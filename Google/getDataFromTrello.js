@@ -61,6 +61,7 @@ function loadFromTrello() {
         var lastDay = carddetails.filter(function (row) {
           return new Date(row.date) >= dateFilter
         })
+        Logger.log(lastDay)
 
         for (var k = 0; k < lastDay.length; k++) {
           // Get the rest of the card data
@@ -70,7 +71,7 @@ function loadFromTrello() {
           var listName = list.name
           // split data to sum and desc
           var comment = carddetails[k].data.text
-          var sumComment = comment.split(/[., ,\-,\/]/)
+          var sumComment = comment.split(/[., ,\-,\/,\\]/)
           var desc = []
           for (var t = 1; t < sumComment.length; t++) {
             desc.push(sumComment[t])
