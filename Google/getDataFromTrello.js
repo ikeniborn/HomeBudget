@@ -8,6 +8,7 @@ var googleId = '10cO9hdYF-K4cLMC7ZbrDqM0RByswKAFfd3E3ggwyl8E'
 var sheetName = 'Trello'
 var enableStackdriverLogging = true
 var logingName = 'ilyatischenko'
+var dateFilter = startDate(1)
 
 function stringComparison(s1, s2) {
   // lets test both variables are the same object type if not throw an error
@@ -49,7 +50,6 @@ function loadFromTrello() {
         var cardId = card.id
         //        var response = UrlFetchApp.fetch(apiRoot + "cards/" + card.id + "/?actions=all&" + keyAndToken);
         //        var carddetails = JSON.parse(response.getContentText()).actions;
-
         var response = UrlFetchApp.fetch(apiRoot + 'cards/' + card.id + '/?actions=commentCard&' + keyAndToken)
         var carddetails = JSON.parse(response.getContentText()).actions
         //        var strComment = carddetails[0].data.text
@@ -58,12 +58,16 @@ function loadFromTrello() {
         //        Logger.log(+sumComment[0][0]);
         if (!carddetails) continue
 
-        for (var k = 0; k < carddetails.length; k++) {
+        var lastDay = carddetails.filter(function (row) {
+          return new Date(row.date) >= dateFilter
+        })
+
+        for (var k = 0; k < lastDay.length; k++) {
           // Get the rest of the card data
-          var dato = carddetails[k].date
-          var fullname = carddetails[k].memberCreator.fullName
-          var cardname = card.name
-          var listname = list.name
+          var date = new Date(carddetails[k].date)
+          var fullName = carddetails[k].memberCreator.fullName
+          var cardName = card.name
+          var listName = list.name
           // split data to sum and desc
           var comment = carddetails[k].data.text
           var sumComment = comment.split(/[., ,\-,\/]/)
@@ -71,7 +75,7 @@ function loadFromTrello() {
           for (var t = 1; t < sumComment.length; t++) {
             desc.push(sumComment[t])
           }
-          ss.appendRow([listId, cardId, dato, cardname, +sumComment[0], desc.join(' '), fullname, listname])
+          ss.appendRow([listId, cardId, date, cardName, +sumComment[0], desc.join(' '), fullName, listName])
           cr++
         }
 

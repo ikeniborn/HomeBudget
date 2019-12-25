@@ -10,8 +10,3 @@ function getItem(item) {
         return rowData[i][1]
     }
 }
-
-
-function test() {
-    Logger.log(getItem('Бензин (-)'))
-}
