@@ -26,10 +26,18 @@ function loadFromTrello() {
     var cr = 2
 
     // get sheet with name Trello, clear all contents, add titles
-    var ss = SpreadsheetApp.openById(googleId).getSheetByName(sheetName).clear()
-    ss.appendRow(['listID', 'CardID', 'Date', 'Task', 'Sum', 'Desc', 'Who', 'List'])
-    ss.getRange(1, 1, 1, 11).setFontWeight('Bold')
-    // var sourceArray = ss.getDataRange().getValues();
+    var ss = SpreadsheetApp.openById(googleId).getSheetByName(sheetName)
+    var ssArray = ss.getDataRange().getValues()
+    var arrayDate = [];
+    for (var j = 0; j < ssArray.length; j++) {
+      arrayDate.push(ssArray[j][0]);
+    };
+    var maxDate = arrayDate.reduce(function (a, b) {
+      return a > b ? a : b;
+    });
+
+    //    ss.appendRow(['Date', 'Task', 'Sum', 'Desc', 'Who', 'List'])
+    //    ss.getRange(1, 1, 1, 6).setFontWeight('Bold')
 
     // Get all lists from Trello API
     var response = UrlFetchApp.fetch(apiRoot + 'boards/' + boardId + '/lists?cards=all&' + keyAndToken)
@@ -61,26 +69,43 @@ function loadFromTrello() {
         var lastDay = carddetails.filter(function (row) {
           return new Date(row.date) >= dateFilter
         })
-        Logger.log(lastDay)
 
         for (var k = 0; k < lastDay.length; k++) {
           // Get the rest of the card data
-          var date = new Date(carddetails[k].date)
-          var fullName = carddetails[k].memberCreator.fullName
-          var cardName = card.name
-          var listName = list.name
-          // split data to sum and desc
-          var comment = carddetails[k].data.text
-          var sumComment = comment.split(/[., ,\-,\/,\\]/)
-          var desc = []
-          for (var t = 1; t < sumComment.length; t++) {
-            desc.push(sumComment[t])
+          if (new Date(carddetails[k].date) > new Date(maxDate.getTime())) {
+            var date = new Date(carddetails[k].date)
+            var fullName = carddetails[k].memberCreator.fullName
+            var cardName = card.name
+            var listName = list.name
+            // split data to sum and desc
+            var comment = carddetails[k].data.text
+            //            var sumComment = comment.split(/[., ,\-,\/,\\]/)
+            //            
+
+            if (comment.match(/^с/)) {
+              var data = comment.split(/^с/).join(' ').trim()
+              var sumdata = data.match(/^\d+/)
+              var desc = data.split(sumdata).join(' ').trim()
+              Logger.log(desc)
+            }
+            var sumComment = comment.match(/^\d+/)
+            var desc = comment.split(sumComment)
+
+            //            for (var t = 1; t < sumComment.length; t++) {
+            //              desc.push(sumComment[t])
+            //            }
+            //ss.appendRow([date, cardName, +sumComment, desc.join(' ').trim(), fullName, listName])
           }
-          ss.appendRow([listId, cardId, date, cardName, +sumComment[0], desc.join(' '), fullName, listName])
           cr++
         }
 
       }
+    }
+    //Удаление пустых строк
+    var maxRows = ss.getMaxRows();
+    var lastRow = ss.getLastRow();
+    if (maxRows - lastRow != 0) {
+      ss.deleteRows(lastRow + 1, maxRows - lastRow);
     }
   } catch (e) {
     if (enableStackdriverLogging) console.error(logingName + ' ERROR: ' + e)
