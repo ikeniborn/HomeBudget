@@ -81,20 +81,20 @@ function loadFromTrello() {
             var comment = carddetails[k].data.text
             //            var sumComment = comment.split(/[., ,\-,\/,\\]/)
             //            
-
-            if (comment.match(/^с/)) {
-              var data = comment.split(/^с/).join(' ').trim()
+            if (comment.match(/^[с,c]/)) {
+              var vcfo = 'Семья'
+              var data = comment.split(/^[с,c]/).join(' ').trim()
               var sumdata = data.match(/^\d+/)
               var desc = data.split(sumdata).join(' ').trim()
               Logger.log(desc)
             }
-            var sumComment = comment.match(/^\d+/)
-            var desc = comment.split(sumComment)
+            //            var sumComment = comment.match(/^\d+/)
+            //            var desc = comment.split(sumComment)
 
             //            for (var t = 1; t < sumComment.length; t++) {
             //              desc.push(sumComment[t])
             //            }
-            //ss.appendRow([date, cardName, +sumComment, desc.join(' ').trim(), fullName, listName])
+            ss.appendRow([date, cardName, +sumdata, desc, fullName, listName, vcfo])
           }
           cr++
         }
