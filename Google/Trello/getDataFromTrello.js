@@ -1,6 +1,6 @@
 // trello variables
 var apiKey = '9dae7dd3ce328d61e67edb4557149502'
-var apiToken = 'e47e9f1e751ede79d8357bee26cbf3bd9d1958481b6d05a241f8687afc63f4cf'
+var apiToken = getTokenTrello()
 var apiRoot = 'https://api.trello.com/1/'
 // var api_member= 'ilyatischenko'
 var boardId = '5dfa7488d7059121c66b4b57' // https://trello.com/b/fXSbKPpT/api

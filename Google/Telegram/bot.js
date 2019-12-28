@@ -1,4 +1,4 @@
-var token = '806168491:AAE5G1oPobTtfArA0vMOH88S9bqi1EfSrjs'; // FILL IN YOUR OWN TOKEN
+var token = getTokenTelegram(); // FILL IN YOUR OWN TOKEN
 var telegramUrl = "https://api.telegram.org/bot" + token;
 var webAppUrl = 'https://script.google.com/macros/s/AKfycbx1SCGWi-54aYp641yDN2v5Ux8oQh6ZQT87yFUuwaqUfivPhxI/exec'; // FILL IN YOUR GOOGLE WEB APP ADDRESS
 var ssId = '1Vuy--i4QlcSyAmQbP6OOSaaKGRSbz4sG08193FDLiwA'; // FILL IN THE ID OF YOUR SPREADSHEET
