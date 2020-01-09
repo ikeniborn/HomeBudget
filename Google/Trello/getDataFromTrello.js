@@ -2,20 +2,14 @@
 var apiKey = '9dae7dd3ce328d61e67edb4557149502'
 var apiToken = getTokenTrello()
 var apiRoot = 'https://api.trello.com/1/'
-// var api_member= 'ilyatischenko'
-var boardId = '5dfa7488d7059121c66b4b57' // https://trello.com/b/fXSbKPpT/api
+var boardId = '5e05161dc3abef51fcf4e761' // https://trello.com/b/fXSbKPpT/api
 var googleId = '10cO9hdYF-K4cLMC7ZbrDqM0RByswKAFfd3E3ggwyl8E'
 var sheetName = 'Trello'
 var enableStackdriverLogging = true
 var logingName = 'ilyatischenko'
-var dateFilter = startDate(1)
-
-function stringComparison(s1, s2) {
-  // lets test both variables are the same object type if not throw an error
-  if (Object.prototype.toString.call(s1) == Object.prototype.toString.call(s2)) {
-    var duplicate = true
-  }
-};
+var factPeriodNow = getMetadata(googleId, 'Период')[0][0]
+var factPeriodPrev = getMetadata(googleId, 'Период')[1][0]
+var dirItem = getDirItem(); //получение справочника статей
 
 function loadFromTrello() {
   try {
@@ -29,15 +23,13 @@ function loadFromTrello() {
     var ss = SpreadsheetApp.openById(googleId).getSheetByName(sheetName)
     var ssArray = ss.getDataRange().getValues()
     var arrayDate = [];
-    for (var j = 0; j < ssArray.length; j++) {
+    for (var j = 1; j < ssArray.length; j++) {
       arrayDate.push(ssArray[j][0]);
     };
+
     var maxDate = arrayDate.reduce(function (a, b) {
       return a > b ? a : b;
-    });
-
-    //    ss.appendRow(['Date', 'Task', 'Sum', 'Desc', 'Who', 'List'])
-    //    ss.getRange(1, 1, 1, 6).setFontWeight('Bold')
+    }, startDate(1));
 
     // Get all lists from Trello API
     var response = UrlFetchApp.fetch(apiRoot + 'boards/' + boardId + '/lists?cards=all&' + keyAndToken)
@@ -56,47 +48,53 @@ function loadFromTrello() {
         var card = cards[j]
         // Get all details of card from Trello API
         var cardId = card.id
-        //        var response = UrlFetchApp.fetch(apiRoot + "cards/" + card.id + "/?actions=all&" + keyAndToken);
-        //        var carddetails = JSON.parse(response.getContentText()).actions;
         var response = UrlFetchApp.fetch(apiRoot + 'cards/' + card.id + '/?actions=commentCard&' + keyAndToken)
         var carddetails = JSON.parse(response.getContentText()).actions
-        //        var strComment = carddetails[0].data.text
-        //        var sumComment = [];
-        //        sumComment.push(strComment.split('.'));
-        //        Logger.log(+sumComment[0][0]);
         if (!carddetails) continue
 
         var lastDay = carddetails.filter(function (row) {
-          return new Date(row.date) >= dateFilter
+          return new Date(row.date) >= maxDate
         })
 
         for (var k = 0; k < lastDay.length; k++) {
           // Get the rest of the card data
           if (new Date(carddetails[k].date) > new Date(maxDate.getTime())) {
+
             var date = new Date(carddetails[k].date)
-            var fullName = carddetails[k].memberCreator.fullName
-            var cardName = card.name
+            var fullName = carddetails[k].memberCreator.username
+            if (!factPeriodPrev) {
+              var factPeriod = factPeriodNow
+            } else {
+              if (fullName == 'ilyatischenko') {
+                var factPeriod = factPeriodNow
+              } else if (fullName == 'oksanatischenko') {
+                var factPeriod = factPeriodPrev
+              }
+            }
             var listName = list.name
+            var nomecName = card.name
+            var dataDirItem = dirItem.filter(function (row) {
+              return row[0] == nomecName
+            })
+            var insertType = dataDirItem[0][2];
+            var insertItem = dataDirItem[0][1];
             // split data to sum and desc
             var comment = carddetails[k].data.text
-            //            var sumComment = comment.split(/[., ,\-,\/,\\]/)
-            //            
-            if (comment.match(/^[с,c]/)) {
-              var vcfo = 'Семья'
-              var data = comment.split(/^[с,c]/).join(' ').trim()
-              var sumdata = data.match(/^\d+/)
-              var desc = data.split(sumdata).join(' ').trim()
-              Logger.log(desc)
+            var sumData = comment.match(/^\d+/)
+            var desc = comment.split(sumData).join(' ').trim()
+            for (var l = 0; l < card.labels.length; l++) {
+              var labels = card.labels[l].name
             }
-            //            var sumComment = comment.match(/^\d+/)
-            //            var desc = comment.split(sumComment)
-
-            //            for (var t = 1; t < sumComment.length; t++) {
-            //              desc.push(sumComment[t])
-            //            }
-            ss.appendRow([date, cardName, +sumdata, desc, fullName, listName, vcfo])
+            if (labels.length > 1) {
+              var typeCost = insertType
+            } else {
+              var typeCost = labels
+            }
+            ss.appendRow([date, factPeriod, listName, listName, typeCost, insertItem, nomecName, +sumData, desc])
           }
+
           cr++
+
         }
 
       }
