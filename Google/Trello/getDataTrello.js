@@ -65,9 +65,9 @@ function loadFromTrello() {
             if (!factPeriodPrev) {
               var factPeriod = factPeriodNow
             } else {
-              if (fullName == 'ilyatischenko') {
+              if (card.name !== 'Оксана') {
                 var factPeriod = factPeriodNow
-              } else if (fullName == 'oksanatischenko') {
+              } else {
                 var factPeriod = factPeriodPrev
               }
             }
@@ -81,7 +81,9 @@ function loadFromTrello() {
             // split data to sum and desc
             var comment = carddetails[k].data.text
             var sumData = comment.match(/^\d+/)
-            var desc = comment.split(sumData).join(' ').trim()
+            var strComment = comment.split(sumData).join('')
+            var desc = strComment.replace(/[., ,\-,\/,\\]/, ' ').trim()
+            Logger.log(desc)
             for (var l = 0; l < card.labels.length; l++) {
               var labels = card.labels[l].name
             }
@@ -90,7 +92,7 @@ function loadFromTrello() {
             } else {
               var typeCost = labels
             }
-            ss.appendRow([date, factPeriod, listName, listName, typeCost, insertItem, nomecName, +sumData, desc])
+            ss.appendRow([date, factPeriod, listName, listName, typeCost, insertItem, nomecName, +sumData, desc, fullName])
           }
 
           cr++
@@ -110,5 +112,49 @@ function loadFromTrello() {
   } finally {
     if (enableStackdriverLogging) console.log(logingName + ' - Loading from Trello ENDED')
     if (enableStackdriverLogging) console.timeEnd(logingName + ' - loadTrello')
+  }
+  updateDataFactTrello()
+}
+
+function updateDataFactTrello() {
+  var sourceSS = SpreadsheetApp.openById('10cO9hdYF-K4cLMC7ZbrDqM0RByswKAFfd3E3ggwyl8E');
+  var targetSS = SpreadsheetApp.openById('1mBsaVLbKLoIXN2WY9Oi-XBPbViwbCt29gozLkOL5sLc');
+  var sourceSheet = sourceSS.getSheetByName('Trello');
+  var targetSheet = targetSS.getSheetByName('Факт');
+  var sourceArray = sourceSheet.getDataRange().getValues();
+  var targetArray = targetSheet.getDataRange().getValues();
+  var arrayDate = [];
+  for (var j = 0; j < targetArray.length; j++) {
+    if (targetArray[j][9] == 'Trello') {
+      arrayDate.push(targetArray[j][0]);
+    }
+  };
+
+  var maxDate = arrayDate.reduce(function (a, b) {
+    return a > b ? a : b;
+  }, startDate(1));
+
+  var newData = sourceArray.filter(function (row) {
+    return row[0] > new Date(maxDate.getTime());
+  });
+  if (newData.length > 0) {
+    for (var i = 0; i < newData.length; i++) {
+      var vData = newData[i][0]
+      var vMonth = newData[i][1]
+      var vCfo = newData[i][2]
+      var vMvz = newData[i][3]
+      var vBill = newData[i][4]
+      var vItem = newData[i][5]
+      var vNomeclature = newData[i][6]
+      var vSum = newData[i][7]
+      var vComment = newData[i][8]
+      targetSheet.appendRow([vData, vMonth, vCfo, vMvz, vBill, vItem, vNomeclature, vSum, vComment, 'Trello'])
+    }
+  }
+  //Удаление пустых строк
+  var maxRows = targetSheet.getMaxRows();
+  var lastRow = targetSheet.getLastRow();
+  if (maxRows - lastRow != 0) {
+    targetSheet.deleteRows(lastRow + 1, maxRows - lastRow);
   }
 }

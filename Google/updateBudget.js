@@ -14,45 +14,46 @@ function intCommentbudget() {
 		var rowDate = values[i][0];
 		var rowPeriod = values[i][1];
 		var rowCfo = values[i][2];
-		var rowType = values[i][3];
+		var rowBill = values[i][3];
 		var rowItem = values[i][4];
-		var rowSum = values[i][5];
-		var rowComment = values[i][6];
-		var rowHash = values[i][8];
+		var rowNomenclature = values[i][5];
+		var rowSum = values[i][6];
+		var rowComment = values[i][7];
+		var rowHash = values[i][9];
 
 		if (rowHash.length == 0) {
 			//Определение статьи
-			if (rowType.length == 0) {
+			if (rowBill.length == 0) {
 				var dataDirItem = DirItem.filter(function (row) {
-					return row[0] == rowItem || row[1] == rowItem
+					return row[0] == rowNomenclature
 				})
-				var insertType = dataDirItem[0][2];
+				var insertBill = dataDirItem[0][2];
 				var insertItem = dataDirItem[0][1];
 				//обновление ячеек
-				sheet.getRange(row, 4).setValue(insertType);
+				sheet.getRange(row, 4).setValue(insertBill);
 				sheet.getRange(row, 5).setValue(insertItem);
 			}
 			//Добавление комментари
 			var insertCommect = rowCfo + "/" + rowComment + "/" + row
-			sheet.getRange(row, 8).setValue(insertCommect)
+			sheet.getRange(row, 9).setValue(insertCommect)
 			//Добавление hash записи строки
-			var insertRow = [rowDate, rowPeriod, rowCfo, insertType, insertItem, rowSum, rowComment, insertCommect]
+			var insertRow = [rowDate, rowPeriod, rowCfo, insertBill, insertItem, rowNomenclature, rowSum, rowComment, insertCommect]
 			if (rowHash.length == 0) {
 				var newHash = MD5(insertRow.join())
-				sheet.getRange(row, 9).setValue(newHash)
+				sheet.getRange(row, 10).setValue(newHash)
 			}
 			//Проверка перевода на счет семьи
 			if (insertItem == 'Перевод на счет Семья') {
 				var insertdate = new Date(rowDate.getTime() + 1000);
 				var insertCommect = "Семья/Семья/Пополнение/" + (i + 2)
 				if (rowCfo == 'Илья') {
-					var ExtraRow = [insertdate, rowPeriod, 'Семья', 'Приход', 'Приход со счета Илья', rowSum, rowComment, insertCommect]
+					var ExtraRow = [insertdate, rowPeriod, 'Семья', 'Приход', 'Приход со счета Илья', 'Приход со счета Илья', rowSum, rowComment, insertCommect]
 					var hashExtraRow = MD5(ExtraRow.join());
-					sheet.appendRow([insertdate, rowPeriod, 'Семья', 'Приход', 'Приход со счета Илья', rowSum, rowComment, insertCommect, hashExtraRow]);
+					sheet.appendRow([insertdate, rowPeriod, 'Семья', 'Приход', 'Приход со счета Илья', 'Приход со счета Илья', rowSum, rowComment, insertCommect, hashExtraRow]);
 				} else if (rowCfo == 'Оксана') {
-					var ExtraRow = [insertdate, rowPeriod, 'Семья', 'Приход', 'Приход со счета Оксана', rowSum, rowComment, insertCommect]
+					var ExtraRow = [insertdate, rowPeriod, 'Семья', 'Приход', 'Приход со счета Оксана', 'Приход со счета Оксана', rowSum, rowComment, insertCommect]
 					var hashExtraRow = MD5(ExtraRow.join());
-					sheet.appendRow([insertdate, rowPeriod, 'Семья', 'Приход', 'Приход со счета Оксана', rowSum, rowComment, insertCommect, hashExtraRow]);
+					sheet.appendRow([insertdate, rowPeriod, 'Семья', 'Приход', 'Приход со счета Оксана', 'Приход со счета Оксана', rowSum, rowComment, insertCommect, hashExtraRow]);
 				}
 			}
 		}
@@ -74,7 +75,9 @@ function updateDataBudget() {
 	var targetArray = targetSheet.getDataRange().getValues();
 	var arrayDate = [];
 	for (var j = 0; j < targetArray.length; j++) {
-		arrayDate.push(targetArray[j][0]);
+		if (targetArray[j][8] == 'GoogleForm') {
+			arrayDate.push(targetArray[j][0]);
+		}
 	};
 
 	var maxDate = arrayDate.reduce(function (a, b) {
@@ -85,14 +88,15 @@ function updateDataBudget() {
 	});
 	if (newData.length > 0) {
 		for (var i = 0; i < newData.length; i++) {
-			var vdata = newData[i][0]
-			var vmonth = newData[i][1]
-			var vcfo = newData[i][2]
-			var vcost = newData[i][3]
-			var vnom = newData[i][4]
-			var vsum = newData[i][5]
-			var vcomment = newData[i][7]
-			targetSheet.appendRow([vdata, vmonth, vcfo, vcost, vnom, vsum, vcomment])
+			var vData = newData[i][0]
+			var vMonth = newData[i][1]
+			var vCfo = newData[i][2]
+			var vBill = newData[i][3]
+			var vItem = newData[i][4]
+			var vNomeclature = newData[i][5]
+			var vSum = newData[i][6]
+			var vComment = newData[i][8]
+			targetSheet.appendRow([vData, vMonth, vCfo, vBill, vItem, vNomeclature, vSum, vComment, 'GoogleForm'])
 		}
 	}
 	//Удаление пустых строк
