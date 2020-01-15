@@ -9,7 +9,7 @@ var enableStackdriverLogging = true
 var logingName = 'ilyatischenko'
 var factPeriodNow = getMetadata(googleId, 'Период')[0][0]
 var factPeriodPrev = getMetadata(googleId, 'Период')[1][0]
-var dirItem = getDirItem(); //получение справочника статей
+var dirItem = getDirItem() //получение справочника статей
 
 function loadFromTrello() {
   try {
@@ -22,14 +22,14 @@ function loadFromTrello() {
     // get sheet with name Trello, clear all contents, add titles
     var ss = SpreadsheetApp.openById(googleId).getSheetByName(sheetName)
     var ssArray = ss.getDataRange().getValues()
-    var arrayDate = [];
+    var arrayDate = []
     for (var j = 1; j < ssArray.length; j++) {
-      arrayDate.push(ssArray[j][0]);
+      arrayDate.push(ssArray[j][0])
     };
 
     var maxDate = arrayDate.reduce(function (a, b) {
-      return a > b ? a : b;
-    }, startDate(1));
+      return a > b ? a : b
+    }, startDate(1))
 
     // Get all lists from Trello API
     var response = UrlFetchApp.fetch(apiRoot + 'boards/' + boardId + '/lists?cards=all&' + keyAndToken)
@@ -81,8 +81,8 @@ function loadFromTrello() {
             var dataDirItem = dirItem.filter(function (row) {
               return row[0] == nomecName
             })
-            var insertType = dataDirItem[0][2];
-            var insertItem = dataDirItem[0][1];
+            var insertType = dataDirItem[0][2]
+            var insertItem = dataDirItem[0][1]
             // split data to sum and desc
             var comment = carddetails[k].data.text
             var sumData = comment.match(/^\d+/)
@@ -107,10 +107,10 @@ function loadFromTrello() {
       }
     }
     //Удаление пустых строк
-    var maxRows = ss.getMaxRows();
-    var lastRow = ss.getLastRow();
+    var maxRows = ss.getMaxRows()
+    var lastRow = ss.getLastRow()
     if (maxRows - lastRow != 0) {
-      ss.deleteRows(lastRow + 1, maxRows - lastRow);
+      ss.deleteRows(lastRow + 1, maxRows - lastRow)
     }
   } catch (e) {
     if (enableStackdriverLogging) console.error(logingName + ' ERROR: ' + e)
@@ -122,26 +122,26 @@ function loadFromTrello() {
 }
 
 function updateDataFactTrello() {
-  var sourceSS = SpreadsheetApp.openById('10cO9hdYF-K4cLMC7ZbrDqM0RByswKAFfd3E3ggwyl8E');
-  var targetSS = SpreadsheetApp.openById('1mBsaVLbKLoIXN2WY9Oi-XBPbViwbCt29gozLkOL5sLc');
-  var sourceSheet = sourceSS.getSheetByName('Trello');
-  var targetSheet = targetSS.getSheetByName('Факт');
-  var sourceArray = sourceSheet.getDataRange().getValues();
-  var targetArray = targetSheet.getDataRange().getValues();
-  var arrayDate = [];
+  var sourceSS = SpreadsheetApp.openById('10cO9hdYF-K4cLMC7ZbrDqM0RByswKAFfd3E3ggwyl8E')
+  var targetSS = SpreadsheetApp.openById('1mBsaVLbKLoIXN2WY9Oi-XBPbViwbCt29gozLkOL5sLc')
+  var sourceSheet = sourceSS.getSheetByName('Trello')
+  var targetSheet = targetSS.getSheetByName('Факт')
+  var sourceArray = sourceSheet.getDataRange().getValues()
+  var targetArray = targetSheet.getDataRange().getValues()
+  var arrayDate = []
   for (var j = 0; j < targetArray.length; j++) {
     if (targetArray[j][9] == 'Trello') {
-      arrayDate.push(targetArray[j][0]);
+      arrayDate.push(targetArray[j][0])
     }
   };
 
   var maxDate = arrayDate.reduce(function (a, b) {
-    return a > b ? a : b;
-  }, startDate(1));
+    return a > b ? a : b
+  }, startDate(1))
 
   var newData = sourceArray.filter(function (row) {
-    return row[0] > new Date(maxDate.getTime());
-  });
+    return row[0] > new Date(maxDate.getTime())
+  })
   if (newData.length > 0) {
     for (var i = 0; i < newData.length; i++) {
       var vData = newData[i][0]
@@ -157,9 +157,9 @@ function updateDataFactTrello() {
     }
   }
   //Удаление пустых строк
-  var maxRows = targetSheet.getMaxRows();
-  var lastRow = targetSheet.getLastRow();
+  var maxRows = targetSheet.getMaxRows()
+  var lastRow = targetSheet.getLastRow()
   if (maxRows - lastRow != 0) {
-    targetSheet.deleteRows(lastRow + 1, maxRows - lastRow);
+    targetSheet.deleteRows(lastRow + 1, maxRows - lastRow)
   }
 }
