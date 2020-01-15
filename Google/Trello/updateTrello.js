@@ -38,7 +38,7 @@ function loadFromTrello() {
     var response = UrlFetchApp.fetch(apiRoot + 'boards/' + boardId + '/actions/?limit=30&' + keyAndToken)
     var actions = JSON.parse((response.getContentText()))
     var lastCommentDate = []
-    for (i = 0; actions.length; i++) {
+    for (var i = 0; actions.length; i++) {
       var action = actions[i]
       if (action.type == 'commentCard') {
         lastCommentDate.push(new Date(action.date))
