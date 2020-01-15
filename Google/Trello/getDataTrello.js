@@ -62,16 +62,17 @@ function loadFromTrello() {
 
             var date = new Date(carddetails[k].date)
             var fullName = carddetails[k].memberCreator.username
+            var factPeriod = []
             if (!factPeriodPrev) {
-              var factPeriod = factPeriodNow
+              factPeriod = factPeriodNow
             } else {
               if (card.name !== 'Оксана') {
-                var factPeriod = factPeriodNow
+                factPeriod = factPeriodNow
               } else {
                 if (new Date().getDay < 15) {
-                  var factPeriod = factPeriodPrev
+                  factPeriod = factPeriodPrev
                 } else {
-                  var factPeriod = factPeriodNow
+                  factPeriod = factPeriodNow
                 }
 
               }
