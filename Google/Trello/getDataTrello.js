@@ -107,7 +107,7 @@ function loadFromTrello() {
 
       }
     }
-    //Удаление пустых строк
+    // Удаление пустых строк
     var maxRows = ss.getMaxRows()
     var lastRow = ss.getLastRow()
     if (maxRows - lastRow != 0) {
