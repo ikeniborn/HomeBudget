@@ -9,7 +9,7 @@ var enableStackdriverLogging = true
 var logingName = 'ilyatischenko'
 var factPeriodNow = getMetadata(googleId, 'Период')[0][0]
 var factPeriodPrev = getMetadata(googleId, 'Период')[1][0]
-var dirItem = getDirItem() //получение справочника статей
+var dirItem = getDirItem() // получение справочника статей
 
 function loadFromTrello() {
   try {
@@ -155,9 +155,18 @@ function updateDataFactTrello() {
       var vSum = newData[i][7]
       var vComment = newData[i][8]
       targetSheet.appendRow([vData, vMonth, vCfo, vMvz, vBill, vItem, vNomeclature, vSum, vComment, 'Trello'])
+      // Проверка перевода на счет семьи
+      if (vBill == 'Перевод на счет Семья') {
+        var insertdate = new Date(vData.getTime() + 1000);
+        if (vCfo == 'Илья') {
+          targetSheet.appendRow([insertdate, vMonth, vCfo, vMvz, vBill, 'Приход со счета Илья', 'Приход со счета Илья', vSum, vComment, 'GoogleForm'])
+        } else if (vCfo == 'Оксана') {
+          targetSheet.appendRow([insertdate, vMonth, vCfo, vMvz, vBill, 'Приход со счета Оксана', 'Приход со счета Оксана', vSum, vComment, 'GoogleForm'])
+        }
+      }
     }
   }
-  //Удаление пустых строк
+  // Удаление пустых строк
   var maxRows = targetSheet.getMaxRows()
   var lastRow = targetSheet.getLastRow()
   if (maxRows - lastRow != 0) {

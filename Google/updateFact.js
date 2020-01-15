@@ -1,14 +1,14 @@
 function intCommentfact() {
-  var ss = SpreadsheetApp.openById("10cO9hdYF-K4cLMC7ZbrDqM0RByswKAFfd3E3ggwyl8E") //Открываем книгу
+  var ss = SpreadsheetApp.openById("10cO9hdYF-K4cLMC7ZbrDqM0RByswKAFfd3E3ggwyl8E") // Открываем книгу
   SpreadsheetApp.setActiveSpreadsheet(ss);
-  var sheet = ss.getSheetByName('Факт'); //'Типы' - имя листа с содержимым списков
+  var sheet = ss.getSheetByName('Факт'); // 'Типы' - имя листа с содержимым списков
   sheet.getRange(2, 1, sheet.getMaxRows() - 1, sheet.getLastColumn()).sort({
     column: 1,
     ascending: true
   });
   var values = sheet.getDataRange().getValues();
-  var DirItem = getDirItem(); //получение справочника статей
-  var DirMvz = getDirMvz(); //получение справочника мвз
+  var DirItem = getDirItem(); // получение справочника статей
+  var DirMvz = getDirMvz(); // получение справочника мвз
   for (var i = 1; i < values.length; ++i) {
     var row = i + 1;
     var rowDate = values[i][0];
@@ -24,7 +24,7 @@ function intCommentfact() {
     var rowHash = values[i][10];
 
     if (rowHash.length == 0) {
-      //Проверка МВЗ
+      // Проверка МВЗ
       if (rowMvz.length == 0) {
         sheet.getRange(row, 4).setValue(rowCfo)
         var insertDirMvz = rowCfo
@@ -38,39 +38,25 @@ function intCommentfact() {
           sheet.getRange(row, 4).setValue(insertDirMvz)
         }
       }
-      //Определение статьи
+      // Определение статьи
       if (rowBill.length == 0) {
         var dataDirItem = DirItem.filter(function (row) {
           return row[0] == rowNomeclature
         })
         var insertBill = dataDirItem[0][2];
         var insertItem = dataDirItem[0][1];
-        //обновление ячеек
+        // обновление ячеек
         sheet.getRange(row, 5).setValue(insertBill);
         sheet.getRange(row, 6).setValue(insertItem);
       }
-      //Добавление комментари
+      // Добавление комментари
       var insertCommect = rowCfo + "/" + insertDirMvz + "/" + rowComment + "/" + row
       sheet.getRange(row, 10).setValue(insertCommect)
-      //Добавление hash записи строки
+      // Добавление hash записи строки
       var insertRow = [rowDate, rowPeriod, rowCfo, insertDirMvz, insertBill, insertItem, rowSum, rowComment, insertCommect]
       if (rowHash.length == 0) {
         var newHash = MD5(insertRow.join())
         sheet.getRange(row, 11).setValue(newHash)
-      }
-      //Проверка перевода на счет семьи
-      if (insertBill == 'Перевод на счет Семья') {
-        var insertdate = new Date(rowDate.getTime() + 1000);
-        var insertCommect = "Семья/Семья/Пополнение/" + (i + 2)
-        if (rowCfo == 'Илья') {
-          var ExtraRow = [insertdate, rowPeriod, 'Семья', 'Семья', 'Приход', 'Приход со счета Илья', 'Приход со счета Илья', rowSum, rowComment, insertCommect]
-          var hashExtraRow = MD5(ExtraRow.join());
-          sheet.appendRow([insertdate, rowPeriod, 'Семья', 'Семья', 'Приход', 'Приход со счета Илья', 'Приход со счета Илья', rowSum, rowComment, insertCommect, hashExtraRow]);
-        } else if (rowCfo == 'Оксана') {
-          var ExtraRow = [insertdate, rowPeriod, 'Семья', 'Семья', 'Приход', 'Приход со счета Оксана', 'Приход со счета Оксана', rowSum, rowComment, insertCommect]
-          var hashExtraRow = MD5(ExtraRow.join());
-          sheet.appendRow([insertdate, rowPeriod, 'Семья', 'Семья', 'Приход', 'Приход со счета Оксана', 'Приход со счета Оксана', rowSum, rowComment, insertCommect, hashExtraRow]);
-        }
       }
     }
   }
@@ -115,9 +101,18 @@ function updateDataFact() {
       var vSum = newData[i][7]
       var vComment = newData[i][9]
       targetSheet.appendRow([vData, vMonth, vCfo, vMvz, vBill, vItem, vNomeclature, vSum, vComment, 'GoogleForm'])
+      // Проверка перевода на счет семьи
+      if (vBill == 'Перевод на счет Семья') {
+        var insertdate = new Date(vData.getTime() + 1000);
+        if (vCfo == 'Илья') {
+          targetSheet.appendRow([insertdate, vMonth, vCfo, vMvz, vBill, 'Приход со счета Илья', 'Приход со счета Илья', vSum, vComment, 'GoogleForm'])
+        } else if (vCfo == 'Оксана') {
+          targetSheet.appendRow([insertdate, vMonth, vCfo, vMvz, vBill, 'Приход со счета Оксана', 'Приход со счета Оксана', vSum, vComment, 'GoogleForm'])
+        }
+      }
     }
   }
-  //Удаление пустых строк
+  // Удаление пустых строк
   var maxRows = targetSheet.getMaxRows();
   var lastRow = targetSheet.getLastRow();
   if (maxRows - lastRow != 0) {
