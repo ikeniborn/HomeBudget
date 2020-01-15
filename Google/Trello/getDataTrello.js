@@ -68,7 +68,12 @@ function loadFromTrello() {
               if (card.name !== 'Оксана') {
                 var factPeriod = factPeriodNow
               } else {
-                var factPeriod = factPeriodPrev
+                if (new Date().getDay < 15) {
+                  var factPeriod = factPeriodPrev
+                } else {
+                  var factPeriod = factPeriodNow
+                }
+
               }
             }
             var listName = list.name
