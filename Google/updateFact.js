@@ -102,12 +102,12 @@ function updateDataFact() {
       var vComment = newData[i][9]
       targetSheet.appendRow([vData, vMonth, vCfo, vMvz, vBill, vItem, vNomeclature, vSum, vComment, 'GoogleForm'])
       // Проверка перевода на счет семьи
-      if (vBill == 'Перевод на счет Семья') {
+      if (vItem == 'Перевод на счет Семья') {
         var insertdate = new Date(vData.getTime() + 1000);
         if (vCfo == 'Илья') {
-          targetSheet.appendRow([insertdate, vMonth, vCfo, vMvz, vBill, 'Приход со счета Илья', 'Приход со счета Илья', vSum, vComment, 'GoogleForm'])
+          targetSheet.appendRow([insertdate, vMonth, 'Семья', 'Семья', 'Приход', 'Приход со счета Илья', 'Приход со счета Илья', vSum, vComment, 'GoogleForm'])
         } else if (vCfo == 'Оксана') {
-          targetSheet.appendRow([insertdate, vMonth, vCfo, vMvz, vBill, 'Приход со счета Оксана', 'Приход со счета Оксана', vSum, vComment, 'GoogleForm'])
+          targetSheet.appendRow([insertdate, vMonth, 'Семья', 'Семья', 'Приход', 'Приход со счета Оксана', 'Приход со счета Оксана', vSum, vComment, 'GoogleForm'])
         }
       }
     }
