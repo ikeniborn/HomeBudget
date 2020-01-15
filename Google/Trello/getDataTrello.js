@@ -87,7 +87,7 @@ function loadFromTrello() {
             var comment = carddetails[k].data.text
             var sumData = comment.match(/^\d+/)
             var strComment = comment.split(sumData).join('')
-            var desc = strComment.replace(/[., ,\-,\/,\\]/, ' ').trim()
+            var desc = strComment.replace(/[.,\,, ,\-,\/,\\]/, ' ').trim()
             Logger.log(desc)
             for (var l = 0; l < card.labels.length; l++) {
               var labels = card.labels[l].name
