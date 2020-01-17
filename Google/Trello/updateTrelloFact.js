@@ -78,5 +78,6 @@ function updateTrelloFact() {
     if (enableStackdriverLogging) console.log('Loading from Trello ENDED')
     if (enableStackdriverLogging) console.timeEnd('loadTrello')
   }
-  copyDataFactTrello(sourceSheetID, targetSheetID, sourceSheetName, targetSheetName) 
+  // copyData(sourceSheetID, targetSheetID, sourceSheetName, targetSheetName) копирование данных из истоничка в учет
+  copyData(sourceSheetID, targetSheetID, sourceSheetName, targetSheetName)
 }
