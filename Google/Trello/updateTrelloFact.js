@@ -18,11 +18,6 @@ var revenueDayOksana = getMetadata(sourceSheetID, periodSheetName)[0][4]
 var accountingItem = getMetadata(sourceSheetID, accountingItemSheetName)
 var currDate = new Date().getDate()
 
-function test() {
-  Logger.log(getLastDateArray(sourceSheetID, sourceSheetName))
-}
-
-
 function updateTrelloFact() {
   // get sheet Google
   var ss = SpreadsheetApp.openById(sourceSheetID).getSheetByName(sourceSheetName)
