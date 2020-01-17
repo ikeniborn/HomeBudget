@@ -2,7 +2,7 @@
 function getLastDateArray(sourceSheetID, sourceSheetName) {
   var ss = SpreadsheetApp.openById(sourceSheetID).getSheetByName(sourceSheetName)
   var array = ss.getDataRange().getValues()
-  var lastColumn = ss.getLastColumn()
+  var lastColumn = ss.getLastColumn()-1
   // get last date from loaf array
   var filterArray = array.filter(function (row) {
     return row[lastColumn] == sourceSheetName
