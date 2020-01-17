@@ -1,4 +1,4 @@
-function loadFromTrello(apiKey, apiToken, apiRoot, boardId, sourceSheetID, sourceSheetName) {
+function loadFromTrello(apiKey, apiToken, apiRoot, boardId, sheetID, sheetName) {
   // trello variables
   var logingName = 'ilyatischenko'
   var enableStackdriverLogging = true
@@ -7,56 +7,25 @@ function loadFromTrello(apiKey, apiToken, apiRoot, boardId, sourceSheetID, sourc
     if (enableStackdriverLogging) console.log(logingName + ' - Loading from Trello STARTED')
 
     var keyAndToken = 'key=' + apiKey + '&token=' + apiToken
-    var cr = 2
 
     // get last date from source array
-    var maxDate = getLastDateArray(sourceSheetID, sourceSheetName)
+    var maxDate = getLastDateArray(sheetID, sheetName)
 
-    // Get last comment for check update data
     var response = UrlFetchApp.fetch(apiRoot + 'boards/' + boardId + '/actions/?limit=30&' + keyAndToken)
     var actions = JSON.parse((response.getContentText()))
-    var lastCommentDate = []
-    for (var i = 0; actions.length; i++) {
+    var lastData = []
+    for (i = 0; i < actions.length; i++) {
       var action = actions[i]
-      if (action.type == 'commentCard') {
-        lastCommentDate.push(new Date(action.date))
-        break
-      }
-    }
-
-    if (new Date(lastCommentDate) > new Date(maxDate.getTime())) {
-      // Get all lists from Trello API
-      var responseList = UrlFetchApp.fetch(apiRoot + 'boards/' + boardId + '/lists?cards=all&' + keyAndToken)
-      var lists = JSON.parse((responseList.getContentText()))
-      // for all lists
-      for (var i = 0; i < lists.length; i++) {
-        var list = lists[i]
-        // Get all cards from Trello API
-        var responseCard = UrlFetchApp.fetch(apiRoot + 'list/' + list.id + '/cards?' + keyAndToken)
-        var cards = JSON.parse(responseCard.getContentText())
-        if (!cards) continue
-
-        // for all cards
-        for (var j = 0; j < cards.length; j++) {
-          var card = cards[j]
-          // Get all details of card from Trello API
-          var responseCommentCard = UrlFetchApp.fetch(apiRoot + 'cards/' + card.id + '/?actions=commentCard&' + keyAndToken)
-          var commentCards = JSON.parse(responseCommentCard.getContentText()).actions
-          if (!commentCards) continue
-
-          var lastData = commentCards.map(function (row) {
-            if (new Date(row.date) >= new Date(maxDate.getTime())) {
-              var commentDate = new Date(row.date)
-              var userName = row.memberCreator.username
-              var listName = list.name
-              var nomenclatureName = card.name
-              var sumData = row.data.text.match(/^\d+/)
-              var commentData = row.data.text.split(sumData).join('').replace(/^[.,\,, ,\-,\/,\\]/, ' ').trim()
-              return [commentDate, userName, listName, nomenclatureName, +sumData, commentData]
-            }
-          })
-          cr++
-        }
+      if (new Date(action.date) >= new Date(maxDate) && action.type == 'commentCard') {
+        Logger.log(action.data.text)
+        var commentDate = new Date(action.date)
+        var userName = action.memberCreator.username
+        var listName = action.data.list.name
+        var nomenclatureName = action.data.card.name
+        var rowDataText = action.data.text
+        var sumData = rowDataText.match(/^\d+/)
+        var commentData = rowDataText.split(sumData).join('').replace(/^[.,\,, ,\-,\/,\\]/, ' ').trim()
+        lastData.push([commentDate, userName, listName, nomenclatureName, +sumData, commentData])
       }
     }
   } catch (e) {

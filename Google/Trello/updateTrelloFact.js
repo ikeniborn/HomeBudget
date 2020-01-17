@@ -1,20 +1,20 @@
-// variables
 var apiKey = '9dae7dd3ce328d61e67edb4557149502'
 var apiToken = getTokenTrello() // get token for session
 var apiRoot = 'https://api.trello.com/1/'
 var boardId = '5e05161dc3abef51fcf4e761'
 var sourceSheetID = '10cO9hdYF-K4cLMC7ZbrDqM0RByswKAFfd3E3ggwyl8E'
-var sourceSheetName = 'trelloFact'
-var metadataSheetName = 'period'
+var sourceSheetName = 'factTrello'
+var periodSheetName = 'period'
+var accountingItemSheetName = 'accountingItem'
 var targetSheetID = '1mBsaVLbKLoIXN2WY9Oi-XBPbViwbCt29gozLkOL5sLc'
 var targetSheetName = 'Факт'
 // getMetadata(sourceSheetID, sourceSheetName) получение данных по периодам.
-var factPeriodNow = getMetadata(sourceSheetID, metadataSheetName)[0][0]
-var factPeriodPrev = getMetadata(sourceSheetID, metadataSheetName)[1][0]
-var revenueDayIlya = getMetadata(sourceSheetID, metadataSheetName)[0][2]
-var revenueDayOksana = getMetadata(sourceSheetID, metadataSheetName)[0][3]
+var factPeriodNow = getMetadata(sourceSheetID, periodSheetName)[0][0]
+var factPeriodPrev = getMetadata(sourceSheetID, periodSheetName)[1][0]
+var revenueDayIlya = getMetadata(sourceSheetID, periodSheetName)[0][2]
+var revenueDayOksana = getMetadata(sourceSheetID, periodSheetName)[0][3]
 //  getDirItem() получение справочника статей
-var dirItem = getDirItem() // получение справочника статей
+var accountingItem = getMetadata(sourceSheetID, accountingItemSheetName) // получение справочника статей
 var currDate = new Date().getDate()
 
 function updateTrelloFact() {
