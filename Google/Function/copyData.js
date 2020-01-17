@@ -3,7 +3,7 @@ function copyData(sourceSheetID, targetSheetID, sourceSheetName, targetSheetName
   var targetSS = SpreadsheetApp.openById(targetSheetID).getSheetByName(targetSheetName)
   var sourceArray = sourceSS.getDataRange().getValues()
 
-  var maxDateTarget = getLastDateArray(targetSheetID, targetSheetName)
+  var maxDateTarget = getLastDateArray(targetSheetID, targetSheetName, 1)
 
   var newData = sourceArray.filter(function (row) {
     return row[0] > new Date(maxDateTarget.getTime())

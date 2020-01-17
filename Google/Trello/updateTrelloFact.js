@@ -1,3 +1,4 @@
+// variables
 var apiKey = '9dae7dd3ce328d61e67edb4557149502'
 var apiToken = getTokenTrello() // get token for session
 var apiRoot = 'https://api.trello.com/1/'
@@ -8,14 +9,22 @@ var periodSheetName = 'period'
 var accountingItemSheetName = 'accountingItem'
 var targetSheetID = '1mBsaVLbKLoIXN2WY9Oi-XBPbViwbCt29gozLkOL5sLc'
 var targetSheetName = 'Факт'
-// getMetadata(sourceSheetID, sourceSheetName) получение данных по периодам.
-var factPeriodNow = getMetadata(sourceSheetID, periodSheetName)[0][0]
-var factPeriodPrev = getMetadata(sourceSheetID, periodSheetName)[1][0]
-var revenueDayIlya = getMetadata(sourceSheetID, periodSheetName)[0][2]
-var revenueDayOksana = getMetadata(sourceSheetID, periodSheetName)[0][3]
-//  getDirItem() получение справочника статей
-var accountingItem = getMetadata(sourceSheetID, accountingItemSheetName) // получение справочника статей
+// получение данных по периодам.
+var factPeriodNow = getMetadata(sourceSheetID, periodSheetName)[0][1]
+var factPeriodPrev = getMetadata(sourceSheetID, periodSheetName)[1][1]
+var revenueDayIlya = getMetadata(sourceSheetID, periodSheetName)[0][3]
+var revenueDayOksana = getMetadata(sourceSheetID, periodSheetName)[0][4]
+// получение данных по статьям
+var accountingItem = getMetadata(sourceSheetID, accountingItemSheetName)
 var currDate = new Date().getDate()
+
+function test() {
+  var accountingItem = getMetadata(sourceSheetID, accountingItemSheetName)
+  var billName = dataDirItem[0][3]
+  var itemName = dataDirItem[0][2]
+  Logger.log(billName)
+}
+
 
 function updateTrelloFact() {
   // get sheet Google
@@ -50,17 +59,17 @@ function updateTrelloFact() {
         }
       }
     }
-    var dataDirItem = dirItem.filter(function (row) {
-      return row[0] == nomenclatureName
+    var dataDirItem = accountingItem.filter(function (row) {
+      return row[1] == nomenclatureName
     })
-    var billName = dataDirItem[0][2]
-    var itemName = dataDirItem[0][1]
+    var billName = dataDirItem[0][3]
+    var itemName = dataDirItem[0][2]
 
     ss.appendRow([commentDate, factPeriod, listName, listName, billName, itemName, nomenclatureName, sumData, commentData, userName])
-    //            Обновление даты зарплаты
+    // Обновление даты зарплаты
     if (itemName == 'Зарплата') {
       // update date for budget period. Start with next parametr (sheetID, SheetName, commentDate, listName)
-      updateRevenueDate(sourceSheetID, metadataSheetName, commentDate, listName)
+      updateRevenueDate(sourceSheetID, periodSheetName, commentDate, listName)
     }
   }
   // Удаление пустых строк
@@ -70,6 +79,6 @@ function updateTrelloFact() {
     ss.deleteRows(lastRow + 1, maxRows - lastRow)
   }
 
-  // copyData(sourceSheetID, targetSheetID, sourceSheetName, targetSheetName) копирование данных из истоничка в учет
+  // Копирование данных из буфера в учет
   copyData(sourceSheetID, targetSheetID, sourceSheetName, targetSheetName)
 }
