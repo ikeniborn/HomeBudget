@@ -1,6 +1,6 @@
 // get sheet with name Trello, clear all contents, add titles
-function getLastDateSaveArray(googleId, sheetName) {
-  var ss = SpreadsheetApp.openById(googleId).getSheetByName(sheetName)
+function getLastDateArray(sourceSheetID, sourceSheetName) {
+  var ss = SpreadsheetApp.openById(sourceSheetID).getSheetByName(sourceSheetName)
   var ssArray = ss.getDataRange().getValues()
   var arrayDate = []
   for (var j = 1; j < ssArray.length; j++) {

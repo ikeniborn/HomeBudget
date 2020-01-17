@@ -1,29 +1,33 @@
 // trello variables
 var apiKey = '9dae7dd3ce328d61e67edb4557149502'
-var apiToken = getTokenTrello()
+var apiToken = getTokenTrello() // get token for session
 var apiRoot = 'https://api.trello.com/1/'
 var boardId = '5e05161dc3abef51fcf4e761'
-var googleId = '10cO9hdYF-K4cLMC7ZbrDqM0RByswKAFfd3E3ggwyl8E'
-var sheetName = 'Trello'
+var sourceSheetID = '10cO9hdYF-K4cLMC7ZbrDqM0RByswKAFfd3E3ggwyl8E'
+var sourceSheetName = 'Trello'
+var targetSheetID = '1mBsaVLbKLoIXN2WY9Oi-XBPbViwbCt29gozLkOL5sLc'
+var targetSheetName = 'Факт'
 var enableStackdriverLogging = true
-var logingName = 'ilyatischenko'
-var factPeriodNow = getMetadata(googleId, 'Период')[0][0]
-var factPeriodPrev = getMetadata(googleId, 'Период')[1][0]
-var revenueDayIlya = getMetadata(googleId, 'Период')[0][2]
-var revenueDayOksana = getMetadata(googleId, 'Период')[0][3]
+// getMetadata(sourceSheetID, sourceSheetName) получение данных по периодам.
+var factPeriodNow = getMetadata(sourceSheetID, 'Период')[0][0]
+var factPeriodPrev = getMetadata(sourceSheetID, 'Период')[1][0]
+var revenueDayIlya = getMetadata(sourceSheetID, 'Период')[0][2]
+var revenueDayOksana = getMetadata(sourceSheetID, 'Период')[0][3]
+//  getDirItem() получение справочника статей
 var dirItem = getDirItem() // получение справочника статей
 var currDate = new Date().getDate()
 
-function loadFromTrello() {
+function updateTrelloFact() {
   try {
-    if (enableStackdriverLogging) console.time(logingName + ' - loadTrello')
-    if (enableStackdriverLogging) console.log(logingName + ' - Loading from Trello STARTED')
+    if (enableStackdriverLogging) console.time('loadTrello')
+    if (enableStackdriverLogging) console.log('Loading from Trello STARTED')
 
     // get sheet Google
-    var ss = SpreadsheetApp.openById(googleId).getSheetByName(sheetName)
+    var ss = SpreadsheetApp.openById(sourceSheetID).getSheetByName(sourceSheetName)
 
     // get last data from board. Function return array with next attribute [commentDate, userName, listName, nomenclatureName, sumData, comment]
-    var lastDataFromTrello = loadFromTrello(apiKey, apiToken, apiRoot, boardId, googleId, sheetName)
+    // loadFromTrello(apiKey, apiToken, apiRoot, boardId, sourceSheetID, sourceSheetName)
+    var lastDataFromTrello = loadFromTrello(apiKey, apiToken, apiRoot, boardId, sourceSheetID, sourceSheetName)
     for (var i = 0; i < lastDataFromTrello.length; i++) {
       var commentDate = new Date(lastDataFromTrello[i][0])
       var userName = lastDataFromTrello[i][1]
@@ -58,8 +62,8 @@ function loadFromTrello() {
       ss.appendRow([commentDate, factPeriod, listName, listName, billName, itemName, nomenclatureName, sumData, commentData, userName])
       //            Обновление даты зарплаты
       if (insertItem == 'Зарплата') {
-        // update date for budget period. Start with next parametr (sheetID, sheetName, commentDate, listName)
-        updateRevenueDate(googleId, 'Период', commentDate, listName)
+        // update date for budget period. Start with next parametr (sheetID, sourceSheetName, commentDate, listName)
+        updateRevenueDate(sourceSheetID, 'Период', commentDate, listName)
       }
     }
     // Удаление пустых строк
@@ -69,62 +73,10 @@ function loadFromTrello() {
       ss.deleteRows(lastRow + 1, maxRows - lastRow)
     }
   } catch (e) {
-    if (enableStackdriverLogging) console.error(logingName + ' ERROR: ' + e)
+    if (enableStackdriverLogging) console.error('ERROR: ' + e)
   } finally {
-    if (enableStackdriverLogging) console.log(logingName + ' - Loading from Trello ENDED')
-    if (enableStackdriverLogging) console.timeEnd(logingName + ' - loadTrello')
+    if (enableStackdriverLogging) console.log('Loading from Trello ENDED')
+    if (enableStackdriverLogging) console.timeEnd('loadTrello')
   }
-  updateDataFactTrello()
-}
-
-function updateDataFactTrello() {
-  var sourceSS = SpreadsheetApp.openById('10cO9hdYF-K4cLMC7ZbrDqM0RByswKAFfd3E3ggwyl8E')
-  var targetSS = SpreadsheetApp.openById('1mBsaVLbKLoIXN2WY9Oi-XBPbViwbCt29gozLkOL5sLc')
-  var sourceSheet = sourceSS.getSheetByName('Trello')
-  var targetSheet = targetSS.getSheetByName('Факт')
-  var sourceArray = sourceSheet.getDataRange().getValues()
-  var targetArray = targetSheet.getDataRange().getValues()
-  var arrayDate = []
-  for (var j = 0; j < targetArray.length; j++) {
-    if (targetArray[j][9] == 'Trello') {
-      arrayDate.push(targetArray[j][0])
-    }
-  };
-
-  var maxDate = arrayDate.reduce(function (a, b) {
-    return a > b ? a : b
-  }, startDate(1))
-
-  var newData = sourceArray.filter(function (row) {
-    return row[0] > new Date(maxDate.getTime())
-  })
-  if (newData.length > 0) {
-    for (var i = 0; i < newData.length; i++) {
-      var vData = newData[i][0]
-      var vMonth = newData[i][1]
-      var vCfo = newData[i][2]
-      var vMvz = newData[i][3]
-      var vBill = newData[i][4]
-      var vItem = newData[i][5]
-      var vNomeclature = newData[i][6]
-      var vSum = newData[i][7]
-      var vComment = newData[i][8]
-      targetSheet.appendRow([vData, vMonth, vCfo, vMvz, vBill, vItem, vNomeclature, vSum, vComment, 'Trello'])
-      // Проверка перевода на счет семьи
-      if (vItem == 'Перевод на счет Семья') {
-        var insertdate = new Date(vData.getTime() + 1000);
-        if (vCfo == 'Илья') {
-          targetSheet.appendRow([insertdate, vMonth, 'Семья', 'Семья', 'Приход', 'Приход со счета Илья', 'Приход со счета Илья', vSum, vComment, 'GoogleForm'])
-        } else if (vCfo == 'Оксана') {
-          targetSheet.appendRow([insertdate, vMonth, 'Семья', 'Семья', 'Приход', 'Приход со счета Оксана', 'Приход со счета Оксана', vSum, vComment, 'GoogleForm'])
-        }
-      }
-    }
-  }
-  // Удаление пустых строк
-  var maxRows = targetSheet.getMaxRows()
-  var lastRow = targetSheet.getLastRow()
-  if (maxRows - lastRow != 0) {
-    targetSheet.deleteRows(lastRow + 1, maxRows - lastRow)
-  }
+  copyDataFactTrello(sourceSheetID, targetSheetID, sourceSheetName, targetSheetName) 
 }

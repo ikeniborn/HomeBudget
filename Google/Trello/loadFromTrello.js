@@ -1,4 +1,4 @@
-function loadFromTrello(apiKey, apiToken, apiRoot, boardId, googleId, sheetName) {
+function loadFromTrello(apiKey, apiToken, apiRoot, boardId, sourceSheetID, sourceSheetName) {
   // trello variables
   var logingName = 'ilyatischenko'
   var enableStackdriverLogging = true
@@ -9,8 +9,8 @@ function loadFromTrello(apiKey, apiToken, apiRoot, boardId, googleId, sheetName)
     var keyAndToken = 'key=' + apiKey + '&token=' + apiToken
     var cr = 2
 
-    // get last date from save array
-    var maxDate = getLastDateSaveArray(googleId, sheetName)
+    // get last date from source array
+    var maxDate = getLastDateArray(sourceSheetID, sourceSheetName)
 
     // Get last comment for check update data
     var response = UrlFetchApp.fetch(apiRoot + 'boards/' + boardId + '/actions/?limit=30&' + keyAndToken)
