@@ -1,20 +1,23 @@
 function getLastDateArray(sheetID, sheetName, filter) {
+  if (filter == undefined) filter = false
   var ss = SpreadsheetApp.openById(sheetID).getSheetByName(sheetName)
   var array = ss.getDataRange().getValues()
   var lastColumn = ss.getLastColumn() - 1
-  if (filter.length == 0) {
-    filter = 0
-  }
   // get last date from load array
-  var filterArray = array.filter(function (row) {
-    if (filter == 1) {
-      return row[lastColumn] == sheetName
+  var targetSheetName = ['Факт', 'Бюджет']
+  var arrayDate = []
+  for (i = 0; i < array.length; i++) {
+    var row = array[i]
+    if (targetSheetName.indexOf(sheetName) !== -1) {
+      if (row[lastColumn] == filter) {
+        arrayDate.push(row[0])
+      }
     } else {
-      return row
+      arrayDate.push(row[0])
     }
-  })
-  var maxDate = filterArray.reduce(function (a, b) {
-    return a[0] > b[0] ? a[0] : b[0]
+  }
+  var maxDate = arrayDate.reduce(function (a, b) {
+    return a > b ? a : b
   }, startDate(1))
   return maxDate
 }
