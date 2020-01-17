@@ -19,10 +19,7 @@ var accountingItem = getMetadata(sourceSheetID, accountingItemSheetName)
 var currDate = new Date().getDate()
 
 function test() {
-  var accountingItem = getMetadata(sourceSheetID, accountingItemSheetName)
-  var billName = dataDirItem[0][3]
-  var itemName = dataDirItem[0][2]
-  Logger.log(billName)
+  Logger.log(getLastDateArray(sourceSheetID, sourceSheetName))
 }
 
 

@@ -19,5 +19,5 @@ function getLastDateArray(sheetID, sheetName, filter) {
   var maxDate = arrayDate.reduce(function (a, b) {
     return a > b ? a : b
   }, startDate(1))
-  return maxDate
+  return new Date(maxDate.getTime() + 1000)
 }
