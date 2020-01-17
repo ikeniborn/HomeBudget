@@ -1,16 +1,7 @@
 function copyData(sourceSheetID, targetSheetID, sourceSheetName, targetSheetName) {
-  var sourceSS = SpreadsheetApp.openById(sourceSheetID)
-  var targetSS = SpreadsheetApp.openById(targetSheetID)
-  var sourceSheet = sourceSS.getSheetByName(sourceSheetName)
-  var targetSheet = targetSS.getSheetByName(targetSheetName)
-  var sourceArray = sourceSheet.getDataRange().getValues()
-  var targetArray = targetSheet.getDataRange().getValues()
-  var arrayDate = []
-  for (var j = 0; j < targetArray.length; j++) {
-    if (targetArray[j][9] == sourceSheetName) {
-      arrayDate.push(targetArray[j][0])
-    }
-  };
+  var sourceSS = SpreadsheetApp.openById(sourceSheetID).getSheetByName(sourceSheetName)
+  var targetSS = SpreadsheetApp.openById(targetSheetID).getSheetByName(targetSheetName)
+  var sourceArray = sourceSS.getDataRange().getValues()
 
   var maxDateTarget = getLastDateArray(targetSheetID, targetSheetName)
 
@@ -29,22 +20,22 @@ function copyData(sourceSheetID, targetSheetID, sourceSheetName, targetSheetName
       var vNomeclature = newData[i][6]
       var vSum = newData[i][7]
       var vComment = newData[i][8]
-      targetSheet.appendRow([vData, vMonth, vCfo, vMvz, vBill, vItem, vNomeclature, vSum, vComment, sourceSheetName])
+      targetSS.appendRow([vData, vMonth, vCfo, vMvz, vBill, vItem, vNomeclature, vSum, vComment, sourceSheetName])
       // Проверка перевода на счет семьи
       if (vItem == 'Перевод на счет Семья') {
         var insertdate = new Date(vData.getTime() + 1000);
         if (vCfo == 'Илья') {
-          targetSheet.appendRow([insertdate, vMonth, 'Семья', 'Семья', 'Приход', 'Приход со счета Илья', 'Приход со счета Илья', vSum, vComment, sourceSheetName])
+          targetSS.appendRow([insertdate, vMonth, 'Семья', 'Семья', 'Приход', 'Приход со счета Илья', 'Приход со счета Илья', vSum, vComment, sourceSheetName])
         } else if (vCfo == 'Оксана') {
-          targetSheet.appendRow([insertdate, vMonth, 'Семья', 'Семья', 'Приход', 'Приход со счета Оксана', 'Приход со счета Оксана', vSum, vComment, sourceSheetName])
+          targetSS.appendRow([insertdate, vMonth, 'Семья', 'Семья', 'Приход', 'Приход со счета Оксана', 'Приход со счета Оксана', vSum, vComment, sourceSheetName])
         }
       }
     }
   }
   // Удаление пустых строк
-  var maxRows = targetSheet.getMaxRows()
-  var lastRow = targetSheet.getLastRow()
+  var maxRows = targetSS.getMaxRows()
+  var lastRow = targetSS.getLastRow()
   if (maxRows - lastRow != 0) {
-    targetSheet.deleteRows(lastRow + 1, maxRows - lastRow)
+    targetSS.deleteRows(lastRow + 1, maxRows - lastRow)
   }
 }
