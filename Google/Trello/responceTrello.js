@@ -1,4 +1,3 @@
-
 function loadFromTrello(apiKey, apiToken, apiRoot, boardId, googleId, sheetName) {
   // trello variables
   var logingName = 'ilyatischenko'
@@ -10,17 +9,8 @@ function loadFromTrello(apiKey, apiToken, apiRoot, boardId, googleId, sheetName)
     var keyAndToken = 'key=' + apiKey + '&token=' + apiToken
     var cr = 2
 
-    // get sheet with name Trello, clear all contents, add titles
-    var ss = SpreadsheetApp.openById(googleId).getSheetByName(sheetName)
-    var ssArray = ss.getDataRange().getValues()
-    var arrayDate = []
-    for (var j = 1; j < ssArray.length; j++) {
-      arrayDate.push(ssArray[j][0])
-    };
-    // get last date from loaf array
-    var maxDate = arrayDate.reduce(function (a, b) {
-      return a > b ? a : b
-    }, startDate(1))
+    // get last date from save array
+    var maxDate = getLastDateSaveArray(googleId, sheetName)
 
     // Get last comment for check update data
     var response = UrlFetchApp.fetch(apiRoot + 'boards/' + boardId + '/actions/?limit=30&' + keyAndToken)
@@ -56,12 +46,13 @@ function loadFromTrello(apiKey, apiToken, apiRoot, boardId, googleId, sheetName)
 
           var lastData = commentCards.map(function (row) {
             if (new Date(row.date) >= new Date(maxDate.getTime())) {
-              var date = new Date(row.date)
-              var fullName = row.memberCreator.username
+              var commentDate = new Date(row.date)
+              var userName = row.memberCreator.username
               var listName = list.name
-              var nomecName = card.name
+              var nomenclatureName = card.name
+              var sumData = row.match(/^\d+/)
               var comment = row.data.text.split(sumData).join('').replace(/^[.,\,, ,\-,\/,\\]/, ' ').trim()
-              return [date, fullName, listName, nomecName, sumData, comment]
+              return [commentDate, userName, listName, nomenclatureName, +sumData, comment]
             }
           })
           cr++

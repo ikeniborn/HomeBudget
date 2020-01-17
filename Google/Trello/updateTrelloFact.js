@@ -19,116 +19,47 @@ function loadFromTrello() {
     if (enableStackdriverLogging) console.time(logingName + ' - loadTrello')
     if (enableStackdriverLogging) console.log(logingName + ' - Loading from Trello STARTED')
 
-    var keyAndToken = 'key=' + apiKey + '&token=' + apiToken
-    var cr = 2
-
-    // get sheet with name Trello, clear all contents, add titles
+    // get sheet Google
     var ss = SpreadsheetApp.openById(googleId).getSheetByName(sheetName)
-    var ssArray = ss.getDataRange().getValues()
-    var arrayDate = []
-    for (var j = 1; j < ssArray.length; j++) {
-      arrayDate.push(ssArray[j][0])
-    };
 
-    var maxDate = arrayDate.reduce(function (a, b) {
-      return a > b ? a : b
-    }, startDate(1))
-
-    // Get last comment for check update data
-    var response = UrlFetchApp.fetch(apiRoot + 'boards/' + boardId + '/actions/?limit=30&' + keyAndToken)
-    var actions = JSON.parse((response.getContentText()))
-    var lastCommentDate = []
-    for (var i = 0; actions.length; i++) {
-      var action = actions[i]
-      if (action.type == 'commentCard') {
-        lastCommentDate.push(new Date(action.date))
-        break
-      }
-    }
-
-    if (new Date(lastCommentDate) > new Date(maxDate.getTime())) {
-      // Get all lists from Trello API
-      var response = UrlFetchApp.fetch(apiRoot + 'boards/' + boardId + '/lists?cards=all&' + keyAndToken)
-      var lists = JSON.parse((response.getContentText()))
-      // for all lists 
-      for (var i = 0; i < lists.length; i++) {
-        var list = lists[i]
-        // Get all cards from Trello API
-        var listId = list.id
-        var response = UrlFetchApp.fetch(apiRoot + 'list/' + list.id + '/cards?' + keyAndToken)
-        var cards = JSON.parse(response.getContentText())
-        if (!cards) continue
-
-        // for all cards
-        for (var j = 0; j < cards.length; j++) {
-          var card = cards[j]
-          // Get all details of card from Trello API
-          var cardId = card.id
-          var response = UrlFetchApp.fetch(apiRoot + 'cards/' + card.id + '/?actions=commentCard&' + keyAndToken)
-          var carddetails = JSON.parse(response.getContentText()).actions
-          if (!carddetails) continue
-
-          var lastDay = carddetails.filter(function (row) {
-            return new Date(row.date) >= maxDate
-          })
-
-          for (var k = 0; k < lastDay.length; k++) {
-            // Get the rest of the card data
-            if (new Date(carddetails[k].date) > new Date(maxDate.getTime())) {
-
-              var date = new Date(carddetails[k].date)
-              var fullName = carddetails[k].memberCreator.username
-              var factPeriod = []
-              if (factPeriodPrev.length == 0) {
-                factPeriod = factPeriodNow
-              } else {
-                if (list.name !== 'Оксана') {
-                  if (currDate >= revenueDayIlya) {
-                    factPeriod = factPeriodNow
-                  } else {
-                    factPeriod = factPeriodPrev
-                  }
-                } else {
-                  if (currDate >= revenueDayOksana) {
-                    factPeriod = factPeriodNow
-                  } else {
-                    factPeriod = factPeriodPrev
-                  }
-                }
-              }
-              var listName = list.name
-              var nomecName = card.name
-              var dataDirItem = dirItem.filter(function (row) {
-                return row[0] == nomecName
-              })
-              var insertType = dataDirItem[0][2]
-              var insertItem = dataDirItem[0][1]
-              // split data to sum and desc
-              var comment = carddetails[k].data.text
-              var sumData = comment.match(/^\d+/)
-              var strComment = comment.split(sumData).join('')
-              var desc = strComment.replace(/^[.,\,, ,\-,\/,\\]/, ' ').trim()
-
-              for (var l = 0; l < card.labels.length; l++) {
-                var labels = card.labels[l].name
-              }
-              if (labels.length > 1) {
-                var typeCost = insertType
-              } else {
-                var typeCost = labels
-              }
-              ss.appendRow([date, factPeriod, listName, listName, typeCost, insertItem, nomecName, +sumData, desc, fullName])
-              //            Обновление даты зарплаты
-              if (insertItem == 'Зарплата') {
-                updateRevenueDate(googleId, 'Период', date, listName)
-              }
-            }
-
-            cr++
-
+    // get last data from board. Function return array with next attribute [commentDate, userName, listName, nomenclatureName, sumData, comment]
+    var lastDataFromTrello = loadFromTrello(apiKey, apiToken, apiRoot, boardId, googleId, sheetName)
+    for (var i = 0; i < lastDataFromTrello.length; i++) {
+      var commentDate = new Date(lastDataFromTrello[i][0])
+      var userName = lastDataFromTrello[i][1]
+      var listName = lastDataFromTrello[i][2]
+      var nomenclatureName = lastDataFromTrello[i][3]
+      var sumData = lastDataFromTrello[i][4]
+      var commentData = lastDataFromTrello[i][5]
+      var factPeriod = []
+      if (factPeriodPrev.length == 0) {
+        factPeriod = factPeriodNow
+      } else {
+        if (listName !== 'Оксана') {
+          if (currDate >= revenueDayIlya) {
+            factPeriod = factPeriodNow
+          } else {
+            factPeriod = factPeriodPrev
           }
-
+        } else {
+          if (currDate >= revenueDayOksana) {
+            factPeriod = factPeriodNow
+          } else {
+            factPeriod = factPeriodPrev
+          }
         }
+      }
+      var dataDirItem = dirItem.filter(function (row) {
+        return row[0] == nomenclatureName
+      })
+      var insertBill = dataDirItem[0][2]
+      var insertItem = dataDirItem[0][1]
+
+      ss.appendRow([commentDate, factPeriod, listName, listName, insertBill, insertItem, nomenclatureName, sumData, commentData, userName])
+      //            Обновление даты зарплаты
+      if (insertItem == 'Зарплата') {
+        // update date for budget period. Start with next parametr (sheetID, sheetName, commentDate, listName)
+        updateRevenueDate(googleId, 'Период', commentDate, listName)
       }
     }
     // Удаление пустых строк
