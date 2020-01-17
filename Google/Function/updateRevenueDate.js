@@ -1,4 +1,5 @@
 function updateRevenueDate(sheetID, sheetName, commentDate, listName) {
+  // Function update budget date
   var ss = SpreadsheetApp.openById(sheetID) // Открываем книгу
   SpreadsheetApp.setActiveSpreadsheet(ss); // Делаем книгу активной
   var metaSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName); //'Типы' - имя листа с содержимым списков
