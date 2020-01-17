@@ -50,9 +50,9 @@ function loadFromTrello(apiKey, apiToken, apiRoot, boardId, googleId, sheetName)
               var userName = row.memberCreator.username
               var listName = list.name
               var nomenclatureName = card.name
-              var sumData = row.match(/^\d+/)
-              var comment = row.data.text.split(sumData).join('').replace(/^[.,\,, ,\-,\/,\\]/, ' ').trim()
-              return [commentDate, userName, listName, nomenclatureName, +sumData, comment]
+              var sumData = row.data.text.match(/^\d+/)
+              var commentData = row.data.text.split(sumData).join('').replace(/^[.,\,, ,\-,\/,\\]/, ' ').trim()
+              return [commentDate, userName, listName, nomenclatureName, +sumData, commentData]
             }
           })
           cr++

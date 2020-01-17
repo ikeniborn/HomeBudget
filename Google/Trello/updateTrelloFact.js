@@ -52,10 +52,10 @@ function loadFromTrello() {
       var dataDirItem = dirItem.filter(function (row) {
         return row[0] == nomenclatureName
       })
-      var insertBill = dataDirItem[0][2]
-      var insertItem = dataDirItem[0][1]
+      var billName = dataDirItem[0][2]
+      var itemName = dataDirItem[0][1]
 
-      ss.appendRow([commentDate, factPeriod, listName, listName, insertBill, insertItem, nomenclatureName, sumData, commentData, userName])
+      ss.appendRow([commentDate, factPeriod, listName, listName, billName, itemName, nomenclatureName, sumData, commentData, userName])
       //            Обновление даты зарплаты
       if (insertItem == 'Зарплата') {
         // update date for budget period. Start with next parametr (sheetID, sheetName, commentDate, listName)
