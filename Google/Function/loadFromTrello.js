@@ -14,10 +14,9 @@ function loadFromTrello(apiKey, apiToken, apiRoot, boardId, sheetID, sheetName) 
     var response = UrlFetchApp.fetch(apiRoot + 'boards/' + boardId + '/actions/?limit=30&' + keyAndToken)
     var actions = JSON.parse((response.getContentText()))
     var lastData = []
-    for (i = 0; i < actions.length; i++) {
+    for (var i = 0; i < actions.length; i++) {
       var action = actions[i]
       if (new Date(action.date) > new Date(maxDate.getTime()) && action.type == 'commentCard') {
-        Logger.log(action.data.text)
         var commentDate = new Date(action.date)
         var userName = action.memberCreator.username
         var listName = action.data.list.name
