@@ -12,10 +12,10 @@ function updateTrelloBudget(postData) {
   var commentData = actionDataText.split(sumData).join('').replace(/^[.,\,, ,\-,\/,\\]/, ' ').trim()
   var period = budgetPeriodNow
   var dataDirItem = accountingItem.filter(function (row) {
-    return row[1] == nomenclatureName
+    return row.nomenclature == nomenclatureName
   })
-  var billName = dataDirItem[0][3]
-  var itemName = dataDirItem[0][2]
+  var billName = dataDirItem.bill
+  var itemName = dataDirItem.account
 
   ss.appendRow([commentDate, period, listName, listName, billName, itemName, nomenclatureName, +sumData, commentData, userName])
   // Удаление пустых строк
