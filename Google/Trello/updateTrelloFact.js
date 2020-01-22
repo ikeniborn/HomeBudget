@@ -30,8 +30,8 @@ function updateTrelloFact(postData) {
   var dataDirItem = accountingItem.filter(function (row) {
     return row.nomenclature == nomenclatureName
   })
-  var billName = dataDirItem.bill
-  var itemName = dataDirItem.account
+  var billName = dataDirItem[0].bill
+  var itemName = dataDirItem[0].account
 
   ss.appendRow([commentDate, period, listName, listName, billName, itemName, nomenclatureName, +sumData, commentData, userName])
   // Обновление даты зарплаты
