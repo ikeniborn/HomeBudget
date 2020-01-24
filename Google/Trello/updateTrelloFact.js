@@ -1,8 +1,7 @@
-function updateTrelloBudget(postData) {
+function updateTrelloFact(postData) {
   // get sheet Google
-  var ss = SpreadsheetApp.openById(sourceSheetID).getSheetByName(sourceSheetNameBudget)
+  var ss = SpreadsheetApp.openById(sourceSheetID).getSheetByName(sourceSheetNameFact)
   // get last date from source array
-
   var commentDate = new Date(postData.action.date)
   var userName = postData.action.memberCreator.username
   var listName = postData.action.data.list.name
@@ -10,7 +9,24 @@ function updateTrelloBudget(postData) {
   var actionDataText = postData.action.data.text
   var sumData = actionDataText.match(/^\d+/)
   var commentData = actionDataText.split(sumData).join('').replace(/^[.,\,, ,\-,\/,\\]/, ' ').trim()
-  var period = budgetPeriodNow
+  var period = []
+  if (factPeriodPrev.length == 0) {
+    period = factPeriodNow
+  } else {
+    if (listName !== 'Оксана') {
+      if (currDate >= revenueDayIlya) {
+        period = factPeriodNow
+      } else {
+        period = factPeriodPrev
+      }
+    } else {
+      if (currDate >= revenueDayOksana) {
+        period = factPeriodNow
+      } else {
+        period = factPeriodPrev
+      }
+    }
+  }
   var dataDirItem = accountingItem.filter(function (row) {
     return row.nomenclature == nomenclatureName
   })
@@ -18,6 +34,11 @@ function updateTrelloBudget(postData) {
   var itemName = dataDirItem[0].account
 
   ss.appendRow([commentDate, period, listName, listName, billName, itemName, nomenclatureName, +sumData, commentData, userName])
+  // Обновление даты зарплаты
+  if (itemName == 'Зарплата') {
+    // обновление даты периода бюджета
+    updateRevenueDate(sourceSheetID, periodSheetName, commentDate, listName)
+  }
   // Удаление пустых строк
   var maxRows = ss.getMaxRows()
   var lastRow = ss.getLastRow()
