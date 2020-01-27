@@ -1,5 +1,5 @@
 function getTotalSum(SheetID, SheetName, уmd, cfo, bill, account, nomenclature) {
-  var ssData = SpreadsheetApp.openById(SheetID).SheetName(SheetName)
+  var ssData = SpreadsheetApp.openById(SheetID).getSheetByName(SheetName)
   var allDataFact = ssData.getDataRange().getValues();
   var total = {}
   var totalBill = 0
