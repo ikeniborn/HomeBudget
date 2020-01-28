@@ -10,22 +10,12 @@ function getTotalSum(SheetID, SheetName, уmd, cfo, bill, account, nomenclature)
     var ymdRow = getYMD(array[1]).ymd
     if (ymdRow == уmd && array[2] == cfo && array[4] == bill) {
       totalBill += array[7]
-      row.push(array)
-    }
-    return row
-  }, [])
-  // получение суммы по статье
-  var filterDataAccount = filterDataBill.reduce(function (row, array) {
-    if (array[5] == account) {
-      totalAccount += array[7]
-      row.push(array)
-    }
-    return row
-  }, [])
-  // получение суммы по номеклатуре
-  var filterDataNomenclature = filterDataAccount.reduce(function (row, array) {
-    if (array[6] == nomenclature) {
-      totalNomenclature += array[7]
+      if (array[5] == account) {
+        totalAccount += array[7]
+        if (array[6] == nomenclature) {
+          totalNomenclature += array[7]
+        }
+      }
       row.push(array)
     }
     return row
