@@ -1,9 +1,17 @@
-function getCostСenter(sourceSheetID, sourceSheetName) {
-  var ss = SpreadsheetApp.openById(sourceSheetID).getSheetByName(sourceSheetName); // 'Типы' - имя листа с содержимым списков
-  var metaData = ss.getDataRange().getValues();
-  var metaValue = []
-  for (var i = 1; i < metaData.length; i++) {
-    metaValue.push({'id':metaData[i][0],'alias':metaData[i][1],'name':metaData[i][2],'type':metaData[i][3]})
-  }
-  return metaValue
+// получение справочника мвз
+function getCostСenter(sheetID, sheetName) {
+  var ss = SpreadsheetApp.openById(sheetID).getSheetByName(sheetName)
+  var ssArrays = ss.getDataRange().getValues()
+  var ssData = []
+  ssArrays.reduce(function (row, array, index) {
+    if (index == 0) {} else {
+      row = {}
+      row.id = array[0]
+      row.alias = array[1]
+      row.name = array[2]
+      row.type = array[3]
+      return ssData.push(row)
+    }
+  }, [])
+  return ssData
 }
