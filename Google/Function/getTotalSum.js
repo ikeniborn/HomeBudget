@@ -55,16 +55,27 @@ function getTotalSum(SheetID, SheetName, уmd, cfo, bill, account, nomenclature)
 
   var reducers = {
     bill: function (state, item) {
-
-      return state.bill += item.array[7]
+      var ymdRow = getYMD(item[1]).ymd
+      if (ymdRow == уmd && item[2] == cfo && item[4] == bill) {
+        state.bill += item.array[7]
+      }
+      return state.bill
     },
     account: function (state, item) {
-      return state.account += item.array[7]
+      var ymdRow = getYMD(item[1]).ymd
+      if (ymdRow == уmd && item[2] == cfo && item[4] == bill && array[5] == account) {
+        state.account += item.array[7]
+      }
+      return state.account
     },
     nomenclature: function (state, item) {
-      return state.nomenclature += item.array[7]
+      var ymdRow = getYMD(item[1]).ymd
+      if (ymdRow == уmd && item[2] == cfo && item[4] == bill && item[5] == account && item[6] == nomenclature) {
+        state.nomenclature += item.array[7]
+      }
+      return state.nomenclature
     }
-  };
+  }
 
   var combineReducers = function (reducers) {
     return function (state, item) {
