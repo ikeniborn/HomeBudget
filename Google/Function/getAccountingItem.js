@@ -1,9 +1,22 @@
-function getAccountingItem(sourceSheetID, sourceSheetName) {
-  var ss = SpreadsheetApp.openById(sourceSheetID).getSheetByName(sourceSheetName); // 'Типы' - имя листа с содержимым списков
-  var metaData = ss.getDataRange().getValues();
-  var metaValue = []
-  for (var i = 1; i < metaData.length; i++) {
-    metaValue.push({'id':metaData[i][0],'nomenclature':metaData[i][1],'account':metaData[i][2],'bill':metaData[i][3]})
-  }
-  return metaValue
+// получаение справочника статей
+function getAccountingItem(sheetID, sheetName) {
+  var ss = SpreadsheetApp.openById(sheetID).getSheetByName(sheetName)
+  var ssArrays = ss.getDataRange().getValues()
+  var ssData = []
+  ssArrays.reduce(function (row, array, index) {
+    if (index == 0) {} else {
+      row = {}
+      row.id = array[0]
+      row.cashFlow = array[1]
+      row.bill = array[2]
+      row.account = array[3]
+      row.nomenclature = array[4]
+      row.family = array[5]
+      row.ilya = array[6]
+      row.oksana = array[7]
+      row.form = array[8]
+      return ssData.push(row)
+    }
+  }, [])
+  return ssData
 }
