@@ -9,17 +9,17 @@ var array = [{
   sum: 2
 }]
 var reducers = {
-  ilya: function (sum, array) {
-    if (array.cfo == 'илья') {
-      sum += array.sum
+  ilya: function (state, item) {
+    if (item.cfo == 'илья') {
+      state.ilya += item.sum
     }
-    return sum
+    return state.ilya
   },
-  family: function (sum, array) {
-    if (array.cfo == 'семья') {
-      sum += array.sum
+  family: function (state, item) {
+    if (item.cfo == 'семья') {
+      state.family += item.sum
     }
-    return sum
+    return state.family
   }
 }
 
