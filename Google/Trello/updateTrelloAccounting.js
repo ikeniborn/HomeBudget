@@ -3,10 +3,10 @@ function updateTrelloAccounting(postObject, targetSheetID, targetSheetName) {
   var ss = SpreadsheetApp.openById(targetSheetID).getSheetByName(targetSheetName)
   var sourceSheetName
   var period
-  if (postObject.boardName == sourceSheetNameFactTrello) {
+  if (postObject.boardName == targetSheetNameFact) {
     sourceSheetName = sourceSheetNameFactTrello
     period = getParametr(sourceSheetID, parametrSheetName, 'factPeriod').value
-  } else if (postObject.boardName == sourceSheetNameBudgetTrello) {
+  } else if (postObject.boardName == targetSheetNameBudget) {
     sourceSheetName = sourceSheetNameBudgetTrello
     period = getParametr(sourceSheetID, parametrSheetName, 'budgetPeriod').value
   }
