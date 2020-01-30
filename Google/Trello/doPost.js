@@ -11,6 +11,8 @@ function doPost(e) {
     const postObject = {}
     postObject.actionId = postData.action.id
     postObject.actionDate = new Date(postData.action.date)
+    postObject.period = getPeriod(boardName, postData.action.data.list.name)
+    postObject.boardName = postData.action.data.board.name
     postObject.listId = postData.action.data.list.id
     postObject.listName = postData.action.data.list.name
     postObject.bill = accountingItem.reduce(function (bill, array) {
