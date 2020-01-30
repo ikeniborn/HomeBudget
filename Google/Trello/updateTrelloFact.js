@@ -40,7 +40,6 @@ function updateTrelloFact(postData, SheetID, SheetName) {
   }
   // добавление строк на страницу
   ss.appendRow([commentDate, period, listName, listName, billName, itemName, nomenclatureName, +sumData, commentData, idAction])
-
   return {
     date: commentDate,
     period: period,
