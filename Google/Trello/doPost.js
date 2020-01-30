@@ -1,7 +1,5 @@
 function doPost(e) {
   const postData = JSON.parse(e.postData.contents)
-  const cardId = postData.action.data.card.id
-  const listId = postData.action.data.list.id
   const idMemberCreator = postData.action.idMemberCreator
   const memberCreator = postData.action.memberCreator.username
   const actionType = postData.action.type
@@ -9,6 +7,8 @@ function doPost(e) {
   const postObject = {}
   postObject.actionId = postData.action.id
   postObject.actionDate = new Date(postData.action.date)
+  postObject.cardId = postData.action.data.card.id
+  postObject.listId = postData.action.data.list.id
   postObject.listName = postData.action.data.list.name
   postObject.bill = accountingItem.reduce(function (bill, array) {
     if (array.nomenclature == postData.action.data.card.name) {
@@ -30,15 +30,16 @@ function doPost(e) {
   if (actionType == 'commentCard' && idMemberCreator !== '5e2b5f3f409c544ebdb1b9d4') {
     if (boardName == targetSheetNameFact) {
       if (postObject.actionDate > maxDateFactTrelloBuffer) {
-        updateTrelloFact(postObject, sourceSheetID, sourceSheetNameFactTrello)
+        updateTrelloBuffer(postObject, sourceSheetID, sourceSheetNameFactTrello)
         updateFactPeriod(postObject)
+        updateTrelloAccounting(postObject, targetSheetID, targetSheetNameFact)
         var textComment = getRestSum(postObject).text
-        addComment(apiRoot, apiToken, apiKey, cardId, textComment)
+        addComment(apiRoot, apiToken, apiKey, postObject.cardId, textComment)
       }
     } else if (boardName == targetSheetNameBudget) {
-      if (postObject.actionDate > maxDateBudgetTrelloBuffer.getTime) {
-        updateTrelloBudget(postData, sourceSheetID, sourceSheetNameBudgetTrello)
-        copyData(sourceSheetID, targetSheetID, sourceSheetNameBudgetTrello, targetSheetNameBudget)
+      if (postObject.actionDate > maxDateBudgetTrelloBuffer) {
+        updateTrelloBuffer(postData, sourceSheetID, sourceSheetNameBudgetTrello)
+        updateTrelloAccounting(postObject, targetSheetID, targetSheetNameBudget)
       }
     }
     if (memberCreator == 'oksanatischenko') {

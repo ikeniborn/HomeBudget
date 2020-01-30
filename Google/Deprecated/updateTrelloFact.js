@@ -4,17 +4,23 @@ function updateTrelloFact(postData, SheetID, SheetName) {
   // get last date from source array
   var idAction = postData.action.id
   var commentDate = new Date(postData.action.date)
-  var userName = postData.action.memberCreator.username
   var listName = postData.action.data.list.name
   var nomenclatureName = postData.action.data.card.name
   var actionDataText = postData.action.data.text
   var sumData = actionDataText.match(/^\d+/)
   var commentData = actionDataText.split(sumData).join('').replace(/^[.,\,, ,\-,\/,\\]/, ' ').trim()
-  var dataDirItem = accountingItem.filter(function (row) {
-    return row.nomenclature == nomenclatureName
+  var billName = accountingItem.reduce(function (bill, array) {
+    if (array.nomenclature == postData.action.data.card.name) {
+      bill = array.bill
+    }
+    return bill
   })
-  var billName = dataDirItem[0].bill
-  var itemName = dataDirItem[0].account
+  var itemName = accountingItem.reduce(function (account, array) {
+    if (array.nomenclature == postData.action.data.card.name) {
+      account = array.account
+    }
+    return account
+  })
   if (listName == 'Илья') {
     if (itemName == 'Зарплата') {
       var newFactPeriod = formatterDate(new Date(commentDate.getYear(), commentDate.getMonth(), 1))
