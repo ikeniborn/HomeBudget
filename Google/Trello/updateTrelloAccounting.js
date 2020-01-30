@@ -12,22 +12,19 @@ function updateTrelloAccounting(postObject, targetSheetID, targetSheetName) {
   }
 
   var maxDateTarget = getLastDateArray(targetSheetID, targetSheetName, sourceSheetNameFactTrello)
-  var newData = postObject.filter(function (row) {
-    return row.actionDate > new Date(maxDateTarget.getTime())
-  })
 
-  newData.forEach(function (data) {
-    ss.appendRow([data.actionDate, period, data.listName, data.listName, data.bill, data.account, data.nomenclature, data.sum, data.comment, newData.actionId, sourceSheetName])
+  if (postObject.actionDate > new Date(maxDateTarget.getTime())) {
+    ss.appendRow([postObject.actionDate, period, postObject.listName, postObject.listName, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
     // Проверка перевода на счет семьи
-    if (data.account == 'Перевод на счет Семья') {
+    if (postObject.account == 'Перевод на счет Семья') {
       var insertdate = new Date(data.actionDate.getTime() + 1000);
-      if (data.listName == 'Илья') {
-        ss.appendRow([insertdate, period, 'Семья', 'Семья', 'Приход', 'Приход со счета Илья', 'Приход со счета Илья', data.sum, data.comment, newData.actionId, sourceSheetName])
+      if (postObject.listName == 'Илья') {
+        ss.appendRow([insertdate, period, 'Семья', 'Семья', 'Приход', 'Приход со счета Илья', 'Приход со счета Илья', postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
       } else if (data.listName == 'Оксана') {
-        ss.appendRow([insertdate, period, 'Семья', 'Семья', 'Приход', 'Приход со счета Оксана', 'Приход со счета Оксана', data.sum, data.comment, newData.actionId, sourceSheetName])
+        ss.appendRow([insertdate, period, 'Семья', 'Семья', 'Приход', 'Приход со счета Оксана', 'Приход со счета Оксана', postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
       }
     }
-  })
+  }
   // Удаление пустых строк
   var maxRows = ss.getMaxRows()
   var lastRow = ss.getLastRow()

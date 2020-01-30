@@ -4,13 +4,13 @@ function doPost(e) {
   const memberCreator = postData.action.memberCreator.username
   const actionType = postData.action.type
   const boardName = postData.action.data.board.name
+  const cardId = postData.action.data.card.id
   var ss = SpreadsheetApp.openById(sourceSheetID).getSheetByName('test')
   ss.getRange(1, 1).setValue(postData)
   if (actionType == 'commentCard' && idMemberCreator !== '5e2b5f3f409c544ebdb1b9d4') {
     const postObject = {}
     postObject.actionId = postData.action.id
     postObject.actionDate = new Date(postData.action.date)
-    postObject.cardId = postData.action.data.card.id
     postObject.listId = postData.action.data.list.id
     postObject.listName = postData.action.data.list.name
     postObject.bill = accountingItem.reduce(function (bill, array) {
@@ -28,13 +28,14 @@ function doPost(e) {
     postObject.nomenclature = postData.action.data.card.name
     postObject.sum = parseComment(postData).sum
     postObject.comment = parseComment(postData).comment
+    console.log(postObject)
     if (boardName == targetSheetNameFact) {
       if (postObject.actionDate > maxDateFactTrelloBuffer) {
         updateTrelloBuffer(postObject, sourceSheetID, sourceSheetNameFactTrello)
         updateFactPeriod(postObject)
         updateTrelloAccounting(postObject, targetSheetID, targetSheetNameFact)
         var textComment = getRestSum(postObject).text
-        addComment(apiRoot, apiToken, apiKey, postObject.cardId, textComment)
+        addComment(apiRoot, apiToken, apiKey, cardId, textComment)
       }
     } else if (boardName == targetSheetNameBudget) {
       if (postObject.actionDate > maxDateBudgetTrelloBuffer) {
