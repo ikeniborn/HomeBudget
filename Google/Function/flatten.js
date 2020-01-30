@@ -1,3 +1,3 @@
-function flatten(arrayOfArrays){
+function flatten(arrayOfArrays) {
   return [].concat.apply([], arrayOfArrays);
 }

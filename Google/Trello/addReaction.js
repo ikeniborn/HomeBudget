@@ -1,6 +1,7 @@
-function addReaction(apiRoot, apiToken, apiKey, actionId) {
+// добавление реакции в трелло
+function addReaction(apiRoot, apiToken, apiKey, actionId, reaction) {
   var keyAndToken = 'key=' + apiKey + '&token=' + apiToken
-  var payload = "{\"shortName\":\"raised_hands\",\"native\":\"✅\",\"unified\":\"2705\"}";
+  var payload = JSON.stringify(reaction)
   var data = {
     method: 'post',
     contentType: 'application/json',

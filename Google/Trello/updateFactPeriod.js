@@ -1,10 +1,13 @@
 function updateFactPeriod(postObject) {
   const actionDate = postObject.actionDate
+  var revenueDay
+  var newFactPeriod
+  var newFactPeriod0
   if (postObject.account == 'Зарплата') {
     if (postObject.listName == 'Илья') {
-      var newFactPeriod = formatterDate(new Date(actionDate.getYear(), actionDate.getMonth(), 1))
-      var newFactPeriod0 = formatterDate(new Date(actionDate.getYear(), actionDate.getMonth() - 1, 1))
-      var revenueDay = actionDate.getDate()
+      newFactPeriod = formatterDate(new Date(actionDate.getYear(), actionDate.getMonth(), 1))
+      newFactPeriod0 = formatterDate(new Date(actionDate.getYear(), actionDate.getMonth() - 1, 1))
+      revenueDay = actionDate.getDate()
       updateParametr(sourceSheetID, parametrSheetName, 'factPeriodIlya', newFactPeriod)
       updateParametr(sourceSheetID, parametrSheetName, 'factPeriodFamily', newFactPeriod)
       updateParametr(sourceSheetID, parametrSheetName, 'factPeriod', newFactPeriod)
@@ -12,8 +15,8 @@ function updateFactPeriod(postObject) {
       updateParametr(sourceSheetID, parametrSheetName, 'revenueDayIlya', revenueDay)
     }
   } else if (postObject.listName == 'Оксана') {
-    var newFactPeriod = formatterDate(new Date(actionDate.getYear(), actionDate.getMonth(), 1))
-    var revenueDay = actionDate.getDate()
+    newFactPeriod = formatterDate(new Date(actionDate.getYear(), actionDate.getMonth(), 1))
+    revenueDay = actionDate.getDate()
     updateParametr(sourceSheetID, parametrSheetName, 'factPeriodOksana', newFactPeriod)
     updateParametr(sourceSheetID, parametrSheetName, 'revenueDayOksana', revenueDay)
   }
