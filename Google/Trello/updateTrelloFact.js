@@ -19,19 +19,12 @@ function updateTrelloFact(postData, SheetID, SheetName) {
     if (itemName == 'Зарплата') {
       var newFactPeriod = formatterDate(new Date(commentDate.getYear(), commentDate.getMonth(), 1))
       var newFactPeriod0 = formatterDate(new Date(commentDate.getYear(), commentDate.getMonth() - 1, 1))
+      var revenueDay = commentDate.getDate()
       updateParametr(sourceSheetID, parametrSheetName, 'factPeriodIlya', newFactPeriod)
       updateParametr(sourceSheetID, parametrSheetName, 'factPeriodFamily', newFactPeriod)
       updateParametr(sourceSheetID, parametrSheetName, 'factPeriod', newFactPeriod)
       updateParametr(sourceSheetID, parametrSheetName, 'factPeriod-1', newFactPeriod0)
-    } else if (itemName == 'Аванс') {
-      var newBudgetPeriod = formatterDate(new Date(commentDate.getYear(), commentDate.getMonth() + 1, 1))
-      var newBudgetPeriod2 = formatterDate(new Date(commentDate.getYear(), commentDate.getMonth() + 2, 1))
-      var newBudgetPeriod3 = formatterDate(new Date(commentDate.getYear(), commentDate.getMonth() + 3, 1))
-      updateParametr(sourceSheetID, parametrSheetName, 'budgetPeriodIlya', newBudgetPeriod)
-      updateParametr(sourceSheetID, parametrSheetName, 'budgetPeriodFamily', newBudgetPeriod)
-      updateParametr(sourceSheetID, parametrSheetName, 'budgetPeriod', newBudgetPeriod2)
-      updateParametr(sourceSheetID, parametrSheetName, 'budgetPeriod+1', newBudgetPeriod2)
-      updateParametr(sourceSheetID, parametrSheetName, 'budgetPeriod+2', newBudgetPeriod3)
+      updateParametr(sourceSheetID, parametrSheetName, 'revenueDayIlya', revenueDay)
     }
     var period = getParametr(sourceSheetID, parametrSheetName, 'factPeriodIlya').value
   } else if (listName == 'Семья') {
@@ -39,10 +32,9 @@ function updateTrelloFact(postData, SheetID, SheetName) {
   } else if (listName == 'Оксана') {
     if (itemName == 'Зарплата') {
       var newFactPeriod = formatterDate(new Date(commentDate.getYear(), commentDate.getMonth(), 1))
+      var revenueDay = commentDate.getDate()
       updateParametr(sourceSheetID, parametrSheetName, 'factPeriodOksana', newFactPeriod)
-    } else if (itemName == 'Аванс') {
-      var newBudgetPeriod = formatterDate(new Date(commentDate.getYear(), commentDate.getMonth() + 1, 1))
-      updateParametr(sourceSheetID, parametrSheetName, 'budgetPeriodOksana', newBudgetPeriod)
+      updateParametr(sourceSheetID, parametrSheetName, 'revenueDayOksana', revenueDay)
     }
     var period = getParametr(sourceSheetID, parametrSheetName, 'factPeriodFamily').value
   }
