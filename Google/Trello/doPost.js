@@ -3,7 +3,7 @@ function doPost(e) {
   const idMemberCreator = postData.action.idMemberCreator
   const memberCreator = postData.action.memberCreator.username
   const actionType = postData.action.type
-  const boardName = postData.action.data.board.name
+  const boardId = postData.action.data.board.id
   const cardId = postData.action.data.card.id
   var ss = SpreadsheetApp.openById(sourceSheetID).getSheetByName('test')
   ss.getRange(1, 1).setValue(postData)
@@ -11,27 +11,21 @@ function doPost(e) {
     const postObject = {}
     postObject.actionId = postData.action.id
     postObject.actionDate = new Date(postData.action.date)
-    postObject.period = getPeriod(boardName, postData.action.data.list.name)
+    postObject.period = getPeriod(boardId, postData.action.data.list.name).period
+    postObject.ymd = getPeriod(boardId, postData.action.data.list.name).ymd
     postObject.boardName = postData.action.data.board.name
+    postObject.boardId = boardId
+    postObject.cardName = postData.action.data.card.name
+    postObject.cardId = cardId
     postObject.listId = postData.action.data.list.id
     postObject.listName = postData.action.data.list.name
-    postObject.bill = accountingItem.reduce(function (bill, array) {
-      if (array.nomenclature == postData.action.data.card.name) {
-        bill = array.bill
-      }
-      return bill
-    })
-    postObject.account = accountingItem.reduce(function (account, array) {
-      if (array.nomenclature == postData.action.data.card.name) {
-        account = array.account
-      }
-      return account
-    })
+    postObject.bill = getAccountingItem(sourceSheetID, accountingItemSheetName, postData.action.data.card.name).bill
+    postObject.account = getAccountingItem(sourceSheetID, accountingItemSheetName, postData.action.data.card.name).account
     postObject.nomenclature = postData.action.data.card.name
     postObject.sum = parseComment(postData).sum
     postObject.comment = parseComment(postData).comment
     console.log(postObject)
-    if (boardName == targetSheetNameFact) {
+    if (boardId == boardIdFact) {
       if (postObject.actionDate > maxDateFactTrelloBuffer) {
         updateTrelloBuffer(postObject, sourceSheetID, sourceSheetNameFactTrello)
         updateFactPeriod(postObject)
@@ -39,7 +33,7 @@ function doPost(e) {
         var textComment = getRestSum(postObject).text
         addComment(apiRoot, apiToken, apiKey, cardId, textComment)
       }
-    } else if (boardName == targetSheetNameBudget) {
+    } else if (boardId == boardIdBudget) {
       if (postObject.actionDate > maxDateBudgetTrelloBuffer) {
         updateTrelloBuffer(postData, sourceSheetID, sourceSheetNameBudgetTrello)
         updateTrelloAccounting(postObject, targetSheetID, targetSheetNameBudget)

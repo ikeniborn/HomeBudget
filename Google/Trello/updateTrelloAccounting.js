@@ -1,14 +1,17 @@
-function updateTrelloAccounting(postObject, targetSheetID, targetSheetName) {
-
-  var ss = SpreadsheetApp.openById(targetSheetID).getSheetByName(targetSheetName)
+function updateTrelloAccounting(postObject, boardId) {
+  var targetSheetID = targetSheetID
   var sourceSheetName
-  if (postObject.boardName == targetSheetNameFact) {
+  if ([boardIdFact, boardIdFact0].indexOf(boardId) !== -1) {
+    targetSheetName = targetSheetNameFact
     sourceSheetName = sourceSheetNameFactTrello
-  } else if (postObject.boardName == targetSheetNameBudget) {
+  } else if ([boardIdBudget, boardIdBudget2, boardIdBudget3].indexOf(boardId) !== -1) {
+    targetSheetName = targetSheetNameBudget
     sourceSheetName = sourceSheetNameBudgetTrello
   }
 
-  var maxDateTarget = getLastDateArray(targetSheetID, targetSheetName, sourceSheetNameFactTrello)
+  var ss = SpreadsheetApp.openById(targetSheetID).getSheetByName(targetSheetName)
+
+  var maxDateTarget = getLastDateArray(targetSheetID, targetSheetName, sourceSheetName)
 
   if (postObject.actionDate > new Date(maxDateTarget.getTime())) {
     ss.appendRow([postObject.actionDate, postObject.period, postObject.listName, postObject.listName, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
@@ -23,9 +26,5 @@ function updateTrelloAccounting(postObject, targetSheetID, targetSheetName) {
     }
   }
   // Удаление пустых строк
-  var maxRows = ss.getMaxRows()
-  var lastRow = ss.getLastRow()
-  if (maxRows - lastRow != 0) {
-    ss.deleteRows(lastRow + 1, maxRows - lastRow)
-  }
+  deleteEmptyRow(targetSheetID, targetSheetName)
 }

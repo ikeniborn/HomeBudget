@@ -1,21 +1,35 @@
-function getPeriod(boardName, listName) {
+function getPeriod(boardId, listName) {
   var period
-  if (boardName == targetSheetNameFact) {
-    if (listName == 'Илья') {
-      period = getParametr(sourceSheetID, parametrSheetName, 'factPeriodIlya').value
-    } else if (listName == 'Семья') {
-      period = getParametr(sourceSheetID, parametrSheetName, 'factPeriodFamily').value
-    } else if (listName == 'Оксана') {
-      period = getParametr(sourceSheetID, parametrSheetName, 'factPeriodIlya').value
-    }
-  } else if (boardName == targetSheetNameBudget) {
-    if (listName == 'Илья') {
-      period = getParametr(sourceSheetID, parametrSheetName, 'budgetPeriodIlya').value
-    } else if (listName == 'Семья') {
-      period = getParametr(sourceSheetID, parametrSheetName, 'budgetPeriodFamily').value
-    } else if (listName == 'Оксана') {
-      period = getParametr(sourceSheetID, parametrSheetName, 'budgetPeriodOksana').value
-    }
+  var ymd
+  var factPeriod
+  var budgetPeriod
+  if (listName == 'Илья') {
+    factPeriod = getParametr(sourceSheetID, parametrSheetName, 'periodFactIlya').value
+    budgetPeriod = getParametr(sourceSheetID, parametrSheetName, 'periodBudgetIlya').value
+  } else if (listName == 'Семья') {
+    factPeriod = getParametr(sourceSheetID, parametrSheetName, 'periodFactFamily').value
+    budgetPeriod = getParametr(sourceSheetID, parametrSheetName, 'periodBudgetFamily').value
+  } else if (listName == 'Оксана') {
+    factPeriod = getParametr(sourceSheetID, parametrSheetName, 'periodFactOksana').value
+    budgetPeriod = getParametr(sourceSheetID, parametrSheetName, 'periodBudgetOksana').value
   }
-  return period
+  if (boardId == boardIdFact) {
+    period = factPeriod
+  } else if (boardId == boardIdFact0) {
+    period = formatterDate(new Date(factPeriod.getYear(), factPeriod.getMonth() - 1, 1))
+  } else if (boardId == boardIdBudget) {
+    period = budgetPeriod
+  } else if (boardId == boardIdBudget2) {
+    period = formatterDate(new Date(budgetPeriod.getYear(), budgetPeriod.getMonth() + 1, 1))
+  } else if (boardId == boardIdBudget3) {
+    period = formatterDate(new Date(budgetPeriod.getYear(), budgetPeriod.getMonth() + 2, 1))
+  }
+
+  ymd = getYMD(period).ymd
+  return {
+    period: period,
+    ymd: ymd,
+    factPeriod: factPeriod,
+    budgetPeriod: budgetPeriod
+  }
 }

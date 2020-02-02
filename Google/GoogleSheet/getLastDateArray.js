@@ -1,6 +1,5 @@
 // получение максимальной даты в массиве
-function getLastDateArray(sheetID, sheetName, filter) {
-  var array = getCurrData(getAllData(sheetID, sheetName))
+function getLastDateArray(array, filter) {
   var arrayDate = array.reduce(function (search, all) {
     if (all.sourceList == filter) {
       search.push(all.date)

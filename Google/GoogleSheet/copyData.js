@@ -1,14 +1,14 @@
 function copyData(sourceSheetID, targetSheetID, sourceSheetName, targetSheetName) {
-  var sourceSS = SpreadsheetApp.openById(sourceSheetID).getSheetByName(sourceSheetName)
   var targetSS = SpreadsheetApp.openById(targetSheetID).getSheetByName(targetSheetName)
-  var sourceArray = sourceSS.getDataRange().getValues()
+  var sourceArray = getAllData(sourceSheetID, sourceSheetName)
+  var targetArray = getAllData(sourceSheetID, sourceSheetName)
 
-  var maxDateTarget = getLastDateArray(targetSheetID, targetSheetName, sourceSheetName)
+  var maxDateTarget = getLastDateArray(targetArray, sourceSheetName)
 
   var newData = sourceArray.filter(function (row) {
     return row[0] > new Date(maxDateTarget.getTime())
   })
-
+  // TODO перевести на испольование свойств абоирубтов
   if (newData.length > 0) {
     for (var i = 0; i < newData.length; i++) {
       var vData = newData[i][0]
@@ -33,9 +33,5 @@ function copyData(sourceSheetID, targetSheetID, sourceSheetName, targetSheetName
     }
   }
   // Удаление пустых строк
-  var maxRows = targetSS.getMaxRows()
-  var lastRow = targetSS.getLastRow()
-  if (maxRows - lastRow != 0) {
-    targetSS.deleteRows(lastRow + 1, maxRows - lastRow)
-  }
+  deleteEmptyRow(targetSheetID, targetSheetName)
 }

@@ -1,5 +1,5 @@
-function getAllData(sheetID, sheetName) {
-  var ss = SpreadsheetApp.openById(sheetID).getSheetByName(sheetName)
+function getAllData(sheetId, sheetName) {
+  var ss = SpreadsheetApp.openById(sheetId).getSheetByName(sheetName)
   var ssArrays = ss.getDataRange().getValues()
 
   var ssData = []
