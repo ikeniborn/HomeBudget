@@ -25,8 +25,11 @@ function doPost(e) {
     postObject.nomenclature = postData.action.data.card.name
     postObject.sum = parseComment(postData).sum
     postObject.comment = parseComment(postData).comment
-    updateFactPeriod(postObject)
-    updateBudgetPeriod(postObject)
+    if (postObject.account == 'Зарплата') {
+      updateFactPeriod(postObject)
+    } else if (postObject.account == 'Аванс') {
+      updateBudgetPeriod(postObject)
+    }
     postObject.period = getPeriod(boardId, postData.action.data.list.name).period
     postObject.ymd = getPeriod(boardId, postData.action.data.list.name).ymd
     console.log(postObject)
@@ -37,7 +40,8 @@ function doPost(e) {
         updateTrelloBuffer(postObject, boardId)
         updateTrelloAccounting(postObject, boardId)
         var textComment = getRestSum(postObject).text
-        addComment(apiRoot, apiToken, apiKey, cardId, textComment)
+        // TODO проверить расчет сумм
+        // addComment(apiRoot, apiToken, apiKey, cardId, textComment)
       }
     } else if ([boardIdBudget, boardIdBudget2, boardIdBudget3].indexOf(boardId) !== -1) {
       sourceSheetName = sourceSheetNameBudgetTrello
