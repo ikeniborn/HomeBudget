@@ -47,7 +47,7 @@ function doPost(e) {
       sourceSheetName = sourceSheetNameBudgetTrello
       maxDate = getLastDateArray(getCurrData(getAllData(sourceSheetID, sourceSheetName), postObject.ymd))
       if (postObject.actionDate > maxDate) {
-        updateTrelloBuffer(postData, boardId)
+        updateTrelloBuffer(postObject, boardId)
         updateTrelloAccounting(postObject, boardId)
       }
     }
