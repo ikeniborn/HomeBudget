@@ -39,8 +39,10 @@ function doPost(e) {
       if (postObject.actionDate > maxDate) {
         updateTrelloBuffer(postObject, boardId)
         updateTrelloAccounting(postObject, boardId)
-        var textComment = getRestSum(postObject).text
-        addComment(apiRoot, apiToken, apiKey, cardId, textComment)
+        if ([boardIdFact].indexOf(boardId) !== -1) {
+          var textComment = getRestSum(postObject).text
+          addComment(apiRoot, apiToken, apiKey, cardId, textComment)
+        }
       }
     } else if ([boardIdBudget, boardIdBudget2, boardIdBudget3].indexOf(boardId) !== -1) {
       sourceSheetName = sourceSheetNameBudgetTrello
