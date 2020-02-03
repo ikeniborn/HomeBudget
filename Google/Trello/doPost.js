@@ -69,7 +69,7 @@ function doPost(e) {
         updateTrelloAccounting(postObject, postObject.boardId)
         if ([boardIdFact].indexOf(postObject.boardId) !== -1) {
           var textComment = getRestSum(postObject).text
-          addComment(apiRoot, apiToken, apiKey, cardId, textComment)
+          addComment(apiRoot, apiToken, apiKey, postObject.cardId, textComment)
         }
       }
     } else if ([boardIdBudget, boardIdBudget2, boardIdBudget3].indexOf(postObject.boardId) !== -1) {
