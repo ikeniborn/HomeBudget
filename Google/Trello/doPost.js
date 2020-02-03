@@ -15,10 +15,10 @@ function doPost(e) {
     postObject.actionDate = new Date(postData.action.date)
     postObject.boardName = postData.action.data.board.name
     postObject.boardId = postData.action.data.board.id
-    postObject.cardName = postData.action.data.card.name
+    postObject.cardName = parseCardName(postData.action.data.card.name)
     postObject.cardId = postData.action.data.card.id
-    postObject.listId = postData.action.data.list.id
     postObject.listName = postData.action.data.list.name
+    postObject.listId = postData.action.data.list.id
     postObject.bill = getAccountingItem(sourceSheetID, accountingItemSheetName, postObject.cardName).bill
     postObject.account = getAccountingItem(sourceSheetID, accountingItemSheetName, postObject.cardName).account
     postObject.nomenclature = postData.action.data.card.name
