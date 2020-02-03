@@ -1,32 +1,27 @@
-function getTotalSum(sheetID, sheetName, уmd, cfo, bill, account, nomenclature) {
-  /*
-    sheetID - идентификатор страницы гугл
-    sheetName - наименование листа страницы
-    уmd - период в формате yyyymmdd
-    cfo - наименование цфо
-    bill - наименование счета
-    account - наименование стать
-    nomenclature - наименование номенклатуры
-   */
-  var allDataFact = filterDataFromArray(getAllData(sheetID, sheetName), уmd)
+function getTotalSum(sheetId, sheetName, postObject) {
+  var listName = postObject.listName
+  var nomenclatureName = postObject.nomenclature
+  var billName = postObject.bill
+  var accountName = postObject.account
+  var currData = getCurrData(getAllData(sheetId, sheetName), postObject.ymd)
   var total = {}
 
-  total.bill = allDataFact.reduce(function (sum, array) {
-    if (array.cfo == cfo && array.bill == bill) {
+  total.bill = currData.reduce(function (sum, array) {
+    if (array.cfo == listName && array.bill == billName) {
       sum += array.sum
     }
     return sum
   }, 0)
 
-  total.account = allDataFact.reduce(function (sum, array) {
-    if (array.cfo == cfo && array.bill == bill && array.account == account) {
+  total.account = currData.reduce(function (sum, array) {
+    if (array.cfo == listName && array.bill == billName && array.account == accountName) {
       sum += array.sum
     }
     return sum
   }, 0)
 
-  total.nomenclature = allDataFact.reduce(function (sum, array) {
-    if (array.cfo == cfo && array.bill == bill && array.account == account && array.nomenclature == nomenclature) {
+  total.nomenclature = currData.reduce(function (sum, array) {
+    if (array.cfo == listName && array.bill == billName && array.account == accountName && array.nomenclature == nomenclatureName) {
       sum += array.sum
     }
     return sum

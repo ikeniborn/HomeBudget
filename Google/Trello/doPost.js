@@ -40,8 +40,7 @@ function doPost(e) {
         updateTrelloBuffer(postObject, boardId)
         updateTrelloAccounting(postObject, boardId)
         var textComment = getRestSum(postObject).text
-        // TODO проверить расчет сумм
-        // addComment(apiRoot, apiToken, apiKey, cardId, textComment)
+        addComment(apiRoot, apiToken, apiKey, cardId, textComment)
       }
     } else if ([boardIdBudget, boardIdBudget2, boardIdBudget3].indexOf(boardId) !== -1) {
       sourceSheetName = sourceSheetNameBudgetTrello

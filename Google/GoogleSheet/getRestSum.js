@@ -1,10 +1,6 @@
 function getRestSum(postObject) {
-  var listName = postObject.listName
-  var nomenclatureName = postObject.nomenclature
-  var billName = postObject.bill
-  var accountName = postObject.account
-  var budgetSum = getTotalSum(targetSheetID, targetSheetNameBudget, listName, billName, accountName, nomenclatureName)
-  var factSum = getTotalSum(targetSheetID, targetSheetNameFact, listName, billName, accountName, nomenclatureName)
+  var budgetSum = getTotalSum(targetSheetID, targetSheetNameBudget, postObject)
+  var factSum = getTotalSum(targetSheetID, targetSheetNameFact, postObject)
   var restSum = {}
   restSum.bill = budgetSum.bill - factSum.bill
   restSum.account = budgetSum.account - factSum.account

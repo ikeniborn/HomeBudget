@@ -16,13 +16,13 @@ function getPeriod(boardId, listName) {
   if (boardId == boardIdFact) {
     period = factPeriod
   } else if (boardId == boardIdFact0) {
-    period = formatterDate(new Date(factPeriod.getYear(), factPeriod.getMonth() - 1, 1))
+    period = new Date(factPeriod.getYear(), factPeriod.getMonth() - 1, 1)
   } else if (boardId == boardIdBudget) {
     period = budgetPeriod
   } else if (boardId == boardIdBudget2) {
-    period = formatterDate(new Date(budgetPeriod.getYear(), budgetPeriod.getMonth() + 1, 1))
+    period = new Date(budgetPeriod.getYear(), budgetPeriod.getMonth() + 1, 1)
   } else if (boardId == boardIdBudget3) {
-    period = formatterDate(new Date(budgetPeriod.getYear(), budgetPeriod.getMonth() + 2, 1))
+    period = new Date(budgetPeriod.getYear(), budgetPeriod.getMonth() + 2, 1)
   }
 
   ymd = getYMD(period).ymd
