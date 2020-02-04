@@ -28,7 +28,7 @@ function doPost(e) {
     postObject.mvz = parseComment(postObject.text, postObject.listName).mvz
     postObject.memberCreator = postData.action.memberCreator.username
     if (['Зарплата', 'Аванс'].indexOf(postObject.account) !== -1) {
-      closedPeriod(postObject)
+      // closedPeriod(postObject)
     }
     postObject.period = getPeriod(postObject.boardId, postData.action.data.list.name).period
     postObject.ymd = getPeriod(postObject.boardId, postData.action.data.list.name).ymd

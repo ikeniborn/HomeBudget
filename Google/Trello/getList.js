@@ -12,12 +12,13 @@ function getList(boardId, listName) {
       variable = {}
       variable.id = array.id
       variable.name = array.name
+      return listArray.push(variable)
     } else if (listName == undefined) {
       variable = {}
       variable.id = array.id
       variable.name = array.name
+      return listArray.push(variable)
     }
-    return listArray.push(variable)
   }, {})
   if (listArray.length == 1) {
     list = listArray[0]
