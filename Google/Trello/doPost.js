@@ -19,8 +19,8 @@ function doPost(e) {
     postObject.listId = postData.action.data.list.id
     postObject.cardName = postData.action.data.card.name
     postObject.cardId = postData.action.data.card.id
-    postObject.bill = getAccountingItem(sourceSheetID, accountingItemSheetName, postObject.cardName).bill
-    postObject.account = getAccountingItem(sourceSheetID, accountingItemSheetName, postObject.cardName).account
+    postObject.bill = getAccountingItem(postObject.cardName).bill
+    postObject.account = getAccountingItem(postObject.cardName).account
     postObject.nomenclature = postData.action.data.card.name
     postObject.text = postData.action.data.text
     postObject.sum = parseComment(postObject.text).sum

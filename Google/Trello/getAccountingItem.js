@@ -1,6 +1,6 @@
 // получаение справочника статей
-function getAccountingItem(sheetID, sheetName, nomenclature) {
-  var ss = SpreadsheetApp.openById(sheetID).getSheetByName(sheetName)
+function getAccountingItem(nomenclature) {
+  var ss = SpreadsheetApp.openById(sourceSheetID).getSheetByName(accountingItemSheetName)
   var ssArrays = ss.getDataRange().getValues()
   var accountArray = []
   var accountItem = {}
