@@ -1,4 +1,4 @@
-function getList(boardId) {
+function getList(boardId, listName) {
   var data = {
     method: 'get',
     contentType: 'application/json'
@@ -8,14 +8,21 @@ function getList(boardId) {
   var listArray = []
   var list
   respData.reduce(function (variable, array) {
-    variable = {}
-    variable.id = array.id
-    variable.name = array.name
+    if (parseListName(array.name) == listName) {
+      variable = {}
+      variable.id = array.id
+      variable.name = array.name
+    } else if (listName == undefined) {
+      variable = {}
+      variable.id = array.id
+      variable.name = array.name
+    }
     return listArray.push(variable)
   }, {})
   if (listArray.length == 1) {
     list = listArray[0]
     return list
+  } else {
+    return listArray
   }
-  return listArray
 }

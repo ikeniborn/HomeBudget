@@ -15,52 +15,23 @@ function doPost(e) {
     postObject.actionDate = new Date(postData.action.date)
     postObject.boardName = postData.action.data.board.name
     postObject.boardId = postData.action.data.board.id
-    postObject.cardName = parseCardName(postData.action.data.card.name)
-    postObject.cardId = postData.action.data.card.id
-    postObject.listName = postData.action.data.list.name
+    postObject.listName = parseListName(postData.action.data.list.name)
     postObject.listId = postData.action.data.list.id
+    postObject.cardName = postData.action.data.card.name
+    postObject.cardId = postData.action.data.card.id
     postObject.bill = getAccountingItem(sourceSheetID, accountingItemSheetName, postObject.cardName).bill
     postObject.account = getAccountingItem(sourceSheetID, accountingItemSheetName, postObject.cardName).account
     postObject.nomenclature = postData.action.data.card.name
     postObject.text = postData.action.data.text
     postObject.sum = parseComment(postObject.text).sum
     postObject.comment = parseComment(postObject.text).comment
+    postObject.mvz = parseComment(postObject.text, postObject.listName).mvz
     postObject.memberCreator = postData.action.memberCreator.username
-    if (postObject.account == 'Зарплата') {
-      updateFactPeriod(postObject)
-      // архивирование факта прошлого периода
-      var listFact0 = getList(boardIdFact0)
-      listFact0.forEach(function (list) {
-        closedList(list.id)
-      })
-      // перенос факта в прошлый период
-      var listFact = getList(boardIdFact)
-      listFact.forEach(function (list) {
-        moveList(listId, boardIdFact0)
-      })
-      var boardNameFact0 = 'Факт' + getParametr(sourceSheetID, parametrSheetName, 'periodFactIlya').value
-      updateBoard(boardIdFact0, boardNameFact0)
-    } else if (postObject.account == 'Аванс') {
-      updateBudgetPeriod(postObject)
-      // архивирование текущего бюджета
-      var listBudget = getList(boardIdBudget)
-      listBudget.forEach(function (list) {
-        closedList(list.id)
-      })
-      // перенос бюджета +1 на текущий бюджет
-      var listBudget2 = getList(boardIdBudget2)
-      listBudget2.forEach(function (list) {
-        moveList(listId, boardIdBudget)
-      })
-      // перенос бюджета +2 на текущий бюджет+1
-      var listBudget3 = getList(boardIdBudget3)
-      listBudget3.forEach(function (list) {
-        moveList(listId, boardIdBudget2)
-      })
+    if (['Зарплата', 'Аванс'].indexOf(postObject.account) !== -1) {
+      closedPeriod(postObject)
     }
     postObject.period = getPeriod(postObject.boardId, postData.action.data.list.name).period
     postObject.ymd = getPeriod(postObject.boardId, postData.action.data.list.name).ymd
-    console.log(postObject)
     if ([boardIdFact, boardIdFact0].indexOf(postObject.boardId) !== -1) {
       sourceSheetName = sourceSheetNameFactTrello
       maxDate = getLastDateArray(getCurrData(getAllData(sourceSheetID, sourceSheetName), postObject.ymd))
@@ -78,7 +49,7 @@ function doPost(e) {
       if (postObject.actionDate > maxDate) {
         updateTrelloBuffer(postObject, postObject.boardId)
         updateTrelloAccounting(postObject, postObject.boardId)
-        var textComment =  getBudgetSum(postObject).text
+        var textComment = getBudgetSum(postObject).text
         addComment(apiRoot, apiToken, apiKey, postObject.cardId, textComment)
       }
     }
