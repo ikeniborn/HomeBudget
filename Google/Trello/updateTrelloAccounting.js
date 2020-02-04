@@ -15,7 +15,7 @@ function updateTrelloAccounting(postObject, boardId) {
   console.log(searchRow)
   if (searchRow.length == 0) {
     var ss = SpreadsheetApp.openById(targetSheetID).getSheetByName(targetSheetName)
-    ss.appendRow([postObject.actionDate, postObject.period, postObject.listName, postObject.listName, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
+    ss.appendRow([postObject.actionDate, postObject.period, postObject.listName, postObject.mvz, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
     // Проверка перевода на счет семьи
     if (postObject.account == 'Перевод на счет Семья') {
       var insertdate = new Date(postObject.actionDate.getTime() + 1000);
