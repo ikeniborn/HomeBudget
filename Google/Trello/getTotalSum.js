@@ -1,6 +1,5 @@
 function getTotalSum(sheetId, sheetName, postObject) {
   var currData = getCurrData(getAllData(sheetId, sheetName), postObject.ymd)
-  console.log(currData)
   var total = {}
 
   total.bill = currData.reduce(function (sum, array) {

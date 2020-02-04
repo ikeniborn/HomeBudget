@@ -1,9 +1,9 @@
 function getBudgetSum(postObject) {
   var budgetSum = getTotalSum(targetSheetID, targetSheetNameBudget, postObject)
   var totalSum = {}
-  totalSum.text = 'Итого: '
-  totalSum.text += 'ЦФО: ' + budgetSum.bill + ' р., '
-  totalSum.text += 'Статья: ' + budgetSum.account + ' р., '
-  totalSum.text += 'Номенклатура: ' + budgetSum.nomenclature + ' р. '
+  totalSum.text = 'Итого бюджет ' + formatterDate(postObject.period) + ': '
+  totalSum.text += ' ' + postObject.listName + ': ' + budgetSum.bill + ' р., '
+  totalSum.text += ' ' + postObject.account + ': ' + budgetSum.account + ' р., '
+  totalSum.text += ' ' + postObject.nomenclature + ': ' + budgetSum.nomenclature + ' р. '
   return totalSum
 }
