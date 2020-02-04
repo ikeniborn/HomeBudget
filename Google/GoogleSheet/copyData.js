@@ -1,12 +1,16 @@
 function copyData(sourceSheetID, targetSheetID, sourceSheetName, targetSheetName) {
+  //TODO добавить проверку по хэш для строк гугл форм.
   var targetSS = SpreadsheetApp.openById(targetSheetID).getSheetByName(targetSheetName)
   var sourceArray = getAllData(sourceSheetID, sourceSheetName)
-  var targetArray = getAllData(sourceSheetID, sourceSheetName)
+  var targetArray = getAllData(targetSheetID, targetSheetName)
 
   var maxDateTarget = getLastDateArray(targetArray, sourceSheetName)
 
-  var newData = sourceArray.filter(function (row) {
-    return row[0] > new Date(maxDateTarget.getTime())
+  var newData = sourceArray.reduce(function (row, array) {
+    var searchRow = targetArray.filter(function (row) {
+      return row.idAction == array.idAction
+    })
+    return row.date > new Date(maxDateTarget.getTime() || row.idAction !== searchRow.idAction)
   })
   // TODO перевести на испольование свойств абоирубтов
   if (newData.length > 0) {

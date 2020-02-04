@@ -1,27 +1,24 @@
 function getTotalSum(sheetId, sheetName, postObject) {
-  var listName = postObject.listName
-  var nomenclatureName = postObject.nomenclature
-  var billName = postObject.bill
-  var accountName = postObject.account
   var currData = getCurrData(getAllData(sheetId, sheetName), postObject.ymd)
+  console.log(currData)
   var total = {}
 
   total.bill = currData.reduce(function (sum, array) {
-    if (array.cfo == listName && array.bill == billName) {
+    if (array.cfo == postObject.listName && array.bill == postObject.bill) {
       sum += array.sum
     }
     return sum
   }, 0)
 
   total.account = currData.reduce(function (sum, array) {
-    if (array.cfo == listName && array.bill == billName && array.account == accountName) {
+    if (array.cfo == postObject.listName && array.bill == postObject.bill && array.account == postObject.account) {
       sum += array.sum
     }
     return sum
   }, 0)
 
   total.nomenclature = currData.reduce(function (sum, array) {
-    if (array.cfo == listName && array.bill == billName && array.account == accountName && array.nomenclature == nomenclatureName) {
+    if (array.cfo == postObject.listName && array.bill == postObject.bill && array.account == postObject.account && array.nomenclature == postObject.nomenclature) {
       sum += array.sum
     }
     return sum
