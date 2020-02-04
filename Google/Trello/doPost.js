@@ -3,6 +3,7 @@ function doPost(e) {
   var ss = SpreadsheetApp.openById(sourceSheetID).getSheetByName('test')
   ss.getRange(1, 1).setValue(postData)
   const variable = {}
+  var postObject = {}
   variable.idMemberCreator = postData.action.idMemberCreator !== undefined ? postData.action.idMemberCreator : null
   variable.actionType = postData.action.type !== undefined ? postData.action.type : null
   console.log(variable)
@@ -10,7 +11,6 @@ function doPost(e) {
     var sourceSheetName
     var maxDate
     // добавление информации в учет
-    var postObject = {}
     postObject.actionId = postData.action.id
     postObject.actionDate = new Date(postData.action.date)
     postObject.boardName = postData.action.data.board.name
@@ -59,9 +59,22 @@ function doPost(e) {
     } else {
       addReaction(apiRoot, apiToken, apiKey, postObject.actionId, jackdawReaction)
     }
+  } else if (variable.actionType == 'updateComment' && variable.idMemberCreator !== '5e2b5f3f409c544ebdb1b9d4') {
+    postObject.actionId = postData.action.data.action.id
+    postObject.boardId = postData.action.data.board.id
+    postObject.text = postData.action.data.action.text
+    postObject.sum = parseComment(postObject.text).sum
+    postObject.comment = parseComment(postObject.text).comment
+    if ([boardIdFact, boardIdFact0].indexOf(postObject.boardId) !== -1) {
+      updateRowByIdAction(sourceSheetID, sourceSheetNameFactTrello, postObject)
+      updateRowByIdAction(targetSheetID, targetSheetNameFact, postObject)
+    } else if ([boardIdBudget, boardIdBudget2, boardIdBudget3].indexOf(postObject.boardId) !== -1) {
+      updateRowByIdAction(sourceSheetID, sourceSheetNameBudgetTrello, postObject)
+      updateRowByIdAction(targetSheetID, targetSheetNameBudget, postObject)
+    }
+    updateRowByIdAction(sheetID, sheetName, postObject)
   } else if (variable.actionType == 'deleteComment') {
     // удаление строки при удалении комментария
-    var postObject = {}
     postObject.actionId = postData.action.data.action.id
     postObject.boardId = postData.action.data.board.id
     console.log(postObject)
