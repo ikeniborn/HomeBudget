@@ -78,6 +78,8 @@ function doPost(e) {
       if (postObject.actionDate > maxDate) {
         updateTrelloBuffer(postObject, postObject.boardId)
         updateTrelloAccounting(postObject, postObject.boardId)
+        var textComment =  getBudgetSum(postObject).text
+        addComment(apiRoot, apiToken, apiKey, postObject.cardId, textComment)
       }
     }
     // добавление реакции на комментарий
