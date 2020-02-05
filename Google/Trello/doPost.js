@@ -8,14 +8,13 @@ function doPost(e) {
   variable.actionType = postData.action.type !== undefined ? postData.action.type : null
   console.log(variable)
   if (variable.actionType == 'commentCard' && variable.idMemberCreator !== '5e2b5f3f409c544ebdb1b9d4') {
-    var sourceSheetName
     var maxDate
     // добавление информации в учет
     postObject.actionId = postData.action.id
     postObject.actionDate = new Date(postData.action.date)
     postObject.boardName = postData.action.data.board.name
     postObject.boardId = postData.action.data.board.id
-    postObject.listName = parseListName(postData.action.data.list.name)
+    postObject.cfo = parseListName(postData.action.data.list.name)
     postObject.listId = postData.action.data.list.id
     postObject.cardName = postData.action.data.card.name
     postObject.cardId = postData.action.data.card.id
@@ -25,16 +24,17 @@ function doPost(e) {
     postObject.text = postData.action.data.text
     postObject.sum = parseComment(postObject.text).sum
     postObject.comment = parseComment(postObject.text).comment
-    postObject.mvz = parseComment(postObject.text, postObject.listName).mvz
+    postObject.mvz = parseComment(postObject.text, postObject.cfo).mvz
     postObject.memberCreator = postData.action.memberCreator.username
-    if (['Зарплата', 'Аванс'].indexOf(postObject.account) !== -1) {
-      // closedPeriod(postObject)
+    if (['Зарплата'].indexOf(postObject.account) !== -1) {
+      // closedFactPeriod(postObject)
+    } else if (['Аванс'].indexOf(postObject.account) !== -1) {
+      // closedFactPeriod(postObject)
     }
     postObject.period = getPeriod(postObject.boardId, postData.action.data.list.name).period
     postObject.ymd = getPeriod(postObject.boardId, postData.action.data.list.name).ymd
     if ([boardIdFact, boardIdFact0].indexOf(postObject.boardId) !== -1) {
-      sourceSheetName = sourceSheetNameFactTrello
-      maxDate = getLastDateArray(getCurrData(getAllData(sourceSheetID, sourceSheetName), postObject.ymd))
+      maxDate = getLastDateArray(getCurrData(getAllData(sourceSheetID, sourceSheetNameFactTrello), postObject.ymd))
       if (postObject.actionDate > maxDate) {
         updateTrelloBuffer(postObject, postObject.boardId)
         updateTrelloAccounting(postObject, postObject.boardId)
@@ -44,8 +44,7 @@ function doPost(e) {
         }
       }
     } else if ([boardIdBudget, boardIdBudget2, boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-      sourceSheetName = sourceSheetNameBudgetTrello
-      maxDate = getLastDateArray(getCurrData(getAllData(sourceSheetID, sourceSheetName), postObject.ymd))
+      maxDate = getLastDateArray(getCurrData(getAllData(sourceSheetID, sourceSheetNameBudgetTrello), postObject.ymd))
       if (postObject.actionDate > maxDate) {
         updateTrelloBuffer(postObject, postObject.boardId)
         updateTrelloAccounting(postObject, postObject.boardId)
@@ -55,24 +54,32 @@ function doPost(e) {
     }
     // добавление реакции на комментарий
     if (postObject.memberCreator == 'oksanatischenko') {
-      addReaction(apiRoot, apiToken, apiKey, postObject.actionId, buuReaction)
+      addReaction(postObject.actionId, buuReaction)
     } else {
-      addReaction(apiRoot, apiToken, apiKey, postObject.actionId, jackdawReaction)
+      addReaction(postObject.actionId, jackdawReaction)
     }
   } else if (variable.actionType == 'updateComment' && variable.idMemberCreator !== '5e2b5f3f409c544ebdb1b9d4') {
     postObject.actionId = postData.action.data.action.id
+    postObject.actionDate = new Date(postData.action.date)
     postObject.boardId = postData.action.data.board.id
+    postObject.cardId = postData.action.data.card.id
     postObject.text = postData.action.data.action.text
     postObject.sum = parseComment(postObject.text).sum
     postObject.comment = parseComment(postObject.text).comment
+    var postObjectRow = {}
     if ([boardIdFact, boardIdFact0].indexOf(postObject.boardId) !== -1) {
       updateRowByIdAction(sourceSheetID, sourceSheetNameFactTrello, postObject)
-      updateRowByIdAction(targetSheetID, targetSheetNameFact, postObject)
+      postObjectRow = updateRowByIdAction(targetSheetID, targetSheetNameFact, postObject)
+      if ([boardIdFact].indexOf(postObject.boardId) !== -1) {
+        var textComment = getRestSum(postObjectRow).text
+        updateCard(postObject.cardId, textComment)
+      }
     } else if ([boardIdBudget, boardIdBudget2, boardIdBudget3].indexOf(postObject.boardId) !== -1) {
       updateRowByIdAction(sourceSheetID, sourceSheetNameBudgetTrello, postObject)
-      updateRowByIdAction(targetSheetID, targetSheetNameBudget, postObject)
+      postObjectRow = updateRowByIdAction(targetSheetID, targetSheetNameBudget, postObject)
+      var textComment = getRestSum(postObjectRow).text
+      updateCard(postObject.cardId, textComment)
     }
-    updateRowByIdAction(sheetID, sheetName, postObject)
   } else if (variable.actionType == 'deleteComment') {
     // удаление строки при удалении комментария
     postObject.actionId = postData.action.data.action.id

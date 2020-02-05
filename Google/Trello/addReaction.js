@@ -1,5 +1,5 @@
 // добавление реакции в трелло
-function addReaction(apiRoot, apiToken, apiKey, actionId, reaction) {
+function addReaction(actionId, reaction) {
   var keyAndToken = 'key=' + apiKey + '&token=' + apiToken
   var payload = JSON.stringify(reaction)
   var data = {

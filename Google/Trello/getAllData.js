@@ -7,8 +7,9 @@ function getAllData(sheetId, sheetName) {
     if (index == 0) {} else {
       row = {}
       if ([sourceSheetNameFactTrello, sourceSheetNameBudgetTrello].indexOf(sheetName) !== -1) {
-        row.date = array[0]
+        row.actionDate = array[0]
         row.period = array[1]
+        row.ymd = getYMD(array[1]).ymd
         row.cfo = array[2]
         row.mvz = null
         row.cashFlow = null
@@ -21,8 +22,9 @@ function getAllData(sheetId, sheetName) {
         row.sourceList = null
         row.indexRow = index + 1
       } else if ([sourceSheetNameFactGoogleForm, sourceSheetNameBudgetGoogleForm].indexOf(sheetName) !== -1) {
-        row.date = array[0]
+        row.actionDate = array[0]
         row.period = array[1]
+        row.ymd = getYMD(array[1]).ymd
         row.cfo = array[2]
         row.mvz = array[3]
         row.cashFlow = null
@@ -35,8 +37,9 @@ function getAllData(sheetId, sheetName) {
         row.sourceList = null
         row.indexRow = index + 1
       } else if ([targetSheetNameFact, targetSheetNameBudget].indexOf(sheetName) !== -1) {
-        row.date = array[0]
+        row.actionDate = array[0]
         row.period = array[1]
+        row.ymd = getYMD(array[1]).ymd
         row.cfo = array[2]
         row.mvz = array[3]
         row.cashFlow = null

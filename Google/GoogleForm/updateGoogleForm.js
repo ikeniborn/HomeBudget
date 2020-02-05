@@ -16,7 +16,7 @@ function updateGoogleForm() {
   var arrayBudget = getAllData(sourceSheetID, sourceSheetNameBudgetGoogleForm)
   var lastRowBudget = ssBudget.getLastRow()
   var rowsBudget = arrayBudget.filter(function (row) {
-    return row.date > maxDateBudgetGoogleFormAccounting
+    return row.actionDate > maxDateBudgetGoogleFormAccounting
   })
   Logger.log(rowsBudget)
   var checkUpdateBudget = updateDataGoogleForm(rowsBudget, lastRowBudget, ssBudget)

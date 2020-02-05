@@ -8,5 +8,5 @@ function updateTrelloBuffer(postObject, boardId) {
   // get sheet Google
   var ss = SpreadsheetApp.openById(sourceSheetID).getSheetByName(sheetName)
   // добавление строк на страницу
-  ss.appendRow([postObject.actionDate, postObject.period, postObject.listName, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId])
+  ss.appendRow([postObject.actionDate, postObject.period, postObject.cfo, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId])
 }
