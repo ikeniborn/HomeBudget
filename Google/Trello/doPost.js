@@ -40,7 +40,7 @@ function doPost(e) {
         updateTrelloAccounting(postObject, postObject.boardId)
         if ([boardIdFact].indexOf(postObject.boardId) !== -1) {
           var textComment = getRestSum(postObject).text
-          addComment(apiRoot, apiToken, apiKey, postObject.cardId, textComment)
+          updateCard(postObject.cardId, textComment)
         }
       }
     } else if ([boardIdBudget, boardIdBudget2, boardIdBudget3].indexOf(postObject.boardId) !== -1) {
@@ -50,7 +50,7 @@ function doPost(e) {
         updateTrelloBuffer(postObject, postObject.boardId)
         updateTrelloAccounting(postObject, postObject.boardId)
         var textComment = getBudgetSum(postObject).text
-        addComment(apiRoot, apiToken, apiKey, postObject.cardId, textComment)
+        updateCard(postObject.cardId, textComment)
       }
     }
     // добавление реакции на комментарий
