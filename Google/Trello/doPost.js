@@ -26,10 +26,12 @@ function doPost(e) {
     postObject.comment = parseComment(postObject.text).comment
     postObject.mvz = parseComment(postObject.text, postObject.cfo).mvz
     postObject.memberCreator = postData.action.memberCreator.username
-    if (['Зарплата'].indexOf(postObject.account) !== -1) {
-      // closedFactPeriod(postObject)
-    } else if (['Аванс'].indexOf(postObject.account) !== -1) {
-      // closedFactPeriod(postObject)
+    if ([boardIdFact].indexOf(postObject.boardId) !== -1) {
+      if (['Зарплата'].indexOf(postObject.account) !== -1) {
+        // closedFactPeriod(postObject)
+      } else if (['Аванс'].indexOf(postObject.account) !== -1) {
+        // closedFactPeriod(postObject)
+      }
     }
     postObject.period = getPeriod(postObject.boardId, postObject.cfo).period
     postObject.ymd = getPeriod(postObject.boardId, postObject.cfo).ymd

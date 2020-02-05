@@ -8,9 +8,9 @@ function copyData(sourceSheetID, targetSheetID, sourceSheetName, targetSheetName
 
   var newData = sourceArray.reduce(function (row, array) {
     var searchRow = targetArray.filter(function (row) {
-      return row.idAction == array.idAction
+      return row.actionId == array.actionId
     })
-    return row.actionDate > new Date(maxDateTarget.getTime() || row.idAction !== searchRow.idAction)
+    return row.actionDate > new Date(maxDateTarget.getTime() || row.actionId !== searchRow.actionId)
   })
   // TODO перевести на испольование свойств абоирубтов
   if (newData.length > 0) {
