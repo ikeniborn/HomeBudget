@@ -5,9 +5,9 @@ function getRestSum(postObject) {
   restSum.bill = budgetSum.bill - factSum.bill
   restSum.account = budgetSum.account - factSum.account
   restSum.nomenclature = budgetSum.nomenclature - factSum.nomenclature
-  restSum.text = 'Остаток: '
-  restSum.text += 'ЦФО: ' + restSum.bill + ' р., '
-  restSum.text += 'Статья: ' + restSum.account + ' р., '
-  restSum.text += 'Номенклатура: ' + restSum.nomenclature + ' р. '
+  restSum.text = 'Остаток бюджета на ' + formatterDateTime(postObject.actionDate) + ': '
+  restSum.text += postObject.listName + ': ' + restSum.bill + ' р., '
+  restSum.text += postObject.account + ': ' + restSum.account + ' р., '
+  restSum.text += postObject.nomenclature + ': ' + restSum.nomenclature + ' р. '
   return restSum
 }
