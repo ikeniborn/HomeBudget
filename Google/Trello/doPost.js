@@ -66,37 +66,37 @@ function doPost(e) {
     postObject.text = postData.action.data.action.text
     postObject.sum = parseComment(postObject.text).sum
     postObject.comment = parseComment(postObject.text).comment
-    var postObjectRow = {}
+    var postObjectUpdate = {}
     if ([boardIdFact, boardIdFact0].indexOf(postObject.boardId) !== -1) {
-      updateRowByIdAction(sourceSheetID, sourceSheetNameFactTrello, postObject)
-      postObjectRow = updateRowByIdAction(targetSheetID, targetSheetNameFact, postObject)
+      updateRowByActionId(sourceSheetID, sourceSheetNameFactTrello, postObject)
+      postObjectUpdate = updateRowByActionId(targetSheetID, targetSheetNameFact, postObject)
       if ([boardIdFact].indexOf(postObject.boardId) !== -1) {
-        var textComment = getRestSum(postObjectRow).text
+        var textComment = getRestSum(postObjectUpdate).text
         updateCard(postObject.cardId, textComment)
       }
     } else if ([boardIdBudget, boardIdBudget2, boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-      updateRowByIdAction(sourceSheetID, sourceSheetNameBudgetTrello, postObject)
-      postObjectRow = updateRowByIdAction(targetSheetID, targetSheetNameBudget, postObject)
-      var textComment = getRestSum(postObjectRow).text
+      updateRowByActionId(sourceSheetID, sourceSheetNameBudgetTrello, postObject)
+      postObjectUpdate = updateRowByActionId(targetSheetID, targetSheetNameBudget, postObject)
+      var textComment = getBudgetSum(postObjectUpdate).text
       updateCard(postObject.cardId, textComment)
     }
   } else if (variable.actionType == 'deleteComment') {
     // удаление строки при удалении комментария
     postObject.actionId = postData.action.data.action.id
     postObject.boardId = postData.action.data.board.id
-    postObject.actionDate = new Date(postData.action.date)
-    var postObjectRow = {}
+    postObject.cardId = postData.action.data.card.id
+    var postObjectDelete = {}
     if ([boardIdFact, boardIdFact0].indexOf(postObject.boardId) !== -1) {
-      deleteRowByIdAction(sourceSheetID, sourceSheetNameFactTrello, postObject)
-      postObjectRow = deleteRowByIdAction(targetSheetID, targetSheetNameFact, postObject)
+      deleteRowByActionId(sourceSheetID, sourceSheetNameFactTrello, postObject)
+      postObjectDelete = deleteRowByActionId(targetSheetID, targetSheetNameFact, postObject)
       if ([boardIdFact].indexOf(postObject.boardId) !== -1) {
-        var textComment = getRestSum(postObjectRow).text
+        var textComment = getRestSum(postObjectDelete).text
         updateCard(postObject.cardId, textComment)
       }
     } else if ([boardIdBudget, boardIdBudget2, boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-      deleteRowByIdAction(sourceSheetID, sourceSheetNameBudgetTrello, postObject)
-      postObjectRow = deleteRowByIdAction(targetSheetID, targetSheetNameBudget, postObject)
-      var textComment = getRestSum(postObjectRow).text
+      deleteRowByActionId(sourceSheetID, sourceSheetNameBudgetTrello, postObject)
+      postObjectDelete = deleteRowByActionId(targetSheetID, targetSheetNameBudget, postObject)
+      var textComment = getBudgetSum(postObjectDelete).text
       updateCard(postObject.cardId, textComment)
     }
   }

@@ -10,7 +10,7 @@ function updateTrelloAccounting(postObject, boardId) {
   }
   var targetArray = getAllData(targetSheetID, targetSheetName)
   var searchRow = targetArray.filter(function (row) {
-    return row.idAction == postObject.idAction
+    return row.actionId == postObject.actionId
   })
   console.log(searchRow)
   if (searchRow.length == 0) {

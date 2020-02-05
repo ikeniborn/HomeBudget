@@ -1,7 +1,6 @@
 function getAllData(sheetId, sheetName) {
   var ss = SpreadsheetApp.openById(sheetId).getSheetByName(sheetName)
   var ssArrays = ss.getDataRange().getValues()
-
   var ssData = []
   ssArrays.reduce(function (row, array, index) {
     if (index == 0) {} else {
@@ -18,7 +17,7 @@ function getAllData(sheetId, sheetName) {
         row.nomenclature = array[3]
         row.sum = array[4]
         row.comment = array[5]
-        row.idAction = array[6]
+        row.actionId = array[6]
         row.sourceList = null
         row.indexRow = index + 1
       } else if ([sourceSheetNameFactGoogleForm, sourceSheetNameBudgetGoogleForm].indexOf(sheetName) !== -1) {
@@ -33,7 +32,7 @@ function getAllData(sheetId, sheetName) {
         row.nomenclature = array[6]
         row.sum = array[7]
         row.comment = array[8]
-        row.idAction = null
+        row.actionId = null
         row.sourceList = null
         row.indexRow = index + 1
       } else if ([targetSheetNameFact, targetSheetNameBudget].indexOf(sheetName) !== -1) {
@@ -48,7 +47,7 @@ function getAllData(sheetId, sheetName) {
         row.nomenclature = array[6]
         row.sum = array[7]
         row.comment = array[8]
-        row.idAction = array[9]
+        row.actionId = array[9]
         row.sourceList = array[10]
         row.indexRow = index + 1
       }
