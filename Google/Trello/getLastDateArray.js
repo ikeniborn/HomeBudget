@@ -2,9 +2,9 @@
 function getLastDateArray(array, filter) {
   var arrayDate = array.reduce(function (search, all) {
     if (all.sourceList == filter) {
-      search.push(all.date)
+      search.push(all.actionDate)
     } else if (filter == undefined) {
-      search.push(all.date)
+      search.push(all.actionDate)
     }
     return search
   }, [])

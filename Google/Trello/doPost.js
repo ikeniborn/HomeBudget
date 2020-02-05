@@ -31,8 +31,8 @@ function doPost(e) {
     } else if (['Аванс'].indexOf(postObject.account) !== -1) {
       // closedFactPeriod(postObject)
     }
-    postObject.period = getPeriod(postObject.boardId, postData.action.data.list.name).period
-    postObject.ymd = getPeriod(postObject.boardId, postData.action.data.list.name).ymd
+    postObject.period = getPeriod(postObject.boardId, postObject.cfo).period
+    postObject.ymd = getPeriod(postObject.boardId, postObject.cfo).ymd
     if ([boardIdFact, boardIdFact0].indexOf(postObject.boardId) !== -1) {
       maxDate = getLastDateArray(getCurrData(getAllData(sourceSheetID, sourceSheetNameFactTrello), postObject.ymd))
       if (postObject.actionDate > maxDate) {
