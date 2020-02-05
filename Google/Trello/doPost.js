@@ -84,13 +84,20 @@ function doPost(e) {
     // удаление строки при удалении комментария
     postObject.actionId = postData.action.data.action.id
     postObject.boardId = postData.action.data.board.id
-    console.log(postObject)
+    postObject.actionDate = new Date(postData.action.date)
+    var postObjectRow = {}
     if ([boardIdFact, boardIdFact0].indexOf(postObject.boardId) !== -1) {
-      deleteRowByIdAction(sourceSheetID, sourceSheetNameFactTrello, postObject.actionId)
-      deleteRowByIdAction(targetSheetID, targetSheetNameFact, postObject.actionId)
+      deleteRowByIdAction(sourceSheetID, sourceSheetNameFactTrello, postObject)
+      postObjectRow = deleteRowByIdAction(targetSheetID, targetSheetNameFact, postObject)
+      if ([boardIdFact].indexOf(postObject.boardId) !== -1) {
+        var textComment = getRestSum(postObjectRow).text
+        updateCard(postObject.cardId, textComment)
+      }
     } else if ([boardIdBudget, boardIdBudget2, boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-      deleteRowByIdAction(sourceSheetID, sourceSheetNameBudgetTrello, postObject.actionId)
-      deleteRowByIdAction(targetSheetID, targetSheetNameBudget, postObject.actionId)
+      deleteRowByIdAction(sourceSheetID, sourceSheetNameBudgetTrello, postObject)
+      postObjectRow = deleteRowByIdAction(targetSheetID, targetSheetNameBudget, postObject)
+      var textComment = getRestSum(postObjectRow).text
+      updateCard(postObject.cardId, textComment)
     }
   }
 }
