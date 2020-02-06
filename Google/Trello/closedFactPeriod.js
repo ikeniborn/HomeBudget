@@ -1,7 +1,13 @@
 /* eslint-disable spaced-comment */
 function closedFactPeriod(postObject) {
   updateFactPeriod(postObject)
-  var accountItems = getAccountingItem()
+  var accountItems = getAccountingItem().filter(function (row) {
+    if (postObject.cfo == 'Илья') {
+      return row.ilya == 1
+    } else if (postObject.cfo == 'Оксана') {
+      return row.oksana == 1
+    }
+  })
   //block архивирование факта прошлого периода
   var listFactId0 = getList(boardIdFact0, postObject.cfo).id
   closedList(listFactId0)
@@ -11,36 +17,32 @@ function closedFactPeriod(postObject) {
   moveList(listFactId, boardIdFact0)
   var listNameFact = postObject.cfo + '' + formatterDate(period0)
   updateList(listFactId, listNameFact)
-  //DOING создание новых листов, карточек в текущий факт и обогащение данными из бюджета
   var period = getPeriod(boardIdBudget, postObject.cfo)
   var newListNameFact = postObject.cfo + '' + formatterDate(period.period)
   var newListFact = addList(newListNameFact, boardIdFact)
-  //block создание карточек на листе
-  var newCardCfo = []
+  //block создание карточек  на листе и чеклистов в карточках
   var cardInfo = {}
+  var budget = getCurrData(getAllData(targetSheetID, targetSheetNameBudget), period.ymd)
   accountItems.forEach(function (accounts) {
-    if (accounts.ilya == 1 && postObject.cfo == 'Илья') {
-      cardInfo = addCard(accounts.nomenclature, newListFact.id)
-      cardInfo.checkListId = addCheckList(cardInfo.id, 'Бюджет').id
-      newCardCfo.push(cardInfo)
-    } else if (accounts.oksana == 1 && postObject.cfo == 'Оксана') {
-      cardInfo = addCard(accounts.nomenclature, newListFact.id)
-      cardInfo.checkListId = addCheckList(cardInfo.id, 'Бюджет').id
-      newCardCfo.push(cardInfo)
-    }
+    cardInfo = addCard(encodeData(accounts.nomenclature, '+'), newListFact.id)
+    // создние чеклиста для листа оксаны
+    checkListId = addCheckList(cardInfo.id, 'Бюджет').id
+    var budgetRow = budget.reduce(function (row, arrya) {
+      if (arrya.cfo == postObject.cfo && cardInfo.name == arrya.nomenclature) {
+        arrya.checkListId = checkListId
+        row.push(arrya)
+      }
+      return row
+    }, [])
+    budgetRow.forEach(function (row) {
+      addCheckListItem(row.checkListId, row.sum + ' ' + row.comment)
+    })
   })
-  //block создание чеклистов по бюджету
-  var currBudget = getCurrData(getAllData(targetSheetID, targetSheetNameBudget), period.ymd)
-  var currBudgetCfo = currBudget.filter(function (row) {
-    return currBudget.cfo = postObject.cfo
-  })
-  // currBudgetCfo.forEach(function (row) {
-  //   if (newCardCfo.name == row.nomenclature) {
-  //     addCheckListItem(newCardCfo.checkListId, row.sum + '' + row.comment)
-  //   }
-  // })
   //block обновление семейных карточек
   if (['Илья'].indexOf(postObject.cfo) !== -1) {
+    var accountItems = getAccountingItem().filter(function (row) {
+      return row.family == 1
+    })
     //block архивирование факта прошлого периода
     var listFact0 = getList(boardIdFact0, 'Семья').id
     closedList(listFact0)
@@ -50,5 +52,26 @@ function closedFactPeriod(postObject) {
     moveList(listFact, boardIdFact0)
     var listNameFact = 'Семья ' + formatterDate(period0.period)
     updateList(listFact, listNameFact)
+    var period = getPeriod(boardIdBudget, 'Семья')
+    var newListNameFact = 'Семья ' + formatterDate(period.period)
+    var newListFact = addList(newListNameFact, boardIdFact)
+    //block создание карточек  на листе и чеклистов в карточках
+    var cardInfo = {}
+    var budget = getCurrData(getAllData(targetSheetID, targetSheetNameBudget), period.ymd)
+    accountItems.forEach(function (accounts) {
+      cardInfo = addCard(encodeData(accounts.nomenclature, '+'), newListFact.id)
+      // создние чеклиста для листа оксаны
+      checkListId = addCheckList(cardInfo.id, 'Бюджет').id
+      var budgetRow = budget.reduce(function (row, arrya) {
+        if (arrya.cfo == 'Семья' && cardInfo.name == arrya.nomenclature) {
+          arrya.checkListId = checkListId
+          row.push(arrya)
+        }
+        return row
+      }, [])
+      budgetRow.forEach(function (row) {
+        addCheckListItem(row.checkListId, row.sum + ' ' + row.comment)
+      })
+    })
   }
 }
