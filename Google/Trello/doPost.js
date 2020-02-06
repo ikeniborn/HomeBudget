@@ -28,7 +28,7 @@ function doPost(e) {
     postObject.memberCreator = postData.action.memberCreator.username
     if ([boardIdFact].indexOf(postObject.boardId) !== -1) {
       if (['Зарплата', 'Остатки'].indexOf(postObject.account) !== -1) {
-        // closedFactPeriod(postObject)
+        closedFactPeriod(postObject)
       } else if (['Аванс'].indexOf(postObject.account) !== -1) {
         // closedBudgetPeriod(postObject)
       }
