@@ -16,6 +16,7 @@ function getAccountingItem(nomenclature) {
       row.ilya = array[6]
       row.oksana = array[7]
       row.form = array[8]
+      row.board = array[9]
       accountArray.push(row)
     } else if (nomenclature == undefined) {
       row = {}
@@ -28,6 +29,7 @@ function getAccountingItem(nomenclature) {
       row.ilya = array[6]
       row.oksana = array[7]
       row.form = array[8]
+      row.board = array[9]
       accountArray.push(row)
     }
   }, {})
