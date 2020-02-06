@@ -1,4 +1,4 @@
-function MD5(input) {
+function md5(input) {
   var txtHash = ''
   var rawHash = Utilities.computeDigest(
     Utilities.DigestAlgorithm.MD5,
