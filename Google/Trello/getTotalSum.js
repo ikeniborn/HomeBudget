@@ -23,5 +23,23 @@ function getTotalSum(sheetId, sheetName, postObject) {
     return sum
   }, 0)
 
+  total.income = currData.reduce(function (sum, array) {
+    if (array.cfo == postObject.cfo && array.bill == 'Приход') {
+      sum += array.sum
+    }
+    return sum
+  }, 0)
+
+  total.expense = currData.reduce(function (sum, array) {
+    if (array.cfo == postObject.cfo && array.bill == 'Расход') {
+      sum += array.sum
+    }
+    return sum
+  }, 0)
+
+  total.row = currData.filter(function (array) {
+    return array.cfo == postObject.cfo && array.bill == postObject.bill && array.account == postObject.account && array.nomenclature == postObject.nomenclature
+  })
+
   return total
 }
