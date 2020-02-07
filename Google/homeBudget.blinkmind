@@ -512,7 +512,7 @@
   "config": {
     "readOnly": false,
     "allowUndo": true,
-    "layoutDir": 0,
+    "layoutDir": 2,
     "theme": {
       "name": "default",
       "randomColor": true,

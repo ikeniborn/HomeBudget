@@ -1,11 +1,8 @@
 // получаение справочника статей
-function getAccountingItem(nomenclature) {
-  var globalVar = getVariable()
-  var ss = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName(globalVar.accountingItemSheetName)
-  var ssArrays = ss.getDataRange().getValues()
+function getAccountingItem(array, nomenclature) {
   var accountArray = []
   var accountItem = {}
-  ssArrays.reduce(function (row, array) {
+  array.reduce(function (row, array) {
     if (array[4] == nomenclature) {
       row = {}
       row.id = array[0]

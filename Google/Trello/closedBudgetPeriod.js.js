@@ -1,8 +1,10 @@
 /* eslint-disable no-undef */
 /* eslint-disable spaced-comment */
-function closedBudgetPeriod(postObject) {
+function closedBudgetPeriod(postObject, AccountingItemArray) {
   var globalVar = getVariable()
-  var accountItems = getAccountingItem()
+  var accountItems = AccountingItemArray.filter(function (row) {
+    return row.budget == 1
+  })
   //block создание новых карточек в бюджете
   updateBudgetPeriod(postObject)
   //block архивирование текущего бюджета
