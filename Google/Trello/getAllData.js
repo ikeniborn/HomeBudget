@@ -1,11 +1,12 @@
 function getAllData(sheetId, sheetName) {
+  var globalVar = getVariable()
   var ss = SpreadsheetApp.openById(sheetId).getSheetByName(sheetName)
   var ssArrays = ss.getDataRange().getValues()
   var ssData = []
   ssArrays.reduce(function (row, array, index) {
     if (index == 0) {} else {
       row = {}
-      if ([sourceSheetNameFactTrello, sourceSheetNameBudgetTrello].indexOf(sheetName) !== -1) {
+      if ([globalVar.sourceSheetNameFactTrello, globalVar.sourceSheetNameBudgetTrello].indexOf(sheetName) !== -1) {
         row.actionDate = array[0]
         row.period = array[1]
         row.ymd = getYMD(array[1]).ymd
@@ -20,7 +21,7 @@ function getAllData(sheetId, sheetName) {
         row.actionId = array[6]
         row.sourceList = null
         row.indexRow = index + 1
-      } else if ([sourceSheetNameFactGoogleForm, sourceSheetNameBudgetGoogleForm].indexOf(sheetName) !== -1) {
+      } else if ([globalVar.sourceSheetNameFactGoogleForm, globalVar.sourceSheetNameBudgetGoogleForm].indexOf(sheetName) !== -1) {
         row.actionDate = array[0]
         row.period = array[1]
         row.ymd = getYMD(array[1]).ymd
@@ -35,7 +36,7 @@ function getAllData(sheetId, sheetName) {
         row.actionId = null
         row.sourceList = null
         row.indexRow = index + 1
-      } else if ([targetSheetNameFact, targetSheetNameBudget].indexOf(sheetName) !== -1) {
+      } else if ([globalVar.targetSheetNameFact, globalVar.targetSheetNameBudget].indexOf(sheetName) !== -1) {
         row.actionDate = array[0]
         row.period = array[1]
         row.ymd = getYMD(array[1]).ymd

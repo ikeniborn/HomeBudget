@@ -4,14 +4,14 @@ function getPeriod(boardId, listName) {
   var factPeriod
   var budgetPeriod
   if (listName == 'Илья') {
-    factPeriod = getParametr(sourceSheetID, parametrSheetName, 'periodFactIlya').value
-    budgetPeriod = getParametr(sourceSheetID, parametrSheetName, 'periodBudgetIlya').value
+    factPeriod = getParametr('periodFactIlya').value
+    budgetPeriod = getParametr('periodBudgetIlya').value
   } else if (listName == 'Семья') {
-    factPeriod = getParametr(sourceSheetID, parametrSheetName, 'periodFactFamily').value
-    budgetPeriod = getParametr(sourceSheetID, parametrSheetName, 'periodBudgetFamily').value
+    factPeriod = getParametr('periodFactFamily').value
+    budgetPeriod = getParametr('periodBudgetFamily').value
   } else if (listName == 'Оксана') {
-    factPeriod = getParametr(sourceSheetID, parametrSheetName, 'periodFactOksana').value
-    budgetPeriod = getParametr(sourceSheetID, parametrSheetName, 'periodBudgetOksana').value
+    factPeriod = getParametr('periodFactOksana').value
+    budgetPeriod = getParametr('periodBudgetOksana').value
   }
   if (boardId == boardIdFact) {
     period = factPeriod

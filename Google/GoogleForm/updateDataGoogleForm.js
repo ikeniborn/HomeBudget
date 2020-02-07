@@ -3,13 +3,13 @@ function updateDataGoogleForm(array, lastRow, ss) {
     var row = array[i]
     var rowDate = row.date
     if (row.period == 'Факт') {
-      var rowPeriod = getParametr(sourceSheetID, parametrSheetName, 'factPeriod').value
+      var rowPeriod = getParametr('factPeriod').value
     } else if (row.period == 'Факт-1') {
-      var rowPeriod = getParametr(sourceSheetID, parametrSheetName, 'factPeriod-1').value
+      var rowPeriod = getParametr('factPeriod-1').value
     } else if (row.period == 'Бюджет') {
-      var rowPeriod = getParametr(sourceSheetID, parametrSheetName, 'budgetPeriod').value
+      var rowPeriod = getParametr('budgetPeriod').value
     } else if (row.period == 'Бюджет+1') {
-      var rowPeriod = getParametr(sourceSheetID, parametrSheetName, 'budgetPeriod+1').value
+      var rowPeriod = getParametr('budgetPeriod+1').value
     } else if (isValidDate(row.period)) {
       var rowPeriod = row.period
     }

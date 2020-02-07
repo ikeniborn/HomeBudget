@@ -1,19 +1,20 @@
 function updateTrelloAccounting(postObject, boardId) {
+  var globalVar = getVariable()
   var targetSheetName
   var sourceSheetName
-  if ([boardIdFact, boardIdFact0].indexOf(boardId) !== -1) {
-    targetSheetName = targetSheetNameFact
-    sourceSheetName = sourceSheetNameFactTrello
-  } else if ([boardIdBudget, boardIdBudget2, boardIdBudget3].indexOf(boardId) !== -1) {
-    targetSheetName = targetSheetNameBudget
-    sourceSheetName = sourceSheetNameBudgetTrello
+  if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(boardId) !== -1) {
+    targetSheetName = globalVar.targetSheetNameFact
+    sourceSheetName = globalVar.sourceSheetNameFactTrello
+  } else if ([globalVar.boardIdBudget, globalVar.boardIdBudget2, globalVar.boardIdBudget3].indexOf(boardId) !== -1) {
+    targetSheetName = globalVar.targetSheetNameBudget
+    sourceSheetName = globalVar.sourceSheetNameBudgetTrello
   }
-  var targetArray = getAllData(targetSheetID, targetSheetName)
+  var targetArray = getAllData(globalVar.targetSheetID, targetSheetName)
   var searchRow = targetArray.filter(function (row) {
     return row.actionId == postObject.actionId
   })
   if (searchRow.length == 0) {
-    var ss = SpreadsheetApp.openById(targetSheetID).getSheetByName(targetSheetName)
+    var ss = SpreadsheetApp.openById(globalVar.targetSheetID).getSheetByName(targetSheetName)
     ss.appendRow([postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
     // Проверка перевода на счет семьи
     if (postObject.account == 'Перевод на счет Семья') {
@@ -25,11 +26,11 @@ function updateTrelloAccounting(postObject, boardId) {
       }
     }
     if (postObject.account == 'Остатки') {
-      var newPeriod = getPeriod(boardIdBudget, postObject.cfo).period
+      var newPeriod = getPeriod(globalVar.boardIdBudget, postObject.cfo).period
       var insertdate = new Date(postObject.actionDate.getTime() + 1000);
       ss.appendRow([insertdate, newPeriod, postObject.cfo, postObject.mvz, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
     }
   }
   // Удаление пустых строк
-  deleteEmptyRow(targetSheetID, targetSheetName)
+  deleteEmptyRow(globalVar.targetSheetID, targetSheetName)
 }
