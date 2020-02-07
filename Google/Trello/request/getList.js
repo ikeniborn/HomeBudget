@@ -1,9 +1,10 @@
 function getList(boardId, listName) {
+  var globalVar = getVariable()
   var data = {
     method: 'get',
     contentType: 'application/json'
   }
-  var resp = UrlFetchApp.fetch(apiRoot + 'boards/' + boardId + '/lists?cards=none&' + keyAndToken, data)
+  var resp = UrlFetchApp.fetch(globalVar.apiRoot + 'boards/' + boardId + '/lists?cards=none&' + globalVar.keyAndToken, data)
   var respData = JSON.parse(resp)
   var listArray = []
   var list

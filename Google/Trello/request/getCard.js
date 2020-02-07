@@ -1,9 +1,10 @@
 function getCard(listId) {
+  var globalVar = getVariable()
   var data = {
     method: 'get',
     contentType: 'application/json'
   }
-  var resp = UrlFetchApp.fetch(apiRoot + 'lists/' + listId + '/cards?' + keyAndToken, data)
+  var resp = UrlFetchApp.fetch(globalVar.apiRoot + 'lists/' + listId + '/cards?' + globalVar.keyAndToken, data)
   var respData = JSON.parse(resp)
   var cardArray = []
   var card = {}

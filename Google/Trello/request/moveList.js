@@ -1,7 +1,8 @@
 function moveList(listId, boardId) {
+  var globalVar = getVariable()
   var data = {
     method: 'put',
     contentType: 'application/json'
   }
-  UrlFetchApp.fetch(apiRoot + 'lists/' + listId + '/idBoard?value=' + boardId + '&' + keyAndToken, data)
+  UrlFetchApp.fetch(globalVar.apiRoot + 'lists/' + listId + '/idBoard?value=' + boardId + '&' + globalVar.keyAndToken, data)
 }
