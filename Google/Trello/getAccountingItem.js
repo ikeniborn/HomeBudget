@@ -13,7 +13,9 @@ function getAccountingItem(nomenclature) {
       row.account = array[3]
       row.nomenclature = array[4]
       row.form = array[5]
-      row.board = array[6]
+      row.budget = array[6]
+      row.fact = array[7]
+      row.target = array[8]
       accountArray.push(row)
     } else if (nomenclature == undefined) {
       row = {}
@@ -23,7 +25,9 @@ function getAccountingItem(nomenclature) {
       row.account = array[3]
       row.nomenclature = array[4]
       row.form = array[5]
-      row.board = array[6]
+      row.budget = array[6]
+      row.fact = array[7]
+      row.target = array[8]
       accountArray.push(row)
     }
   }, {})

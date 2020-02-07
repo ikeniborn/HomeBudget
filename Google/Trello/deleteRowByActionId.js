@@ -1,12 +1,11 @@
 function deleteRowByActionId(sheetID, sheetName, postObject) {
   var ss = SpreadsheetApp.openById(sheetID).getSheetByName(sheetName)
   var currData = getAllData(sheetID, sheetName)
-  var postObjectRow = {}
-  currData.forEach(function (row) {
-    if (row.actionId == postObject.actionId) {
-      postObjectRow = row
-      ss.deleteRow(row.indexRow)
-    }
+  var postObjectRow = currData.filter(function (row) {
+    return row.actionId == postObject.actionId
   })
-  return postObjectRow
+  postObjectRow.forEach(function (row) {
+    ss.deleteRow(row.indexRow)
+  })
+  return postObjectRow.length > 1 ? postObjectRow[0] : postObjectRow
 }

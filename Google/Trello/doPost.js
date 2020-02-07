@@ -36,15 +36,13 @@ function doPost(e) {
         if ([boardIdFact].indexOf(postObject.boardId) !== -1) {
           var textComment = getRestSum(postObject).text
           updateCard(postObject.cardId, textComment)
-        }
-      }
-      //* закрытие периода
-      if ([boardIdFact].indexOf(postObject.boardId) !== -1) {
-        if (['Остатки'].indexOf(postObject.account) !== -1) {
-          updateFactPeriod(postObject)
-          closedFactPeriod(postObject)
-        } else if (['Аванс'].indexOf(postObject.account) !== -1) {
-          // closedBudgetPeriod(postObject)
+          //* закрытие периода
+          if (['Остатки'].indexOf(postObject.account) !== -1) {
+            updateFactPeriod(postObject)
+            closedFactPeriod(postObject)
+          } else if (['Аванс'].indexOf(postObject.account) !== -1) {
+            // closedBudgetPeriod(postObject)
+          }
         }
       }
     } else if ([boardIdBudget, boardIdBudget2, boardIdBudget3].indexOf(postObject.boardId) !== -1) {
@@ -63,6 +61,7 @@ function doPost(e) {
       addReaction(postObject.actionId, jackdawReaction)
     }
   } else if (variable.actionType == 'updateComment' && variable.idMemberCreator !== '5e2b5f3f409c544ebdb1b9d4') {
+    //* обновление данных при изменении комментария
     postObject.actionId = postData.action.data.action.id
     postObject.actionDate = new Date(postData.action.date)
     postObject.boardId = postData.action.data.board.id
@@ -71,17 +70,18 @@ function doPost(e) {
     postObject.sum = parseComment(postObject.text).sum
     postObject.comment = parseComment(postObject.text).comment
     var postObjectUpdate = {}
+    var textComment
     if ([boardIdFact, boardIdFact0].indexOf(postObject.boardId) !== -1) {
       updateRowByActionId(sourceSheetID, sourceSheetNameFactTrello, postObject)
       postObjectUpdate = updateRowByActionId(targetSheetID, targetSheetNameFact, postObject)
       if ([boardIdFact].indexOf(postObject.boardId) !== -1) {
-        var textComment = getRestSum(postObjectUpdate).text
+        textComment = getRestSum(postObjectUpdate).text
         updateCard(postObject.cardId, textComment)
       }
     } else if ([boardIdBudget, boardIdBudget2, boardIdBudget3].indexOf(postObject.boardId) !== -1) {
       updateRowByActionId(sourceSheetID, sourceSheetNameBudgetTrello, postObject)
       postObjectUpdate = updateRowByActionId(targetSheetID, targetSheetNameBudget, postObject)
-      var textComment = getBudgetSum(postObjectUpdate).text
+      textComment = getBudgetSum(postObjectUpdate).text
       updateCard(postObject.cardId, textComment)
     }
   } else if (variable.actionType == 'deleteComment') {
