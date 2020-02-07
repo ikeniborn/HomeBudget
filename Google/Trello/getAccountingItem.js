@@ -12,11 +12,8 @@ function getAccountingItem(nomenclature) {
       row.bill = array[2]
       row.account = array[3]
       row.nomenclature = array[4]
-      row.family = array[5]
-      row.ilya = array[6]
-      row.oksana = array[7]
-      row.form = array[8]
-      row.board = array[9]
+      row.form = array[5]
+      row.board = array[6]
       accountArray.push(row)
     } else if (nomenclature == undefined) {
       row = {}
@@ -25,11 +22,8 @@ function getAccountingItem(nomenclature) {
       row.bill = array[2]
       row.account = array[3]
       row.nomenclature = array[4]
-      row.family = array[5]
-      row.ilya = array[6]
-      row.oksana = array[7]
-      row.form = array[8]
-      row.board = array[9]
+      row.form = array[5]
+      row.board = array[6]
       accountArray.push(row)
     }
   }, {})

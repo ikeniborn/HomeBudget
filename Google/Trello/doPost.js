@@ -26,13 +26,6 @@ function doPost(e) {
     postObject.comment = parseComment(postObject.text).comment
     postObject.mvz = parseComment(postObject.text, postObject.cfo).mvz
     postObject.memberCreator = postData.action.memberCreator.username
-    if ([boardIdFact].indexOf(postObject.boardId) !== -1) {
-      if (['Зарплата', 'Остатки'].indexOf(postObject.account) !== -1) {
-        closedFactPeriod(postObject)
-      } else if (['Аванс'].indexOf(postObject.account) !== -1) {
-        // closedBudgetPeriod(postObject)
-      }
-    }
     postObject.period = getPeriod(postObject.boardId, postObject.cfo).period
     postObject.ymd = getPeriod(postObject.boardId, postObject.cfo).ymd
     if ([boardIdFact, boardIdFact0].indexOf(postObject.boardId) !== -1) {
@@ -43,6 +36,15 @@ function doPost(e) {
         if ([boardIdFact].indexOf(postObject.boardId) !== -1) {
           var textComment = getRestSum(postObject).text
           updateCard(postObject.cardId, textComment)
+        }
+      }
+      //* закрытие периода
+      if ([boardIdFact].indexOf(postObject.boardId) !== -1) {
+        if (['Остатки'].indexOf(postObject.account) !== -1) {
+          updateFactPeriod(postObject)
+          closedFactPeriod(postObject)
+        } else if (['Аванс'].indexOf(postObject.account) !== -1) {
+          // closedBudgetPeriod(postObject)
         }
       }
     } else if ([boardIdBudget, boardIdBudget2, boardIdBudget3].indexOf(postObject.boardId) !== -1) {

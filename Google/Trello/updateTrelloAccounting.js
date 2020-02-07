@@ -25,8 +25,12 @@ function updateTrelloAccounting(postObject, boardId) {
         ss.appendRow([insertdate, postObject.period, 'Семья', 'Семья', 'Приход', 'Приход со счета Оксана', 'Приход со счета Оксана', postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
       }
     }
+    if (postObject.account == 'Остатки') {
+      var newPeriod = getPeriod(boardIdFact, postObject.cfo).period
+      var insertdate = new Date(postObject.actionDate.getTime() + 1000);
+      ss.appendRow([postObject.actionDate, newPeriod, postObject.cfo, postObject.mvz, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
+    }
   }
-
   // Удаление пустых строк
   deleteEmptyRow(targetSheetID, targetSheetName)
 }
