@@ -7,7 +7,7 @@ function closedFactPeriod(postObject) {
   var listFactId0 = getList(boardIdFact0, postObject.cfo).id
   var listFactId = getList(boardIdFact, postObject.cfo).id
   archiveAllCards(listFactId0)
-  moveAllCards(listFactId, boardIdFact0, listFactId)
+  moveAllCards(listFactId, boardIdFact0, listFactId0)
   var period0 = getPeriod(boardIdFact0, postObject.cfo)
   var listNameFact0 = postObject.cfo + ' ' + formatterDate(period0.period)
   updateList(listFactId, listNameFact0)
@@ -25,10 +25,10 @@ function closedFactPeriod(postObject) {
       if (arrya.cfo == postObject.cfo && cardInfo.name == arrya.nomenclature) {
         row += 1
       }
-      return row > 0 ? true : false
+      return row
     }, 0)
 
-    if (cardInfo.withBudget) {
+    if (cardInfo.withBudget > 0) {
       var checkListId = addCheckList(cardInfo.id, 'Бюджет').id
     }
 

@@ -12,7 +12,6 @@ function updateTrelloAccounting(postObject, boardId) {
   var searchRow = targetArray.filter(function (row) {
     return row.actionId == postObject.actionId
   })
-  console.log(searchRow)
   if (searchRow.length == 0) {
     var ss = SpreadsheetApp.openById(targetSheetID).getSheetByName(targetSheetName)
     ss.appendRow([postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
@@ -26,9 +25,9 @@ function updateTrelloAccounting(postObject, boardId) {
       }
     }
     if (postObject.account == 'Остатки') {
-      var newPeriod = getPeriod(boardIdFact, postObject.cfo).period
+      var newPeriod = getPeriod(boardIdBudget, postObject.cfo).period
       var insertdate = new Date(postObject.actionDate.getTime() + 1000);
-      ss.appendRow([postObject.actionDate, newPeriod, postObject.cfo, postObject.mvz, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
+      ss.appendRow([insertdate, newPeriod, postObject.cfo, postObject.mvz, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
     }
   }
   // Удаление пустых строк
