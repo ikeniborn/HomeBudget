@@ -1,4 +1,5 @@
 function getPeriod(boardId, listName) {
+  var globalVar = getVariable()
   var period
   var ymd
   var factPeriod
@@ -13,15 +14,15 @@ function getPeriod(boardId, listName) {
     factPeriod = getParametr('periodFactOksana').value
     budgetPeriod = getParametr('periodBudgetOksana').value
   }
-  if (boardId == boardIdFact) {
+  if (boardId == globalVar.boardIdFact) {
     period = factPeriod
-  } else if (boardId == boardIdFact0) {
+  } else if (boardId == globalVar.boardIdFact0) {
     period = new Date(factPeriod.getYear(), factPeriod.getMonth() - 1, 1)
-  } else if (boardId == boardIdBudget) {
+  } else if (boardId == globalVar.boardIdBudget) {
     period = budgetPeriod
-  } else if (boardId == boardIdBudget2) {
+  } else if (boardId == globalVar.boardIdBudget2) {
     period = new Date(budgetPeriod.getYear(), budgetPeriod.getMonth() + 1, 1)
-  } else if (boardId == boardIdBudget3) {
+  } else if (boardId == globalVar.boardIdBudget3) {
     period = new Date(budgetPeriod.getYear(), budgetPeriod.getMonth() + 2, 1)
   }
 
