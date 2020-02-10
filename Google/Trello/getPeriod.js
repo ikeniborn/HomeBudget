@@ -24,7 +24,6 @@ function getPeriod(globalVar, boardId, listName) {
   } else if (boardId == globalVar.boardIdBudget3) {
     period = new Date(budgetPeriod.getYear(), budgetPeriod.getMonth() + 2, 1)
   }
-
   ymd = getYMD(period).ymd
   return {
     period: period,

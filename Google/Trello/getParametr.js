@@ -1,5 +1,5 @@
 function getParametr(globalVar, parametr) {
-  var array = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName(globalVar.parametrSheetName).getDataRange().getValues()
+  var array = [] && SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName(globalVar.parametrSheetName).getDataRange().getValues()
   var parametrRow = array.filter(function (row) {
     return row[1] == parametr
   })

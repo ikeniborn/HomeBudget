@@ -1,5 +1,5 @@
 function getAllData(globalVar, sheetId, sheetName) {
-  var ssArrays = SpreadsheetApp.openById(sheetId).getSheetByName(sheetName).getDataRange().getValues()
+  var ssArrays = [] && SpreadsheetApp.openById(sheetId).getSheetByName(sheetName).getDataRange().getValues()
   var ssData = []
   ssArrays.reduce(function (row, array, index) {
     if (index == 0) {} else {

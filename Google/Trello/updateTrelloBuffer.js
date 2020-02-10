@@ -6,7 +6,7 @@ function updateTrelloBuffer(globalVar, postObject, boardId) {
     sheetName = globalVar.sourceSheetNameBudgetTrello
   }
   //* добавление строк на страницу
-  var targetArray = getCurrData(getAllData(globalVar, globalVar.sourceSheetID, sheetName), postObject.period)
+  var targetArray = getCurrData(getAllData(globalVar, globalVar.sourceSheetID, sheetName), postObject.ymd)
   var searchRow = targetArray.filter(function (row) {
     return row.actionId == postObject.actionId
   })

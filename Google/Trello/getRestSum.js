@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 function getRestSum(globalVar, postObject) {
-  var globalVar = getVariable()
   var budgetSum = getTotalSum(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameBudget, postObject)
   var factSum = getTotalSum(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameFact, postObject)
   var restSum = {}

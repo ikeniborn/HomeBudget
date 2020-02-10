@@ -8,7 +8,7 @@ function updateTrelloAccounting(globalVar, postObject, boardId) {
     targetSheetName = globalVar.targetSheetNameBudget
     sourceSheetName = globalVar.sourceSheetNameBudgetTrello
   }
-  var targetArray = getCurrData(getAllData(globalVar, globalVar.targetSheetID, targetSheetName), postObject.period)
+  var targetArray = getCurrData(getAllData(globalVar, globalVar.targetSheetID, targetSheetName), postObject.ymd)
   var searchRow = targetArray.filter(function (row) {
     return row.actionId == postObject.actionId
   })
