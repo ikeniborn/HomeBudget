@@ -9,7 +9,8 @@ function doPost(e) {
     var postObject = {}
     variable.idMemberCreator = postData.action.idMemberCreator !== undefined ? postData.action.idMemberCreator : null
     variable.actionType = postData.action.type !== undefined ? postData.action.type : null
-    if (enableStackdriverLogging) console.log(variable.actionType)
+    variable.username = postData.action.memberCreator.username !== undefined ? postData.action.memberCreator.username : null
+    if (enableStackdriverLogging) console.log(variable)
     if (variable.actionType == 'commentCard' && variable.idMemberCreator !== '5e2b5f3f409c544ebdb1b9d4') {
       var AccountingItemArray = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName(globalVar.accountingItemSheetName).getDataRange().getValues()
       var maxDate
@@ -32,22 +33,22 @@ function doPost(e) {
       postObject.memberCreator = postData.action.memberCreator.username
       postObject.period = getPeriod(postObject.boardId, postObject.cfo).period
       postObject.ymd = getPeriod(postObject.boardId, postObject.cfo).ymd
+
+      //* закрытие периода
+      if (postObject.account == 'Остатки' && globalVar.boardIdFact == postObject.boardId) {
+        updateFactPeriod(postObject)
+        closedFactPeriod(postObject, AccountingItemArray)
+      } else if (postObject.account == 'Аванс' && globalVar.boardIdFact === postObject.boardId) {
+        // closedBudgetPeriod(postObject)
+      }
+
       if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(postObject.boardId) !== -1) {
         maxDate = getLastDateArray(getCurrData(getAllData(globalVar.sourceSheetID, globalVar.sourceSheetNameFactTrello), postObject.ymd))
         if (postObject.actionDate > maxDate) {
           updateTrelloBuffer(postObject, postObject.boardId)
           updateTrelloAccounting(postObject, postObject.boardId)
-          if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1) {
-            var textComment = getRestSum(postObject).text
-            updateCard(postObject.cardId, textComment)
-            //* закрытие периода
-            if (['Остатки'].indexOf(postObject.account) !== -1) {
-              updateFactPeriod(postObject)
-              closedFactPeriod(postObject, AccountingItemArray)
-            } else if (['Аванс'].indexOf(postObject.account) !== -1) {
-              // closedBudgetPeriod(postObject)
-            }
-          }
+          var textComment = getRestSum(postObject).text
+          updateCard(postObject.cardId, textComment) //! проверить. Возможная пробема в обновлении карточки. 
         }
       } else if ([globalVar.boardIdBudget, globalVar.boardIdBudget2, globalVar.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
         maxDate = getLastDateArray(getCurrData(getAllData(globalVar.sourceSheetID, globalVar.sourceSheetNameBudgetTrello), postObject.ymd))
