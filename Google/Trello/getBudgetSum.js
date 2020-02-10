@@ -3,11 +3,11 @@ function getBudgetSum(postObject) {
   var budgetSum = getTotalSum(globalVar.targetSheetID, globalVar.targetSheetNameBudget, postObject)
   var totalSum = {}
   var budgetRow = budgetSum.row
-  totalSum.text = '**Итого бюджет** ' + formatterDate(postObject.period) + ':' + lineBreak
-  totalSum.text += postObject.cfo + ': ' + budgetSum.bill + ' р.' + lineBreak
-  totalSum.text += postObject.account + ': ' + budgetSum.account + ' р.' + lineBreak
-  totalSum.text += postObject.nomenclature + ': ' + budgetSum.nomenclature + ' р.' + lineBreak
-  totalSum.text += '**Внесенные суммы**:' + lineBreak
+  totalSum.text = '**Итого бюджет** ' + formatterDate(postObject.period) + ':' +  globalVar.lineBreak
+  totalSum.text += postObject.cfo + ': ' + budgetSum.bill + ' р.' +  globalVar.lineBreak
+  totalSum.text += postObject.account + ': ' + budgetSum.account + ' р.' +  globalVar.lineBreak
+  totalSum.text += postObject.nomenclature + ': ' + budgetSum.nomenclature + ' р.' +  globalVar.lineBreak
+  totalSum.text += '**Внесенные суммы**:' +  globalVar.lineBreak
   var i = 1
   budgetRow.forEach(function (row) {
     var comma
