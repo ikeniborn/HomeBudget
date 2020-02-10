@@ -1,5 +1,4 @@
-function updateList(listId, listName) {
-  var globalVar = getVariable()
+function updateList(globalVar, listId, listName) {
   var data = {
     method: 'put',
     contentType: 'application/json'

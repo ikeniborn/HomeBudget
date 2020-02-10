@@ -1,5 +1,4 @@
-function archiveAllCards(listId) {
-  var globalVar = getVariable()
+function archiveAllCards(globalVar, listId) {
   var data = {
     method: 'post',
     contentType: 'application/json'

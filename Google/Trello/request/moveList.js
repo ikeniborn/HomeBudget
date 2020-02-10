@@ -1,5 +1,4 @@
-function moveList(listId, boardId) {
-  var globalVar = getVariable()
+function moveList(globalVar, listId, boardId) {
   var data = {
     method: 'put',
     contentType: 'application/json'

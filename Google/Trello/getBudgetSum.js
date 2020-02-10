@@ -1,6 +1,6 @@
-function getBudgetSum(postObject) {
+function getBudgetSum(globalVar, postObject) {
   var globalVar = getVariable()
-  var budgetSum = getTotalSum(globalVar.targetSheetID, globalVar.targetSheetNameBudget, postObject)
+  var budgetSum = getTotalSum(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameBudget, postObject)
   var totalSum = {}
   var budgetRow = budgetSum.row
   totalSum.text = '**Итого бюджет** ' + formatterDate(postObject.period) + ':' + globalVar.lineBreak

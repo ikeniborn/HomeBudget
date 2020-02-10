@@ -1,7 +1,7 @@
-function updateGoogleForm() {
+function updateGoogleForm(globalVar) {
   // проверка данных с фактической формы
   var ssFact = SpreadsheetApp.openById(sourceSheetID).getSheetByName(sourceSheetNameFactGoogleForm)
-  var arrayFact = getAllData(sourceSheetID, sourceSheetNameFactGoogleForm)
+  var arrayFact = getAllData(globalVar, sourceSheetID, sourceSheetNameFactGoogleForm)
   var lastRowFact = ssFact.getLastRow()
   var rowsFact = arrayFact.filter(function (row) {
     return row.date > maxDateFactGoogleFormAccounting
@@ -13,7 +13,7 @@ function updateGoogleForm() {
   }
   //  проверка данных с форму бюджета
   var ssBudget = SpreadsheetApp.openById(sourceSheetID).getSheetByName(sourceSheetNameBudgetGoogleForm)
-  var arrayBudget = getAllData(sourceSheetID, sourceSheetNameBudgetGoogleForm)
+  var arrayBudget = getAllData(globalVar, sourceSheetID, sourceSheetNameBudgetGoogleForm)
   var lastRowBudget = ssBudget.getLastRow()
   var rowsBudget = arrayBudget.filter(function (row) {
     return row.actionDate > maxDateBudgetGoogleFormAccounting

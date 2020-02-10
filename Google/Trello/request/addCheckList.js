@@ -1,5 +1,4 @@
-function addCheckList(cardId, checkListName) {
-  var globalVar = getVariable()
+function addCheckList(globalVar, cardId, checkListName) {
   var data = {
     method: 'post',
     contentType: 'application/json'

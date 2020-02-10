@@ -1,5 +1,4 @@
-function moveCard(cardId, listId, boardId) {
-  var globalVar = getVariable()
+function moveCard(globalVar, cardId, listId, boardId) {
   var data = {
     method: 'put',
     contentType: 'application/json'

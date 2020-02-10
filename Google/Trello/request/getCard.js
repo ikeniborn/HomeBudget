@@ -1,5 +1,4 @@
-function getCard(listId) {
-  var globalVar = getVariable()
+function getCard(globalVar, listId) {
   var data = {
     method: 'get',
     contentType: 'application/json'

@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
-function getRestSum(postObject) {
+function getRestSum(globalVar, postObject) {
   var globalVar = getVariable()
-  var budgetSum = getTotalSum(globalVar.targetSheetID, globalVar.targetSheetNameBudget, postObject)
-  var factSum = getTotalSum(globalVar.targetSheetID, globalVar.targetSheetNameFact, postObject)
+  var budgetSum = getTotalSum(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameBudget, postObject)
+  var factSum = getTotalSum(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameFact, postObject)
   var restSum = {}
   restSum.bill = budgetSum.bill - factSum.bill
   restSum.account = budgetSum.account - factSum.account

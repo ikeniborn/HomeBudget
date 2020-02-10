@@ -1,7 +1,6 @@
-function updateRowByActionId(sheetID, sheetName, postObject) {
-  var globalVar = getVariable()
+function updateRowByActionId(globalVar, sheetID, sheetName, postObject) {
   var ss = SpreadsheetApp.openById(sheetID).getSheetByName(sheetName)
-  var currData = getCurrData(getAllData(sheetID, sheetName))
+  var currData = getCurrData(getAllData(globalVar, sheetID, sheetName), postObject.ymd)
   var postObjectRow
   currData.forEach(function (row) {
     if (row.actionId == postObject.actionId) {

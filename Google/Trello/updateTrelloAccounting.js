@@ -1,5 +1,4 @@
-function updateTrelloAccounting(postObject, boardId) {
-  var globalVar = getVariable()
+function updateTrelloAccounting(globalVar, postObject, boardId) {
   var targetSheetName
   var sourceSheetName
   if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(boardId) !== -1) {
@@ -9,7 +8,7 @@ function updateTrelloAccounting(postObject, boardId) {
     targetSheetName = globalVar.targetSheetNameBudget
     sourceSheetName = globalVar.sourceSheetNameBudgetTrello
   }
-  var targetArray = getAllData(globalVar.targetSheetID, targetSheetName)
+  var targetArray = getCurrData(getAllData(globalVar, globalVar.targetSheetID, targetSheetName), postObject.period)
   var searchRow = targetArray.filter(function (row) {
     return row.actionId == postObject.actionId
   })
@@ -26,7 +25,7 @@ function updateTrelloAccounting(postObject, boardId) {
       }
     }
     if (postObject.account == 'Остатки') {
-      var newPeriod = getPeriod(globalVar.boardIdBudget, postObject.cfo).period
+      var newPeriod = getPeriod(globalVar, globalVar.boardIdBudget, postObject.cfo).period
       var insertdate = new Date(postObject.actionDate.getTime() + 1000);
       ss.appendRow([insertdate, newPeriod, postObject.cfo, postObject.mvz, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
     }

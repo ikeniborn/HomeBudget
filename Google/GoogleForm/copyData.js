@@ -1,8 +1,8 @@
-function copyData(sourceSheetID, targetSheetID, sourceSheetName, targetSheetName) {
+function copyData(globalVar, sourceSheetID, targetSheetID, sourceSheetName, targetSheetName) {
   //TODO добавить проверку по хэш для строк гугл форм.
   var targetSS = SpreadsheetApp.openById(targetSheetID).getSheetByName(targetSheetName)
-  var sourceArray = getAllData(sourceSheetID, sourceSheetName)
-  var targetArray = getAllData(targetSheetID, targetSheetName)
+  var sourceArray = getAllData(globalVar, sourceSheetID, sourceSheetName)
+  var targetArray = getAllData(globalVar, targetSheetID, targetSheetName)
 
   var maxDateTarget = getLastDateArray(targetArray, sourceSheetName)
 

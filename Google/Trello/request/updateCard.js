@@ -1,5 +1,4 @@
-function updateCard(cardId, desc) {
-  var globalVar = getVariable()
+function updateCard(globalVar, cardId, desc) {
   var data = {
     method: 'put',
     contentType: 'application/json'

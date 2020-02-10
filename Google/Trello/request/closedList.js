@@ -1,5 +1,4 @@
-function closedList(listId) {
-  var globalVar = getVariable()
+function closedList(globalVar, listId) {
   var data = {
     method: 'put',
     contentType: 'application/json'

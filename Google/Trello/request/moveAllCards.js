@@ -1,5 +1,4 @@
-function moveAllCards(oldListId, boardId, newListId) {
-  var globalVar = getVariable()
+function moveAllCards(globalVar, oldListId, boardId, newListId) {
   var data = {
     method: 'post',
     contentType: 'application/json'

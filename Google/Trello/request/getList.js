@@ -1,5 +1,4 @@
-function getList(boardId, listName) {
-  var globalVar = getVariable()
+function getList(globalVar, boardId, listName) {
   var data = {
     method: 'get',
     contentType: 'application/json'

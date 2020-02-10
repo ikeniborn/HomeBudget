@@ -1,5 +1,4 @@
-function updateBoard(boardId, boardName) {
-  var globalVar = getVariable()
+function updateBoard(globalVar, boardId, boardName) {
   var data = {
     method: 'put',
     contentType: 'application/json'

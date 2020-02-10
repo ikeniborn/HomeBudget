@@ -1,5 +1,4 @@
-function addLabel(labelName, labelColor, boardId) {
-  var globalVar = getVariable()
+function addLabel(globalVar, labelName, labelColor, boardId) {
   var data = {
     method: 'post',
     contentType: 'application/json'

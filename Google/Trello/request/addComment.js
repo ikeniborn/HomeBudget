@@ -1,5 +1,4 @@
-function addComment(cardId, text) {
-  var globalVar = getVariable()
+function addComment(globalVar, cardId, text) {
   var data = {
     method: 'post',
     contentType: 'application/json'

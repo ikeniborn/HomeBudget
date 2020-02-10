@@ -1,5 +1,4 @@
-function addList(listName, boardId) {
-  var globalVar = getVariable()
+function addList(globalVar, listName, boardId) {
   var data = {
     method: 'post',
     contentType: 'application/json'
