@@ -5,7 +5,7 @@ function closedFactPeriod(globalVar, postObject, AccountingItemArray) {
     return row.fact == 1
   })
   var listFactId0 = getList(globalVar.boardIdFact0, postObject.cfo).id
-  var listFactId = getList(globalVar.boardIdFact, postObject.cfo).id
+  var listFactId = postObject.listId
   archiveAllCards(globalVar, listFactId0)
   moveAllCards(globalVar, listFactId, globalVar.boardIdFact0, listFactId0)
   var period0 = getPeriod(globalVar, globalVar.boardIdFact0, postObject.cfo)

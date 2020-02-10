@@ -15,7 +15,6 @@ function doPost(e) {
     if (enableStackdriverLogging) console.log(variable)
     if (variable.actionType == 'commentCard' && variable.idMemberCreator !== '5e2b5f3f409c544ebdb1b9d4') {
       AccountingItemArray = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName(globalVar.accountingItemSheetName).getDataRange().getValues()
-      var maxDate
       // добавление информации в учет
       postObject.actionId = postData.action.id
       postObject.actionDate = new Date(postData.action.date)
@@ -36,21 +35,15 @@ function doPost(e) {
       postObject.ymd = getPeriod(globalVar, postObject.boardId, postObject.cfo).ymd
 
       if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(postObject.boardId) !== -1) {
-        maxDate = getLastDateArray(getCurrData(getAllData(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameFactTrello), postObject.ymd))
-        if (postObject.actionDate > maxDate) {
-          updateTrelloBuffer(postObject, postObject.boardId)
-          updateTrelloAccounting(postObject, postObject.boardId)
-          textComment = getRestSum(globalVar, postObject).text
-          updateCard(globalVar, postObject.cardId, textComment)
-        }
+        updateTrelloBuffer(postObject, postObject.boardId)
+        updateTrelloAccounting(postObject, postObject.boardId)
+        textComment = getRestSum(globalVar, postObject).text
+        updateCard(globalVar, postObject.cardId, textComment)
       } else if ([globalVar.boardIdBudget, globalVar.boardIdBudget2, globalVar.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-        maxDate = getLastDateArray(getCurrData(getAllData(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameBudgetTrello), postObject.ymd))
-        if (postObject.actionDate > maxDate) {
-          updateTrelloBuffer(globalVar, postObject, postObject.boardId)
-          updateTrelloAccounting(globalVar, postObject, postObject.boardId)
-          textComment = getBudgetSum(globalVar, postObject).text
-          updateCard(globalVar, postObject.cardId, textComment)
-        }
+        updateTrelloBuffer(globalVar, postObject, postObject.boardId)
+        updateTrelloAccounting(globalVar, postObject, postObject.boardId)
+        textComment = getBudgetSum(globalVar, postObject).text
+        updateCard(globalVar, postObject.cardId, textComment)
       }
       //* добавление реакции на комментарий
       if (variable.idMemberCreator == '55cb5c5729ae976dfd2b901e') {
@@ -112,6 +105,7 @@ function doPost(e) {
       postObject.actionDate = new Date(postData.action.date)
       postObject.boardId = postData.action.data.board.id
       postObject.cfo = parseListName(postData.action.data.list.name)
+      postObject.listId = postData.action.data.list.id
       postObject.account = getAccountingItem(AccountingItemArray, postObject.cardName).account
       postObject.nomenclature = postData.action.data.card.name
       if (postObject.account == 'Остатки' && globalVar.boardIdFact == postObject.boardId) {
