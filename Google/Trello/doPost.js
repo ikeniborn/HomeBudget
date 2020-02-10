@@ -60,7 +60,7 @@ function doPost(e) {
         }
       }
       // добавление реакции на комментарий
-      if (postObject.memberCreator == 'oksanatischenko') {
+      if (variable.idMemberCreator == '55cb5c5729ae976dfd2b901e') {
         addReaction(postObject.actionId, globalVar.buuReaction)
       } else {
         addReaction(postObject.actionId, globalVar.jackdawReaction)
