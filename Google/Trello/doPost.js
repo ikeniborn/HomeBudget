@@ -47,6 +47,15 @@ function doPost(e) {
     } else {
       addReaction(globalVar, postObject.actionId, globalVar.jackdawReaction)
     }
+    if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1) {
+      //* закрытие периода
+      if (postObject.account == 'Остатки') {
+        updateFactPeriod(globalVar, postObject)
+        closedFactPeriod(globalVar, postObject, AccountingItemArray)
+      } else if (postObject.account == 'Аванс') {
+        // closedBudgetPeriod(postObject)
+      }
+    }
   } else if (variable.actionType == 'updateComment' && variable.idMemberCreator !== '5e2b5f3f409c544ebdb1b9d4') {
     //* обновление данных при изменении комментария
     AccountingItemArray = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName(globalVar.accountingItemSheetName).getDataRange().getValues()
@@ -104,24 +113,6 @@ function doPost(e) {
       deleteRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameBudget, postObject)
       textComment = getBudgetSum(globalVar, postObject).text
       updateCard(globalVar, postObject.cardId, textComment)
-    }
-  } else if (variable.actionType == 'updateCard' && ['Остатки (+)', 'Аванс (+)'].indexOf(postData.action.data.card.name) !== -1 && variable.idMemberCreator == '5e2b5f3f409c544ebdb1b9d4') {
-    //* закрытие периода
-    AccountingItemArray = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName(globalVar.accountingItemSheetName).getDataRange().getValues()
-    postObject.globalVar = globalVar
-    postObject.actionDate = new Date(postData.action.date)
-    postObject.boardId = postData.action.data.board.id
-    postObject.cfo = parseListName(postData.action.data.list.name)
-    postObject.listId = postData.action.data.list.id
-    postObject.cardId = postData.action.data.card.id
-    postObject.cardName = postData.action.data.card.name
-    postObject.account = getAccountingItem(AccountingItemArray, postObject.cardName).account
-    postObject.nomenclature = postData.action.data.card.name
-    if (postObject.account == 'Остатки' && globalVar.boardIdFact == postObject.boardId) {
-      // updateFactPeriod(globalVar, postObject)
-      // closedFactPeriod(globalVar, postObject, AccountingItemArray)
-    } else if (postObject.account == 'Аванс' && globalVar.boardIdFact === postObject.boardId) {
-      // closedBudgetPeriod(postObject)
     }
   }
 }

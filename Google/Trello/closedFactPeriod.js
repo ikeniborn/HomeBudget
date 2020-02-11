@@ -4,16 +4,20 @@ function closedFactPeriod(globalVar, postObject, AccountingItemArray) {
   var accountItems = getAccountingItem(AccountingItemArray).filter(function (row) {
     return row.fact == 1
   })
+  //* закрытие исторического листа
   var listFactId0 = getList(globalVar, globalVar.boardIdFact0, postObject.cfo).id
+  closedList(globalVar, listFactId0)
   var listFactId = postObject.listId
-  archiveAllCards(globalVar, listFactId0)
-  moveAllCards(globalVar, listFactId, globalVar.boardIdFact0, listFactId0)
+  //* копирование текущего факта и перенос на доску истории
   var period0 = getPeriod(globalVar, globalVar.boardIdFact0, postObject.cfo)
   var listNameFact0 = postObject.cfo + ' ' + formatterDate(period0.period)
-  updateList(globalVar, listFactId0, listNameFact0)
+  var listFactIdCopy = copyList(globalVar, listNameFact0, postObject.boardId, listFactId).id
+  moveList(globalVar, listFactIdCopy, globalVar.boardIdFact0)
+//* обновление текущего листа факта
   var period = getPeriod(globalVar, globalVar.boardIdFact, postObject.cfo)
   var listNameFact = postObject.cfo + ' ' + formatterDate(period.period)
   updateList(globalVar, listFactId, listNameFact)
+  archiveAllCards(globalVar, listFactId)
   //* создание карточек на листе факт и чеклистов в карточках
   var budget = getCurrData(getAllData(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameBudget), period.ymd)
   accountItems.forEach(function (accounts) {
