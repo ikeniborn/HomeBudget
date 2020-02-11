@@ -9,6 +9,9 @@ function doPost(e) {
   variable.actionType = postData.action.type !== undefined ? postData.action.type : null
   variable.username = postData.action.memberCreator.username !== undefined ? postData.action.memberCreator.username : null
   console.log(variable)
+  var ssTest = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName('test')
+  ssTest.appendRow([variable])
+  ssTest.appendRow([postData])
   if (variable.actionType == 'commentCard' && variable.idMemberCreator !== '5e2b5f3f409c544ebdb1b9d4') {
     AccountingItemArray = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName(globalVar.accountingItemSheetName).getDataRange().getValues()
     //* добавление информации в учет
@@ -46,15 +49,6 @@ function doPost(e) {
       addReaction(globalVar, postObject.actionId, globalVar.buuReaction)
     } else {
       addReaction(globalVar, postObject.actionId, globalVar.jackdawReaction)
-    }
-    if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1) {
-      //* закрытие периода
-      if (postObject.account == 'Остатки') {
-        updateFactPeriod(globalVar, postObject)
-        closedFactPeriod(globalVar, postObject, AccountingItemArray)
-      } else if (postObject.account == 'Аванс') {
-        // closedBudgetPeriod(postObject)
-      }
     }
   } else if (variable.actionType == 'updateComment' && variable.idMemberCreator !== '5e2b5f3f409c544ebdb1b9d4') {
     //* обновление данных при изменении комментария
@@ -113,6 +107,27 @@ function doPost(e) {
       deleteRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameBudget, postObject)
       textComment = getBudgetSum(globalVar, postObject).text
       updateCard(globalVar, postObject.cardId, textComment)
+    }
+  } else if (variable.actionType == 'updateCard' && variable.idMemberCreator == '5e2b5f3f409c544ebdb1b9d4' && ['Остатки (+)', 'Аванс (+)'].indexOf(postData.action.data.card.name) !== -1) {
+    AccountingItemArray = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName(globalVar.accountingItemSheetName).getDataRange().getValues()
+    postObject.globalVar = globalVar
+    postObject.boardId = postData.action.data.board.id
+    postObject.cardId = postData.action.data.card.id
+    postObject.cardName = postData.action.data.card.name
+    postObject.cfo = getCardList(globalVar, postObject.cardId).name
+    postObject.bill = getAccountingItem(AccountingItemArray, postObject.cardName).bill
+    postObject.account = getAccountingItem(AccountingItemArray, postObject.cardName).account
+    postObject.nomenclature = postData.action.data.card.name
+    postObject.period = getPeriod(globalVar, postObject.boardId, postObject.cfo).period
+    postObject.ymd = getPeriod(globalVar, postObject.boardId, postObject.cfo).ymd
+    if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1) {
+      //* закрытие периода
+      if (postObject.account == 'Остатки') {
+        updateFactPeriod(globalVar, postObject)
+        closedFactPeriod(globalVar, postObject, AccountingItemArray)
+      } else if (postObject.account == 'Аванс') {
+        // closedBudgetPeriod(postObject)
+      }
     }
   }
 }
