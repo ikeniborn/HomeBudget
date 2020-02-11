@@ -50,6 +50,15 @@ function doPost(e) {
     } else {
       addReaction(globalVar, postObject.actionId, globalVar.jackdawReaction)
     }
+    if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1) {
+      //* закрытие периода
+      if (postObject.account == 'Остатки') {
+        updateFactPeriod(globalVar, postObject)
+        closedFactPeriod(globalVar, postObject, AccountingItemArray)
+      } else if (postObject.account == 'Аванс') {
+        // closedBudgetPeriod(postObject)
+      }
+    }
   } else if (variable.actionType == 'updateComment' && variable.idMemberCreator !== '5e2b5f3f409c544ebdb1b9d4') {
     //* обновление данных при изменении комментария
     AccountingItemArray = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName(globalVar.accountingItemSheetName).getDataRange().getValues()
@@ -120,14 +129,5 @@ function doPost(e) {
     postObject.nomenclature = postData.action.data.card.name
     postObject.period = getPeriod(globalVar, postObject.boardId, postObject.cfo).period
     postObject.ymd = getPeriod(globalVar, postObject.boardId, postObject.cfo).ymd
-    if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1) {
-      //* закрытие периода
-      if (postObject.account == 'Остатки') {
-        updateFactPeriod(globalVar, postObject)
-        closedFactPeriod(globalVar, postObject, AccountingItemArray)
-      } else if (postObject.account == 'Аванс') {
-        // closedBudgetPeriod(postObject)
-      }
-    }
   }
 }
