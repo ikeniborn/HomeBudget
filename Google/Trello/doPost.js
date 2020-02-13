@@ -1,10 +1,11 @@
 function doPost(e) {
   const postData = JSON.parse(e.postData.contents)
   const variable = {}
-  variable.idMemberCreator = postData.action.idMemberCreator !== undefined ? postData.action.idMemberCreator : null
+  variable.actionDate = new Date(postData.action.date)
   variable.actionId = postData.action.id !== undefined ? postData.action.id : null
   variable.actionType = postData.action.type !== undefined ? postData.action.type : null
   variable.username = postData.action.memberCreator.username !== undefined ? postData.action.memberCreator.username : null
+  variable.idMemberCreator = postData.action.idMemberCreator !== undefined ? postData.action.idMemberCreator : null
   console.log(variable)
   var parseAction = ['commentCard', 'updateComment', 'deleteComment']
   if (parseAction.indexOf(variable.actionType) !== -1) {
@@ -14,7 +15,6 @@ function doPost(e) {
     var accountingItemArray = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName(globalVar.accountingItemSheetName).getDataRange().getValues()
     var ssTest = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName('test')
     ssTest.appendRow([variable])
-    ssTest.appendRow([postData])
   }
   if (variable.actionType == 'commentCard') {
     postObject.globalVar = globalVar

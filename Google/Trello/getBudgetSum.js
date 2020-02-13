@@ -10,7 +10,7 @@ function getBudgetSum(globalVar, postObject) {
   var i = 1
   budgetRow.forEach(function (row) {
     var comma
-    budgetRow.length > i ? comma = ', ' : comma = ''
+    budgetRow.length > i ? comma = globalVar.lineBreak : comma = ''
     totalSum.text += formatterDateTime(row.actionDate) + ': ' + row.sum + ' р. ' + row.comment + comma
     i += 1
   })
