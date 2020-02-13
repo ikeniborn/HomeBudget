@@ -12,7 +12,7 @@ function closedFactPeriod(globalVar, postObject, accountingItemArray) {
   updateList(globalVar, listFactId0, listNameFact0)
   //* Перенос карточек на доску факт-1
   var listFactId = postObject.listId
-  var labelList = getBoardLabel(globalVar, boardId)
+  var labelList = getBoardLabel(globalVar, postObject.boardId)
   moveAllCards(globalVar, listFactId, globalVar.boardIdFact0, listFactId0)
   //* обновление текущего листа факта
   var period = getPeriod(globalVar, globalVar.boardIdFact, postObject.cfo)

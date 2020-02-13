@@ -2,7 +2,7 @@ function doPost(e) {
   const postData = JSON.parse(e.postData.contents)
   const variable = {}
   variable.idMemberCreator = postData.action.idMemberCreator !== undefined ? postData.action.idMemberCreator : null
-  variable.webHookDate = formatterDate(new Date()).timestamp
+  variable.webHookDate = formatterDate().timestamp
   variable.actionId = postData.action.id !== undefined ? postData.action.id : null
   variable.actionType = postData.action.type !== undefined ? postData.action.type : null
   variable.username = postData.action.memberCreator.username !== undefined ? postData.action.memberCreator.username : null
