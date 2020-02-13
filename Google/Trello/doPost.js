@@ -31,9 +31,15 @@ function doPost(e) {
       }
       //* добавление реакции на комментарий
       if (variable.idMemberCreator == '55cb5c5729ae976dfd2b901e') {
-        addReaction(globalVar, postObject.actionId, globalVar.buuReaction)
+        if (postObject.sum > 500) {
+          addReaction(globalVar, postObject.actionId, globalVar.buuReaction)
+        } else {
+          addReaction(globalVar, postObject.actionId, globalVar.scream)
+        }
+        addReaction(globalVar, postObject.actionId, globalVar.moneyBag)
       } else {
-        addReaction(globalVar, postObject.actionId, globalVar.jackdawReaction)
+        addReaction(globalVar, postObject.actionId, globalVar.sunglasses)
+        addReaction(globalVar, postObject.actionId, globalVar.moneyBag)
       }
       //* закрытие периода
       if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1) {

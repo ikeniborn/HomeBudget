@@ -58,4 +58,5 @@ function getPostObject(globalVar, postData) {
     postObject.period = getPeriod(globalVar, postObject.boardId, postObject.cfo).period
     postObject.ymd = getPeriod(globalVar, postObject.boardId, postObject.cfo).ymd
   }
+  return postObject
 }
