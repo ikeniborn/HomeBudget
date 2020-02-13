@@ -13,17 +13,17 @@ function closedBudgetPeriod(globalVar, postObject, AccountingItemArray) {
   var period = getPeriod(globalVar, globalVar.boardIdBudget2, postObject.cfo).period
   var listBudget2 = getList(globalVar, globalVar.boardIdBudget2, postObject.cfo).id
   moveList(globalVar, listBudget2, globalVar.boardIdBudget)
-  var listNameBudget = postObject.cfo + '' + formatterDate(period.period)
+  var listNameBudget = postObject.cfo + '' + formatterDate(period.period).date
   updateList(globalVar, listBudget2, listNameBudget)
   //block перенос бюджета +2 на текущий бюджет+1
   var period2 = getPeriod(globalVar, globalVar.boardIdBudget2, postObject.cfo).period
   var listBudget3 = getList(globalVar, globalVar.boardIdBudget2, postObject.cfo).id
   moveList(globalVar, listBudget3, globalVar.boardIdBudget2)
-  var listNameBudget2 = postObject.cfo + '' + formatterDate(period2.period)
+  var listNameBudget2 = postObject.cfo + '' + formatterDate(period2.period).date
   updateList(globalVar, listBudget3, listNameBudget2)
   //block добавление новый карточек на доску бюджет+2
   var period3 = getPeriod(globalVar, globalVar.boardIdBudget3, postObject.cfo).period
-  var listNameBudget3 = postObject.cfo + '' + formatterDate(period3.period)
+  var listNameBudget3 = postObject.cfo + '' + formatterDate(period3.period).date
   var newListBudget3 = addList(globalVar, listNameBudget3, globalVar.boardIdBudget3)
   accountItems.forEach(function (accounts) {
     if (accounts.ilya == 1 && postObject.cfo == 'Илья') {

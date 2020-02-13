@@ -4,7 +4,7 @@ function getArrayParametrValue(sourceSheetID, parametrSheetName, ArrayParametrs)
   array.forEach(function (attr) {
     var value = getParametr(globalVar, sourceSheetID, parametrSheetName, attr).value
     if (isValidDate(value)) {
-      var parametr = formatterDate(value)
+      var parametr = formatterDate(value).date
     } else {
       var parametr = value
     }

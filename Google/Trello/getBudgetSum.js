@@ -2,7 +2,7 @@ function getBudgetSum(globalVar, postObject) {
   var budgetSum = getTotalSum(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameBudget, postObject)
   var totalSum = {}
   var budgetRow = budgetSum.row
-  totalSum.text = '**Итого бюджет** ' + formatterDate(postObject.period) + ':' + globalVar.lineBreak
+  totalSum.text = '**Итого бюджет** ' + formatterDate(postObject.period).date + ':' + globalVar.lineBreak
   totalSum.text += postObject.cfo + ': ' + budgetSum.bill + ' р.' + globalVar.lineBreak
   totalSum.text += postObject.account + ': ' + budgetSum.account + ' р.' + globalVar.lineBreak
   totalSum.text += postObject.nomenclature + ': ' + budgetSum.nomenclature + ' р.' + globalVar.lineBreak
@@ -11,7 +11,7 @@ function getBudgetSum(globalVar, postObject) {
   budgetRow.forEach(function (row) {
     var comma
     budgetRow.length > i ? comma = globalVar.lineBreak : comma = ''
-    totalSum.text += formatterDateTime(row.actionDate) + ': ' + row.sum + ' р. ' + row.comment + comma
+    totalSum.text += formatterDate(row.actionDate).time + ': ' + row.sum + ' р. ' + row.comment + comma
     i += 1
   })
   return totalSum
