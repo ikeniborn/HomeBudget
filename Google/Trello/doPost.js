@@ -98,6 +98,7 @@ function doPost(e) {
   } else if (variable.actionType == 'deleteComment') {
     //* удаление строки при удалении комментария
     postObject.globalVar = globalVar
+    postObject.actionDate = new Date(postData.action.date)
     postObject.actionId = postData.action.data.action.id
     postObject.boardId = postData.action.data.board.id
     postObject.cardId = postData.action.data.card.id

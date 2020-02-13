@@ -1,4 +1,4 @@
-function getCard(globalVar, listId) {
+function getCards(globalVar, listId) {
   var data = {
     method: 'get',
     contentType: 'application/json'
@@ -13,11 +13,5 @@ function getCard(globalVar, listId) {
     variable.name = array.name
     return cardArray.push(variable)
   }, {})
-  // if (cardArray.length == 1) {
-  //   card = cardArray[0]
-  //   return card
-  // } else {
-  //   return cardArray
-  // }
   return cardArray
 }
