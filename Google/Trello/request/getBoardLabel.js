@@ -6,12 +6,11 @@ function getBoardLabel(globalVar, boardId) {
   var resp = UrlFetchApp.fetch(globalVar.apiRoot + 'boards/' + boardId + '/labels?fields=all&limit=10&' + globalVar.keyAndToken, data)
   var respData = JSON.parse(resp)
   var respArray = []
-  // var card = {}
   respData.reduce(function (variable, array) {
     variable = {}
     variable.id = array.id
     variable.name = array.name
-    variable.name = array.color
+    variable.color = array.color
     return respArray.push(variable)
   }, {})
   return respArray

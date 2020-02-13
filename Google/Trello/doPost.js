@@ -9,32 +9,13 @@ function doPost(e) {
   console.log(variable)
   var parseAction = ['commentCard', 'updateComment', 'deleteComment']
   if (parseAction.indexOf(variable.actionType) !== -1) {
-    const globalVar = getVariable()
-    var postObject = {}
+    var globalVar = getVariable()
+    var postObject = getPostObject(globalVar, postData)
     var textComment
-    var accountingItemArray = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName(globalVar.accountingItemSheetName).getDataRange().getValues()
     var ssTest = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName('test')
     ssTest.appendRow([variable])
   }
   if (variable.actionType == 'commentCard') {
-    postObject.globalVar = globalVar
-    postObject.actionId = postData.action.id
-    postObject.actionDate = new Date(postData.action.date)
-    postObject.boardName = postData.action.data.board.name
-    postObject.boardId = postData.action.data.board.id
-    postObject.cfo = parseListName(postData.action.data.list.name)
-    postObject.listId = postData.action.data.list.id
-    postObject.cardName = postData.action.data.card.name
-    postObject.cardId = postData.action.data.card.id
-    postObject.bill = getAccountingItem(accountingItemArray, postObject.cardName).bill
-    postObject.account = getAccountingItem(accountingItemArray, postObject.cardName).account
-    postObject.nomenclature = postData.action.data.card.name
-    postObject.text = postData.action.data.text
-    postObject.sum = parseComment(postObject.text).sum
-    postObject.comment = parseComment(postObject.text).comment
-    postObject.mvz = parseComment(postObject.text, postObject.cfo).mvz
-    postObject.period = getPeriod(globalVar, postObject.boardId, postObject.cfo).period
-    postObject.ymd = getPeriod(globalVar, postObject.boardId, postObject.cfo).ymd
     if (variable.idMemberCreator !== '5e2b5f3f409c544ebdb1b9d4' && checkActionId(globalVar, postObject) == 0) {
       //* добавление информации в учет
       if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(postObject.boardId) !== -1) {
@@ -58,7 +39,7 @@ function doPost(e) {
       if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1) {
         if (postObject.account == 'Остатки') {
           updateFactPeriod(globalVar, postObject)
-          closedFactPeriod(globalVar, postObject, accountingItemArray)
+          closedFactPeriod(globalVar, postObject)
         } else if (postObject.account == 'Аванс') {
           // addCardComment(globalVar, postObject.cardId, 'Бюджетный период закрыт')
           // closedBudgetPeriod(globalVar, postObject)
@@ -67,21 +48,6 @@ function doPost(e) {
     }
   } else if (variable.actionType == 'updateComment' && variable.idMemberCreator !== '5e2b5f3f409c544ebdb1b9d4') {
     //* обновление данных при изменении комментария
-    postObject.globalVar = globalVar
-    postObject.actionId = postData.action.data.action.id
-    postObject.actionDate = new Date(postData.action.date)
-    postObject.boardId = postData.action.data.board.id
-    postObject.cardId = postData.action.data.card.id
-    postObject.cardName = postData.action.data.card.name
-    postObject.cfo = getCardList(globalVar, postObject.cardId).name
-    postObject.bill = getAccountingItem(accountingItemArray, postObject.cardName).bill
-    postObject.account = getAccountingItem(accountingItemArray, postObject.cardName).account
-    postObject.nomenclature = postData.action.data.card.name
-    postObject.text = postData.action.data.action.text
-    postObject.sum = parseComment(postObject.text).sum
-    postObject.comment = parseComment(postObject.text).comment
-    postObject.period = getPeriod(globalVar, postObject.boardId, postObject.cfo).period
-    postObject.ymd = getPeriod(globalVar, postObject.boardId, postObject.cfo).ymd
     if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(postObject.boardId) !== -1) {
       updateRowByActionId(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameFactTrello, postObject)
       updateRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameFact, postObject)
@@ -97,18 +63,6 @@ function doPost(e) {
     }
   } else if (variable.actionType == 'deleteComment') {
     //* удаление строки при удалении комментария
-    postObject.globalVar = globalVar
-    postObject.actionDate = new Date(postData.action.date)
-    postObject.actionId = postData.action.data.action.id
-    postObject.boardId = postData.action.data.board.id
-    postObject.cardId = postData.action.data.card.id
-    postObject.cardName = postData.action.data.card.name
-    postObject.cfo = getCardList(globalVar, postObject.cardId).name
-    postObject.bill = getAccountingItem(accountingItemArray, postObject.cardName).bill
-    postObject.account = getAccountingItem(accountingItemArray, postObject.cardName).account
-    postObject.nomenclature = postData.action.data.card.name
-    postObject.period = getPeriod(globalVar, postObject.boardId, postObject.cfo).period
-    postObject.ymd = getPeriod(globalVar, postObject.boardId, postObject.cfo).ymd
     if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(postObject.boardId) !== -1) {
       deleteRowByActionId(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameFactTrello, postObject)
       deleteRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameFact, postObject)
