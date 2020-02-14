@@ -31,12 +31,11 @@ function doPost(e) {
       }
       //* добавление реакции на комментарий
       if (variable.idMemberCreator == '55cb5c5729ae976dfd2b901e') {
-        if(postObject.sum > 500){
+        if (postObject.sum > 500) {
           addReaction(globalVar, postObject.actionId, globalVar.buuReaction)
         } else {
-        addReaction(globalVar, postObject.actionId, globalVar.scream)
+          addReaction(globalVar, postObject.actionId, globalVar.scream)
         }
-        
         addReaction(globalVar, postObject.actionId, globalVar.moneyBag)
       } else {
         addReaction(globalVar, postObject.actionId, globalVar.sunglasses)
@@ -49,7 +48,7 @@ function doPost(e) {
           closedFactPeriod(globalVar, postObject)
           reportBudgetOksana(globalVar)
         } else if (postObject.account == 'Аванс') {
-          // addCardComment(globalVar, postObject.cardId, 'Бюджетный период закрыт')
+          updateBudgetPeriod(globalVar, postObject)
           // closedBudgetPeriod(globalVar, postObject)
         }
       }

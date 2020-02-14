@@ -1,4 +1,4 @@
-function updateBudgetPeriod(postObject) {
+function updateBudgetPeriod(globalVar, postObject) {
   var factPeriod
   var newBudgetPeriod
   if (['Илья'].indexOf(postObject.cfo) !== -1) {
