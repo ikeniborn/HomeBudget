@@ -32,13 +32,12 @@ function doPost(e) {
       //* добавление реакции на комментарий
       if (variable.idMemberCreator == '55cb5c5729ae976dfd2b901e') {
         if (postObject.sum > 500) {
-          addReaction(globalVar, postObject.actionId, globalVar.buuReaction)
-        } else {
           addReaction(globalVar, postObject.actionId, globalVar.scream)
+        } else {
+          addReaction(globalVar, postObject.actionId, globalVar.buuReaction)
         }
         addReaction(globalVar, postObject.actionId, globalVar.moneyBag)
       } else {
-        addReaction(globalVar, postObject.actionId, globalVar.sunglasses)
         addReaction(globalVar, postObject.actionId, globalVar.moneyBag)
       }
       //* закрытие периода

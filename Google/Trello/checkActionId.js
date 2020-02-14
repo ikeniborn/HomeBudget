@@ -6,7 +6,7 @@ function checkActionId(globalVar, postObject) {
     sheetName = globalVar.sourceSheetNameBudgetTrello
   }
   //* добавление строк на страницу
-  var targetArray = getCurrData(getAllData(globalVar, globalVar.sourceSheetID, sheetName), postObject.ymd)
+  var targetArray = getAllData(globalVar, globalVar.sourceSheetID, sheetName)
   var searchRow = targetArray.filter(function (row) {
     return row.actionId == postObject.actionId
   })
