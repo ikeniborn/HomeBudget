@@ -1,15 +1,11 @@
 function updateBudgetPeriod(globalVar, postObject) {
-  var factPeriod
-  var newBudgetPeriod
+  var currBudgetPeriod = getPeriod(globalVar, globalVar.boardIdBudget, postObject.cfo).period
+  var newBudgetPeriod = formatterDate(new Date(currBudgetPeriod.getYear(), currBudgetPeriod.getMonth() + 1, 1)).date
   if (['Илья'].indexOf(postObject.cfo) !== -1) {
-    factPeriod = getPeriod(globalVar, postObject.boardId, postObject.cfo).factPeriod
-    newBudgetPeriod = formatterDate(new Date(factPeriod.getYear(), factPeriod.getMonth() + 1, 1)).date
     updateParametr(globalVar, 'periodBudgetIlya', newBudgetPeriod)
-    updateParametr(globalVar, 'periodBudgetFamily', newBudgetPeriod)
   } else if (['Оксана'].indexOf(postObject.cfo) !== -1) {
-    factPeriod = getPeriod(globalVar, postObject.boardId, postObject.cfo).factPeriod
-    newBudgetPeriod = formatterDate(new Date(factPeriod.getYear(), factPeriod.getMonth() + 1, 1)).date
     updateParametr(globalVar, 'periodBudgetOksana', newBudgetPeriod)
+  } else if (['Семья'].indexOf(postObject.cfo) !== -1) {
+    updateParametr(globalVar, 'periodBudgetFamily', newBudgetPeriod)
   }
-
 }

@@ -4,14 +4,14 @@ function getPeriod(globalVar, boardId, listName) {
   var factPeriod
   var budgetPeriod
   if (listName == 'Илья') {
-    factPeriod = getParametr(globalVar, 'periodFactIlya').value
-    budgetPeriod = getParametr(globalVar, 'periodBudgetIlya').value
+    factPeriod = getParametr(globalVar.parametrArray, 'periodFactIlya').value
+    budgetPeriod = getParametr(globalVar.parametrArray, 'periodBudgetIlya').value
   } else if (listName == 'Семья') {
-    factPeriod = getParametr(globalVar, 'periodFactFamily').value
-    budgetPeriod = getParametr(globalVar, 'periodBudgetFamily').value
+    factPeriod = getParametr(globalVar.parametrArray, 'periodFactFamily').value
+    budgetPeriod = getParametr(globalVar.parametrArray, 'periodBudgetFamily').value
   } else if (listName == 'Оксана') {
-    factPeriod = getParametr(globalVar, 'periodFactOksana').value
-    budgetPeriod = getParametr(globalVar, 'periodBudgetOksana').value
+    factPeriod = getParametr(globalVar.parametrArray, 'periodFactOksana').value
+    budgetPeriod = getParametr(globalVar.parametrArray, 'periodBudgetOksana').value
   }
   if (boardId == globalVar.boardIdFact) {
     period = factPeriod
@@ -27,8 +27,6 @@ function getPeriod(globalVar, boardId, listName) {
   ymd = getYMD(period).ymd
   return {
     period: period,
-    ymd: ymd,
-    factPeriod: factPeriod,
-    budgetPeriod: budgetPeriod
+    ymd: ymd
   }
 }
