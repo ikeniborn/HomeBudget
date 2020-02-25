@@ -9,7 +9,6 @@ function doPost(e) {
       var textComment
       var ssTest = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName('test')
       ssTest.appendRow([postObject.webHookDate, postObject.actionType, postObject.actionId, postObject.memberUsername, isValidData])
-      console.log(postObject)
       if (postObject.actionType == 'commentCard' && postObject.memberId !== '5e2b5f3f409c544ebdb1b9d4' && isValidData) {
         //* добавление информации в учет
         // var addComment = Promise()
@@ -39,7 +38,6 @@ function doPost(e) {
             closedBudgetPeriod(globalVar, postObject)
           }
         }
-
       } else if (postObject.actionType == 'updateComment' && postObject.memberId !== '5e2b5f3f409c544ebdb1b9d4') {
         //* обновление данных при изменении комментария
         if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(postObject.boardId) !== -1) {
