@@ -44,7 +44,7 @@ function doPost(e) {
         if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1) {
           var factPeriod = getPeriod(globalVar, globalVar.boardIdFact, postObject.cfo).ymd
           var budgetPeriod = getPeriod(globalVar, globalVar.boardIdBudget, postObject.cfo).ymd
-          if (postObject.account == 'Остатки') {
+          if (postObject.account == 'Остатки' && factPeriod != budgetPeriod) {
             updateFactPeriod(globalVar, postObject)
             closedFactPeriod(globalVar, postObject)
             // reportBudgetOksana(globalVar)

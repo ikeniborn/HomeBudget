@@ -29,5 +29,7 @@ function getList(globalVar, boardId, listName) {
     }
   } catch (e) {
     console.error('getList: ' + e)
+  } finally {
+    console.log('getList: complete')
   }
 }
