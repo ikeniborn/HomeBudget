@@ -13,8 +13,8 @@ function updateTrelloBuffer(globalVar, postObject) {
     // Удаление пустых строк
     deleteEmptyRow(globalVar.sourceSheetID, sheetName)
   } catch (e) {
-    console.error('updateTrelloAccounting: ' + e)
+    console.error('updateTrelloBuffer: ' + e)
   } finally {
-    console.log('updateTrelloAccounting: complete')
+    console.log('updateTrelloBuffer: complete')
   }
 }

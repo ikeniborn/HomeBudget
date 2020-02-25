@@ -1,4 +1,4 @@
-function checkActionId(globalVar, postObject) {
+function isNewData(globalVar, postObject) {
   try {
     var sheetName
     if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(postObject.boardId) !== -1) {
@@ -11,11 +11,15 @@ function checkActionId(globalVar, postObject) {
     var searchRow = targetArray.filter(function (row) {
       return row.actionId == postObject.actionId
     })
-    return searchRow.length
+    if (searchRow.length == 0) {
+      return true
+    } else {
+      return false
+    }
   } catch (e) {
-    console.error('checkActionId: ' + e)
+    console.error('isNewData: ' + e)
   } finally {
-    console.log('checkActionId: complete ')
+    console.log('isNewData: complete ')
   }
 
 }

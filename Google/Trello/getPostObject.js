@@ -2,8 +2,12 @@ function getPostObject(globalVar, postData) {
   const postObject = {}
   if (postData.action.type == 'commentCard') {
     postObject.globalVar = globalVar
+    postObject.webHookDate = formatterDate().timestamp
+    postObject.actionType = postData.action.type
     postObject.actionId = postData.action.id
     postObject.actionDate = new Date(postData.action.date)
+    postObject.memberId = postData.action.memberCreator.id
+    postObject.memberUsername = postData.action.memberCreator.username
     postObject.boardId = postData.action.data.board.id
     postObject.boardName = postData.action.data.board.name
     postObject.listId = postData.action.data.list.id
@@ -21,8 +25,12 @@ function getPostObject(globalVar, postData) {
     postObject.ymd = getPeriod(globalVar, postObject.boardId, postObject.cfo).ymd
   } else if (postData.action.type == 'updateComment') {
     postObject.globalVar = globalVar
+    postObject.webHookDate = formatterDate().timestamp
+    postObject.actionType = postData.action.type
     postObject.actionId = postData.action.data.action.id
     postObject.actionDate = new Date(postData.action.date)
+    postObject.memberId = postData.action.memberCreator.id
+    postObject.memberUsername = postData.action.memberCreator.username
     postObject.boardId = postData.action.data.board.id
     postObject.boardName = postData.action.data.board.name
     postObject.cardId = postData.action.data.card.id
@@ -40,8 +48,12 @@ function getPostObject(globalVar, postData) {
     postObject.ymd = getPeriod(globalVar, postObject.boardId, postObject.cfo).ymd
   } else if (postData.action.type == 'deleteComment') {
     postObject.globalVar = globalVar
-    postObject.actionDate = new Date(postData.action.date)
+    postObject.webHookDate = formatterDate().timestamp
+    postObject.actionType = postData.action.type
     postObject.actionId = postData.action.data.action.id
+    postObject.actionDate = new Date(postData.action.date)
+    postObject.memberId = postData.action.memberCreator.id
+    postObject.memberUsername = postData.action.memberCreator.username
     postObject.boardId = postData.action.data.board.id
     postObject.boardName = postData.action.data.board.name
     postObject.cardId = postData.action.data.card.id

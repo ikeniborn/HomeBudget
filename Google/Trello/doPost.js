@@ -1,90 +1,75 @@
 function doPost(e) {
   try {
     const postData = JSON.parse(e.postData.contents)
-    const variable = {}
-    variable.webHookDate = formatterDate().timestamp
-    variable.actionType = postData.action.type !== undefined ? postData.action.type : null
-    variable.actionId = postData.action.id !== undefined ? postData.action.id : null
-    variable.username = postData.action.memberCreator.username !== undefined ? postData.action.memberCreator.username : null
-    console.log(variable)
     var parseAction = ['commentCard', 'updateComment', 'deleteComment']
-    if (parseAction.indexOf(variable.actionType) !== -1) {
+    if (parseAction.indexOf(postData.action.type) !== -1) {
       var globalVar = getVariable()
       var postObject = getPostObject(globalVar, postData)
-      var checkActionId = checkActionId(globalVar, postObject)
+      var isValidData = isNewData(globalVar, postObject)
       var textComment
       var ssTest = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName('test')
-      ssTest.appendRow([variable.webHookDate, variable.actionType, variable.actionId, variable.username, checkActionId])
-    }
-    if (variable.actionType == 'commentCard') {
-      if (variable.idMemberCreator !== '5e2b5f3f409c544ebdb1b9d4' && checkActionId == 0) {
-        //* добавление информации в учет
-        // var addComment = Promise()
+      ssTest.appendRow([postObject.webHookDate, postObject.actionType, postObject.actionId, postObject.memberUsername, isValidData])
+      if (postObject.actionType == 'commentCard') {
+        if (postObject.memberId !== '5e2b5f3f409c544ebdb1b9d4' && isValidData) {
+          //* добавление информации в учет
+          // var addComment = Promise()
+          if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(postObject.boardId) !== -1) {
+            updateTrelloBuffer(globalVar, postObject)
+            updateTrelloAccounting(globalVar, postObject)
+            textComment = getRestSum(globalVar, postObject).text
+            updateCard(globalVar, postObject.cardId, textComment)
+          } else if ([globalVar.boardIdBudget, globalVar.boardIdBudget2, globalVar.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
+            updateTrelloBuffer(globalVar, postObject)
+            updateTrelloAccounting(globalVar, postObject)
+            textComment = getBudgetSum(globalVar, postObject).text
+            updateCard(globalVar, postObject.cardId, textComment)
+          }
+          //* добавление реакции на комментарий
+          addReaction(globalVar, postObject)
+          //* закрытие периода
+          if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1 && ['Остатки', 'Аванс'].indexOf(postObject.account) !== -1) {
+            var factPeriod = getPeriod(globalVar, globalVar.boardIdFact, postObject.cfo).ymd
+            var budgetPeriod = getPeriod(globalVar, globalVar.boardIdBudget, postObject.cfo).ymd
+            if (postObject.account == 'Остатки' && factPeriod != budgetPeriod) {
+              updateFactPeriod(globalVar, postObject)
+              closedFactPeriod(globalVar, postObject)
+              // reportBudgetOksana(globalVar)
+            } else if (postObject.account == 'Аванс' && factPeriod == budgetPeriod) {
+              updateBudgetPeriod(globalVar, postObject)
+              closedBudgetPeriod(globalVar, postObject)
+            }
+          }
+        }
+      } else if (postObject.actionType == 'updateComment' && postObject.memberId !== '5e2b5f3f409c544ebdb1b9d4') {
+        //* обновление данных при изменении комментария
         if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(postObject.boardId) !== -1) {
-          updateTrelloBuffer(globalVar, postObject)
-          updateTrelloAccounting(globalVar, postObject)
-          textComment = getRestSum(globalVar, postObject).text
-          updateCard(globalVar, postObject.cardId, textComment)
+          updateRowByActionId(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameFactTrello, postObject)
+          updateRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameFact, postObject)
+          if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1) {
+            textComment = getRestSum(globalVar, postObject).text
+            updateCard(globalVar, postObject.cardId, textComment)
+          }
         } else if ([globalVar.boardIdBudget, globalVar.boardIdBudget2, globalVar.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-          updateTrelloBuffer(globalVar, postObject)
-          updateTrelloAccounting(globalVar, postObject)
+          updateRowByActionId(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameBudgetTrello, postObject)
+          updateRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameBudget, postObject)
           textComment = getBudgetSum(globalVar, postObject).text
           updateCard(globalVar, postObject.cardId, textComment)
         }
-        //* добавление реакции на комментарий
-        if (variable.idMemberCreator == '55cb5c5729ae976dfd2b901e') {
-          if (postObject.sum > 500) {
-            addReaction(globalVar, postObject.actionId, globalVar.scream)
-          } else {
-            addReaction(globalVar, postObject.actionId, globalVar.buuReaction)
+      } else if (postObject.actionType == 'deleteComment') {
+        //* удаление строки при удалении комментария
+        if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(postObject.boardId) !== -1) {
+          deleteRowByActionId(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameFactTrello, postObject)
+          deleteRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameFact, postObject)
+          if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1) {
+            textComment = getRestSum(globalVar, postObject).text
+            updateCard(globalVar, postObject.cardId, textComment)
           }
-          addReaction(globalVar, postObject.actionId, globalVar.moneyBag)
-        } else {
-          addReaction(globalVar, postObject.actionId, globalVar.moneyBag)
-        }
-        //* закрытие периода
-        if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1) {
-          var factPeriod = getPeriod(globalVar, globalVar.boardIdFact, postObject.cfo).ymd
-          var budgetPeriod = getPeriod(globalVar, globalVar.boardIdBudget, postObject.cfo).ymd
-          if (postObject.account == 'Остатки' && factPeriod != budgetPeriod) {
-            updateFactPeriod(globalVar, postObject)
-            closedFactPeriod(globalVar, postObject)
-            // reportBudgetOksana(globalVar)
-          } else if (postObject.account == 'Аванс' && factPeriod == budgetPeriod) {
-            updateBudgetPeriod(globalVar, postObject)
-            closedBudgetPeriod(globalVar, postObject)
-          }
-        }
-      }
-    } else if (variable.actionType == 'updateComment' && variable.idMemberCreator !== '5e2b5f3f409c544ebdb1b9d4') {
-      //* обновление данных при изменении комментария
-      if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(postObject.boardId) !== -1) {
-        updateRowByActionId(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameFactTrello, postObject)
-        updateRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameFact, postObject)
-        if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1) {
-          textComment = getRestSum(globalVar, postObject).text
+        } else if ([globalVar.boardIdBudget, globalVar.boardIdBudget2, globalVar.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
+          deleteRowByActionId(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameBudgetTrello, postObject)
+          deleteRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameBudget, postObject)
+          textComment = getBudgetSum(globalVar, postObject).text
           updateCard(globalVar, postObject.cardId, textComment)
         }
-      } else if ([globalVar.boardIdBudget, globalVar.boardIdBudget2, globalVar.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-        updateRowByActionId(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameBudgetTrello, postObject)
-        updateRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameBudget, postObject)
-        textComment = getBudgetSum(globalVar, postObject).text
-        updateCard(globalVar, postObject.cardId, textComment)
-      }
-    } else if (variable.actionType == 'deleteComment') {
-      //* удаление строки при удалении комментария
-      if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(postObject.boardId) !== -1) {
-        deleteRowByActionId(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameFactTrello, postObject)
-        deleteRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameFact, postObject)
-        if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1) {
-          textComment = getRestSum(globalVar, postObject).text
-          updateCard(globalVar, postObject.cardId, textComment)
-        }
-      } else if ([globalVar.boardIdBudget, globalVar.boardIdBudget2, globalVar.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-        deleteRowByActionId(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameBudgetTrello, postObject)
-        deleteRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameBudget, postObject)
-        textComment = getBudgetSum(globalVar, postObject).text
-        updateCard(globalVar, postObject.cardId, textComment)
       }
     }
   } catch (e) {
