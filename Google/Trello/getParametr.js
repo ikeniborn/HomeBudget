@@ -11,7 +11,7 @@ function getParametr(sheetArray, parametr) {
     }
   }, {})
   if (parametrArray.length == 1) {
-    let parametrObject = parametrArray[0]
+    var parametrObject = parametrArray[0]
     return parametrObject
   } else {
     return parametrArray

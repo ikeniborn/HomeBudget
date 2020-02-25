@@ -1,8 +1,15 @@
 function encodeData(data, symbol) {
-  if (data.match(symbol)) {
-    var encodeData = data.replace(symbol, encodeURIComponent(symbol))
-    return encodeData
-  } else {
-    return data
+  try {
+    var encodeSymbol = encodeURIComponent(symbol)
+    var encodeData = encodeURIComponent(data)
+    if (encodeData.match(encodeSymbol)) {
+      return data.replace(symbol, encodeURIComponent(symbol))
+    } else {
+      return data
+    }
+  } catch (e) {
+    console.error('encodeData: ' + e)
+  } finally {
+    console.log('encodeData: complete')
   }
 }

@@ -11,21 +11,23 @@ function doPost(e) {
     if (parseAction.indexOf(variable.actionType) !== -1) {
       var globalVar = getVariable()
       var postObject = getPostObject(globalVar, postData)
+      var checkActionId = checkActionId(globalVar, postObject)
       var textComment
       var ssTest = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName('test')
-      ssTest.appendRow([variable.webHookDate, variable.actionType, variable.actionId, variable.username, checkActionId(globalVar, postObject)])
+      ssTest.appendRow([variable.webHookDate, variable.actionType, variable.actionId, variable.username, checkActionId])
     }
     if (variable.actionType == 'commentCard') {
-      if (variable.idMemberCreator !== '5e2b5f3f409c544ebdb1b9d4' && checkActionId(globalVar, postObject) == 0) {
+      if (variable.idMemberCreator !== '5e2b5f3f409c544ebdb1b9d4' && checkActionId == 0) {
         //* добавление информации в учет
+        // var addComment = Promise()
         if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(postObject.boardId) !== -1) {
-          updateTrelloBuffer(globalVar, postObject, postObject.boardId)
-          updateTrelloAccounting(globalVar, postObject, postObject.boardId)
+          updateTrelloBuffer(globalVar, postObject)
+          updateTrelloAccounting(globalVar, postObject)
           textComment = getRestSum(globalVar, postObject).text
           updateCard(globalVar, postObject.cardId, textComment)
         } else if ([globalVar.boardIdBudget, globalVar.boardIdBudget2, globalVar.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-          updateTrelloBuffer(globalVar, postObject, postObject.boardId)
-          updateTrelloAccounting(globalVar, postObject, postObject.boardId)
+          updateTrelloBuffer(globalVar, postObject)
+          updateTrelloAccounting(globalVar, postObject)
           textComment = getBudgetSum(globalVar, postObject).text
           updateCard(globalVar, postObject.cardId, textComment)
         }
