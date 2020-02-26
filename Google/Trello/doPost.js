@@ -6,7 +6,6 @@ function doPost(e) {
       var globalVar = getVariable()
       var postObject = getPostObject(globalVar, postData)
       var isValidData = isNewData(globalVar, postObject)
-      var textComment
       var ssTest = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName('test')
       ssTest.appendRow([postObject.webHookDate, postObject.actionType, postObject.actionId, postObject.memberUsername, isValidData])
       if (postObject.actionType == 'commentCard' && postObject.memberId !== '5e2b5f3f409c544ebdb1b9d4' && isValidData) {
@@ -15,13 +14,13 @@ function doPost(e) {
         if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(postObject.boardId) !== -1) {
           updateTrelloBuffer(globalVar, postObject)
           updateTrelloAccounting(globalVar, postObject)
-          textComment = getRestSum(globalVar, postObject).text
-          updateCard(globalVar, postObject.cardId, textComment)
+          postObject.cardComment = getSum(globalVar, postObject).text
+          updateCard(globalVar, postObject)
         } else if ([globalVar.boardIdBudget, globalVar.boardIdBudget2, globalVar.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
           updateTrelloBuffer(globalVar, postObject)
           updateTrelloAccounting(globalVar, postObject)
-          textComment = getBudgetSum(globalVar, postObject).text
-          updateCard(globalVar, postObject.cardId, textComment)
+          postObject.cardComment = getSum(globalVar, postObject).text
+          updateCard(globalVar, postObject)
         }
         //* добавление реакции на комментарий
         addReaction(globalVar, postObject)
@@ -44,14 +43,14 @@ function doPost(e) {
           updateRowByActionId(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameFactTrello, postObject)
           updateRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameFact, postObject)
           if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1) {
-            textComment = getRestSum(globalVar, postObject).text
-            updateCard(globalVar, postObject.cardId, textComment)
+            postObject.cardComment = getSum(globalVar, postObject).text
+            updateCard(globalVar, postObject)
           }
         } else if ([globalVar.boardIdBudget, globalVar.boardIdBudget2, globalVar.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
           updateRowByActionId(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameBudgetTrello, postObject)
           updateRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameBudget, postObject)
-          textComment = getBudgetSum(globalVar, postObject).text
-          updateCard(globalVar, postObject.cardId, textComment)
+          postObject.cardComment = getSum(globalVar, postObject).text
+          updateCard(globalVar, postObject)
         }
       } else if (postObject.actionType == 'deleteComment') {
         //* удаление строки при удалении комментария
@@ -59,14 +58,14 @@ function doPost(e) {
           deleteRowByActionId(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameFactTrello, postObject)
           deleteRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameFact, postObject)
           if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1) {
-            textComment = getRestSum(globalVar, postObject).text
-            updateCard(globalVar, postObject.cardId, textComment)
+            postObject.cardComment = getSum(globalVar, postObject).text
+            updateCard(globalVar, postObject)
           }
         } else if ([globalVar.boardIdBudget, globalVar.boardIdBudget2, globalVar.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
           deleteRowByActionId(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameBudgetTrello, postObject)
           deleteRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameBudget, postObject)
-          textComment = getBudgetSum(globalVar, postObject).text
-          updateCard(globalVar, postObject.cardId, textComment)
+          postObject.cardComment = getSum(globalVar, postObject).text
+          updateCard(globalVar, postObject)
         }
       }
     }

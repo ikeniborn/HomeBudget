@@ -10,10 +10,11 @@ function getPostObject(globalVar, postData) {
     postObject.memberUsername = postData.action.memberCreator.username
     postObject.boardId = postData.action.data.board.id
     postObject.boardName = postData.action.data.board.name
-    postObject.listId = postData.action.data.list.id
-    postObject.cfo = parseListName(postData.action.data.list.name)
-    postObject.cardName = postData.action.data.card.name
     postObject.cardId = postData.action.data.card.id
+    postObject.cardName = postData.action.data.card.name
+    postObject.cardComment = null
+    postObject.listId = postData.action.data.list.id
+    postObject.listName = parseListName(postData.action.data.list.name)
     postObject.bill = getAccountingItem(globalVar.accountingItemArray, postObject.cardName).bill
     postObject.account = getAccountingItem(globalVar.accountingItemArray, postObject.cardName).account
     postObject.nomenclature = postData.action.data.card.name
@@ -35,8 +36,9 @@ function getPostObject(globalVar, postData) {
     postObject.boardName = postData.action.data.board.name
     postObject.cardId = postData.action.data.card.id
     postObject.cardName = postData.action.data.card.name
+    postObject.cardComment = null
     postObject.listId = getCardList(globalVar, postObject.cardId).id
-    postObject.cfo = getCardList(globalVar, postObject.cardId).name
+    postObject.listName = getCardList(globalVar, postObject.cardId).name
     postObject.bill = getAccountingItem(globalVar.accountingItemArray, postObject.cardName).bill
     postObject.account = getAccountingItem(globalVar.accountingItemArray, postObject.cardName).account
     postObject.nomenclature = postData.action.data.card.name
@@ -58,8 +60,9 @@ function getPostObject(globalVar, postData) {
     postObject.boardName = postData.action.data.board.name
     postObject.cardId = postData.action.data.card.id
     postObject.cardName = postData.action.data.card.name
+    postObject.cardComment = null
     postObject.listId = getCardList(globalVar, postObject.cardId).id
-    postObject.cfo = getCardList(globalVar, postObject.cardId).name
+    postObject.listName = getCardList(globalVar, postObject.cardId).name
     postObject.bill = getAccountingItem(globalVar.accountingItemArray, postObject.cardName).bill
     postObject.account = getAccountingItem(globalVar.accountingItemArray, postObject.cardName).account
     postObject.nomenclature = postData.action.data.card.name
