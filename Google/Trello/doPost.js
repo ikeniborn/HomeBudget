@@ -15,8 +15,8 @@ function doPost(e) {
         addCardReaction(postObject)
         //* закрытие периода
         if (postObject.isCurrFact && ['Остатки', 'Аванс'].indexOf(postObject.account) !== -1) {
-          var factPeriod = getPeriod(postObject, postObject.boardIdFact).ymd
-          var budgetPeriod = getPeriod(postObject, postObject.boardIdBudget).ymd
+          var factPeriod = getYMD(postObject.factPeriod).ymd
+          var budgetPeriod = getYMD(postObject.budgetPeriod).ymd
           if (postObject.account == 'Остатки' && factPeriod != budgetPeriod) {
             updateFactPeriod(postObject)
             closedFactPeriod(postObject)

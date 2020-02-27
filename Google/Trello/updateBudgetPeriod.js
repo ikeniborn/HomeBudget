@@ -1,6 +1,6 @@
 function updateBudgetPeriod(postObject) {
   try {
-    var currBudgetPeriod = getPeriod(postObject, postObject.boardIdBudget).period
+    var currBudgetPeriod = postObject.BudgetPeriod
     var newBudgetPeriod = formatterDate(new Date(currBudgetPeriod.getYear(), currBudgetPeriod.getMonth() + 1, 1)).date
     if (['Илья'].indexOf(postObject.listName) !== -1) {
       updateParametr(postObject, 'periodBudgetIlya', newBudgetPeriod)

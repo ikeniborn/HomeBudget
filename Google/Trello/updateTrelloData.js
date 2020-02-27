@@ -20,7 +20,7 @@ function updateTrelloData(postObject) {
     ss.appendRow([postObject.actionDate, postObject.period, postObject.listName, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId])
     //* вставка значений в учет
     if (postObject.account == 'Остатки') {
-      var newPeriod = getPeriod(postObject, globalVar.boardIdBudget).period
+      var newPeriod = postObject.budgetPeriod
       insertdate = new Date(postObject.actionDate.getTime() + 1000);
       ts.appendRow([insertdate, newPeriod, postObject.listName, postObject.mvz, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
     } else {

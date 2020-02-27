@@ -5,7 +5,6 @@ function getPostObject(postData) {
       postObject.webHookDate = formatterDate().timestamp
       postObject.actionType = postData.action.type
       postObject.actionId = postData.action.id
-      postObject.isValidData = isValidData(postObject)
       postObject.actionDate = new Date(postData.action.date)
       postObject.memberId = postData.action.memberCreator.id
       postObject.memberUsername = postData.action.memberCreator.username
@@ -44,11 +43,16 @@ function getPostObject(postData) {
       postObject.date = getPeriod(postObject)
       postObject.period = postObject.date.period
       postObject.ymd = postObject.date.ymd
+      postObject.factPeriod0 = postObject.date.factPeriod0
+      postObject.factPeriod = postObject.date.factPeriod
+      postObject.budgetPeriod = postObject.date.budgetPeriod
+      postObject.budgetPeriod2 = postObject.date.budgetPeriod2
+      postObject.budgetPeriod3 = postObject.date.budgetPeriod3
+      postObject.isValidData = isValidData(postObject)
     } else if (postData.action.type == 'updateComment') {
       postObject.webHookDate = formatterDate().timestamp
       postObject.actionType = postData.action.type
       postObject.actionId = postData.action.data.action.id
-      postObject.isValidData = isValidData(postObject)
       postObject.actionDate = new Date(postData.action.date)
       postObject.memberId = postData.action.memberCreator.id
       postObject.memberUsername = postData.action.memberCreator.username
@@ -72,7 +76,7 @@ function getPostObject(postData) {
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
       postObject.cardComment = null
-      postObject.list = getCardList(postObject)
+      postObject.list = getCardList(postObject, postObject.cardId)
       postObject.listId = postObject.list.id
       postObject.listName = postObject.list.name
       postObject.accountingItem = getAccountingItem(postObject)
@@ -87,11 +91,16 @@ function getPostObject(postData) {
       postObject.date = getPeriod(postObject)
       postObject.period = postObject.date.period
       postObject.ymd = postObject.date.ymd
+      postObject.factPeriod0 = postObject.date.factPeriod0
+      postObject.factPeriod = postObject.date.factPeriod
+      postObject.budgetPeriod = postObject.date.budgetPeriod
+      postObject.budgetPeriod2 = postObject.date.budgetPeriod2
+      postObject.budgetPeriod3 = postObject.date.budgetPeriod3
+      postObject.isValidData = isValidData(postObject)
     } else if (postData.action.type == 'deleteComment') {
       postObject.webHookDate = formatterDate().timestamp
       postObject.actionType = postData.action.type
       postObject.actionId = postData.action.data.action.id
-      postObject.isValidData = isValidData(postObject)
       postObject.actionDate = new Date(postData.action.date)
       postObject.memberId = postData.action.memberCreator.id
       postObject.memberUsername = postData.action.memberCreator.username
@@ -129,6 +138,12 @@ function getPostObject(postData) {
       postObject.date = getPeriod(postObject)
       postObject.period = postObject.date.period
       postObject.ymd = postObject.date.ymd
+      postObject.factPeriod0 = postObject.date.factPeriod0
+      postObject.factPeriod = postObject.date.factPeriod
+      postObject.budgetPeriod = postObject.date.budgetPeriod
+      postObject.budgetPeriod2 = postObject.date.budgetPeriod2
+      postObject.budgetPeriod3 = postObject.date.budgetPeriod3
+      postObject.isValidData = isValidData(postObject)
     }
     return postObject
   } catch (e) {

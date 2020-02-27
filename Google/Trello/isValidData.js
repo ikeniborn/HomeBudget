@@ -1,9 +1,9 @@
 function isValidData(postObject) {
   try {
     var sheetName
-    if ([postObject.boardIdFact, postObject.boardIdFact0].indexOf(postObject.boardId) !== -1) {
+    if (postObject.isFact) {
       sheetName = postObject.sourceSheetNameFactTrello
-    } else if ([postObject.boardIdBudget, postObject.boardIdBudget2, postObject.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
+    } else {
       sheetName = postObject.sourceSheetNameBudgetTrello
     }
     //* добавление строк на страницу

@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
 function getSum(postObject) {
   try {
-    var budgetSum = getTotalSum(postObject, postObject.targetSheetID, postObject.targetSheetNameBudget, postObject)
-    var factSum = getTotalSum(postObject, postObject.targetSheetID, postObject.targetSheetNameFact, postObject)
+    var budgetSum = getTotalSum(postObject, postObject.targetSheetID, postObject.targetSheetNameBudget)
+    var factSum = getTotalSum(postObject, postObject.targetSheetID, postObject.targetSheetNameFact)
     var totalSum = {}
     totalSum.bill = budgetSum.bill - factSum.bill
     totalSum.account = budgetSum.account - factSum.account
@@ -12,14 +12,14 @@ function getSum(postObject) {
     if (postObject.isFact) {
       //* описание для фактических карточек
       totalSum.text += '**Остаток бюджета**:' + postObject.lineBreak
-      totalSum.text += postObject.listName + ': ' + restSum.bill + ' р.,' + postObject.lineBreak
-      totalSum.text += postObject.account + ': ' + restSum.account + ' р.,' + postObject.lineBreak
-      totalSum.text += postObject.nomenclature + ': ' + restSum.nomenclature + ' р.' + postObject.lineBreak
-      totalSum.text += '**Остаток средств** ' + ': ' + restSum.total + ' р.'
+      totalSum.text += postObject.listName + ': ' + totalSum.bill + ' р.,' + postObject.lineBreak
+      totalSum.text += postObject.account + ': ' + totalSum.account + ' р.,' + postObject.lineBreak
+      totalSum.text += postObject.nomenclature + ': ' + totalSum.nomenclature + ' р.' + postObject.lineBreak
+      totalSum.text += '**Остаток средств** ' + ': ' + totalSum.total + ' р.'
     } else {
       //* описание для бюджетных карточек
       var budgetRow = budgetSum.row
-      totalSum.text = '**Итого бюджет** ' + formatterDate(postObject.period).date + ':' + postObject.lineBreak
+      totalSum.text += '**Итого бюджет** ' + formatterDate(postObject.period).date + ':' + postObject.lineBreak
       totalSum.text += postObject.listName + ': ' + budgetSum.bill + ' р.' + postObject.lineBreak
       totalSum.text += postObject.account + ': ' + budgetSum.account + ' р.' + postObject.lineBreak
       totalSum.text += postObject.nomenclature + ': ' + budgetSum.nomenclature + ' р.' + postObject.lineBreak

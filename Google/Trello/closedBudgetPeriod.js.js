@@ -9,7 +9,7 @@ function closedBudgetPeriod(postObject) {
     //* обновление текущего бюджета
     var listBudget = getList(postObject, postObject.boardIdBudget)
     archiveAllCards(postObject, listBudget.id)
-    var budgetPeriod = getPeriod(postObject, postObject.boardIdBudget).period
+    var budgetPeriod = getPeriod(postObject).budgetPeriod
     var listNameBudget = postObject.listName + ' ' + formatterDate(budgetPeriod).date
     updateList(postObject, listBudget.id, listNameBudget)
     var listBudget2 = getList(postObject, postObject.boardIdBudget2)
@@ -28,7 +28,7 @@ function closedBudgetPeriod(postObject) {
       moveAllCards(postObject, listBudget2.id, postObject.boardIdBudget, listBudget.id)
     }
     //* обновление бюджета+1
-    var budgetPeriod2 = getPeriod(postObject, postObject.boardIdBudget2).period
+    var budgetPeriod2 = getPeriod(postObject).budgetPeriod2
     var listNameBudget2 = postObject.listName + ' ' + formatterDate(budgetPeriod2).date
     updateList(postObject, listBudget2.id, listNameBudget2)
     var listBudget3 = getList(postObject, postObject.boardIdBudget3).id
@@ -47,7 +47,7 @@ function closedBudgetPeriod(postObject) {
       moveAllCards(postObject, listBudget3.id, postObject.boardIdBudget2, listBudget2.id)
     }
     //* обновление бюджета+2
-    var budgetPeriod3 = getPeriod(postObject, postObject.boardIdBudget3).period
+    var budgetPeriod3 = getPeriod(postObject).budgetPeriod3
     var listNameBudget3 = postObject.listName + ' ' + formatterDate(budgetPeriod3).date
     updateList(postObject, listBudget3.id, listNameBudget3)
     var labelListBudget3 = getBoardLabel(postObject, postObject.boardIdBudget3)

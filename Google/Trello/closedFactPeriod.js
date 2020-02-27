@@ -9,16 +9,16 @@ function closedFactPeriod(postObject) {
     //* закрытие листа на доске факт-1
     var listFact0 = getList(postObject, postObject.boardIdFact0)
     archiveAllCards(postObject, listFact0.id)
-    var period0 = getPeriod(postObject.boardIdFact0)
-    var listNameFact0 = postObject.listName + ' ' + formatterDate(period0.period).date
+    var factPeriod0 = getPeriod(postObject).factPeriod0
+    var listNameFact0 = postObject.listName + ' ' + formatterDate(factPeriod0).date
     updateList(postObject, listFact0.id, listNameFact0)
     //* Перенос карточек на доску факт-1
     var listFactId = postObject.listId
     var labelList = getBoardLabel(postObject, globalVar.boardIdFact)
     moveAllCards(postObject, listFactId, globalVar.boardIdFact0, listFact0.id)
     //* обновление текущего листа факта
-    var period = getPeriod(postObject, globalVar.boardIdFact)
-    var listNameFact = postObject.listName + ' ' + formatterDate(period.period).date
+    var factPeriod = getPeriod(postObject).factPeriod
+    var listNameFact = postObject.listName + ' ' + formatterDate(factPeriod).date
     updateList(postObject, listFactId, listNameFact)
     //* создание карточек на листе факт и чеклистов в карточках
     var budget = getCurrData(getAllData(postObject, postObject.targetSheetID, postObject.targetSheetNameBudget), period.ymd)
