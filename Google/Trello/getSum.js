@@ -28,7 +28,8 @@ function getSum(postObject) {
       })
     } else {
       //* описание для бюджетных карточек
-      totalSum.text += '**Итого бюджет** ' + formatterDate(postObject.period).date + ':' + postObject.lineBreak
+      totalSum.text += '**Бюджет** ' + formatterDate(postObject.period).date + ':' + postObject.lineBreak
+      totalSum.text += '*По счету*: ' + budgetSum.bill + ' р.' + postObject.lineBreak
       totalSum.text += '*По статье*: ' + budgetSum.account + ' р.' + postObject.lineBreak
       totalSum.text += '*По номенклатуре*: ' + budgetSum.nomenclature + ' р.' + postObject.lineBreak
       if (postObject.isCurrBudget) {
