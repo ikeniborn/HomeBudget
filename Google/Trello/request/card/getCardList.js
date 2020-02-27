@@ -1,14 +1,13 @@
-function getCardList(postObject, cardId) {
+function getCardList(postObject) {
   /*
    * @postObject - входные параметра запроса
-   * @cardId - входной параметр ID карточки trello
    **/
   try {
     var data = {
       method: 'get',
       contentType: 'application/json'
     }
-    var resp = UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + cardId + '/list?&' + postObject.keyAndToken, data)
+    var resp = UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '/list?&' + postObject.keyAndToken, data)
     var respData = JSON.parse(resp)
     var variable = {}
     variable.id = respData.id

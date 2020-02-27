@@ -25,6 +25,11 @@ function getPostObject(postData) {
       } else {
         postObject.isCurrFact = false
       }
+      if ([postObject.boardIdBudget].indexOf(postObject.boardId) !== -1) {
+        postObject.isCurrBudget = true
+      } else {
+        postObject.isCurrBudget = false
+      }
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
       postObject.cardComment = null
@@ -36,7 +41,7 @@ function getPostObject(postData) {
       postObject.account = postObject.accountingItem.item.account
       postObject.nomenclature = postData.action.data.card.name
       postObject.text = postData.action.data.text
-      postObject.parseText = parseComment(postObject.text)
+      postObject.parseText = parseComment(postObject)
       postObject.sum = postObject.parseText.sum
       postObject.comment = postObject.parseText.comment
       postObject.mvz = postObject.parseText.mvz
@@ -73,10 +78,15 @@ function getPostObject(postData) {
       } else {
         postObject.isCurrFact = false
       }
+      if ([postObject.boardIdBudget].indexOf(postObject.boardId) !== -1) {
+        postObject.isCurrBudget = true
+      } else {
+        postObject.isCurrBudget = false
+      }
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
       postObject.cardComment = null
-      postObject.list = getCardList(postObject, postObject.cardId)
+      postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
       postObject.listName = postObject.list.name
       postObject.accountingItem = getAccountingItem(postObject)
@@ -84,7 +94,7 @@ function getPostObject(postData) {
       postObject.account = postObject.accountingItem.item.account
       postObject.nomenclature = postData.action.data.card.name
       postObject.text = postData.action.data.action.text
-      postObject.parseText = parseComment(postObject.text)
+      postObject.parseText = parseComment(postObject)
       postObject.sum = postObject.parseText.sum
       postObject.comment = postObject.parseText.comment
       postObject.mvz = postObject.parseText.mvz
@@ -121,10 +131,15 @@ function getPostObject(postData) {
       } else {
         postObject.isCurrFact = false
       }
+      if ([postObject.boardIdBudget].indexOf(postObject.boardId) !== -1) {
+        postObject.isCurrBudget = true
+      } else {
+        postObject.isCurrBudget = false
+      }
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
       postObject.cardComment = null
-      postObject.list = getCardList(postObject, postObject.cardId)
+      postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
       postObject.listName = postObject.list.name
       postObject.accountingItem = getAccountingItem(postObject)

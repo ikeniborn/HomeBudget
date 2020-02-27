@@ -1,6 +1,7 @@
-function parseComment(text, listName) {
+function parseComment(postObject) {
   try {
     const parseData = {}
+    var text = postObject.text
     if (text.toLowerCase().match('машина')) {
       parseData.mvz = 'BMW X5'
     } else if (text.toLowerCase().match('гараж')) {
@@ -8,7 +9,7 @@ function parseComment(text, listName) {
     } else if (text.toLowerCase().match('квартира')) {
       parseData.mvz = 'Квартира Котлярова'
     } else {
-      parseData.mvz = listName
+      parseData.mvz = postObject.listName
     }
     parseData.sum = +text.match(/^\d+/)
     parseData.comment = text.split(parseData.sum).join('').replace(/^[.,\,, ,\-,\/,\\]/, ' ').trim()

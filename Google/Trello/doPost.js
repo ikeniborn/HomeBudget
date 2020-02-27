@@ -1,6 +1,7 @@
 function doPost(e) {
   try {
     const postData = JSON.parse(e.postData.contents)
+    console.log([formatterDate().timestamp, postData.action.type, postData.action.id, postData.action.memberCreator.username])
     var parseAction = ['commentCard', 'updateComment', 'deleteComment']
     if (parseAction.indexOf(postData.action.type) !== -1) {
       var postObject = getPostObject(postData)
