@@ -9,7 +9,5 @@ function encodeData(data, symbol) {
     }
   } catch (e) {
     console.error('encodeData: ' + e)
-  } finally {
-    console.log('encodeData: complete')
   }
 }

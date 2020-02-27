@@ -1,10 +1,14 @@
-function getCards(globalVar, listId) {
+function getCards(postObject, listId) {
+  /*
+   * @postObject - входные параметра запроса
+   * @listId - входной параметр ID листа trello
+   **/
   try {
     var data = {
       method: 'get',
       contentType: 'application/json'
     }
-    var resp = UrlFetchApp.fetch(globalVar.apiRoot + 'lists/' + listId + '/cards?' + globalVar.keyAndToken, data)
+    var resp = UrlFetchApp.fetch(postObject.apiRoot + 'lists/' + listId + '/cards?' + postObject.keyAndToken, data)
     var respData = JSON.parse(resp)
     var cardArray = []
     // var card = {}
@@ -17,7 +21,5 @@ function getCards(globalVar, listId) {
     return cardArray
   } catch (e) {
     console.error('getCards: ' + e)
-  } finally {
-    console.log('getCards: complete')
   }
 }

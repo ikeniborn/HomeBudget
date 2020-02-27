@@ -1,19 +1,48 @@
-function updateRowByActionId(globalVar, sheetID, sheetName, postObject) {
-  var ss = SpreadsheetApp.openById(sheetID).getSheetByName(sheetName)
-  var currData = getCurrData(getAllData(globalVar, sheetID, sheetName), postObject.ymd)
-  currData.forEach(function (row) {
-    if (row.actionId == postObject.actionId) {
-      if ([globalVar.sourceSheetID].indexOf(sheetID) !== -1 && [globalVar.sourceSheetNameFactTrello, globalVar.sourceSheetNameBudgetTrello].indexOf(sheetName) !== -1) {
-        row.actionDate = postObject.actionDate
-        ss.getRange(row.indexRow, 1).setValue(postObject.actionDate)
-        ss.getRange(row.indexRow, 5).setValue(postObject.sum)
-        ss.getRange(row.indexRow, 6).setValue(postObject.comment)
-      } else if ([globalVar.targetSheetID].indexOf(sheetID) !== -1 && [globalVar.targetSheetNameFact, globalVar.targetSheetNameBudget].indexOf(sheetName) !== -1) {
-        row.actionDate = postObject.actionDate
-        ss.getRange(row.indexRow, 1).setValue(postObject.actionDate)
-        ss.getRange(row.indexRow, 8).setValue(postObject.sum)
-        ss.getRange(row.indexRow, 9).setValue(postObject.comment)
-      }
+function updateRowByActionId(postObject) {
+  /*
+   * @postObject - данные реквеста
+   * */
+  try {
+    var ss
+    var sourceData
+    var sourceRows
+    var ts
+    var targetData
+    var targetRows
+    if (postObject.isFact) {
+      ss = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.sourceSheetNameFactTrello)
+      sourceData = getCurrData(getAllData(postObject, postObject.sourceSheetID, postObject.sourceSheetNameFactTrello), postObject.ymd)
+      sourceRows = sourceData.filter(function (row) {
+        return row.actionId == postObject.actionId
+      })
+      ts = SpreadsheetApp.openById(postObject.targetSheetID).getSheetByName(postObject.targetSheetNameFact)
+      targetData = getCurrData(getAllData(postObject, postObject.targetSheetID, postObject.targetSheetNameFact), postObject.ymd)
+      targetRows = targetData.filter(function (row) {
+        return row.actionId == postObject.actionId
+      })
+    } else {
+      ss = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.sourceSheetNameBudgetTrello)
+      sourceData = getCurrData(getAllData(postObject, postObject.sourceSheetID, postObject.sourceSheetNameBudgetTrello), postObject.ymd)
+      var sourceRows = sourceData.filter(function (row) {
+        return row.actionId == postObject.actionId
+      })
+      ts = SpreadsheetApp.openById(postObject.targetSheetID).getSheetByName(postObject.targetSheetNameBudget)
+      targetData = getCurrData(getAllData(postObject, postObject.targetSheetID, postObject.targetSheetNameBudget), postObject.ymd)
+      targetRows = targetData.filter(function (row) {
+        return row.actionId == postObject.actionId
+      })
     }
-  })
+    sourceRows.forEach(function (row) {
+      ss.getRange(row.indexRow, 1).setValue(postObject.actionDate)
+      ss.getRange(row.indexRow, 5).setValue(postObject.sum)
+      ss.getRange(row.indexRow, 6).setValue(postObject.comment)
+    })
+    targetRows.forEach(function (row) {
+      ts.getRange(row.indexRow, 1).setValue(postObject.actionDate)
+      ts.getRange(row.indexRow, 8).setValue(postObject.sum)
+      ts.getRange(row.indexRow, 9).setValue(postObject.comment)
+    })
+  } catch (e) {
+    console.error('updateParametr: ' + e)
+  }
 }

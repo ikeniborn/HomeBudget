@@ -1,10 +1,14 @@
-function getBoardLabel(globalVar, boardId) {
+function getBoardLabel(postObject, boardId) {
+  /*
+   * @postObject - входные параметра запроса
+   * @boardId - входной параметр ID листа trello
+   **/
   try {
     var data = {
       method: 'get',
       contentType: 'application/json'
     }
-    var resp = UrlFetchApp.fetch(globalVar.apiRoot + 'boards/' + boardId + '/labels?fields=all&limit=10&' + globalVar.keyAndToken, data)
+    var resp = UrlFetchApp.fetch(postObject.apiRoot + 'boards/' + boardId + '/labels?fields=all&limit=10&' + postObject.keyAndToken, data)
     var respData = JSON.parse(resp)
     var respArray = []
     respData.reduce(function (variable, array) {
@@ -17,7 +21,5 @@ function getBoardLabel(globalVar, boardId) {
     return respArray
   } catch (e) {
     console.error('getBoardLabel: ' + e)
-  } finally {
-    console.log('getBoardLabel: complete')
   }
 }

@@ -1,19 +1,20 @@
 /* eslint-disable no-undef */
 /* eslint-disable spaced-comment */
-function closedBudgetPeriod(globalVar, postObject) {
+function closedBudgetPeriod(postObject) {
   try {
-    var accountItems = getAccountingItem(globalVar.accountingItemArray).filter(function (row) {
+    var accountArray = postObject.accountingItem.array
+    var accountItems = accountArray.filter(function (row) {
       return row.budget == 1
     })
     //* обновление текущего бюджета
-    var listBudgetId = getList(globalVar, globalVar.boardIdBudget, postObject.cfo).id
-    archiveAllCards(globalVar, listBudgetId)
-    var budgetPeriod = getPeriod(globalVar, globalVar.boardIdBudget, postObject.cfo).period
-    var listNameBudget = postObject.cfo + ' ' + formatterDate(budgetPeriod).date
-    updateList(globalVar, listBudgetId, listNameBudget)
-    var listBudgetId2 = getList(globalVar, globalVar.boardIdBudget2, postObject.cfo).id
-    var labelListBudget = getBoardLabel(globalVar, globalVar.boardIdBudget)
-    if (getCards(globalVar, listBudgetId2).length == 0) {
+    var listBudget = getList(postObject, postObject.boardIdBudget)
+    archiveAllCards(postObject, listBudget.id)
+    var budgetPeriod = getPeriod(postObject, postObject.boardIdBudget).period
+    var listNameBudget = postObject.listName + ' ' + formatterDate(budgetPeriod).date
+    updateList(postObject, listBudget.id, listNameBudget)
+    var listBudget2 = getList(postObject, postObject.boardIdBudget2)
+    var labelListBudget = getBoardLabel(postObject, postObject.boardIdBudget)
+    if (getCards(postObject, listBudget2.id).length == 0) {
       accountItems.forEach(function (accounts) {
         var label = labelListBudget.reduce(function (row, arrya) {
           if (arrya.name.toUpperCase() == accounts.bill.toUpperCase()) {
@@ -21,18 +22,18 @@ function closedBudgetPeriod(globalVar, postObject) {
           }
           return row
         })
-        addCard(globalVar, encodeData(accounts.nomenclature, '+'), listBudgetId, label.id)
+        addCard(postObject, encodeData(accounts.nomenclature, '+'), listBudget2.id, label.id)
       })
     } else {
-      moveAllCards(globalVar, listBudgetId2, globalVar.boardIdBudget, listBudgetId)
+      moveAllCards(postObject, listBudget2.id, postObject.boardIdBudget, listBudget.id)
     }
     //* обновление бюджета+1
-    var budgetPeriod2 = getPeriod(globalVar, globalVar.boardIdBudget2, postObject.cfo).period
-    var listNameBudget2 = postObject.cfo + ' ' + formatterDate(budgetPeriod2).date
-    updateList(globalVar, listBudgetId2, listNameBudget2)
-    var listBudgetId3 = getList(globalVar, globalVar.boardIdBudget3, postObject.cfo).id
-    var labelListBudget2 = getBoardLabel(globalVar, globalVar.boardIdBudget2)
-    if (getCards(globalVar, listBudgetId3).length == 0) {
+    var budgetPeriod2 = getPeriod(postObject, postObject.boardIdBudget2).period
+    var listNameBudget2 = postObject.listName + ' ' + formatterDate(budgetPeriod2).date
+    updateList(postObject, listBudget2.id, listNameBudget2)
+    var listBudget3 = getList(postObject, postObject.boardIdBudget3).id
+    var labelListBudget2 = getBoardLabel(postObject, postObject.boardIdBudget2)
+    if (getCards(postObject, listBudget3.id).length == 0) {
       accountItems.forEach(function (accounts) {
         var label = labelListBudget2.reduce(function (row, arrya) {
           if (arrya.name.toUpperCase() == accounts.bill.toUpperCase()) {
@@ -40,16 +41,16 @@ function closedBudgetPeriod(globalVar, postObject) {
           }
           return row
         })
-        addCard(globalVar, encodeData(accounts.nomenclature, '+'), listBudgetId2, label.id)
+        addCard(postObject, encodeData(accounts.nomenclature, '+'), listBudget2.id, label.id)
       })
     } else {
-      moveAllCards(globalVar, listBudgetId3, globalVar.boardIdBudget2, listBudgetId2)
+      moveAllCards(postObject, listBudget3.id, postObject.boardIdBudget2, listBudget2.id)
     }
     //* обновление бюджета+2
-    var budgetPeriod3 = getPeriod(globalVar, globalVar.boardIdBudget3, postObject.cfo).period
-    var listNameBudget3 = postObject.cfo + ' ' + formatterDate(budgetPeriod3).date
-    updateList(globalVar, listBudgetId3, listNameBudget3)
-    var labelListBudget3 = getBoardLabel(globalVar, globalVar.boardIdBudget3)
+    var budgetPeriod3 = getPeriod(postObject, postObject.boardIdBudget3).period
+    var listNameBudget3 = postObject.listName + ' ' + formatterDate(budgetPeriod3).date
+    updateList(postObject, listBudget3.id, listNameBudget3)
+    var labelListBudget3 = getBoardLabel(postObject, postObject.boardIdBudget3)
     accountItems.forEach(function (accounts) {
       var label = labelListBudget3.reduce(function (row, arrya) {
         if (arrya.name.toUpperCase() == accounts.bill.toUpperCase()) {
@@ -57,11 +58,9 @@ function closedBudgetPeriod(globalVar, postObject) {
         }
         return row
       })
-      addCard(globalVar, encodeData(accounts.nomenclature, '+'), listBudgetId3, label.id)
+      addCard(postObject, encodeData(accounts.nomenclature, '+'), listBudget3.id, label.id)
     })
   } catch (e) {
     console.error('closedBudgetPeriod: ' + e)
-  } finally {
-    console.log('closedBudgetPeriod: complete')
   }
 }

@@ -3,75 +3,42 @@ function doPost(e) {
     const postData = JSON.parse(e.postData.contents)
     var parseAction = ['commentCard', 'updateComment', 'deleteComment']
     if (parseAction.indexOf(postData.action.type) !== -1) {
-      var globalVar = getVariable()
-      var postObject = getPostObject(globalVar, postData)
-      var isValidData = isNewData(globalVar, postObject)
-      var ssTest = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName('test')
-      ssTest.appendRow([postObject.webHookDate, postObject.actionType, postObject.actionId, postObject.memberUsername, isValidData])
-      if (postObject.actionType == 'commentCard' && postObject.memberId !== '5e2b5f3f409c544ebdb1b9d4' && isValidData) {
-        //* добавление информации в учет
-        // var addComment = Promise()
-        if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(postObject.boardId) !== -1) {
-          updateTrelloBuffer(globalVar, postObject)
-          updateTrelloAccounting(globalVar, postObject)
-          postObject.cardComment = getSum(globalVar, postObject).text
-          updateCard(globalVar, postObject)
-        } else if ([globalVar.boardIdBudget, globalVar.boardIdBudget2, globalVar.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-          updateTrelloBuffer(globalVar, postObject)
-          updateTrelloAccounting(globalVar, postObject)
-          postObject.cardComment = getSum(globalVar, postObject).text
-          updateCard(globalVar, postObject)
-        }
+      var postObject = getPostObject(postData)
+      var ssTest = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName('test')
+      ssTest.appendRow([postObject.webHookDate, postObject.actionType, postObject.actionId, postObject.memberUsername, postObject.isValidData])
+      if (postObject.actionType == 'commentCard' && postObject.isUser && postObject.isValidData) {
+        //* добавление информации
+        updateTrelloData(postObject)
+        postObject.cardComment = getSum(postObject).text
+        updateCard(postObject)
         //* добавление реакции на комментарий
-        addReaction(globalVar, postObject)
+        addCardReaction(postObject)
         //* закрытие периода
-        if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1 && ['Остатки', 'Аванс'].indexOf(postObject.account) !== -1) {
-          var factPeriod = getPeriod(globalVar, globalVar.boardIdFact, postObject.cfo).ymd
-          var budgetPeriod = getPeriod(globalVar, globalVar.boardIdBudget, postObject.cfo).ymd
+        if (postObject.isCurrFact && ['Остатки', 'Аванс'].indexOf(postObject.account) !== -1) {
+          var factPeriod = getPeriod(postObject, postObject.boardIdFact).ymd
+          var budgetPeriod = getPeriod(postObject, postObject.boardIdBudget).ymd
           if (postObject.account == 'Остатки' && factPeriod != budgetPeriod) {
-            updateFactPeriod(globalVar, postObject)
-            closedFactPeriod(globalVar, postObject)
-            // reportBudgetOksana(globalVar)
+            updateFactPeriod(postObject)
+            closedFactPeriod(postObject)
+            // reportBudgetOksana(postObject)
           } else if (postObject.account == 'Аванс' && factPeriod == budgetPeriod) {
-            updateBudgetPeriod(globalVar, postObject)
-            closedBudgetPeriod(globalVar, postObject)
+            updateBudgetPeriod(postObject)
+            closedBudgetPeriod(postObject)
           }
         }
-      } else if (postObject.actionType == 'updateComment' && postObject.memberId !== '5e2b5f3f409c544ebdb1b9d4') {
+      } else if (postObject.actionType == 'updateComment' && postObject.isUser) {
         //* обновление данных при изменении комментария
-        if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(postObject.boardId) !== -1) {
-          updateRowByActionId(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameFactTrello, postObject)
-          updateRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameFact, postObject)
-          if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1) {
-            postObject.cardComment = getSum(globalVar, postObject).text
-            updateCard(globalVar, postObject)
-          }
-        } else if ([globalVar.boardIdBudget, globalVar.boardIdBudget2, globalVar.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-          updateRowByActionId(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameBudgetTrello, postObject)
-          updateRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameBudget, postObject)
-          postObject.cardComment = getSum(globalVar, postObject).text
-          updateCard(globalVar, postObject)
-        }
+        updateRowByActionId(postObject)
+        postObject.cardComment = getSum(postObject).text
+        updateCard(postObject)
       } else if (postObject.actionType == 'deleteComment') {
         //* удаление строки при удалении комментария
-        if ([globalVar.boardIdFact, globalVar.boardIdFact0].indexOf(postObject.boardId) !== -1) {
-          deleteRowByActionId(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameFactTrello, postObject)
-          deleteRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameFact, postObject)
-          if ([globalVar.boardIdFact].indexOf(postObject.boardId) !== -1) {
-            postObject.cardComment = getSum(globalVar, postObject).text
-            updateCard(globalVar, postObject)
-          }
-        } else if ([globalVar.boardIdBudget, globalVar.boardIdBudget2, globalVar.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-          deleteRowByActionId(globalVar, globalVar.sourceSheetID, globalVar.sourceSheetNameBudgetTrello, postObject)
-          deleteRowByActionId(globalVar, globalVar.targetSheetID, globalVar.targetSheetNameBudget, postObject)
-          postObject.cardComment = getSum(globalVar, postObject).text
-          updateCard(globalVar, postObject)
-        }
+        deleteRowByActionId(postObject)
+        postObject.cardComment = getSum(postObject).text
+        updateCard(postObject)
       }
     }
   } catch (e) {
     console.error('doPost: ' + e)
-  } finally {
-    console.log('doPost: complete')
   }
 }

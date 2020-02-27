@@ -1,38 +1,30 @@
-function getPeriod(globalVar, boardId, listName) {
+function getPeriod(postObject, boardId) {
   try {
-    var period
-    var ymd
-    var factPeriod
-    var budgetPeriod
-    if (listName == 'Илья') {
-      factPeriod = getParametr(globalVar.parametrArray, 'periodFactIlya').value
-      budgetPeriod = getParametr(globalVar.parametrArray, 'periodBudgetIlya').value
-    } else if (listName == 'Семья') {
-      factPeriod = getParametr(globalVar.parametrArray, 'periodFactFamily').value
-      budgetPeriod = getParametr(globalVar.parametrArray, 'periodBudgetFamily').value
-    } else if (listName == 'Оксана') {
-      factPeriod = getParametr(globalVar.parametrArray, 'periodFactOksana').value
-      budgetPeriod = getParametr(globalVar.parametrArray, 'periodBudgetOksana').value
+    var date = {}
+    if (postObject.listName == 'Илья') {
+      date.factPeriod = getParametr(postObject.parametrArray, 'periodFactIlya').value
+      date.budgetPeriod = getParametr(postObject.parametrArray, 'periodBudgetIlya').value
+    } else if (postObject.listName == 'Семья') {
+      date.factPeriod = getParametr(postObject.parametrArray, 'periodFactFamily').value
+      date.budgetPeriod = getParametr(postObject.parametrArray, 'periodBudgetFamily').value
+    } else if (postObject.listName == 'Оксана') {
+      date.factPeriod = getParametr(postObject.parametrArray, 'periodFactOksana').value
+      date.budgetPeriod = getParametr(postObject.parametrArray, 'periodBudgetOksana').value
     }
-    if (boardId == globalVar.boardIdFact) {
-      period = factPeriod
-    } else if (boardId == globalVar.boardIdFact0) {
-      period = new Date(factPeriod.getYear(), factPeriod.getMonth() - 1, 1)
-    } else if (boardId == globalVar.boardIdBudget) {
-      period = budgetPeriod
-    } else if (boardId == globalVar.boardIdBudget2) {
-      period = new Date(budgetPeriod.getYear(), budgetPeriod.getMonth() + 1, 1)
-    } else if (boardId == globalVar.boardIdBudget3) {
-      period = new Date(budgetPeriod.getYear(), budgetPeriod.getMonth() + 2, 1)
+    if (boardId == postObject.boardIdFact) {
+      date.period = date.factPeriod
+    } else if (boardId == postObject.boardIdFact0) {
+      date.period = new Date(date.factPeriod.getYear(), date.factPeriod.getMonth() - 1, 1)
+    } else if (boardId == postObject.boardIdBudget) {
+      date.period = date.budgetPeriod
+    } else if (boardId == postObject.boardIdBudget2) {
+      date.period = new Date(date.budgetPeriod.getYear(), date.budgetPeriod.getMonth() + 1, 1)
+    } else if (boardId == postObject.boardIdBudget3) {
+      date.period = new Date(date.budgetPeriod.getYear(), date.budgetPeriod.getMonth() + 2, 1)
     }
-    ymd = getYMD(period).ymd
-    return {
-      period: period,
-      ymd: ymd
-    }
+    date.ymd = getYMD(date.period).ymd
+    return date
   } catch (e) {
     console.error('getPeriod: ' + e)
-  } finally {
-    console.log('getPeriod: complete')
   }
 }

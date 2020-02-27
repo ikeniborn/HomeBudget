@@ -1,38 +1,39 @@
 // получаение справочника статей
-function getAccountingItem(array, nomenclature) {
-  var accountArray = []
-  var accountItem = {}
-  array.reduce(function (row, array) {
-    if (array[4] == nomenclature) {
-      row = {}
-      row.id = array[0]
-      row.cashFlow = array[1]
-      row.bill = array[2]
-      row.account = array[3]
-      row.nomenclature = array[4]
-      row.form = array[5]
-      row.budget = array[6]
-      row.fact = array[7]
-      row.target = array[8]
-      accountArray.push(row)
-    } else if (nomenclature == undefined) {
-      row = {}
-      row.id = array[0]
-      row.cashFlow = array[1]
-      row.bill = array[2]
-      row.account = array[3]
-      row.nomenclature = array[4]
-      row.form = array[5]
-      row.budget = array[6]
-      row.fact = array[7]
-      row.target = array[8]
-      accountArray.push(row)
-    }
-  }, {})
-  if (accountArray.length == 1) {
-    accountItem = accountArray[0]
-    return accountItem
-  } else {
-    return accountArray
+function getAccountingItem(postObject) {
+  try {
+    var array = postObject.accountingItemArray
+    var account = {}
+    account.item = {}
+    account.array = []
+    array.reduce(function (row, array) {
+      if (array[4] == postObject.cardName) {
+        row = {}
+        row.id = array[0]
+        row.cashFlow = array[1]
+        row.bill = array[2]
+        row.account = array[3]
+        row.nomenclature = array[4]
+        row.form = array[5]
+        row.budget = array[6]
+        row.fact = array[7]
+        row.target = array[8]
+        account.item = row
+      } else {
+        row = {}
+        row.id = array[0]
+        row.cashFlow = array[1]
+        row.bill = array[2]
+        row.account = array[3]
+        row.nomenclature = array[4]
+        row.form = array[5]
+        row.budget = array[6]
+        row.fact = array[7]
+        row.target = array[8]
+        account.array.push(row)
+      }
+    }, {})
+    return account
+  } catch (e) {
+    console.error('getAccountingItem: ' + e)
   }
 }

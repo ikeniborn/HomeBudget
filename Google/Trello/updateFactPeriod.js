@@ -1,28 +1,26 @@
 /* eslint-disable no-undef */
-function updateFactPeriod(globalVar, postObject) {
+function updateFactPeriod(postObject) {
   try {
     var actionDate = postObject.actionDate
     var period = {}
-    if (['Илья'].indexOf(postObject.cfo) !== -1) {
+    if (['Илья'].indexOf(postObject.listName) !== -1) {
       period.period = formatterDate(new Date(actionDate.getYear(), actionDate.getMonth(), 1)).date
       period.day = actionDate.getDate()
-      updateParametr(globalVar, 'periodFactIlya', period.period)
-      updateParametr(globalVar, 'revenueDayIlya', period.day)
-    } else if (['Оксана'].indexOf(postObject.cfo) !== -1) {
+      updateParametr(postObject, 'periodFactIlya', period.period)
+      updateParametr(postObject, 'revenueDayIlya', period.day)
+    } else if (['Оксана'].indexOf(postObject.listName) !== -1) {
       period.period = formatterDate(new Date(actionDate.getYear(), actionDate.getMonth(), 1)).date
       period.day = actionDate.getDate()
-      updateParametr(globalVar, 'periodFactOksana', period.period)
-      updateParametr(globalVar, 'revenueDayOksana', period.day)
-    } else if (['Семья'].indexOf(postObject.cfo) !== -1) {
+      updateParametr(postObject, 'periodFactOksana', period.period)
+      updateParametr(postObject, 'revenueDayOksana', period.day)
+    } else if (['Семья'].indexOf(postObject.listName) !== -1) {
       period.period = formatterDate(new Date(actionDate.getYear(), actionDate.getMonth(), 1)).date
       period.day = actionDate.getDate()
-      updateParametr(globalVar, 'periodFactFamily', period.period)
-      updateParametr(globalVar, 'revenueDayFamily', period.day)
+      updateParametr(postObject, 'periodFactFamily', period.period)
+      updateParametr(postObject, 'revenueDayFamily', period.day)
     }
-    globalVar.parametrArray = SpreadsheetApp.openById(globalVar.sourceSheetID).getSheetByName(globalVar.parametrSheetName).getDataRange().getValues()
+    globalVar.parametrArray = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.parametrSheetName).getDataRange().getValues()
   } catch (e) {
     console.error('updateFactPeriod: ' + e)
-  } finally {
-    console.log('updateFactPeriod: complete')
   }
 }

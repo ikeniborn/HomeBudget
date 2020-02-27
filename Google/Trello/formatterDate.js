@@ -11,7 +11,5 @@ function formatterDate(date) {
     return formatter
   } catch (e) {
     console.error('formatterDate: ' + e)
-  } finally {
-    console.log('formatterDate: complete')
   }
 }

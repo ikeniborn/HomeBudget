@@ -1,5 +1,5 @@
-function reportBudgetOksana(globalVar) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet(globalVar.targetSheetID).getSheetByName("Б_Оксана"); //Выбираем нужный лист
+function reportBudgetOksana(postObject) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet(postObject.targetSheetID).getSheetByName("Б_Оксана"); //Выбираем нужный лист
   var salary = sheet.getRange(5, 3).getValues() //Зарплата до аванса
   var prepayment = sheet.getRange(6, 3).getValues() //Аванс
   var vacation = sheet.getRange(7, 3).getValues() //Отпускные
