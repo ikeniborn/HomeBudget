@@ -15,8 +15,13 @@ function getSum(postObject) {
       totalSum.text += '**По номенклатуре**: ' + postObject.lineBreak
       totalSum.text += '*Бюджет*: ' + budgetSum.nomenclature + ' р.' + postObject.lineBreak
       totalSum.text += '*Факт*: ' + factSum.nomenclature + ' р.' + postObject.lineBreak
+      totalSum.text += '*Остаток*: ' + totalSum.nomenclature + ' р.' + postObject.lineBreak
       totalSum.text += '*Исполнение*: ' + ((factSum.nomenclature / budgetSum.nomenclature) * 100).toFixed(2) + encodeData('%', '%') + postObject.lineBreak
-      totalSum.text += '**Остаток по статье**: ' + totalSum.account + ' р.' + postObject.lineBreak
+      totalSum.text += '**По статье**: ' + postObject.lineBreak
+      totalSum.text += '*Бюджет*: ' + budgetSum.account + ' р.' + postObject.lineBreak
+      totalSum.text += '*Факт*: ' + factSum.account + ' р.' + postObject.lineBreak
+      totalSum.text += '*Остаток*: ' + totalSum.account + ' р.' + postObject.lineBreak
+      totalSum.text += '*Исполнение*: ' + ((factSum.account / budgetSum.account) * 100).toFixed(2) + encodeData('%', '%') + postObject.lineBreak
       totalSum.text += '**Остаток средств** ' + ': ' + totalSum.total + ' р.' + postObject.lineBreak
       totalSum.text += '**Бюджетные заявки:**' + postObject.lineBreak
       var i = 1
@@ -28,7 +33,8 @@ function getSum(postObject) {
       })
     } else {
       //* описание для бюджетных карточек
-      totalSum.text += '**Итого бюджет** ' + formatterDate(postObject.period).date + ':' + postObject.lineBreak
+      totalSum.text += '**Итого бюджет на** ' + formatterDate(postObject.period).date + ':' + postObject.lineBreak
+      totalSum.text += '*По счету*: ' + budgetSum.bill + ' р.' + postObject.lineBreak
       totalSum.text += '*По статье*: ' + budgetSum.account + ' р.' + postObject.lineBreak
       totalSum.text += '*По номенклатуре*: ' + budgetSum.nomenclature + ' р.' + postObject.lineBreak
       if (postObject.isCurrBudget) {
