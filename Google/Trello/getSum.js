@@ -15,7 +15,7 @@ function getSum(postObject) {
       totalSum.text += '**По номенклатуре**: ' + postObject.lineBreak
       totalSum.text += '*Бюджет*: ' + budgetSum.nomenclature + ' р.' + postObject.lineBreak
       totalSum.text += '*Факт*: ' + factSum.nomenclature + ' р.' + postObject.lineBreak
-      totalSum.text += '*Исполнение*: ' + totalSum.nomenclature + ' р.' + postObject.lineBreak
+      totalSum.text += '*Исполнение*: ' + ((factSum.nomenclature / budgetSum.nomenclature) * 100).toFixed(2) + encodeData('%', '%') + postObject.lineBreak
       totalSum.text += '**Остаток по статье**: ' + totalSum.account + ' р.' + postObject.lineBreak
       totalSum.text += '**Остаток средств** ' + ': ' + totalSum.total + ' р.' + postObject.lineBreak
       totalSum.text += '**Бюджетные заявки:**' + postObject.lineBreak
