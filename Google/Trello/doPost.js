@@ -21,6 +21,8 @@ function doPost(e) {
           postObjectFact.listId = factList.id
           postObjectFact.cardId = factCard.id
           postObjectFact.isFact = true
+          postObjectFact.period = postObject.factPeriod
+          postObjectFact.ymd = getYMD(postObject.factPeriod).ymd
           postObjectFact.cardComment = getSum(postObjectFact).text
           updateCard(postObjectFact)
         }
