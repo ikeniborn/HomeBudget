@@ -18,7 +18,7 @@ function doPost(e) {
           var factCard = getCards(postObject, factList.id).item
           var postObjectFact = postObject
           postObjectFact.boardId = postObject.boardIdFact
-          postObjectFact.listId = postObject.factList.id
+          postObjectFact.listId = factList.id
           postObjectFact.cardId = factCard.id
           postObjectFact.isFact = true
           postObjectFact.cardComment = getSum(postObjectFact).text

@@ -12,7 +12,7 @@ function getCards(postObject, listId) {
     var respData = JSON.parse(resp)
     var cards = {}
     cards.item = {}
-    cards.array = {}
+    cards.array = []
     respData.reduce(function (variable, array) {
       if (array.name == postObject.nomenclature) {
         variable = {}
