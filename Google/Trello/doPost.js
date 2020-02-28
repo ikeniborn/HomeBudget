@@ -8,16 +8,14 @@ function doPost(e) {
       var ssTest = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName('test')
       ssTest.appendRow([postObject.webHookDate, postObject.actionType, postObject.actionId, postObject.memberUsername, postObject.isValidData])
       if (postObject.actionType == 'commentCard' && postObject.isUser && postObject.isValidData) {
-        var factPeriodYMD = getYMD(postObject.factPeriod).ymd
-        var budgetPeriodYMD = getYMD(postObject.budgetPeriod).ymd
         //* добавление информации
         updateTrelloData(postObject)
         postObject.cardComment = getSum(postObject).text
         updateCard(postObject)
         //* обновление фактической карточки при обновлении текущего бюджета
-        if (postObject.isCurrBudget && factPeriodYMD == budgetPeriodYMD) {
+        if (postObject.isCurrBudget && postObject.isSamePeriod) {
           var factList = getList(postObject, postObject.boardIdFact)
-          var factCard = getCards(postObject, factList.id)
+          var factCard = getCards(postObject, factList.id).item
           var postObjectFact = postObject
           postObjectFact.boardId = postObject.boardIdFact
           postObjectFact.listId = postObject.factList.id
@@ -30,11 +28,11 @@ function doPost(e) {
         addCardReaction(postObject)
         //* закрытие периода
         if (postObject.isCurrFact && ['Остатки', 'Аванс'].indexOf(postObject.account) !== -1) {
-          if (postObject.account == 'Остатки' && factPeriodYMD != budgetPeriodYMD) {
+          if (postObject.account == 'Остатки' && !postObject.isSamePeriod) {
             updateFactPeriod(postObject)
             closedFactPeriod(postObject)
             // reportBudgetOksana(postObject)
-          } else if (postObject.account == 'Аванс' && factPeriodYMD == budgetPeriodYMD) {
+          } else if (postObject.account == 'Аванс' && postObject.isSamePeriod) {
             updateBudgetPeriod(postObject)
             closedBudgetPeriod(postObject)
           }

@@ -53,6 +53,11 @@ function getPostObject(postData) {
       postObject.budgetPeriod = postObject.date.budgetPeriod
       postObject.budgetPeriod2 = postObject.date.budgetPeriod2
       postObject.budgetPeriod3 = postObject.date.budgetPeriod3
+      if (getYMD(postObject.factPeriod).ymd == getYMD(postObject.budgetPeriod).ymd) {
+        postObject.isSamePeriod = true
+      } else {
+        postObject.isSamePeriod = false
+      }
       postObject.isValidData = isValidData(postObject)
     } else if (postData.action.type == 'updateComment') {
       postObject.webHookDate = formatterDate().timestamp
@@ -106,6 +111,11 @@ function getPostObject(postData) {
       postObject.budgetPeriod = postObject.date.budgetPeriod
       postObject.budgetPeriod2 = postObject.date.budgetPeriod2
       postObject.budgetPeriod3 = postObject.date.budgetPeriod3
+      if (getYMD(postObject.factPeriod).ymd == getYMD(postObject.budgetPeriod).ymd) {
+        postObject.isSamePeriod = true
+      } else {
+        postObject.isSamePeriod = false
+      }
       postObject.isValidData = isValidData(postObject)
     } else if (postData.action.type == 'deleteComment') {
       postObject.webHookDate = formatterDate().timestamp
@@ -158,6 +168,11 @@ function getPostObject(postData) {
       postObject.budgetPeriod = postObject.date.budgetPeriod
       postObject.budgetPeriod2 = postObject.date.budgetPeriod2
       postObject.budgetPeriod3 = postObject.date.budgetPeriod3
+      if (getYMD(postObject.factPeriod).ymd == getYMD(postObject.budgetPeriod).ymd) {
+        postObject.isSamePeriod = true
+      } else {
+        postObject.isSamePeriod = false
+      }
       postObject.isValidData = isValidData(postObject)
     }
     return postObject

@@ -10,15 +10,24 @@ function getCards(postObject, listId) {
     }
     var resp = UrlFetchApp.fetch(postObject.apiRoot + 'lists/' + listId + '/cards?' + postObject.keyAndToken, data)
     var respData = JSON.parse(resp)
-    var cardArray = []
-    // var card = {}
+    var cards = {}
+    cards.item = {}
+    cards.array = {}
     respData.reduce(function (variable, array) {
-      variable = {}
-      variable.id = array.id
-      variable.name = array.name
-      return cardArray.push(variable)
+      if (array.name == postObject.nomenclature) {
+        variable = {}
+        variable.id = array.id
+        variable.name = array.name
+        cards.item = variable
+        cards.array.push(variable)
+      } else {
+        variable = {}
+        variable.id = array.id
+        variable.name = array.name
+        cards.array.push(variable)
+      }
     }, {})
-    return cardArray
+    return cards
   } catch (e) {
     console.error('getCards: ' + e)
   }

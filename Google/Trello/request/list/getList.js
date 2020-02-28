@@ -18,11 +18,7 @@ function getList(postObject, boardId) {
         return variable
       }
     }, {})
-    if (listArray.length == 1) {
-      return listArray[0]
-    } else {
-      return listArray
-    }
+    return listArray
   } catch (e) {
     console.error('getList: ' + e)
   }

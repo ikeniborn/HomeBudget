@@ -18,6 +18,7 @@ function getAccountingItem(postObject) {
         row.fact = array[7]
         row.target = array[8]
         account.item = row
+        account.array.push(row)
       } else {
         row = {}
         row.id = array[0]
