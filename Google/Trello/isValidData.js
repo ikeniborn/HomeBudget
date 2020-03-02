@@ -5,7 +5,7 @@ function isValidData(postObject) {
       sheetName = postObject.sourceSheetNameFactTrello
     } else if (postObject.isTarget) {
       sheetName = postObject.sourceSheetNameTargetTrello
-    } else {
+    } else if (postObject.isBudget) {
       sheetName = postObject.sourceSheetNameBudgetTrello
     }
     //* добавление строк на страницу
