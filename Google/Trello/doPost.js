@@ -11,10 +11,10 @@ function doPost(e) {
         //* добавление информации
         updateTrelloData(postObject)
         var sumData = getSum(postObject)
-        postObject.cardComment = sumData.text
+        postObject.cardComment = sumData.desc
         updateCard(postObject)
         if (postObject.isCurrFact) {
-          updateBalanceCard(postObject, sumData)
+          updateBalanceCard(postObject, sumData.comment)
         }
         if (postObject.isCurrBudget && postObject.isSamePeriod) {
           //* обновление фактической карточки при обновлении текущего бюджета
@@ -27,7 +27,7 @@ function doPost(e) {
           postObjectFact.isFact = true
           postObjectFact.period = postObject.factPeriod
           postObjectFact.ymd = getYMD(postObject.factPeriod).ymd
-          postObjectFact.cardComment = getSum(postObjectFact).text
+          postObjectFact.cardComment = getSum(postObjectFact).desc
           updateCard(postObjectFact)
         }
         //* добавление реакции на комментарий
@@ -47,19 +47,19 @@ function doPost(e) {
         //* обновление данных при изменении комментария
         updateRowByActionId(postObject)
         var sumData = getSum(postObject)
-        postObject.cardComment = sumData.text
+        postObject.cardComment = sumData.desc
         updateCard(postObject)
         if (postObject.isCurrFact) {
-          updateBalanceCard(postObject, sumData)
+          updateBalanceCard(postObject, sumData.comment)
         }
       } else if (postObject.actionType == 'deleteComment') {
         //* удаление строки при удалении комментария
         deleteRowByActionId(postObject)
         var sumData = getSum(postObject)
-        postObject.cardComment = sumData.text
+        postObject.cardComment = sumData.desc
         updateCard(postObject)
         if (postObject.isCurrFact) {
-          updateBalanceCard(postObject, sumData)
+          updateBalanceCard(postObject, sumData.comment)
         }
       }
     }
