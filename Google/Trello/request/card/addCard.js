@@ -1,9 +1,10 @@
-function addCard(postObject, cardName, listId, labelId) {
+function addCard(postObject, cardName, listId, pos, labelId) {
   /*
    * @postObject - входные параметра запроса
    * @cardName - входной параметр наименования карточки trello
    * @listId - входной параметр ID листа trello
    * @labelId - входной параметр ID метки trello
+   * @pos - позиция карточки на листе
    */
   try {
     var data = {
@@ -12,9 +13,9 @@ function addCard(postObject, cardName, listId, labelId) {
     }
     var resp
     if (labelId == undefined) {
-      resp = UrlFetchApp.fetch(postObject.apiRoot + '/cards?name=' + cardName + '&idList=' + listId + '&' + postObject.keyAndToken, data)
+      resp = UrlFetchApp.fetch(postObject.apiRoot + '/cards?pos=' + pos + '&name=' + cardName + '&idList=' + listId + '&' + postObject.keyAndToken, data)
     } else {
-      resp = UrlFetchApp.fetch(postObject.apiRoot + '/cards?name=' + cardName + '&idList=' + listId + '&idLabels=' + labelId + '&' + postObject.keyAndToken, data)
+      resp = UrlFetchApp.fetch(postObject.apiRoot + '/cards?pos=' + pos + '&name=' + cardName + '&idList=' + listId + '&idLabels=' + labelId + '&' + postObject.keyAndToken, data)
     }
     var variable = {}
     variable.id = JSON.parse(resp).id
