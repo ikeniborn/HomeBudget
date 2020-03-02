@@ -3,6 +3,8 @@ function isValidData(postObject) {
     var sheetName
     if (postObject.isFact) {
       sheetName = postObject.sourceSheetNameFactTrello
+    } else if (postObject.isTarget) {
+      sheetName = postObject.sourceSheetNameTargetTrello
     } else {
       sheetName = postObject.sourceSheetNameBudgetTrello
     }
