@@ -1,4 +1,4 @@
-function updateBalanceCard(postObject, comment) {
+function updateBalanceCard(postObject) {
   /*
    * @postObject - данные реквеста
    * @sumData - данные по суммам из учета
@@ -8,5 +8,5 @@ function updateBalanceCard(postObject, comment) {
   postObjectBalance.nomenclature = 'Баланс'
   var balanceCard = getCards(postObjectBalance, postObjectBalance.listId).item
   postObjectBalance.cardId = balanceCard.id
-  addCardComment(postObjectBalance, comment)
+  addCardComment(postObjectBalance)
 }

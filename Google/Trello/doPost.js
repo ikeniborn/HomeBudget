@@ -11,10 +11,11 @@ function doPost(e) {
         //* добавление информации
         updateTrelloData(postObject)
         var sumData = getSum(postObject)
-        postObject.cardComment = sumData.desc
-        updateCard(postObject)
+        postObject.cardDesc = sumData.desc
+        postObject.cardComment = sumData.comment
+        updateCardDesc(postObject)
         if (postObject.isCurrFact) {
-          updateBalanceCard(postObject, sumData.comment)
+          updateBalanceCard(postObject)
         }
         if (postObject.isCurrBudget && postObject.isSamePeriod) {
           //* обновление фактической карточки при обновлении текущего бюджета
@@ -27,8 +28,8 @@ function doPost(e) {
           postObjectFact.isFact = true
           postObjectFact.period = postObject.factPeriod
           postObjectFact.ymd = getYMD(postObject.factPeriod).ymd
-          postObjectFact.cardComment = getSum(postObjectFact).desc
-          updateCard(postObjectFact)
+          postObjectFact.cardDesc = getSum(postObjectFact).desc
+          updateCardDesc(postObjectFact)
         }
         //* добавление реакции на комментарий
         addCardReaction(postObject)
@@ -47,19 +48,21 @@ function doPost(e) {
         //* обновление данных при изменении комментария
         updateRowByActionId(postObject)
         var sumData = getSum(postObject)
-        postObject.cardComment = sumData.desc
-        updateCard(postObject)
+        postObject.cardDesc = sumData.desc
+        postObject.cardComment = sumData.comment
+        updateCardDesc(postObject)
         if (postObject.isCurrFact) {
-          updateBalanceCard(postObject, sumData.comment)
+          updateBalanceCard(postObject)
         }
       } else if (postObject.actionType == 'deleteComment' && postObject.isUser) {
         //* удаление строки при удалении комментария
         deleteRowByActionId(postObject)
         var sumData = getSum(postObject)
-        postObject.cardComment = sumData.desc
-        updateCard(postObject)
+        postObject.cardDesc = sumData.desc
+        postObject.cardComment = sumData.comment
+        updateCardDesc(postObject)
         if (postObject.isCurrFact) {
-          updateBalanceCard(postObject, sumData.comment)
+          updateBalanceCard(postObject)
         }
       }
     }
