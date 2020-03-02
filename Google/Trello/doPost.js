@@ -14,13 +14,7 @@ function doPost(e) {
         postObject.cardComment = sumData.text
         updateCard(postObject)
         if (postObject.isCurrFact) {
-          //* обновление карточки баланса
-          var postObjectBalance = postObject
-          postObjectBalance.nomenclature = 'Баланс'
-          var balanceCard = getCards(postObjectBalance, postObjectBalance.listId).item
-          postObjectBalance.cardId = balanceCard.id
-          var comment = '*Остаток средств:* ' + sumData.total
-          addCardComment(postObjectBalance, comment)
+          updateBalanceCard(postObject, sumData)
         }
         if (postObject.isCurrBudget && postObject.isSamePeriod) {
           //* обновление фактической карточки при обновлении текущего бюджета
@@ -56,13 +50,7 @@ function doPost(e) {
         postObject.cardComment = sumData.text
         updateCard(postObject)
         if (postObject.isCurrFact) {
-          //* обновление карточки баланса
-          var postObjectBalance = postObject
-          postObjectBalance.nomenclature = 'Баланс'
-          var balanceCard = getCards(postObjectBalance, postObjectBalance.listId).item
-          postObjectBalance.cardId = balanceCard.id
-          var comment = '*Остаток средств:* ' + sumData.total
-          addCardComment(postObjectBalance, comment)
+          updateBalanceCard(postObject, sumData)
         }
       } else if (postObject.actionType == 'deleteComment') {
         //* удаление строки при удалении комментария
@@ -71,13 +59,7 @@ function doPost(e) {
         postObject.cardComment = sumData.text
         updateCard(postObject)
         if (postObject.isCurrFact) {
-          //* обновление карточки баланса
-          var postObjectBalance = postObject
-          postObjectBalance.nomenclature = 'Баланс'
-          var balanceCard = getCards(postObjectBalance, postObjectBalance.listId).item
-          postObjectBalance.cardId = balanceCard.id
-          var comment = '*Остаток средств:* ' + sumData.total
-          addCardComment(postObjectBalance, comment)
+          updateBalanceCard(postObject, sumData)
         }
       }
     }

@@ -8,7 +8,12 @@ function getSum(postObject) {
     totalSum.bill = budgetSum.bill - factSum.bill
     totalSum.account = budgetSum.account - factSum.account
     totalSum.nomenclature = budgetSum.nomenclature - factSum.nomenclature
-    totalSum.total = factSum.income - factSum.expense
+    totalSum.incomeFact = factSum.income
+    totalSum.incomeBudget = budgetSum.income
+    totalSum.expenseFact = factSum.expense
+    totalSum.expenseBudget = budgetSum.expense
+    totalSum.totalFact = factSum.income - factSum.expense
+    totalSum.totalBudget = budgetSum.income - budgetSum.expense
     totalSum.text = '*Дата обновления*: ' + formatterDate(postObject.actionDate).time + postObject.lineBreak
     if (postObject.isFact) {
       //* описание для фактических карточек
@@ -22,7 +27,7 @@ function getSum(postObject) {
       totalSum.text += '*Факт*: ' + factSum.account + ' р.' + postObject.lineBreak
       totalSum.text += '*Остаток*: ' + totalSum.account + ' р.' + postObject.lineBreak
       totalSum.text += '*Исполнение*: ' + ((factSum.account / budgetSum.account) * 100).toFixed(2) + encodeData('%', '%') + postObject.lineBreak
-      totalSum.text += '**Остаток средств** ' + ': ' + totalSum.total + ' р.' + postObject.lineBreak
+      totalSum.text += '**Остаток средств** ' + ': ' + totalSum.totalFact + ' р.' + postObject.lineBreak
       totalSum.text += '**Бюджетные заявки:**' + postObject.lineBreak
       var i = 1
       budgetRow.forEach(function (row) {
