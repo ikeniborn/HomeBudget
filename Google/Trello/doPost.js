@@ -52,7 +52,7 @@ function doPost(e) {
         if (postObject.isCurrFact) {
           updateBalanceCard(postObject, sumData.comment)
         }
-      } else if (postObject.actionType == 'deleteComment') {
+      } else if (postObject.actionType == 'deleteComment' && postObject.isUser) {
         //* удаление строки при удалении комментария
         deleteRowByActionId(postObject)
         var sumData = getSum(postObject)
