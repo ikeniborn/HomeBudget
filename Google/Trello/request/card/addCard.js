@@ -12,10 +12,12 @@ function addCard(postObject, cardName, listId, pos, labelId) {
       contentType: 'application/json'
     }
     var resp
+    var position
+    pos == undefined ? position = 'bottom' : position = pos
     if (labelId == undefined) {
-      resp = UrlFetchApp.fetch(postObject.apiRoot + '/cards?pos=' + pos + '&name=' + cardName + '&idList=' + listId + '&' + postObject.keyAndToken, data)
+      resp = UrlFetchApp.fetch(postObject.apiRoot + '/cards?pos=' + position + '&name=' + cardName + '&idList=' + listId + '&' + postObject.keyAndToken, data)
     } else {
-      resp = UrlFetchApp.fetch(postObject.apiRoot + '/cards?pos=' + pos + '&name=' + cardName + '&idList=' + listId + '&idLabels=' + labelId + '&' + postObject.keyAndToken, data)
+      resp = UrlFetchApp.fetch(postObject.apiRoot + '/cards?pos=' + position + '&name=' + cardName + '&idList=' + listId + '&idLabels=' + labelId + '&' + postObject.keyAndToken, data)
     }
     var variable = {}
     variable.id = JSON.parse(resp).id
