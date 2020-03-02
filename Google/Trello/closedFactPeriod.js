@@ -21,32 +21,14 @@ function closedFactPeriod(postObject) {
     var listNameFact = postObject.listName + ' ' + formatterDate(factPeriod).date
     updateList(postObject, listFactId, listNameFact)
     //* создание карточек на листе факт и чеклистов в карточках
-    var budget = getCurrData(getAllData(postObject, postObject.targetSheetID, postObject.targetSheetNameBudget), period.ymd)
     accountItems.forEach(function (accounts) {
       var label = labelList.reduce(function (row, arrya) {
-        if (arrya.name.toUpperCase() == accounts.bill.toUpperCase()) {
+        if (arrya.color.toUpperCase() == accounts.color.toUpperCase()) {
           row = arrya
         }
         return row
       })
       accounts.cardInfo = addCard(postObject, encodeData(accounts.nomenclature, '+'), listFactId, accounts.id, label.id)
-      // var card = accounts.cardInfo
-      // card.withBudget = budget.reduce(function (row, arrya) {
-      //   if (arrya.cfo == postObject.listName && card.name == arrya.nomenclature) {
-      //     row += 1
-      //   }
-      //   return row
-      // }, 0)
-      // if (card.withBudget > 0) {
-      //   card.checkListId = addCheckList(postObject, card.id, 'Бюджет').id
-      // }
-      // var budgetRow = budget.filter(function (arrya) {
-      //   arrya.checkListId = card.checkListId
-      //   return arrya.cfo == postObject.listName && card.name == arrya.nomenclature && card.withBudget > 0
-      // })
-      // budgetRow.forEach(function (row) {
-      //   addCheckListItem(postObject, row.checkListId, row.sum + ' ' + row.comment)
-      // })
     })
   } catch (e) {
     console.error('closedFactPeriod: ' + e)
