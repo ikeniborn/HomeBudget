@@ -32,6 +32,7 @@ function getPostObject(postData) {
       }
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
+      postObject.cardDesc = null
       postObject.cardComment = null
       postObject.list = null
       postObject.listId = postData.action.data.list.id
@@ -53,6 +54,11 @@ function getPostObject(postData) {
       postObject.budgetPeriod = postObject.date.budgetPeriod
       postObject.budgetPeriod2 = postObject.date.budgetPeriod2
       postObject.budgetPeriod3 = postObject.date.budgetPeriod3
+      if (getYMD(postObject.factPeriod).ymd == getYMD(postObject.budgetPeriod).ymd) {
+        postObject.isSamePeriod = true
+      } else {
+        postObject.isSamePeriod = false
+      }
       postObject.isValidData = isValidData(postObject)
     } else if (postData.action.type == 'updateComment') {
       postObject.webHookDate = formatterDate().timestamp
@@ -85,6 +91,7 @@ function getPostObject(postData) {
       }
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
+      postObject.cardDesc = null
       postObject.cardComment = null
       postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
@@ -106,6 +113,11 @@ function getPostObject(postData) {
       postObject.budgetPeriod = postObject.date.budgetPeriod
       postObject.budgetPeriod2 = postObject.date.budgetPeriod2
       postObject.budgetPeriod3 = postObject.date.budgetPeriod3
+      if (getYMD(postObject.factPeriod).ymd == getYMD(postObject.budgetPeriod).ymd) {
+        postObject.isSamePeriod = true
+      } else {
+        postObject.isSamePeriod = false
+      }
       postObject.isValidData = isValidData(postObject)
     } else if (postData.action.type == 'deleteComment') {
       postObject.webHookDate = formatterDate().timestamp
@@ -138,6 +150,7 @@ function getPostObject(postData) {
       }
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
+      postObject.cardDesc = null
       postObject.cardComment = null
       postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
@@ -147,6 +160,7 @@ function getPostObject(postData) {
       postObject.account = postObject.accountingItem.item.account
       postObject.nomenclature = postData.action.data.card.name
       postObject.text = null
+      postObject.parseText = null
       postObject.sum = null
       postObject.comment = null
       postObject.mvz = null
@@ -158,6 +172,11 @@ function getPostObject(postData) {
       postObject.budgetPeriod = postObject.date.budgetPeriod
       postObject.budgetPeriod2 = postObject.date.budgetPeriod2
       postObject.budgetPeriod3 = postObject.date.budgetPeriod3
+      if (getYMD(postObject.factPeriod).ymd == getYMD(postObject.budgetPeriod).ymd) {
+        postObject.isSamePeriod = true
+      } else {
+        postObject.isSamePeriod = false
+      }
       postObject.isValidData = isValidData(postObject)
     }
     return postObject

@@ -10,19 +10,16 @@ function getList(postObject, boardId) {
     }
     var resp = UrlFetchApp.fetch(postObject.apiRoot + 'boards/' + boardId + '/lists?cards=none&' + postObject.keyAndToken, data)
     var respData = JSON.parse(resp)
-    var listArray = respData.reduce(function (variable, array) {
+    var listArray = {}
+    respData.reduce(function (variable, array) {
       if (parseListName(array.name) == postObject.listName) {
         variable = {}
         variable.id = array.id
         variable.name = array.name
-        return variable
+        listArray = variable
       }
     }, {})
-    if (listArray.length == 1) {
-      return listArray[0]
-    } else {
-      return listArray
-    }
+    return listArray
   } catch (e) {
     console.error('getList: ' + e)
   }

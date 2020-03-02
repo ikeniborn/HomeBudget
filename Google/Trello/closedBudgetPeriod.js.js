@@ -14,7 +14,8 @@ function closedBudgetPeriod(postObject) {
     updateList(postObject, listBudget.id, listNameBudget)
     var listBudget2 = getList(postObject, postObject.boardIdBudget2)
     var labelListBudget = getBoardLabel(postObject, postObject.boardIdBudget)
-    if (getCards(postObject, listBudget2.id).length == 0) {
+    var countCardsListBudget2 = getCards(postObject, listBudget2.id).array
+    if (countCardsListBudget2.length == 0) {
       accountItems.forEach(function (accounts) {
         var label = labelListBudget.reduce(function (row, arrya) {
           if (arrya.name.toUpperCase() == accounts.bill.toUpperCase()) {
@@ -33,7 +34,8 @@ function closedBudgetPeriod(postObject) {
     updateList(postObject, listBudget2.id, listNameBudget2)
     var listBudget3 = getList(postObject, postObject.boardIdBudget3).id
     var labelListBudget2 = getBoardLabel(postObject, postObject.boardIdBudget2)
-    if (getCards(postObject, listBudget3.id).length == 0) {
+    var countCardsListBudget3 = getCards(postObject, listBudget3.id).array
+    if (countCardsListBudget3.length == 0) {
       accountItems.forEach(function (accounts) {
         var label = labelListBudget2.reduce(function (row, arrya) {
           if (arrya.name.toUpperCase() == accounts.bill.toUpperCase()) {

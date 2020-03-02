@@ -1,4 +1,4 @@
-function addCardComment(postObject, comment) {
+function addCardComment(postObject) {
   /*
    * @postObject - входные параметра запроса
    * @comment - текст комментария
@@ -8,7 +8,7 @@ function addCardComment(postObject, comment) {
       method: 'post',
       contentType: 'application/json'
     }
-    UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '/actions/comments?text=' + comment + '&' + postObject.keyAndToken, data)
+    UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '/actions/comments?text=' + postObject.cardComment + '&' + postObject.keyAndToken, data)
   } catch (e) {
     console.error('addCardComment: ' + e)
   }
