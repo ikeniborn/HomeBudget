@@ -45,7 +45,7 @@ function getPostObject(postData) {
       postObject.parseText = parseComment(postObject)
       postObject.sum = postObject.parseText.sum
       postObject.comment = postObject.parseText.comment
-      postObject.mvz = postObject.parseText.mvz
+      postObject.mvz = getCostСenter(postObject).item.mvz
       postObject.date = getPeriod(postObject)
       postObject.period = postObject.date.period
       postObject.ymd = postObject.date.ymd
@@ -58,6 +58,11 @@ function getPostObject(postData) {
         postObject.isSamePeriod = true
       } else {
         postObject.isSamePeriod = false
+      }
+      if ([postObject.boardIdTarget].indexOf(postObject.boardId) !== -1) {
+        postObject.isTarget = true
+      } else {
+        postObject.isTarget = false
       }
       postObject.isValidData = isValidData(postObject)
     } else if (postData.action.type == 'updateComment') {
@@ -104,7 +109,7 @@ function getPostObject(postData) {
       postObject.parseText = parseComment(postObject)
       postObject.sum = postObject.parseText.sum
       postObject.comment = postObject.parseText.comment
-      postObject.mvz = postObject.parseText.mvz
+      postObject.mvz = getCostСenter(postObject).item.mvz
       postObject.date = getPeriod(postObject)
       postObject.period = postObject.date.period
       postObject.ymd = postObject.date.ymd
@@ -117,6 +122,11 @@ function getPostObject(postData) {
         postObject.isSamePeriod = true
       } else {
         postObject.isSamePeriod = false
+      }
+      if ([postObject.boardIdTarget].indexOf(postObject.boardId) !== -1) {
+        postObject.isTarget = true
+      } else {
+        postObject.isTarget = false
       }
       postObject.isValidData = isValidData(postObject)
     } else if (postData.action.type == 'deleteComment') {
@@ -176,6 +186,11 @@ function getPostObject(postData) {
         postObject.isSamePeriod = true
       } else {
         postObject.isSamePeriod = false
+      }
+      if ([postObject.boardIdTarget].indexOf(postObject.boardId) !== -1) {
+        postObject.isTarget = true
+      } else {
+        postObject.isTarget = false
       }
       postObject.isValidData = isValidData(postObject)
     }

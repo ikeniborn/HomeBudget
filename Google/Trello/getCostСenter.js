@@ -1,26 +1,27 @@
 function getCostСenter(postObject) {
   try {
     var array = postObject.costСenterArray
-    var account = {}
-    account.item = {}
-    account.array = []
+    var text = postObject.text
+    var mvz = {}
+    mvz.item = {}
+    mvz.array = []
     array.reduce(function (row, array) {
-      if (array[4] == postObject.cardName) {
+      if (text.toLowerCase().match(array[2].toLowerCase())) {
         row = {}
         row.id = array[0]
-        row.tag = array[1]
-        row.mvz = array[2]
-        account.item = row
-        account.array.push(row)
+        row.mvz = array[1]
+        row.tag = array[2]
+        mvz.item = row
+        mvz.array.push(row)
       } else {
         row = {}
         row.id = array[0]
-        row.tag = array[1]
-        row.mvz = array[2]
-        account.array.push(row)
+        row.mvz = array[1]
+        row.tag = array[2]
+        mvz.array.push(row)
       }
     }, {})
-    return account
+    return mvz
   } catch (e) {
     console.error('getCostСenter: ' + e)
   }
