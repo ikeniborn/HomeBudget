@@ -29,24 +29,24 @@ function closedFactPeriod(postObject) {
         }
         return row
       })
-      accounts.cardInfo = addCard(postObject, encodeData(accounts.nomenclature, '+'), listFactId, label.id)
-      var card = accounts.cardInfo
-      card.withBudget = budget.reduce(function (row, arrya) {
-        if (arrya.cfo == postObject.listName && card.name == arrya.nomenclature) {
-          row += 1
-        }
-        return row
-      }, 0)
-      if (card.withBudget > 0) {
-        card.checkListId = addCheckList(postObject, card.id, 'Бюджет').id
-      }
-      var budgetRow = budget.filter(function (arrya) {
-        arrya.checkListId = card.checkListId
-        return arrya.cfo == postObject.listName && card.name == arrya.nomenclature && card.withBudget > 0
-      })
-      budgetRow.forEach(function (row) {
-        addCheckListItem(postObject, row.checkListId, row.sum + ' ' + row.comment)
-      })
+      accounts.cardInfo = addCard(postObject, encodeData(accounts.nomenclature, '+'), listFactId, accounts.id, label.id)
+      // var card = accounts.cardInfo
+      // card.withBudget = budget.reduce(function (row, arrya) {
+      //   if (arrya.cfo == postObject.listName && card.name == arrya.nomenclature) {
+      //     row += 1
+      //   }
+      //   return row
+      // }, 0)
+      // if (card.withBudget > 0) {
+      //   card.checkListId = addCheckList(postObject, card.id, 'Бюджет').id
+      // }
+      // var budgetRow = budget.filter(function (arrya) {
+      //   arrya.checkListId = card.checkListId
+      //   return arrya.cfo == postObject.listName && card.name == arrya.nomenclature && card.withBudget > 0
+      // })
+      // budgetRow.forEach(function (row) {
+      //   addCheckListItem(postObject, row.checkListId, row.sum + ' ' + row.comment)
+      // })
     })
   } catch (e) {
     console.error('closedFactPeriod: ' + e)
