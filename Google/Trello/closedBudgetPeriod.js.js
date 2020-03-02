@@ -18,12 +18,12 @@ function closedBudgetPeriod(postObject) {
     if (countCardsListBudget2.length == 0) {
       accountItems.forEach(function (accounts) {
         var label = labelListBudget.reduce(function (row, arrya) {
-          if (arrya.name.toUpperCase() == accounts.bill.toUpperCase()) {
+          if (arrya.color.toUpperCase() == accounts.color.toUpperCase()) {
             row = arrya
           }
           return row
         })
-        addCard(postObject, encodeData(accounts.nomenclature, '+'), listBudget2.id, label.id)
+        addCard(postObject, encodeData(accounts.nomenclature, '+'), listBudget2.id, accounts.id, label.id)
       })
     } else {
       moveAllCards(postObject, listBudget2.id, postObject.boardIdBudget, listBudget.id)
@@ -38,12 +38,12 @@ function closedBudgetPeriod(postObject) {
     if (countCardsListBudget3.length == 0) {
       accountItems.forEach(function (accounts) {
         var label = labelListBudget2.reduce(function (row, arrya) {
-          if (arrya.name.toUpperCase() == accounts.bill.toUpperCase()) {
+          if (arrya.color.toUpperCase() == accounts.color.toUpperCase()) {
             row = arrya
           }
           return row
         })
-        addCard(postObject, encodeData(accounts.nomenclature, '+'), listBudget2.id, label.id)
+        addCard(postObject, encodeData(accounts.nomenclature, '+'), listBudget2.id, accounts.id, label.id)
       })
     } else {
       moveAllCards(postObject, listBudget3.id, postObject.boardIdBudget2, listBudget2.id)
@@ -55,12 +55,12 @@ function closedBudgetPeriod(postObject) {
     var labelListBudget3 = getBoardLabel(postObject, postObject.boardIdBudget3)
     accountItems.forEach(function (accounts) {
       var label = labelListBudget3.reduce(function (row, arrya) {
-        if (arrya.name.toUpperCase() == accounts.bill.toUpperCase()) {
+        if (arrya.color.toUpperCase() == accounts.color.toUpperCase()) {
           row = arrya
         }
         return row
       })
-      addCard(postObject, encodeData(accounts.nomenclature, '+'), listBudget3.id, label.id)
+      addCard(postObject, encodeData(accounts.nomenclature, '+'), listBudget3.id, accounts.id, label.id)
     })
   } catch (e) {
     console.error('closedBudgetPeriod: ' + e)
