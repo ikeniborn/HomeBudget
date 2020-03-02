@@ -10,10 +10,20 @@ function doPost(e) {
       if (postObject.actionType == 'commentCard' && postObject.isUser && postObject.isValidData) {
         //* добавление информации
         updateTrelloData(postObject)
-        postObject.cardComment = getSum(postObject).text
+        var sumData = getSum(postObject)
+        postObject.cardComment = sumData.text
         updateCard(postObject)
-        //* обновление фактической карточки при обновлении текущего бюджета
+        if (postObject.isCurrFact) {
+          //* обновление карточки баланса
+          var postObjectBalance = postObject
+          postObjectBalance.nomenclature = 'Баланс'
+          var balanceCard = getCards(postObjectBalance, postObjectBalance.listId).item
+          postObjectBalance.cardId = balanceCard.id
+          var comment = '*Остаток средств:* ' + sumData.total
+          addCardComment(postObjectBalance, comment)
+        }
         if (postObject.isCurrBudget && postObject.isSamePeriod) {
+          //* обновление фактической карточки при обновлении текущего бюджета
           var factList = getList(postObject, postObject.boardIdFact)
           var factCard = getCards(postObject, factList.id).item
           var postObjectFact = postObject
@@ -42,13 +52,33 @@ function doPost(e) {
       } else if (postObject.actionType == 'updateComment' && postObject.isUser) {
         //* обновление данных при изменении комментария
         updateRowByActionId(postObject)
-        postObject.cardComment = getSum(postObject).text
+        var sumData = getSum(postObject)
+        postObject.cardComment = sumData.text
         updateCard(postObject)
+        if (postObject.isCurrFact) {
+          //* обновление карточки баланса
+          var postObjectBalance = postObject
+          postObjectBalance.nomenclature = 'Баланс'
+          var balanceCard = getCards(postObjectBalance, postObjectBalance.listId).item
+          postObjectBalance.cardId = balanceCard.id
+          var comment = '*Остаток средств:* ' + sumData.total
+          addCardComment(postObjectBalance, comment)
+        }
       } else if (postObject.actionType == 'deleteComment') {
         //* удаление строки при удалении комментария
         deleteRowByActionId(postObject)
-        postObject.cardComment = getSum(postObject).text
+        var sumData = getSum(postObject)
+        postObject.cardComment = sumData.text
         updateCard(postObject)
+        if (postObject.isCurrFact) {
+          //* обновление карточки баланса
+          var postObjectBalance = postObject
+          postObjectBalance.nomenclature = 'Баланс'
+          var balanceCard = getCards(postObjectBalance, postObjectBalance.listId).item
+          postObjectBalance.cardId = balanceCard.id
+          var comment = '*Остаток средств:* ' + sumData.total
+          addCardComment(postObjectBalance, comment)
+        }
       }
     }
   } catch (e) {
