@@ -27,7 +27,7 @@ function getSum(postObject) {
       totalSum.desc += '*Факт*: ' + factSum.account + ' р.' + postObject.lineBreak
       totalSum.desc += '*Остаток*: ' + totalSum.account + ' р.' + postObject.lineBreak
       totalSum.desc += '*Исполнение*: ' + ((factSum.account / budgetSum.account) * 100).toFixed(2) + encodeData('%', '%') + postObject.lineBreak
-      totalSum.desc += '**Остаток средств** ' + postObject.listName + '*: ' + totalSum.totalFact + ' р.' + postObject.lineBreak
+      totalSum.desc += '**Остаток средств** *' + postObject.listName + '*: ' + totalSum.totalFact + ' р.' + postObject.lineBreak
       totalSum.desc += '**Бюджетные заявки:**' + postObject.lineBreak
       var i = 1
       budgetRow.forEach(function (row) {
