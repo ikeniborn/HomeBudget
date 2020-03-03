@@ -18,16 +18,11 @@ function getSum(postObject) {
     if (postObject.isFact) {
       //* описание для фактических карточек
       totalSum.desc += '**По номенклатуре**: ' + postObject.lineBreak
-      totalSum.desc += '*Бюджет*: ' + budgetSum.nomenclature + ' р.' + postObject.lineBreak
-      totalSum.desc += '*Факт*: ' + factSum.nomenclature + ' р.' + postObject.lineBreak
       totalSum.desc += '*Остаток*: ' + totalSum.nomenclature + ' р.' + postObject.lineBreak
       totalSum.desc += '*Исполнение*: ' + ((factSum.nomenclature / budgetSum.nomenclature) * 100).toFixed(2) + encodeData('%', '%') + postObject.lineBreak
       totalSum.desc += '**По статье**: ' + postObject.lineBreak
-      totalSum.desc += '*Бюджет*: ' + budgetSum.account + ' р.' + postObject.lineBreak
-      totalSum.desc += '*Факт*: ' + factSum.account + ' р.' + postObject.lineBreak
       totalSum.desc += '*Остаток*: ' + totalSum.account + ' р.' + postObject.lineBreak
       totalSum.desc += '*Исполнение*: ' + ((factSum.account / budgetSum.account) * 100).toFixed(2) + encodeData('%', '%') + postObject.lineBreak
-      totalSum.desc += '**Остаток средств** *' + postObject.listName + '*: ' + totalSum.totalFact + ' р.' + postObject.lineBreak
       totalSum.desc += '**Бюджетные заявки:**' + postObject.lineBreak
       var i = 1
       budgetRow.forEach(function (row) {
