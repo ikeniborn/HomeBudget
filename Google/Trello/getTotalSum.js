@@ -41,6 +41,9 @@ function getTotalSum(postObject, sheetId, sheetName) {
     total.row = currData.filter(function (array) {
       return array.cfo == postObject.listName && array.bill == postObject.bill && array.account == postObject.account && array.nomenclature == postObject.nomenclature
     })
+    total.rows = currData.filter(function (array) {
+      return array.cfo == postObject.listName
+    })
     return total
   } catch (e) {
     console.error('getTotalSum: ' + e)

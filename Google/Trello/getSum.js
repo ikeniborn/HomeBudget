@@ -5,6 +5,7 @@ function getSum(postObject) {
     var factSum = getTotalSum(postObject, postObject.targetSheetID, postObject.targetSheetNameFact)
     var totalSum = {}
     var budgetRow = budgetSum.row
+    var budgetRows = budgetSum.rows
     totalSum.bill = budgetSum.bill - factSum.bill
     totalSum.account = budgetSum.account - factSum.account
     totalSum.nomenclature = budgetSum.nomenclature - factSum.nomenclature
@@ -32,14 +33,11 @@ function getSum(postObject) {
         i += 1
       })
       if (postObject.isCurrFact) {
-        totalSum.comment = '**По номенклатуре** *' + postObject.nomenclature + '*: ' + postObject.lineBreak
-        totalSum.comment += '*Остаток*: ' + totalSum.nomenclature + ' р.' + postObject.lineBreak
-        totalSum.comment += '*Исполнение*: ' + ((factSum.nomenclature / budgetSum.nomenclature) * 100).toFixed(2) + encodeData('%', '%') + postObject.lineBreak
-        totalSum.comment += '**По статье** *' + postObject.account + '*: ' + postObject.lineBreak
-        totalSum.comment += '*Остаток*: ' + totalSum.account + ' р.' + postObject.lineBreak
-        totalSum.comment += '*Исполнение*: ' + ((factSum.account / budgetSum.account) * 100).toFixed(2) + encodeData('%', '%') + postObject.lineBreak
-        totalSum.comment += '**Остаток средств** *' + postObject.listName + '/' + postObject.mvz + '*: ' + totalSum.totalFact + ' р.' + postObject.lineBreak
-      }
+        totalSum.comment = '**Остаток**:' + postObject.lineBreak
+        totalSum.comment += '*' + postObject.nomenclature + '*: ' + totalSum.nomenclature + postObject.lineBreak
+        totalSum.comment += '*' + postObject.account + '*: ' + totalSum.account + postObject.lineBreak
+        totalSum.comment += '*' + postObject.listName + '*: ' + totalSum.totalFact + ' р.' + postObject.lineBreak
+      } else if (postObject.isCurrBudget) {}
     } else {
       //* описание для бюджетных карточек
       totalSum.desc += '**Итого бюджет на** ' + formatterDate(postObject.period).date + ':' + postObject.lineBreak
