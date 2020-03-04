@@ -10,10 +10,15 @@ function updateTrelloData(postObject) {
       sourceSheetName = postObject.sourceSheetNameFactTrello
       ts = SpreadsheetApp.openById(postObject.targetSheetID).getSheetByName(postObject.targetSheetNameFact)
       targetSheetName = postObject.targetSheetNameFact
-    } else {
+    } else if (postObject.isBudget) {
       ss = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.sourceSheetNameBudgetTrello)
       sourceSheetName = postObject.sourceSheetNameBudgetTrello
       ts = SpreadsheetApp.openById(postObject.targetSheetID).getSheetByName(postObject.targetSheetNameBudget)
+      targetSheetName = postObject.targetSheetNameBudget
+    } else if (postObject.isTarget) {
+      ss = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.sourceSheetNameTargetTrello)
+      sourceSheetName = postObject.sourceSheetNameBudgetTrello
+      ts = SpreadsheetApp.openById(postObject.targetSheetID).getSheetByName(postObject.targetSheetNameFact)
       targetSheetName = postObject.targetSheetNameBudget
     }
     //* вставка значений в буфер
