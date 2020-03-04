@@ -4,6 +4,7 @@ function updateTrelloData(postObject) {
     var sourceSheetName
     var ts
     var targetSheetName
+    var insertdate
     //* определение истоников
     if (postObject.isFact) {
       ss = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.sourceSheetNameFactTrello)
