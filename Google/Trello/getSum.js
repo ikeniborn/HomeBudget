@@ -34,13 +34,13 @@ function getSum(postObject) {
       })
       if (postObject.isCurrFact) {
         totalSum.comment = '**Остаток**:' + postObject.lineBreak
-        totalSum.comment += '*' + postObject.nomenclature + '*: ' + totalSum.nomenclature + postObject.lineBreak
-        totalSum.comment += '*' + postObject.account + '*: ' + totalSum.account + postObject.lineBreak
+        totalSum.comment += '*' + postObject.nomenclature + '*: ' + totalSum.nomenclature + ' р.' + postObject.lineBreak
+        totalSum.comment += '*' + postObject.account + '*: ' + totalSum.account + ' р.' + postObject.lineBreak
         totalSum.comment += '*' + postObject.listName + '*: ' + totalSum.totalFact + ' р.' + postObject.lineBreak
-        totalSum.comment += '**Внесенная сумма**: ' + postObject.sum + postObject.lineBreak
+        totalSum.comment += '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
         totalSum.comment += '**Комментарий**: ' + postObject.comment + postObject.lineBreak
-      } else if (postObject.isCurrBudget) {}
-    } else {
+      }
+    } else if (postObject.isBudget) {
       //* описание для бюджетных карточек
       totalSum.desc += '**Итого бюджет на** ' + formatterDate(postObject.period).date + ':' + postObject.lineBreak
       totalSum.desc += '*По счету*: ' + budgetSum.bill + ' р.' + postObject.lineBreak
@@ -59,6 +59,13 @@ function getSum(postObject) {
         totalSum.desc += '**Факт прошлых периодов:**' + postObject.lineBreak
         totalSum.desc += formatterDate(postObject.factPeriod).date + ' - ' + factSumPrev1.nomenclature + ' р.' + postObject.lineBreak
         totalSum.desc += formatterDate(postObject.factPeriod0).date + ' - ' + factSumPrev2.nomenclature + ' р.' + postObject.lineBreak
+        //* комментарий
+        totalSum.comment = '**Заявка**:' + postObject.lineBreak
+        totalSum.comment += '*' + postObject.nomenclature + '*: ' + totalSum.nomenclature + ' р.' + postObject.lineBreak
+        totalSum.comment += '*' + postObject.account + '*: ' + totalSum.account + ' р.' + postObject.lineBreak
+        totalSum.comment += '*' + postObject.listName + '*: ' + totalSum.totalFact + ' р.' + postObject.lineBreak
+        totalSum.comment += '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
+        totalSum.comment += '**Комментарий**: ' + postObject.comment + postObject.lineBreak
       }
       totalSum.desc += '**Бюджетные заявки**:' + postObject.lineBreak
       var i = 1
