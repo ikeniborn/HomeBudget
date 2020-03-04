@@ -5,6 +5,7 @@ function getSum(postObject) {
     var factSum = getTotalSum(postObject, postObject.targetSheetID, postObject.targetSheetNameFact)
     var totalSum = {}
     var budgetRow = budgetSum.row
+    var budgetRows = budgetSum.rows
     totalSum.bill = budgetSum.bill - factSum.bill
     totalSum.account = budgetSum.account - factSum.account
     totalSum.nomenclature = budgetSum.nomenclature - factSum.nomenclature
@@ -18,16 +19,11 @@ function getSum(postObject) {
     if (postObject.isFact) {
       //* описание для фактических карточек
       totalSum.desc += '**По номенклатуре**: ' + postObject.lineBreak
-      totalSum.desc += '*Бюджет*: ' + budgetSum.nomenclature + ' р.' + postObject.lineBreak
-      totalSum.desc += '*Факт*: ' + factSum.nomenclature + ' р.' + postObject.lineBreak
       totalSum.desc += '*Остаток*: ' + totalSum.nomenclature + ' р.' + postObject.lineBreak
       totalSum.desc += '*Исполнение*: ' + ((factSum.nomenclature / budgetSum.nomenclature) * 100).toFixed(2) + encodeData('%', '%') + postObject.lineBreak
       totalSum.desc += '**По статье**: ' + postObject.lineBreak
-      totalSum.desc += '*Бюджет*: ' + budgetSum.account + ' р.' + postObject.lineBreak
-      totalSum.desc += '*Факт*: ' + factSum.account + ' р.' + postObject.lineBreak
       totalSum.desc += '*Остаток*: ' + totalSum.account + ' р.' + postObject.lineBreak
       totalSum.desc += '*Исполнение*: ' + ((factSum.account / budgetSum.account) * 100).toFixed(2) + encodeData('%', '%') + postObject.lineBreak
-      totalSum.desc += '**Остаток средств** *' + postObject.listName + '*: ' + totalSum.totalFact + ' р.' + postObject.lineBreak
       totalSum.desc += '**Бюджетные заявки:**' + postObject.lineBreak
       var i = 1
       budgetRow.forEach(function (row) {
@@ -37,14 +33,13 @@ function getSum(postObject) {
         i += 1
       })
       if (postObject.isCurrFact) {
-        totalSum.comment = '**По номенклатуре** *' + postObject.nomenclature + '*: ' + postObject.lineBreak
-        totalSum.comment += '*Остаток*: ' + totalSum.nomenclature + ' р.' + postObject.lineBreak
-        totalSum.comment += '*Исполнение*: ' + ((factSum.nomenclature / budgetSum.nomenclature) * 100).toFixed(2) + encodeData('%', '%') + postObject.lineBreak
-        totalSum.comment += '**По статье** *' + postObject.account + '*: ' + postObject.lineBreak
-        totalSum.comment += '*Остаток*: ' + totalSum.account + ' р.' + postObject.lineBreak
-        totalSum.comment += '*Исполнение*: ' + ((factSum.account / budgetSum.account) * 100).toFixed(2) + encodeData('%', '%') + postObject.lineBreak
-        totalSum.comment += '**Остаток средств** *' + postObject.listName + '*: ' + totalSum.totalFact + ' р.' + postObject.lineBreak
-      }
+        totalSum.comment = '**Остаток**:' + postObject.lineBreak
+        totalSum.comment += '*' + postObject.nomenclature + '*: ' + totalSum.nomenclature + postObject.lineBreak
+        totalSum.comment += '*' + postObject.account + '*: ' + totalSum.account + postObject.lineBreak
+        totalSum.comment += '*' + postObject.listName + '*: ' + totalSum.totalFact + ' р.' + postObject.lineBreak
+        totalSum.comment = '**Внесенная сумма**: ' + postObject.sum + postObject.lineBreak
+        totalSum.comment = '**Комментарий**: ' + postObject.comment + postObject.lineBreak
+      } else if (postObject.isCurrBudget) {}
     } else {
       //* описание для бюджетных карточек
       totalSum.desc += '**Итого бюджет на** ' + formatterDate(postObject.period).date + ':' + postObject.lineBreak
