@@ -38,7 +38,7 @@ function getSum(postObject) {
         totalSum.comment += '**По статье** *' + postObject.account + '*: ' + postObject.lineBreak
         totalSum.comment += '*Остаток*: ' + totalSum.account + ' р.' + postObject.lineBreak
         totalSum.comment += '*Исполнение*: ' + ((factSum.account / budgetSum.account) * 100).toFixed(2) + encodeData('%', '%') + postObject.lineBreak
-        totalSum.comment += '**Остаток средств** *' + postObject.listName + '*: ' + totalSum.totalFact + ' р.' + postObject.lineBreak
+        totalSum.comment += '**Остаток средств** *' + postObject.listName + '/' + postObject.mvz + '*: ' + totalSum.totalFact + ' р.' + postObject.lineBreak
       }
     } else {
       //* описание для бюджетных карточек
