@@ -24,7 +24,7 @@ function getCostСenter(postObject) {
         }
       }, {})
     } else {
-      mvz = null
+      mvz = postObject.listName
     }
     return mvz
   } catch (e) {
