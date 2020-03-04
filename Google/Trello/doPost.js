@@ -15,7 +15,22 @@ function doPost(e) {
         postObject.cardComment = sumData.comment
         updateCardDesc(postObject)
         if (postObject.isCurrFact) {
+          //* обновление карточки баланса
           updateBalanceCard(postObject)
+          //* обновление карточек бюджета по данным факта
+          if (!postObject.isSamePeriod) {
+            var budgetList = getList(postObject, postObject.boardIdBudget)
+            var budgetCard = getCards(postObject, budgetList.id).item
+            var postObjectbudget = postObject
+            postObjectbudget.boardId = postObject.boardIdFact
+            postObjectbudget.listId = budgetList.id
+            postObjectbudget.cardId = budgetCard.id
+            postObjectbudget.isFact = false
+            postObjectbudget.period = postObject.budgetPeriod
+            postObjectbudget.ymd = getYMD(postObject.budgetPeriod).ymd
+            postObjectbudget.cardDesc = getSum(postObjectbudget).desc
+            updateCardDesc(postObjectbudget)
+          }
         }
         if (postObject.isCurrBudget && postObject.isSamePeriod) {
           //* обновление фактической карточки при обновлении текущего бюджета
