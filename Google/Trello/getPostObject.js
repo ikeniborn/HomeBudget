@@ -20,7 +20,7 @@ function getPostObject(postData) {
       } else {
         postObject.isFact = false
       }
-      if ([postObject.boardIdFact, postObject.boardIdFact2, postObject.boardIdFact3].indexOf(postObject.boardId) !== -1) {
+      if ([postObject.boardIdBudget, postObject.boardIdBudget2, postObject.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
         postObject.isBudget = true
       } else {
         postObject.isBudget = false
@@ -89,7 +89,7 @@ function getPostObject(postData) {
       } else {
         postObject.isFact = false
       }
-      if ([postObject.boardIdFact, postObject.boardIdFact2, postObject.boardIdFact3].indexOf(postObject.boardId) !== -1) {
+      if ([postObject.boardIdBudget, postObject.boardIdBudget2, postObject.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
         postObject.isBudget = true
       } else {
         postObject.isBudget = false
@@ -158,7 +158,7 @@ function getPostObject(postData) {
       } else {
         postObject.isFact = false
       }
-      if ([postObject.boardIdFact, postObject.boardIdFact2, postObject.boardIdFact3].indexOf(postObject.boardId) !== -1) {
+      if ([postObject.boardIdBudget, postObject.boardIdBudget2, postObject.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
         postObject.isBudget = true
       } else {
         postObject.isBudget = false
@@ -228,7 +228,7 @@ function getPostObject(postData) {
       } else {
         postObject.isFact = false
       }
-      if ([postObject.boardIdFact, postObject.boardIdFact2, postObject.boardIdFact3].indexOf(postObject.boardId) !== -1) {
+      if ([postObject.boardIdBudget, postObject.boardIdBudget2, postObject.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
         postObject.isBudget = true
       } else {
         postObject.isBudget = false
