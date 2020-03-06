@@ -14,8 +14,8 @@ function closedFactPeriod(postObject) {
     updateList(postObject, listFact0.id, listNameFact0)
     //* Перенос карточек на доску факт-1
     var listFactId = postObject.listId
-    var labelList = getBoardLabel(postObject, globalVar.boardIdFact)
-    moveAllCards(postObject, listFactId, globalVar.boardIdFact0, listFact0.id)
+    var labelList = getBoardLabel(postObject, postObject.boardIdFact)
+    moveAllCards(postObject, listFactId, postObject.boardIdFact0, listFact0.id)
     //* обновление текущего листа факта
     var factPeriod = getPeriod(postObject).factPeriod
     var listNameFact = postObject.listName + ' ' + formatterDate(factPeriod).date
