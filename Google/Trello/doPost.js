@@ -34,6 +34,15 @@ function doPost(e) {
             postObjectBudget.cardDesc = getSum(postObjectBudget).desc
             updateCardDesc(postObjectBudget)
           }
+          //* закрытие периода
+          if (['Остатки'].indexOf(postObject.account) !== -1 && !postObject.isSamePeriod) {
+            updateFactPeriod(postObject)
+            closedFactPeriod(postObject)
+            // reportBudgetOksana(postObject)
+          } else if (['Аванс'].indexOf(postObject.account) !== -1 && postObject.isSamePeriod) {
+            updateBudgetPeriod(postObject)
+            closedBudgetPeriod(postObject)
+          }
         } else if (postObject.isCurrBudget) {
           updateBalanceCard(postObject)
           if (postObject.isSamePeriod) {
@@ -56,17 +65,6 @@ function doPost(e) {
         }
         //* добавление реакции на комментарий
         addCardReaction(postObject)
-        //* закрытие периода
-        if (postObject.isCurrFact && ['Остатки', 'Аванс'].indexOf(postObject.account) !== -1) {
-          if (postObject.account == 'Остатки' && !postObject.isSamePeriod) {
-            updateFactPeriod(postObject)
-            closedFactPeriod(postObject)
-            // reportBudgetOksana(postObject)
-          } else if (postObject.account == 'Аванс' && postObject.isSamePeriod) {
-            updateBudgetPeriod(postObject)
-            closedBudgetPeriod(postObject)
-          }
-        }
       } else if (postObject.actionType == 'updateComment' && postObject.isUser) {
         //* обновление данных при изменении комментария
         updateRowByActionId(postObject)

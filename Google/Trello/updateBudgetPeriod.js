@@ -12,5 +12,7 @@ function updateBudgetPeriod(postObject) {
     postObject.parametrArray = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.parametrSheetName).getDataRange().getValues()
   } catch (e) {
     console.error('updateBudgetPeriod: ' + e)
+  } finally {
+    console.log('updateBudgetPeriod:complete')
   }
 }

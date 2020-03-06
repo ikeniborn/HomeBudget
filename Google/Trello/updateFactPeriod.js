@@ -22,5 +22,7 @@ function updateFactPeriod(postObject) {
     globalVar.parametrArray = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.parametrSheetName).getDataRange().getValues()
   } catch (e) {
     console.error('updateFactPeriod: ' + e)
+  } finally {
+    console.log('updateFactPeriod:complete')
   }
 }

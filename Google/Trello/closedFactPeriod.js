@@ -32,5 +32,7 @@ function closedFactPeriod(postObject) {
     })
   } catch (e) {
     console.error('closedFactPeriod: ' + e)
+  } finally {
+    console.log('closedFactPeriod:complete')
   }
 }
