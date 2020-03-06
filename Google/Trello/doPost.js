@@ -18,7 +18,7 @@ function doPost(e) {
           //* обновление карточки баланса
           updateBalanceCard(postObject)
           //* обновление карточек бюджета по данным факта
-          if (!postObject.isSamePeriod) {
+          if (!postObject.isSamePeriod && ['Остатки'].indexOf(postObject.account) === -1) {
             var budgetList = getList(postObject, postObject.boardIdBudget)
             var budgetCard = getCards(postObject, budgetList.id).item
             var postObjectBudget = postObject
