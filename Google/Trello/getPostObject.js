@@ -36,7 +36,7 @@ function getPostObject(postData) {
         postObject.isCurrBudget = false
       }
       postObject.cardId = postData.action.data.card.id
-      postObject.cardName = postData.action.data.card.name
+      postObject.cardName = encodeData(postData.action.data.card.name, '+')
       postObject.cardDesc = null
       postObject.cardComment = null
       postObject.list = null
@@ -105,7 +105,7 @@ function getPostObject(postData) {
         postObject.isCurrBudget = false
       }
       postObject.cardId = postData.action.data.card.id
-      postObject.cardName = postData.action.data.card.name
+      postObject.cardName = encodeData(postData.action.data.card.name, '+')
       postObject.cardDesc = null
       postObject.cardComment = null
       postObject.list = getCardList(postObject)
@@ -174,7 +174,7 @@ function getPostObject(postData) {
         postObject.isCurrBudget = false
       }
       postObject.cardId = postData.action.data.card.id
-      postObject.cardName = postData.action.data.card.name
+      postObject.cardName = encodeData(postData.action.data.card.name, '+')
       postObject.cardDesc = null
       postObject.cardComment = null
       postObject.list = getCardList(postObject)
