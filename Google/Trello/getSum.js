@@ -5,10 +5,10 @@ function getSum(postObject) {
     var factSum = getTotalSum(postObject, postObject.targetSheetID, postObject.targetSheetNameFact)
     var totalSum = {}
     var budgetRow = budgetSum.row
-    var budgetRows = budgetSum.rows
     totalSum.bill = budgetSum.bill - factSum.bill
     totalSum.account = budgetSum.account - factSum.account
     totalSum.nomenclature = budgetSum.nomenclature - factSum.nomenclature
+    totalSum.nomenclatureBudget = budgetSum.nomenclature
     totalSum.incomeFact = factSum.income
     totalSum.incomeBudget = budgetSum.income
     totalSum.expenseFact = factSum.expense

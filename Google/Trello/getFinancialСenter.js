@@ -1,6 +1,6 @@
 function getFinancialСenter(postObject) {
   try {
-    var array = postObject.financialArray
+    var array = postObject.financialСenterArray
     var listName = postObject.listName
     var cfo = {}
     cfo.item = {}
@@ -21,6 +21,6 @@ function getFinancialСenter(postObject) {
     }, {})
     return cfo
   } catch (e) {
-    console.error('getfinancialСenter: ' + e)
+    console.error('getFinancialСenter: ' + e)
   }
 }

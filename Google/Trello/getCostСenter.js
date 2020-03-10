@@ -2,7 +2,7 @@ function getCostСenter(postObject) {
   try {
     var array = postObject.costСenterArray
     var text = postObject.comment
-    var cfo = postObject.listName
+    var cfo = postObject.cfo
     var mvz = {}
     mvz.item = {}
     mvz.array = []

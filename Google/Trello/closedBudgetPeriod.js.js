@@ -19,7 +19,8 @@ function closedBudgetPeriod(postObject) {
       accountItems.forEach(function (accounts) {
         var label = labelListBudget.reduce(function (row, arrya) {
           if (arrya.color.toUpperCase() == accounts.color.toUpperCase()) {
-            row = arrya
+            row = {}
+            row.id = arrya.id
           }
           return row
         })
@@ -39,7 +40,8 @@ function closedBudgetPeriod(postObject) {
       accountItems.forEach(function (accounts) {
         var label = labelListBudget2.reduce(function (row, arrya) {
           if (arrya.color.toUpperCase() == accounts.color.toUpperCase()) {
-            row = arrya
+            row = {}
+            row.id = arrya.id
           }
           return row
         })
@@ -56,7 +58,8 @@ function closedBudgetPeriod(postObject) {
     accountItems.forEach(function (accounts) {
       var label = labelListBudget3.reduce(function (row, arrya) {
         if (arrya.color.toUpperCase() == accounts.color.toUpperCase()) {
-          row = arrya
+          row = {}
+          row.id = arrya.id
         }
         return row
       })
