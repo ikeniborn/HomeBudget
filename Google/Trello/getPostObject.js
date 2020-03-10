@@ -36,7 +36,7 @@ function getPostObject(postData) {
         postObject.isCurrBudget = false
       }
       postObject.cardId = postData.action.data.card.id
-      postObject.cardName = encodeData(postData.action.data.card.name, '+')
+      postObject.cardName = postData.action.data.card.name
       postObject.cardDesc = null
       postObject.cardComment = null
       postObject.cardLabelColor = getCardLabel(postObjectCard).item.color
@@ -107,7 +107,7 @@ function getPostObject(postData) {
         postObject.isCurrBudget = false
       }
       postObject.cardId = postData.action.data.card.id
-      postObject.cardName = encodeData(postData.action.data.card.name, '+')
+      postObject.cardName = postData.action.data.card.name
       postObject.cardDesc = null
       postObject.cardComment = null
       postObject.cardLabelColor = getCardLabel(postObjectCard).item.color
@@ -178,7 +178,7 @@ function getPostObject(postData) {
         postObject.isCurrBudget = false
       }
       postObject.cardId = postData.action.data.card.id
-      postObject.cardName = encodeData(postData.action.data.card.name, '+')
+      postObject.cardName = postData.action.data.card.name
       postObject.cardDesc = null
       postObject.cardComment = null
       postObject.cardLabelColor = getCardLabel(postObjectCard).item.color
