@@ -17,23 +17,30 @@ function getPostObject(postData) {
       postObject.boardName = postData.action.data.board.name
       if ([postObject.boardIdFact, postObject.boardIdFact0].indexOf(postObject.boardId) !== -1) {
         postObject.isFact = true
-      } else {
-        postObject.isFact = false
-      }
-      if ([postObject.boardIdBudget, postObject.boardIdBudget2, postObject.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-        postObject.isBudget = true
-      } else {
+        if ([postObject.boardIdFact].indexOf(postObject.boardId) !== -1) {
+          postObject.isCurrFact = true
+        } else {
+          postObject.isCurrFact = true
+        }
         postObject.isBudget = false
-      }
-      if ([postObject.boardIdFact].indexOf(postObject.boardId) !== -1) {
-        postObject.isCurrFact = true
-      } else {
-        postObject.isCurrFact = false
-      }
-      if ([postObject.boardIdBudget].indexOf(postObject.boardId) !== -1) {
-        postObject.isCurrBudget = true
-      } else {
         postObject.isCurrBudget = false
+        postObject.isTarget = false
+      } else if ([postObject.boardIdBudget, postObject.boardIdBudget2, postObject.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
+        postObject.isFact = false
+        postObject.isCurrFact = false
+        postObject.isBudget = true
+        if ([postObject.boardIdBudget].indexOf(postObject.boardId) !== -1) {
+          postObject.isCurrBudget = true
+        } else {
+          postObject.isCurrBudget = false
+        }
+        postObject.isTarget = false
+      } else if ([postObject.boardIdTarget].indexOf(postObject.boardId) !== -1) {
+        postObject.isFact = false
+        postObject.isCurrFact = false
+        postObject.isBudget = false
+        postObject.isCurrBudget = false
+        postObject.isTarget = true
       }
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
@@ -61,16 +68,7 @@ function getPostObject(postData) {
       postObject.budgetPeriod = postObject.date.budgetPeriod
       postObject.budgetPeriod2 = postObject.date.budgetPeriod2
       postObject.budgetPeriod3 = postObject.date.budgetPeriod3
-      if (getYMD(postObject.factPeriod).ymd == getYMD(postObject.budgetPeriod).ymd) {
-        postObject.isSamePeriod = true
-      } else {
-        postObject.isSamePeriod = false
-      }
-      if ([postObject.boardIdTarget].indexOf(postObject.boardId) !== -1) {
-        postObject.isTarget = true
-      } else {
-        postObject.isTarget = false
-      }
+      postObject.isSamePeriod = postObject.date.isSamePeriod
       postObject.isValidData = isValidData(postObject)
     } else if (postData.action.type == 'updateComment') {
       postObject.webHookDate = formatterDate().timestamp
@@ -88,23 +86,30 @@ function getPostObject(postData) {
       postObject.boardName = postData.action.data.board.name
       if ([postObject.boardIdFact, postObject.boardIdFact0].indexOf(postObject.boardId) !== -1) {
         postObject.isFact = true
-      } else {
-        postObject.isFact = false
-      }
-      if ([postObject.boardIdBudget, postObject.boardIdBudget2, postObject.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-        postObject.isBudget = true
-      } else {
+        if ([postObject.boardIdFact].indexOf(postObject.boardId) !== -1) {
+          postObject.isCurrFact = true
+        } else {
+          postObject.isCurrFact = true
+        }
         postObject.isBudget = false
-      }
-      if ([postObject.boardIdFact].indexOf(postObject.boardId) !== -1) {
-        postObject.isCurrFact = true
-      } else {
-        postObject.isCurrFact = false
-      }
-      if ([postObject.boardIdBudget].indexOf(postObject.boardId) !== -1) {
-        postObject.isCurrBudget = true
-      } else {
         postObject.isCurrBudget = false
+        postObject.isTarget = false
+      } else if ([postObject.boardIdBudget, postObject.boardIdBudget2, postObject.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
+        postObject.isFact = false
+        postObject.isCurrFact = false
+        postObject.isBudget = true
+        if ([postObject.boardIdBudget].indexOf(postObject.boardId) !== -1) {
+          postObject.isCurrBudget = true
+        } else {
+          postObject.isCurrBudget = false
+        }
+        postObject.isTarget = false
+      } else if ([postObject.boardIdTarget].indexOf(postObject.boardId) !== -1) {
+        postObject.isFact = false
+        postObject.isCurrFact = false
+        postObject.isBudget = false
+        postObject.isCurrBudget = false
+        postObject.isTarget = true
       }
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
@@ -132,16 +137,7 @@ function getPostObject(postData) {
       postObject.budgetPeriod = postObject.date.budgetPeriod
       postObject.budgetPeriod2 = postObject.date.budgetPeriod2
       postObject.budgetPeriod3 = postObject.date.budgetPeriod3
-      if (getYMD(postObject.factPeriod).ymd == getYMD(postObject.budgetPeriod).ymd) {
-        postObject.isSamePeriod = true
-      } else {
-        postObject.isSamePeriod = false
-      }
-      if ([postObject.boardIdTarget].indexOf(postObject.boardId) !== -1) {
-        postObject.isTarget = true
-      } else {
-        postObject.isTarget = false
-      }
+      postObject.isSamePeriod = postObject.date.isSamePeriod
       postObject.isValidData = isValidData(postObject)
     } else if (postData.action.type == 'deleteComment') {
       postObject.webHookDate = formatterDate().timestamp
@@ -159,23 +155,30 @@ function getPostObject(postData) {
       postObject.boardName = postData.action.data.board.name
       if ([postObject.boardIdFact, postObject.boardIdFact0].indexOf(postObject.boardId) !== -1) {
         postObject.isFact = true
-      } else {
-        postObject.isFact = false
-      }
-      if ([postObject.boardIdBudget, postObject.boardIdBudget2, postObject.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-        postObject.isBudget = true
-      } else {
+        if ([postObject.boardIdFact].indexOf(postObject.boardId) !== -1) {
+          postObject.isCurrFact = true
+        } else {
+          postObject.isCurrFact = true
+        }
         postObject.isBudget = false
-      }
-      if ([postObject.boardIdFact].indexOf(postObject.boardId) !== -1) {
-        postObject.isCurrFact = true
-      } else {
-        postObject.isCurrFact = false
-      }
-      if ([postObject.boardIdBudget].indexOf(postObject.boardId) !== -1) {
-        postObject.isCurrBudget = true
-      } else {
         postObject.isCurrBudget = false
+        postObject.isTarget = false
+      } else if ([postObject.boardIdBudget, postObject.boardIdBudget2, postObject.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
+        postObject.isFact = false
+        postObject.isCurrFact = false
+        postObject.isBudget = true
+        if ([postObject.boardIdBudget].indexOf(postObject.boardId) !== -1) {
+          postObject.isCurrBudget = true
+        } else {
+          postObject.isCurrBudget = false
+        }
+        postObject.isTarget = false
+      } else if ([postObject.boardIdTarget].indexOf(postObject.boardId) !== -1) {
+        postObject.isFact = false
+        postObject.isCurrFact = false
+        postObject.isBudget = false
+        postObject.isCurrBudget = false
+        postObject.isTarget = true
       }
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
@@ -203,16 +206,7 @@ function getPostObject(postData) {
       postObject.budgetPeriod = postObject.date.budgetPeriod
       postObject.budgetPeriod2 = postObject.date.budgetPeriod2
       postObject.budgetPeriod3 = postObject.date.budgetPeriod3
-      if (getYMD(postObject.factPeriod).ymd == getYMD(postObject.budgetPeriod).ymd) {
-        postObject.isSamePeriod = true
-      } else {
-        postObject.isSamePeriod = false
-      }
-      if ([postObject.boardIdTarget].indexOf(postObject.boardId) !== -1) {
-        postObject.isTarget = true
-      } else {
-        postObject.isTarget = false
-      }
+      postObject.isSamePeriod = postObject.date.isSamePeriod
       postObject.isValidData = isValidData(postObject)
     } else if (postData.action.type == 'createList') {
       //* данные по новой цели
@@ -231,23 +225,30 @@ function getPostObject(postData) {
       postObject.boardName = postData.action.data.board.name
       if ([postObject.boardIdFact, postObject.boardIdFact0].indexOf(postObject.boardId) !== -1) {
         postObject.isFact = true
-      } else {
-        postObject.isFact = false
-      }
-      if ([postObject.boardIdBudget, postObject.boardIdBudget2, postObject.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-        postObject.isBudget = true
-      } else {
+        if ([postObject.boardIdFact].indexOf(postObject.boardId) !== -1) {
+          postObject.isCurrFact = true
+        } else {
+          postObject.isCurrFact = true
+        }
         postObject.isBudget = false
-      }
-      if ([postObject.boardIdFact].indexOf(postObject.boardId) !== -1) {
-        postObject.isCurrFact = true
-      } else {
-        postObject.isCurrFact = false
-      }
-      if ([postObject.boardIdBudget].indexOf(postObject.boardId) !== -1) {
-        postObject.isCurrBudget = true
-      } else {
         postObject.isCurrBudget = false
+        postObject.isTarget = false
+      } else if ([postObject.boardIdBudget, postObject.boardIdBudget2, postObject.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
+        postObject.isFact = false
+        postObject.isCurrFact = false
+        postObject.isBudget = true
+        if ([postObject.boardIdBudget].indexOf(postObject.boardId) !== -1) {
+          postObject.isCurrBudget = true
+        } else {
+          postObject.isCurrBudget = false
+        }
+        postObject.isTarget = false
+      } else if ([postObject.boardIdTarget].indexOf(postObject.boardId) !== -1) {
+        postObject.isFact = false
+        postObject.isCurrFact = false
+        postObject.isBudget = false
+        postObject.isCurrBudget = false
+        postObject.isTarget = true
       }
       postObject.cardId = null
       postObject.cardName = null
@@ -275,16 +276,7 @@ function getPostObject(postData) {
       postObject.budgetPeriod = postObject.date.budgetPeriod
       postObject.budgetPeriod2 = postObject.date.budgetPeriod2
       postObject.budgetPeriod3 = postObject.date.budgetPeriod3
-      if (getYMD(postObject.factPeriod).ymd == getYMD(postObject.budgetPeriod).ymd) {
-        postObject.isSamePeriod = true
-      } else {
-        postObject.isSamePeriod = false
-      }
-      if ([postObject.boardIdTarget].indexOf(postObject.boardId) !== -1) {
-        postObject.isTarget = true
-      } else {
-        postObject.isTarget = false
-      }
+      postObject.isSamePeriod = postObject.date.isSamePeriod
       postObject.isValidData = isValidData(postObject)
     }
     return postObject
