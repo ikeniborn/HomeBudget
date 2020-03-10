@@ -73,9 +73,7 @@ function doPost(e) {
         postObject.cardDesc = sumData.desc
         postObject.cardComment = sumData.comment
         updateCardDesc(postObject)
-        if (postObject.isCurrFact) {
-          updateBalanceCard(postObject)
-        }
+        updateBalanceCard(postObject)
       } else if (postObject.actionType == 'deleteComment' && postObject.isUser) {
         //* удаление строки при удалении комментария
         deleteRowByActionId(postObject)
@@ -83,9 +81,7 @@ function doPost(e) {
         postObject.cardDesc = sumData.desc
         postObject.cardComment = sumData.comment
         updateCardDesc(postObject)
-        if (postObject.isCurrFact) {
-          updateBalanceCard(postObject)
-        }
+        updateBalanceCard(postObject)
       } else if (postObject.actionType == 'createList' && postObject.isUser && postObject.isTarget) {
         //* создание новой цели
       }
