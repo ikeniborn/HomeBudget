@@ -30,6 +30,8 @@ function getCostСenter(postObject) {
           mvz.array.push(row)
         }
       }, {})
+    } else {
+      mvz = postObject.cfo
     }
     return mvz
   } catch (e) {

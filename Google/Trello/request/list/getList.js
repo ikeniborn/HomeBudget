@@ -12,7 +12,9 @@ function getList(postObject, boardId) {
     var respData = JSON.parse(resp)
     var listArray = {}
     respData.reduce(function (variable, array) {
-      if (parseListName(array.name) == postObject.listName) {
+      var listName = array.name
+      var postObjectCfo = postObject.cfo
+      if (listName.toLowerCase().match(postObjectCfo.toLowerCase())) {
         variable = {}
         variable.id = array.id
         variable.name = array.name

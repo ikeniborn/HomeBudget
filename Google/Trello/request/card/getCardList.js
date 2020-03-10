@@ -11,7 +11,7 @@ function getCardList(postObject) {
     var respData = JSON.parse(resp)
     var variable = {}
     variable.id = respData.id
-    variable.name = parseListName(respData.name)
+    variable.name = respData.name
     return variable
   } catch (e) {
     console.error('getCardList: ' + e)

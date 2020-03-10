@@ -6,13 +6,13 @@ function getAccountingItem(postObject) {
     account.item = {}
     account.array = []
     array.reduce(function (row, array) {
-      if (array[4] == postObject.cardName) {
+      if (encodeData(array[4], '+') == postObject.cardName) {
         row = {}
         row.id = array[0]
         row.cashFlow = array[1]
         row.bill = array[2]
         row.account = array[3]
-        row.nomenclature = array[4]
+        row.nomenclature = encodeData(array[4], '+')
         row.form = array[5]
         row.budget = array[6]
         row.fact = array[7]
@@ -26,7 +26,7 @@ function getAccountingItem(postObject) {
         row.cashFlow = array[1]
         row.bill = array[2]
         row.account = array[3]
-        row.nomenclature = array[4]
+        row.nomenclature = encodeData(array[4], '+')
         row.form = array[5]
         row.budget = array[6]
         row.fact = array[7]
