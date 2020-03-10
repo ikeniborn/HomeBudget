@@ -39,7 +39,7 @@ function getPostObject(postData) {
       postObject.cardName = postData.action.data.card.name
       postObject.cardDesc = null
       postObject.cardComment = null
-      postObject.cardLabelColor = getCardLabel(postObjectCard).item.color
+      postObject.cardLabelColor = getCardLabel(postObject).item.color
       postObject.list = null
       postObject.listId = postData.action.data.list.id
       postObject.listName = postData.action.data.list.name
@@ -110,7 +110,7 @@ function getPostObject(postData) {
       postObject.cardName = postData.action.data.card.name
       postObject.cardDesc = null
       postObject.cardComment = null
-      postObject.cardLabelColor = getCardLabel(postObjectCard).item.color
+      postObject.cardLabelColor = getCardLabel(postObject).item.color
       postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
       postObject.listName = postObject.list.name
@@ -181,7 +181,7 @@ function getPostObject(postData) {
       postObject.cardName = postData.action.data.card.name
       postObject.cardDesc = null
       postObject.cardComment = null
-      postObject.cardLabelColor = getCardLabel(postObjectCard).item.color
+      postObject.cardLabelColor = getCardLabel(postObject).item.color
       postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
       postObject.listName = postObject.list.name
