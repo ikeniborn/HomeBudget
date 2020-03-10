@@ -35,7 +35,7 @@ function getSum(postObject) {
       totalSum.comment = '**Остаток**:' + postObject.lineBreak
       totalSum.comment += '*' + postObject.nomenclature + '*: ' + totalSum.nomenclature + ' р.' + postObject.lineBreak
       totalSum.comment += '*' + postObject.account + '*: ' + totalSum.account + ' р.' + postObject.lineBreak
-      totalSum.comment += '*' + postObject.listName + '*: ' + totalSum.totalFact + ' р.' + postObject.lineBreak
+      totalSum.comment += '*' + postObject.cfo + '*: ' + totalSum.totalFact + ' р.' + postObject.lineBreak
       totalSum.comment += '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
       totalSum.comment += '**Комментарий**: ' + postObject.comment + postObject.lineBreak
     } else if (postObject.isBudget) {

@@ -10,7 +10,7 @@ function closedBudgetPeriod(postObject) {
     var listBudget = getList(postObject, postObject.boardIdBudget)
     archiveAllCards(postObject, listBudget.id)
     var budgetPeriod = getPeriod(postObject).budgetPeriod
-    var listNameBudget = postObject.listName + ' ' + formatterDate(budgetPeriod).date
+    var listNameBudget = postObject.cfo + ' ' + formatterDate(budgetPeriod).date
     updateList(postObject, listBudget.id, listNameBudget)
     var listBudget2 = getList(postObject, postObject.boardIdBudget2)
     var labelListBudget = getBoardLabel(postObject, postObject.boardIdBudget)
@@ -30,7 +30,7 @@ function closedBudgetPeriod(postObject) {
     }
     //* обновление бюджета+1
     var budgetPeriod2 = getPeriod(postObject).budgetPeriod2
-    var listNameBudget2 = postObject.listName + ' ' + formatterDate(budgetPeriod2).date
+    var listNameBudget2 = postObject.cfo + ' ' + formatterDate(budgetPeriod2).date
     updateList(postObject, listBudget2.id, listNameBudget2)
     var listBudget3 = getList(postObject, postObject.boardIdBudget3).id
     var labelListBudget2 = getBoardLabel(postObject, postObject.boardIdBudget2)
@@ -50,7 +50,7 @@ function closedBudgetPeriod(postObject) {
     }
     //* обновление бюджета+2
     var budgetPeriod3 = getPeriod(postObject).budgetPeriod3
-    var listNameBudget3 = postObject.listName + ' ' + formatterDate(budgetPeriod3).date
+    var listNameBudget3 = postObject.cfo + ' ' + formatterDate(budgetPeriod3).date
     updateList(postObject, listBudget3.id, listNameBudget3)
     var labelListBudget3 = getBoardLabel(postObject, postObject.boardIdBudget3)
     accountItems.forEach(function (accounts) {

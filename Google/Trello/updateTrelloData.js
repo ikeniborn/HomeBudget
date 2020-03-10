@@ -22,21 +22,21 @@ function updateTrelloData(postObject) {
       targetSheetName = postObject.targetSheetNameBudget
     }
     //* вставка значений в буфер
-    ss.appendRow([postObject.actionDate, postObject.period, postObject.listName, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId])
+    ss.appendRow([postObject.actionDate, postObject.period, postObject.cfo, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId])
     //* вставка значений в учет
     if (postObject.account == 'Остатки') {
       var newPeriod = postObject.budgetPeriod
       insertdate = new Date(postObject.actionDate.getTime() + 1000);
-      ts.appendRow([insertdate, newPeriod, postObject.listName, postObject.mvz, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
+      ts.appendRow([insertdate, newPeriod, postObject.cfo, postObject.mvz, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
     } else {
-      ts.appendRow([postObject.actionDate, postObject.period, postObject.listName, postObject.mvz, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
+      ts.appendRow([postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
     }
     //* Проверка перевода на счет семьи
     if (postObject.account == 'Перевод на счет Семья') {
       insertdate = new Date(postObject.actionDate.getTime() + 1000);
-      if (postObject.listName == 'Илья') {
+      if (postObject.cfo == 'Илья') {
         ts.appendRow([insertdate, postObject.period, 'Семья', 'Семья', 'Приход', 'Приход со счета Илья', 'Приход со счета Илья', postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
-      } else if (postObject.listName == 'Оксана') {
+      } else if (postObject.cfo == 'Оксана') {
         ts.appendRow([insertdate, postObject.period, 'Семья', 'Семья', 'Приход', 'Приход со счета Оксана', 'Приход со счета Оксана', postObject.sum, postObject.comment, postObject.actionId, sourceSheetName])
       }
     }

@@ -41,7 +41,8 @@ function getPostObject(postData) {
       postObject.cardComment = null
       postObject.list = null
       postObject.listId = postData.action.data.list.id
-      postObject.listName = parseListName(postData.action.data.list.name)
+      postObject.listName = postData.action.data.list.name
+      postObject.cfo = getFinancialСenter(postObject).item.cfo
       postObject.accountingItem = getAccountingItem(postObject)
       postObject.bill = postObject.accountingItem.item.bill
       postObject.account = postObject.accountingItem.item.account
@@ -111,6 +112,7 @@ function getPostObject(postData) {
       postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
       postObject.listName = postObject.list.name
+      postObject.cfo = getFinancialСenter(postObject).item.cfo
       postObject.accountingItem = getAccountingItem(postObject)
       postObject.bill = postObject.accountingItem.item.bill
       postObject.account = postObject.accountingItem.item.account
@@ -180,6 +182,7 @@ function getPostObject(postData) {
       postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
       postObject.listName = postObject.list.name
+      postObject.cfo = getFinancialСenter(postObject).item.cfo
       postObject.accountingItem = getAccountingItem(postObject)
       postObject.bill = postObject.accountingItem.item.bill
       postObject.account = postObject.accountingItem.item.account
@@ -250,6 +253,7 @@ function getPostObject(postData) {
       postObject.list = null
       postObject.listId = postData.action.data.list.id
       postObject.listName = postData.action.data.list.name
+      postObject.cfo = getFinancialСenter(postObject).item.cfo
       postObject.accountingItem = getAccountingItem(postObject)
       postObject.bill = postObject.accountingItem.item.bill
       postObject.account = postObject.accountingItem.item.account

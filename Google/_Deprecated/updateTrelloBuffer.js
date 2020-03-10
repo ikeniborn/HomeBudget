@@ -8,7 +8,7 @@ function updateTrelloBuffer(postObject) {
     }
     //* добавление строк на страницу
     var ss = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(sheetName)
-    ss.appendRow([postObject.actionDate, postObject.period, postObject.listName, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId])
+    ss.appendRow([postObject.actionDate, postObject.period, postObject.cfo, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId])
 
     // Удаление пустых строк
     deleteEmptyRow(postObject.sourceSheetID, sheetName)

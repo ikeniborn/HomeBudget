@@ -1,13 +1,13 @@
 function getPeriod(postObject) {
   try {
     var date = {}
-    if (postObject.listName == 'Илья') {
+    if (postObject.cfo == 'Илья') {
       date.factPeriod = getParametr(postObject.parametrArray, 'periodFactIlya').value
       date.budgetPeriod = getParametr(postObject.parametrArray, 'periodBudgetIlya').value
-    } else if (postObject.listName == 'Семья') {
+    } else if (postObject.cfo == 'Семья') {
       date.factPeriod = getParametr(postObject.parametrArray, 'periodFactFamily').value
       date.budgetPeriod = getParametr(postObject.parametrArray, 'periodBudgetFamily').value
-    } else if (postObject.listName == 'Оксана') {
+    } else if (postObject.cfo == 'Оксана') {
       date.factPeriod = getParametr(postObject.parametrArray, 'periodFactOksana').value
       date.budgetPeriod = getParametr(postObject.parametrArray, 'periodBudgetOksana').value
     }
