@@ -59,6 +59,7 @@ function deleteRowByActionId(postObject) {
     targetRows.forEach(function (row) {
       ts.deleteRow(row.indexRow)
     })
+    return targetRows[0]
   } catch (e) {
     console.error('deleteRowByActionId: ' + e)
   }

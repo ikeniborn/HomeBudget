@@ -8,11 +8,6 @@ function getPostObject(postData) {
       postObject.actionDate = new Date(postData.action.date)
       postObject.memberId = postData.action.memberCreator.id
       postObject.memberUsername = postData.action.memberCreator.username
-      if (postObject.memberId !== '5e2b5f3f409c544ebdb1b9d4') {
-        postObject.isUser = true
-      } else {
-        postObject.isUser = false
-      }
       postObject.boardId = postData.action.data.board.id
       postObject.boardName = postData.action.data.board.name
       if ([postObject.boardIdFact, postObject.boardIdFact0].indexOf(postObject.boardId) !== -1) {
@@ -44,8 +39,8 @@ function getPostObject(postData) {
       }
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
-      postObject.cardDesc = null
-      postObject.cardComment = null
+      postObject.cardDesc = ''
+      postObject.cardComment = ''
       postObject.cardLabelColor = getCardLabel(postObject).item.color
       postObject.list = null
       postObject.listId = postData.action.data.list.id
@@ -77,11 +72,6 @@ function getPostObject(postData) {
       postObject.actionDate = new Date(postData.action.date)
       postObject.memberId = postData.action.memberCreator.id
       postObject.memberUsername = postData.action.memberCreator.username
-      if (postObject.memberId !== '5e2b5f3f409c544ebdb1b9d4') {
-        postObject.isUser = true
-      } else {
-        postObject.isUser = false
-      }
       postObject.boardId = postData.action.data.board.id
       postObject.boardName = postData.action.data.board.name
       if ([postObject.boardIdFact, postObject.boardIdFact0].indexOf(postObject.boardId) !== -1) {
@@ -113,8 +103,8 @@ function getPostObject(postData) {
       }
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
-      postObject.cardDesc = null
-      postObject.cardComment = null
+      postObject.cardDesc = ''
+      postObject.cardComment = ''
       postObject.cardLabelColor = getCardLabel(postObject).item.color
       postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
@@ -146,11 +136,6 @@ function getPostObject(postData) {
       postObject.actionDate = new Date(postData.action.date)
       postObject.memberId = postData.action.memberCreator.id
       postObject.memberUsername = postData.action.memberCreator.username
-      if (postObject.memberId !== '5e2b5f3f409c544ebdb1b9d4') {
-        postObject.isUser = true
-      } else {
-        postObject.isUser = false
-      }
       postObject.boardId = postData.action.data.board.id
       postObject.boardName = postData.action.data.board.name
       if ([postObject.boardIdFact, postObject.boardIdFact0].indexOf(postObject.boardId) !== -1) {
@@ -182,8 +167,8 @@ function getPostObject(postData) {
       }
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
-      postObject.cardDesc = null
-      postObject.cardComment = null
+      postObject.cardDesc = ''
+      postObject.cardComment = ''
       postObject.cardLabelColor = getCardLabel(postObject).item.color
       postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
@@ -193,11 +178,11 @@ function getPostObject(postData) {
       postObject.bill = postObject.accountingItem.item.bill
       postObject.account = postObject.accountingItem.item.account
       postObject.nomenclature = postData.action.data.card.name
-      postObject.text = null
-      postObject.parseText = null
-      postObject.sum = null
-      postObject.comment = null
-      postObject.mvz = null
+      postObject.text = ''
+      postObject.parseText = ''
+      postObject.sum = 0
+      postObject.comment = ''
+      postObject.mvz = ''
       postObject.date = getPeriod(postObject)
       postObject.period = postObject.date.period
       postObject.ymd = postObject.date.ymd
@@ -216,11 +201,6 @@ function getPostObject(postData) {
       postObject.actionDate = new Date(postData.action.date)
       postObject.memberId = postData.action.memberCreator.id
       postObject.memberUsername = postData.action.memberCreator.username
-      if (postObject.memberId !== '5e2b5f3f409c544ebdb1b9d4') {
-        postObject.isUser = true
-      } else {
-        postObject.isUser = false
-      }
       postObject.boardId = postData.action.data.board.id
       postObject.boardName = postData.action.data.board.name
       if ([postObject.boardIdFact, postObject.boardIdFact0].indexOf(postObject.boardId) !== -1) {
@@ -251,10 +231,10 @@ function getPostObject(postData) {
         postObject.isTarget = true
       }
       postObject.cardId = null
-      postObject.cardName = null
-      postObject.cardDesc = null
-      postObject.cardComment = null
-      postObject.cardLabelColor = null
+      postObject.cardName = ''
+      postObject.cardDesc = ''
+      postObject.cardComment = ''
+      postObject.cardLabelColor = ''
       postObject.list = null
       postObject.listId = postData.action.data.list.id
       postObject.listName = postData.action.data.list.name
@@ -263,11 +243,11 @@ function getPostObject(postData) {
       postObject.bill = postObject.accountingItem.item.bill
       postObject.account = postObject.accountingItem.item.account
       postObject.nomenclature = postData.action.data.card.name
-      postObject.text = null
-      postObject.parseText = null
-      postObject.sum = null
-      postObject.comment = null
-      postObject.mvz = null
+      postObject.text = ''
+      postObject.parseText = ''
+      postObject.sum = 0
+      postObject.comment = ''
+      postObject.mvz = ''
       postObject.date = getPeriod(postObject)
       postObject.period = postObject.date.period
       postObject.ymd = postObject.date.ymd

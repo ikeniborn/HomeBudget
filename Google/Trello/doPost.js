@@ -3,11 +3,12 @@ function doPost(e) {
     const postData = JSON.parse(e.postData.contents)
     console.log([formatterDate().timestamp, postData.action.type, postData.action.id, postData.action.memberCreator.username])
     var parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList']
-    if (parseAction.indexOf(postData.action.type) !== -1) {
+    var botUser = ['5e2b5f3f409c544ebdb1b9d4']
+    if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1) {
       var postObject = getPostObject(postData)
       var ssTest = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName('test')
       ssTest.appendRow([postObject.webHookDate, postObject.actionType, postObject.actionId, postObject.memberUsername, postObject.isValidData])
-      if (postObject.actionType == 'commentCard' && postObject.isUser && postObject.isValidData) {
+      if (postObject.actionType == 'commentCard' && postObject.isValidData) {
         //* добавление информации
         updateTrelloData(postObject)
         var sumData = getSum(postObject)
@@ -66,7 +67,7 @@ function doPost(e) {
         }
         //* добавление реакции на комментарий
         addCardReaction(postObject)
-      } else if (postObject.actionType == 'updateComment' && postObject.isUser) {
+      } else if (postObject.actionType == 'updateComment') {
         //* обновление данных при изменении комментария
         updateRowByActionId(postObject)
         var sumData = getSum(postObject)
@@ -74,15 +75,16 @@ function doPost(e) {
         postObject.cardComment = sumData.comment
         updateCardDesc(postObject)
         updateBalanceCard(postObject)
-      } else if (postObject.actionType == 'deleteComment' && postObject.isUser) {
+      } else if (postObject.actionType == 'deleteComment') {
         //* удаление строки при удалении комментария
-        deleteRowByActionId(postObject)
+        var deleteRow = deleteRowByActionId(postObject)
+        postObject.sum = deleteRow.sum
         var sumData = getSum(postObject)
         postObject.cardDesc = sumData.desc
         postObject.cardComment = sumData.comment
         updateCardDesc(postObject)
         updateBalanceCard(postObject)
-      } else if (postObject.actionType == 'createList' && postObject.isUser && postObject.isTarget) {
+      } else if (postObject.actionType == 'createList' && postObject.isTarget) {
         //* создание новой цели
       }
     }

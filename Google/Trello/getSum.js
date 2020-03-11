@@ -36,7 +36,13 @@ function getSum(postObject) {
       totalSum.comment += '*' + postObject.nomenclature + '*: ' + totalSum.nomenclature + ' р.' + postObject.lineBreak
       totalSum.comment += '*' + postObject.account + '*: ' + totalSum.account + ' р.' + postObject.lineBreak
       totalSum.comment += '**Остаток средств** ' + '*' + postObject.cfo + '*: ' + totalSum.totalFact + ' р.' + postObject.lineBreak
-      totalSum.comment += '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
+      if (postObject.actionType == 'commentCard') {
+        totalSum.comment += '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
+      } else if (postObject.actionType == 'updateComment') {
+        totalSum.comment += '**Новая сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
+      } else if (postObject.actionType == 'deleteComment') {
+        totalSum.comment += '**Удаленная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
+      }
       if (postObject.comment.length !== 0) {
         totalSum.comment += '**Комментарий**: ' + postObject.comment + postObject.lineBreak
       }
@@ -73,7 +79,13 @@ function getSum(postObject) {
       totalSum.comment += '*' + postObject.nomenclature + '*: ' + budgetSum.nomenclature + ' р.' + postObject.lineBreak
       totalSum.comment += '*' + postObject.account + '*: ' + budgetSum.account + ' р.' + postObject.lineBreak
       totalSum.comment += '*' + postObject.bill + '*: ' + budgetSum.bill + ' р.' + postObject.lineBreak
-      totalSum.comment += '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
+      if (postObject.actionType == 'commentCard') {
+        totalSum.comment += '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
+      } else if (postObject.actionType == 'updateComment') {
+        totalSum.comment += '**Новая сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
+      } else if (postObject.actionType == 'deleteComment') {
+        totalSum.comment += '**Удаленная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
+      }
       if (postObject.comment.length !== 0) {
         totalSum.comment += '**Комментарий**: ' + postObject.comment + postObject.lineBreak
       }
