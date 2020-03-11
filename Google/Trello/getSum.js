@@ -13,7 +13,7 @@ function getSum(postObject) {
     totalSum.incomeBudget = budgetSum.income
     totalSum.expenseFact = factSum.expense
     totalSum.expenseBudget = budgetSum.expense
-    totalSum.totalFact = factSum.income - factSum.expense
+    totalSum.totalFact = factSum.income + factSum.rest - factSum.expense
     totalSum.totalBudget = budgetSum.income - budgetSum.expense
     totalSum.desc = '*Дата обновления*: ' + formatterDate(postObject.actionDate).time + postObject.lineBreak
     if (postObject.isFact) {

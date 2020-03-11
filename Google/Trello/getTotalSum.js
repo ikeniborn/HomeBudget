@@ -41,6 +41,13 @@ function getTotalSum(postObject, source, type) {
       }
       return sum
     }, 0)
+    //* сумма по статье расход
+    total.rest = currData.reduce(function (sum, array) {
+      if (array.cfo == postObject.cfo && array.bill == 'Остатки') {
+        sum += array.sum
+      }
+      return sum
+    }, 0)
     //* данные из учета
     total.row = currData.filter(function (array) {
       return array.cfo == postObject.cfo && array.bill == postObject.bill && array.account == postObject.account && array.nomenclature == postObject.nomenclature
