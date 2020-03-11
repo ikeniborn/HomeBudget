@@ -32,10 +32,10 @@ function getSum(postObject) {
         totalSum.desc += formatterDate(row.actionDate).time + ': ' + row.sum + ' р. ' + row.comment + comma
         i += 1
       })
-      totalSum.comment = '**Остаток**:' + postObject.lineBreak
+      totalSum.comment = '**Остаток бюджета**:' + postObject.lineBreak
       totalSum.comment += '*' + postObject.nomenclature + '*: ' + totalSum.nomenclature + ' р.' + postObject.lineBreak
       totalSum.comment += '*' + postObject.account + '*: ' + totalSum.account + ' р.' + postObject.lineBreak
-      totalSum.comment += '*' + postObject.cfo + '*: ' + totalSum.totalFact + ' р.' + postObject.lineBreak
+      totalSum.comment += '**Остаток средств** ' + '*' + postObject.cfo + '*: ' + totalSum.totalFact + ' р.' + postObject.lineBreak
       totalSum.comment += '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
       if (postObject.comment.length !== 0) {
         totalSum.comment += '**Комментарий**: ' + postObject.comment + postObject.lineBreak
