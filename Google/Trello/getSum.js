@@ -1,11 +1,10 @@
 /* eslint-disable no-undef */
 function getSum(postObject) {
   try {
-    var budgetSum = getTotalSum(postObject, postObject.targetSheetID, postObject.targetSheetNameBudget)
-    var factSum = getTotalSum(postObject, postObject.targetSheetID, postObject.targetSheetNameFact)
+    var budgetSum = getTotalSum(postObject, 'account', 'budget')
+    var factSum = getTotalSum(postObject, 'account', 'fact')
     var totalSum = {}
     var budgetRow = budgetSum.row
-    var budgetRows = budgetSum.rows
     totalSum.bill = budgetSum.bill - factSum.bill
     totalSum.account = budgetSum.account - factSum.account
     totalSum.nomenclature = budgetSum.nomenclature - factSum.nomenclature
@@ -37,7 +36,9 @@ function getSum(postObject) {
       totalSum.comment += '*' + postObject.account + '*: ' + totalSum.account + ' р.' + postObject.lineBreak
       totalSum.comment += '*' + postObject.cfo + '*: ' + totalSum.totalFact + ' р.' + postObject.lineBreak
       totalSum.comment += '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
-      totalSum.comment += '**Комментарий**: ' + postObject.comment + postObject.lineBreak
+      if (postObject.comment.length !== 0) {
+        totalSum.comment += '**Комментарий**: ' + postObject.comment + postObject.lineBreak
+      }
     } else if (postObject.isBudget) {
       //* описание для бюджетных карточек
       totalSum.desc += '**Итого бюджет на** ' + formatterDate(postObject.period).date + ':' + postObject.lineBreak
@@ -49,11 +50,11 @@ function getSum(postObject) {
         var postObjectPrev1 = postObject
         postObjectPrev1.period = postObject.factPeriod
         postObjectPrev1.ymd = getYMD(postObjectPrev1.period).ymd
-        var factSumPrev1 = getTotalSum(postObjectPrev1, postObject.targetSheetID, postObject.targetSheetNameFact)
+        var factSumPrev1 = getTotalSum(postObjectPrev1, 'account', 'fact')
         var postObjectPrev2 = postObject
         postObjectPrev2.period = postObject.factPeriod0
         postObjectPrev2.ymd = getYMD(postObjectPrev2.period).ymd
-        var factSumPrev2 = getTotalSum(postObjectPrev2, postObject.targetSheetID, postObject.targetSheetNameFact)
+        var factSumPrev2 = getTotalSum(postObjectPrev2, 'account', 'fact')
         totalSum.desc += '**Факт прошлых периодов:**' + postObject.lineBreak
         totalSum.desc += formatterDate(postObject.factPeriod).date + ' - ' + factSumPrev1.nomenclature + ' р.' + postObject.lineBreak
         totalSum.desc += formatterDate(postObject.factPeriod0).date + ' - ' + factSumPrev2.nomenclature + ' р.' + postObject.lineBreak
@@ -72,7 +73,9 @@ function getSum(postObject) {
       totalSum.comment += '*' + postObject.account + '*: ' + budgetSum.account + ' р.' + postObject.lineBreak
       totalSum.comment += '*' + postObject.bill + '*: ' + budgetSum.bill + ' р.' + postObject.lineBreak
       totalSum.comment += '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
-      totalSum.comment += '**Комментарий**: ' + postObject.comment + postObject.lineBreak
+      if (postObject.comment.length !== 0) {
+        totalSum.comment += '**Комментарий**: ' + postObject.comment + postObject.lineBreak
+      }
     }
     return totalSum
   } catch (e) {

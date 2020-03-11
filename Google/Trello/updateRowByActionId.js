@@ -10,24 +10,24 @@ function updateRowByActionId(postObject) {
     var targetData
     var targetRows
     if (postObject.isFact) {
-      ss = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.sourceSheetNameFactTrello)
-      sourceData = getCurrData(getAllData(postObject, postObject.sourceSheetID, postObject.sourceSheetNameFactTrello), postObject.ymd)
+      ss = postObject.sourceSheetNameFactTrelloOpen
+      sourceData = getCurrData(getAllData(postObject, 'buffer', 'fact'), postObject.ymd)
       sourceRows = sourceData.filter(function (row) {
         return row.actionId == postObject.actionId
       })
-      ts = SpreadsheetApp.openById(postObject.targetSheetID).getSheetByName(postObject.targetSheetNameFact)
-      targetData = getCurrData(getAllData(postObject, postObject.targetSheetID, postObject.targetSheetNameFact), postObject.ymd)
+      ts = postObject.targetSheetNameFactOpen
+      targetData = getCurrData(getAllData(postObject, 'account', 'fact'), postObject.ymd)
       targetRows = targetData.filter(function (row) {
         return row.actionId == postObject.actionId
       })
     } else {
-      ss = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.sourceSheetNameBudgetTrello)
-      sourceData = getCurrData(getAllData(postObject, postObject.sourceSheetID, postObject.sourceSheetNameBudgetTrello), postObject.ymd)
+      ss = postObject.sourceSheetNameBudgetTrelloOpen
+      sourceData = getCurrData(getAllData(postObject, 'buffer', 'budget'), postObject.ymd)
       var sourceRows = sourceData.filter(function (row) {
         return row.actionId == postObject.actionId
       })
-      ts = SpreadsheetApp.openById(postObject.targetSheetID).getSheetByName(postObject.targetSheetNameBudget)
-      targetData = getCurrData(getAllData(postObject, postObject.targetSheetID, postObject.targetSheetNameBudget), postObject.ymd)
+      ts = postObject.targetSheetNameBudgetOpen
+      targetData = getCurrData(getAllData(postObject, 'account', 'budget'), postObject.ymd)
       targetRows = targetData.filter(function (row) {
         return row.actionId == postObject.actionId
       })

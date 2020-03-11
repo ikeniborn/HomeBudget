@@ -1,15 +1,15 @@
 function isValidData(postObject) {
   try {
-    var sheetName
+    var type
     if (postObject.isFact) {
-      sheetName = postObject.sourceSheetNameFactTrello
+      type = 'fact'
     } else if (postObject.isTarget) {
-      sheetName = postObject.sourceSheetNameTargetTrello
+      type = 'target'
     } else if (postObject.isBudget) {
-      sheetName = postObject.sourceSheetNameBudgetTrello
+      type = 'budget'
     }
     //* добавление строк на страницу
-    var targetArray = getAllData(postObject, postObject.sourceSheetID, sheetName)
+    var targetArray = getAllData(postObject, 'account', type)
     var searchRow = targetArray.filter(function (row) {
       return row.actionId == postObject.actionId
     })

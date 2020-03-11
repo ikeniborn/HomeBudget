@@ -7,8 +7,8 @@ function deleteRowByActionId(postObject) {
     var targetData
     var targetRows
     if (postObject.isFact) {
-      ss = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.sourceSheetNameFactTrello)
-      sourceData = getCurrData(getAllData(postObject, postObject.sourceSheetID, postObject.sourceSheetNameFactTrello), postObject.ymd)
+      ss = postObject.sourceSheetNameFactTrelloOpen
+      sourceData = getCurrData(getAllData(postObject, 'buffer', 'fact'), postObject.ymd)
       sourceRows = sourceData.reduce(function (row, array) {
         if (array.actionId == postObject.actionId) {
           row.push(array)
@@ -18,8 +18,8 @@ function deleteRowByActionId(postObject) {
         })
         return row
       }, [])
-      ts = SpreadsheetApp.openById(postObject.targetSheetID).getSheetByName(postObject.targetSheetNameFact)
-      targetData = getCurrData(getAllData(postObject, postObject.targetSheetID, postObject.targetSheetNameFact), postObject.ymd)
+      ts = postObject.targetSheetNameFactOpen
+      targetData = getCurrData(getAllData(postObject, 'account', 'fact'), postObject.ymd)
       targetRows = targetData.reduce(function (row, array) {
         if (array.actionId == postObject.actionId) {
           row.push(array)
@@ -30,9 +30,9 @@ function deleteRowByActionId(postObject) {
         return row
       }, [])
     } else {
-      ss = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.sourceSheetNameBudgetTrello)
-      sourceData = getCurrData(getAllData(postObject, postObject.sourceSheetID, postObject.sourceSheetNameBudgetTrello), postObject.ymd)
-      var sourceRows = sourceData.reduce(function (row, array) {
+      ss = postObject.sourceSheetNameBudgetTrelloOpen
+      sourceData = getCurrData(getAllData(postObject, 'buffer', 'budget'), postObject.ymd)
+      sourceRows = sourceData.reduce(function (row, array) {
         if (array.actionId == postObject.actionId) {
           row.push(array)
         }
@@ -41,8 +41,8 @@ function deleteRowByActionId(postObject) {
         })
         return row
       }, [])
-      ts = SpreadsheetApp.openById(postObject.targetSheetID).getSheetByName(postObject.targetSheetNameBudget)
-      targetData = getCurrData(getAllData(postObject, postObject.targetSheetID, postObject.targetSheetNameBudget), postObject.ymd)
+      ts = postObject.targetSheetNameBudgetOpen
+      targetData = getCurrData(getAllData(postObject, 'account', 'budget'), postObject.ymd)
       targetRows = targetData.reduce(function (row, array) {
         if (array.actionId == postObject.actionId) {
           row.push(array)

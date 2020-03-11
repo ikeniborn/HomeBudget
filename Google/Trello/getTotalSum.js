@@ -1,6 +1,10 @@
-function getTotalSum(postObject, sheetId, sheetName) {
+function getTotalSum(postObject, source, type) {
+  /*
+   * @source - истоник: buffer, account
+   * @type - тип данных: fact, budget, target
+   */
   try {
-    var currData = getCurrData(getAllData(postObject, sheetId, sheetName), postObject.ymd)
+    var currData = getCurrData(getAllData(postObject, source, type), postObject.ymd)
     var total = {}
     //* сумма по счету
     total.bill = currData.reduce(function (sum, array) {
