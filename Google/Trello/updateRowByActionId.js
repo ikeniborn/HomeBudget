@@ -4,11 +4,9 @@ function updateRowByActionId(postObject) {
    * */
   try {
     var ss
-    var sourceArray
     var sourceData
     var sourceRows
     var ts
-    var targetArray
     var targetData
     var targetRows
     if (postObject.isFact) {
@@ -24,8 +22,7 @@ function updateRowByActionId(postObject) {
         ss.getRange(row.indexRow, 6).setValue(postObject.comment)
       })
       //* обновление данных в массиве истонике
-      sourceArray = postObject.sourceSheetNameFactTrelloArray
-      postObject.sourceSheetNameFactTrelloArray = sourceArray.map(function (array) {
+      postObject.sourceSheetNameFactTrelloArray.map(function (array) {
         if (array[6] == postObject.actionId) {
           array[0] = postObject.actionDate
           array[4] = postObject.sum
@@ -44,8 +41,7 @@ function updateRowByActionId(postObject) {
         ts.getRange(row.indexRow, 9).setValue(postObject.comment)
       })
       //* обновление данных в массиве учета
-      targetArray = postObject.targetSheetNameFactArray
-      postObject.targetSheetNameFactArray = targetArray.map(function (array) {
+      postObject.targetSheetNameFactArray.map(function (array) {
         if (array[9] == postObject.actionId) {
           array[0] = postObject.actionDate
           array[7] = postObject.sum
@@ -65,8 +61,7 @@ function updateRowByActionId(postObject) {
         ss.getRange(row.indexRow, 6).setValue(postObject.comment)
       })
       //* обновление данных в массиве истонике
-      sourceArray = postObject.sourceSheetNameBudgetTrelloArray
-      postObject.sourceSheetNameBudgetTrelloArray = sourceArray.map(function (array) {
+      postObject.sourceSheetNameBudgetTrelloArray.map(function (array) {
         if (array[6] == postObject.actionId) {
           array[0] = postObject.actionDate
           array[4] = postObject.sum
@@ -85,8 +80,7 @@ function updateRowByActionId(postObject) {
         ts.getRange(row.indexRow, 9).setValue(postObject.comment)
       })
       //* обновление данных в массиве учета
-      targetArray = postObject.targetSheetNameBudgetArray
-      postObject.targetSheetNameBudgetArray = targetArray.map(function (array) {
+      postObject.targetSheetNameBudgetArray.map(function (array) {
         if (array[9] == postObject.actionId) {
           array[0] = postObject.actionDate
           array[7] = postObject.sum

@@ -34,7 +34,7 @@ function deleteRowByActionId(postObject) {
         }
         return row
       })
-      postObject.sourceSheetNameFactTrelloArray = sourceArray.splice(sourceRowIndex, 1)
+      postObject.sourceSheetNameFactTrelloArray.splice(sourceRowIndex, 1)
       //* удаление данных на листе учета
       ts = postObject.targetSheetNameFactOpen
       targetData = getCurrData(getAllData(postObject, 'account', 'fact'), postObject.ymd)
@@ -58,7 +58,7 @@ function deleteRowByActionId(postObject) {
         }
         return row
       })
-      postObject.targetSheetNameFactArray = targetArray.splice(targetRowIndex, 1)
+      postObject.targetSheetNameFactArray.splice(targetRowIndex, 1)
     } else if (postObject.isBudget) {
       //* удаление данных на листе источнике
       ss = postObject.sourceSheetNameBudgetTrelloOpen
@@ -83,7 +83,7 @@ function deleteRowByActionId(postObject) {
         }
         return row
       })
-      postObject.sourceSheetNameBudgetTrelloArray = sourceArray.splice(sourceRowIndex, 1)
+      postObject.sourceSheetNameBudgetTrelloArray.splice(sourceRowIndex, 1)
       //* удаление данных на листе учета
       ts = postObject.targetSheetNameBudgetOpen
       targetData = getCurrData(getAllData(postObject, 'account', 'budget'), postObject.ymd)
@@ -107,7 +107,7 @@ function deleteRowByActionId(postObject) {
         }
         return row
       })
-      postObject.targetSheetNameBudgetArray = targetArray.splice(targetRowIndex, 1)
+      postObject.targetSheetNameBudgetArray.splice(targetRowIndex, 1)
     }
     return targetRows[0]
   } catch (e) {
