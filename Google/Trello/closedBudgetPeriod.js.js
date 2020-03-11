@@ -19,11 +19,12 @@ function closedBudgetPeriod(postObject) {
       accountItems.forEach(function (accounts) {
         var label = labelListBudget.reduce(function (row, arrya) {
           if (arrya.color.toUpperCase() == accounts.color.toUpperCase()) {
-            row = arrya
+            row = {}
+            row.id = arrya.id
           }
           return row
         })
-        addCard(postObject, encodeData(accounts.nomenclature, '+'), listBudget2.id, accounts.id, label.id)
+        addCard(postObject, accounts.nomenclature, listBudget2.id, accounts.id, label.id)
       })
     } else {
       moveAllCards(postObject, listBudget2.id, postObject.boardIdBudget, listBudget.id)
@@ -39,11 +40,12 @@ function closedBudgetPeriod(postObject) {
       accountItems.forEach(function (accounts) {
         var label = labelListBudget2.reduce(function (row, arrya) {
           if (arrya.color.toUpperCase() == accounts.color.toUpperCase()) {
-            row = arrya
+            row = {}
+            row.id = arrya.id
           }
           return row
         })
-        addCard(postObject, encodeData(accounts.nomenclature, '+'), listBudget2.id, accounts.id, label.id)
+        addCard(postObject, accounts.nomenclature, listBudget2.id, accounts.id, label.id)
       })
     } else {
       moveAllCards(postObject, listBudget3.id, postObject.boardIdBudget2, listBudget2.id)
@@ -56,11 +58,12 @@ function closedBudgetPeriod(postObject) {
     accountItems.forEach(function (accounts) {
       var label = labelListBudget3.reduce(function (row, arrya) {
         if (arrya.color.toUpperCase() == accounts.color.toUpperCase()) {
-          row = arrya
+          row = {}
+          row.id = arrya.id
         }
         return row
       })
-      addCard(postObject, encodeData(accounts.nomenclature, '+'), listBudget3.id, accounts.id, label.id)
+      addCard(postObject, accounts.nomenclature, listBudget3.id, accounts.id, label.id)
     })
   } catch (e) {
     console.error('closedBudgetPeriod: ' + e)

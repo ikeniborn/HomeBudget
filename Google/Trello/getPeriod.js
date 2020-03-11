@@ -26,6 +26,11 @@ function getPeriod(postObject) {
     date.budgetPeriod2 = new Date(date.budgetPeriod.getYear(), date.budgetPeriod.getMonth() + 1, 1)
     date.budgetPeriod3 = new Date(date.budgetPeriod.getYear(), date.budgetPeriod.getMonth() + 2, 1)
     date.ymd = getYMD(date.period).ymd
+    if (getYMD(date.factPeriod).ymd == getYMD(date.budgetPeriod).ymd) {
+      date.isSamePeriod = true
+    } else {
+      date.isSamePeriod = false
+    }
     return date
   } catch (e) {
     console.error('getPeriod: ' + e)

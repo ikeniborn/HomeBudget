@@ -13,10 +13,11 @@ function doPost(e) {
         var sumData = getSum(postObject)
         postObject.cardDesc = sumData.desc
         postObject.cardComment = sumData.comment
+        //* обновление описание карточки
         updateCardDesc(postObject)
-        if (postObject.isCurrFact) {
-          //* обновление карточки баланса
-          updateBalanceCard(postObject)
+        //* обновление карточки баланса
+        updateBalanceCard(postObject)
+        if (postObject.isCurrFact && !postObject.isSamePeriod) {
           //* обновление карточек бюджета по данным факта
           if (!postObject.isSamePeriod && ['Остатки'].indexOf(postObject.account) === -1) {
             var budgetList = getList(postObject, postObject.boardIdBudget)
@@ -72,9 +73,7 @@ function doPost(e) {
         postObject.cardDesc = sumData.desc
         postObject.cardComment = sumData.comment
         updateCardDesc(postObject)
-        if (postObject.isCurrFact) {
-          updateBalanceCard(postObject)
-        }
+        updateBalanceCard(postObject)
       } else if (postObject.actionType == 'deleteComment' && postObject.isUser) {
         //* удаление строки при удалении комментария
         deleteRowByActionId(postObject)
@@ -82,9 +81,7 @@ function doPost(e) {
         postObject.cardDesc = sumData.desc
         postObject.cardComment = sumData.comment
         updateCardDesc(postObject)
-        if (postObject.isCurrFact) {
-          updateBalanceCard(postObject)
-        }
+        updateBalanceCard(postObject)
       } else if (postObject.actionType == 'createList' && postObject.isUser && postObject.isTarget) {
         //* создание новой цели
       }

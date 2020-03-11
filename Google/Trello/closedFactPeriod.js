@@ -20,15 +20,27 @@ function closedFactPeriod(postObject) {
     var factPeriod = getPeriod(postObject).factPeriod
     var listNameFact = postObject.cfo + ' ' + formatterDate(factPeriod).date
     updateList(postObject, listFactId, listNameFact)
-    //* создание карточек на листе факт и чеклистов в карточках
+    //* создание карточек на листе факт
     accountItems.forEach(function (accounts) {
       var label = labelList.reduce(function (row, arrya) {
         if (arrya.color.toUpperCase() == accounts.color.toUpperCase()) {
-          row = arrya
+          row = {}
+          row.id = arrya.id
         }
         return row
       })
-      accounts.cardInfo = addCard(postObject, encodeData(accounts.nomenclature, '+'), listFactId, accounts.id, label.id)
+      var cardInfo = addCard(postObject, accounts.nomenclature, postObject.listId, accounts.id, label.id)
+      var postObjectCard = postObject
+      postObjectCard.cardId = cardInfo.id
+      postObjectCard.nomenclature = accounts.nomenclature
+      postObjectCard.bill = accounts.bill
+      postObjectCard.account = accounts.account
+      var sumData = getSum(postObjectCard)
+      if (sumData.nomenclatureBudget !== 0 && accounts.desc == 1) {
+        postObjectCard.cardDesc = sumData.desc
+        //* обновление описание карточки
+        updateCardDesc(postObjectCard)
+      }
     })
   } catch (e) {
     console.error('closedFactPeriod: ' + e)
