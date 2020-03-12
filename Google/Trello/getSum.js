@@ -5,7 +5,7 @@ function getSum(postObject) {
     var factSum = getTotalSum(postObject, 'account', 'fact')
     var totalSum = {}
     var budgetRow = budgetSum.row
-    var budgetRows = budgetSum.rows
+    var groupBudgetRows = budgetSum.rows
     totalSum.bill = budgetSum.bill - factSum.bill
     totalSum.account = budgetSum.account - factSum.account
     totalSum.nomenclature = budgetSum.nomenclature - factSum.nomenclature
@@ -54,9 +54,8 @@ function getSum(postObject) {
         totalSum.comment += '**Комментарий**: ' + postObject.comment + postObject.lineBreak
       }
     } else if (postObject.isBudget) {
-
       //* описание для бюджетных карточек
-      totalSum.desc += '**Итого бюджет на** *' + formatterDate(postObject.period).date + '*:' + postObject.lineBreak
+      totalSum.desc += '**Итого бюджет на** *' + formatterDate(postObject.budgetPeriod).date + '*:' + postObject.lineBreak
       totalSum.desc += '*По счету*: ' + budgetSum.bill + ' р.' + postObject.lineBreak
       totalSum.desc += '*По статье*: ' + budgetSum.account + ' р.' + postObject.lineBreak
       totalSum.desc += '*По номенклатуре*: ' + budgetSum.nomenclature + ' р.' + postObject.lineBreak
@@ -84,12 +83,12 @@ function getSum(postObject) {
           i += 1
         })
       }
-      totalSum.descBalance = '**Итого бюджет по статьям на** *' + formatterDate(postObject.period).date + '*:' + postObject.lineBreak
-      if (budgetRows.length != 0) {
+      totalSum.descBalance = '**Итоговый бюджет** *' + formatterDate(postObject.budgetPeriod).date + '* **по статьям**' + ':' + postObject.lineBreak
+      if (groupBudgetRows.length !== 0) {
         var i = 1
-        budgetRows.forEach(function (row) {
+        groupBudgetRows.forEach(function (row) {
           var comma
-          budgetRow.length > i ? comma = postObject.lineBreak : comma = ''
+          groupBudgetRows.length > i ? comma = postObject.lineBreak : comma = ''
           totalSum.descBalance += row.bill + ' - ' + row.account + ': ' + row.sum + ' р. ' + comma
           i += 1
         })

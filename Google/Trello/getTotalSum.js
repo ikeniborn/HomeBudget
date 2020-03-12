@@ -53,18 +53,26 @@ function getTotalSum(postObject, source, type) {
       return array.cfo == postObject.cfo && array.bill == postObject.bill && array.account == postObject.account && array.nomenclature == postObject.nomenclature
     })
     //* данные по статьям с агрегацией
-    //! не рабоает
-    total.rows = currData.reduce(function (newArray, array) {
+    var groupData = currData.reduce(function (newArray, array) {
       if (array.cfo == postObject.cfo) {
         if (!newArray[array.account]) {
           newArray[array.account] = {}
           newArray[array.account].bill = array.bill
           newArray[array.account].account = array.account
+          newArray[array.account].sum = 0
         }
         newArray[array.account].sum += array.sum
       }
       return newArray
-    }, [])
+    }, {})
+    total.rows = Object.keys(groupData).map(function (k) {
+      const item = groupData[k]
+      return {
+        bill: item.bill,
+        account: item.account,
+        sum: item.sum
+      }
+    })
     return total
   } catch (e) {
     console.error('getTotalSum: ' + e)
