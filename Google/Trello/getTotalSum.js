@@ -41,7 +41,7 @@ function getTotalSum(postObject, source, type) {
       }
       return sum
     }, 0)
-    //* сумма по статье расход
+    //* сумма по статье остатки
     total.rest = currData.reduce(function (sum, array) {
       if (array.cfo == postObject.cfo && array.bill == 'Остатки') {
         sum += array.sum
@@ -52,9 +52,19 @@ function getTotalSum(postObject, source, type) {
     total.row = currData.filter(function (array) {
       return array.cfo == postObject.cfo && array.bill == postObject.bill && array.account == postObject.account && array.nomenclature == postObject.nomenclature
     })
-    total.rows = currData.filter(function (array) {
-      return array.cfo == postObject.cfo
-    })
+    //* данные по статьям с агрегацией
+    //! не рабоает
+    total.rows = currData.reduce(function (newArray, array) {
+      if (array.cfo == postObject.cfo) {
+        if (!newArray[array.account]) {
+          newArray[array.account] = {}
+          newArray[array.account].bill = array.bill
+          newArray[array.account].account = array.account
+        }
+        newArray[array.account].sum += array.sum
+      }
+      return newArray
+    }, [])
     return total
   } catch (e) {
     console.error('getTotalSum: ' + e)

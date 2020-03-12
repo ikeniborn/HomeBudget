@@ -17,6 +17,7 @@ function doPost(e) {
         //* обновление описание карточки
         updateCardDesc(postObject)
         //* обновление карточки баланса
+        postObject.cardDesc = sumData.descBalance
         updateBalanceCard(postObject)
         if (postObject.isCurrFact && !postObject.isSamePeriod) {
           //* обновление карточек бюджета по данным факта
@@ -74,6 +75,7 @@ function doPost(e) {
         postObject.cardDesc = sumData.desc
         postObject.cardComment = sumData.comment
         updateCardDesc(postObject)
+        postObject.cardDesc = sumData.descBalance
         updateBalanceCard(postObject)
       } else if (postObject.actionType == 'deleteComment') {
         //* удаление строки при удалении комментария
@@ -83,6 +85,7 @@ function doPost(e) {
         postObject.cardDesc = sumData.desc
         postObject.cardComment = sumData.comment
         updateCardDesc(postObject)
+        postObject.cardDesc = sumData.descBalance
         updateBalanceCard(postObject)
       } else if (postObject.actionType == 'createList' && postObject.isTarget) {
         //* создание новой цели

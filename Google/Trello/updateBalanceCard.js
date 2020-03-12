@@ -9,4 +9,7 @@ function updateBalanceCard(postObject) {
   var balanceCard = getCards(postObjectBalance, postObjectBalance.listId).item
   postObjectBalance.cardId = balanceCard.id
   addCardComment(postObjectBalance)
+  if (postObjectBalance.isBudget) {
+    updateCardDesc(postObjectBalance)
+  }
 }
