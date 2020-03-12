@@ -11,13 +11,13 @@ function doPost(e) {
       if (postObject.actionType == 'commentCard' && postObject.isValidData) {
         //* добавление информации
         updateTrelloData(postObject)
-        var sumData = getSum(postObject)
-        postObject.cardDesc = sumData.desc
-        postObject.cardComment = sumData.comment
+        var description = getDescription(postObject)
+        postObject.cardDesc = description.text
+        var comment = getComment(postObject)
+        postObject.balanceCardComment = comment.text
         //* обновление описание карточки
         updateCardDesc(postObject)
         //* обновление карточки баланса
-        postObject.cardDesc = sumData.descBalance
         updateBalanceCard(postObject)
         if (postObject.isCurrFact && !postObject.isSamePeriod) {
           //* обновление карточек бюджета по данным факта
@@ -34,7 +34,7 @@ function doPost(e) {
             postObjectBudget.isCurrBudget = true
             postObjectBudget.period = postObject.budgetPeriod
             postObjectBudget.ymd = getYMD(postObject.budgetPeriod).ymd
-            postObjectBudget.cardDesc = getSum(postObjectBudget).desc
+            postObjectBudget.cardDesc = getDescription(postObjectBudget).text
             updateCardDesc(postObjectBudget)
           }
           //* закрытие периода
@@ -62,7 +62,7 @@ function doPost(e) {
             postObjectFact.isCurrBudget = false
             postObjectFact.period = postObject.factPeriod
             postObjectFact.ymd = getYMD(postObject.factPeriod).ymd
-            postObjectFact.cardDesc = getSum(postObjectFact).desc
+            postObjectFact.cardDesc = getDescription(postObjectFact).text
             updateCardDesc(postObjectFact)
           }
         }
@@ -71,21 +71,25 @@ function doPost(e) {
       } else if (postObject.actionType == 'updateComment') {
         //* обновление данных при изменении комментария
         updateRowByActionId(postObject)
-        var sumData = getSum(postObject)
-        postObject.cardDesc = sumData.desc
-        postObject.cardComment = sumData.comment
+        var description = getDescription(postObject)
+        postObject.cardDesc = description.text
+        var comment = getComment(postObject)
+        postObject.balanceCardComment = comment.text
+        //* обновление описание карточки
         updateCardDesc(postObject)
-        postObject.cardDesc = sumData.descBalance
+        //* обновление карточки баланса
         updateBalanceCard(postObject)
       } else if (postObject.actionType == 'deleteComment') {
         //* удаление строки при удалении комментария
         var deleteRow = deleteRowByActionId(postObject)
         postObject.sum = deleteRow.sum
-        var sumData = getSum(postObject)
-        postObject.cardDesc = sumData.desc
-        postObject.cardComment = sumData.comment
+        var description = getDescription(postObject)
+        postObject.cardDesc = description.text
+        var comment = getComment(postObject)
+        postObject.balanceCardComment = comment.text
+        //* обновление описание карточки
         updateCardDesc(postObject)
-        postObject.cardDesc = sumData.descBalance
+        //* обновление карточки баланса
         updateBalanceCard(postObject)
       } else if (postObject.actionType == 'createList' && postObject.isTarget) {
         //* создание новой цели

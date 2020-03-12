@@ -35,9 +35,9 @@ function closedFactPeriod(postObject) {
       postObjectCard.nomenclature = accounts.nomenclature
       postObjectCard.bill = accounts.bill
       postObjectCard.account = accounts.account
-      var sumData = getSum(postObjectCard)
-      if (sumData.nomenclatureBudget !== 0 && accounts.desc == 1) {
-        postObjectCard.cardDesc = sumData.desc
+      var description = getDescription(postObjectCard)
+      if (description.haveBudget && accounts.useDesc == 1) {
+        postObjectCard.cardDesc = description.text
         //* обновление описание карточки
         updateCardDesc(postObjectCard)
       }

@@ -10,6 +10,8 @@ function updateBalanceCard(postObject) {
   postObjectBalance.cardId = balanceCard.id
   addCardComment(postObjectBalance)
   if (postObjectBalance.isBudget) {
+    var description = getDescription(postObjectBalance)
+    postObjectBalance.cardDesc = description.text
     updateCardDesc(postObjectBalance)
   }
 }

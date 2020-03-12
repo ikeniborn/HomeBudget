@@ -40,7 +40,7 @@ function getPostObject(postData) {
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
       postObject.cardDesc = ''
-      postObject.cardComment = ''
+      postObject.balanceCardComment = ''
       postObject.cardLabelColor = getCardLabel(postObject).item.color
       postObject.list = null
       postObject.listId = postData.action.data.list.id
@@ -50,6 +50,7 @@ function getPostObject(postData) {
       postObject.bill = postObject.accountingItem.item.bill
       postObject.account = postObject.accountingItem.item.account
       postObject.nomenclature = postData.action.data.card.name
+      postObject.useDesc = postObject.accountingItem.item.useDesc
       postObject.text = postData.action.data.text
       postObject.parseText = parseComment(postObject)
       postObject.sum = postObject.parseText.sum
@@ -104,7 +105,7 @@ function getPostObject(postData) {
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
       postObject.cardDesc = ''
-      postObject.cardComment = ''
+      postObject.balanceCardComment = ''
       postObject.cardLabelColor = getCardLabel(postObject).item.color
       postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
@@ -114,6 +115,7 @@ function getPostObject(postData) {
       postObject.bill = postObject.accountingItem.item.bill
       postObject.account = postObject.accountingItem.item.account
       postObject.nomenclature = postData.action.data.card.name
+      postObject.useDesc = postObject.accountingItem.item.useDesc
       postObject.text = postData.action.data.action.text
       postObject.parseText = parseComment(postObject)
       postObject.sum = postObject.parseText.sum
@@ -168,7 +170,7 @@ function getPostObject(postData) {
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
       postObject.cardDesc = ''
-      postObject.cardComment = ''
+      postObject.balanceCardComment = ''
       postObject.cardLabelColor = getCardLabel(postObject).item.color
       postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
@@ -178,6 +180,7 @@ function getPostObject(postData) {
       postObject.bill = postObject.accountingItem.item.bill
       postObject.account = postObject.accountingItem.item.account
       postObject.nomenclature = postData.action.data.card.name
+      postObject.useDesc = postObject.accountingItem.item.useDesc
       postObject.text = ''
       postObject.parseText = ''
       postObject.sum = 0
@@ -233,7 +236,7 @@ function getPostObject(postData) {
       postObject.cardId = null
       postObject.cardName = ''
       postObject.cardDesc = ''
-      postObject.cardComment = ''
+      postObject.balanceCardComment = ''
       postObject.cardLabelColor = ''
       postObject.list = null
       postObject.listId = postData.action.data.list.id
@@ -243,6 +246,7 @@ function getPostObject(postData) {
       postObject.bill = postObject.accountingItem.item.bill
       postObject.account = postObject.accountingItem.item.account
       postObject.nomenclature = postData.action.data.card.name
+      postObject.useDesc = postObject.accountingItem.item.useDesc
       postObject.text = ''
       postObject.parseText = ''
       postObject.sum = 0
