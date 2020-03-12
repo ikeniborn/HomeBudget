@@ -39,8 +39,8 @@ function getPostObject(postData) {
       }
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
-      postObject.cardDesc = ''
-      postObject.balanceCardComment = ''
+      postObject.cardDescription = ''
+      postObject.cardComment = ''
       postObject.cardLabelColor = getCardLabel(postObject).item.color
       postObject.list = null
       postObject.listId = postData.action.data.list.id
@@ -104,8 +104,8 @@ function getPostObject(postData) {
       }
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
-      postObject.cardDesc = ''
-      postObject.balanceCardComment = ''
+      postObject.cardDescription = ''
+      postObject.cardComment = ''
       postObject.cardLabelColor = getCardLabel(postObject).item.color
       postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
@@ -169,8 +169,8 @@ function getPostObject(postData) {
       }
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
-      postObject.cardDesc = ''
-      postObject.balanceCardComment = ''
+      postObject.cardDescription = ''
+      postObject.cardComment = ''
       postObject.cardLabelColor = getCardLabel(postObject).item.color
       postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
@@ -235,8 +235,8 @@ function getPostObject(postData) {
       }
       postObject.cardId = null
       postObject.cardName = ''
-      postObject.cardDesc = ''
-      postObject.balanceCardComment = ''
+      postObject.cardDescription = ''
+      postObject.cardComment = ''
       postObject.cardLabelColor = ''
       postObject.list = null
       postObject.listId = postData.action.data.list.id

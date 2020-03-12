@@ -8,19 +8,20 @@ function getSum(postObject) {
       sum = factSum
       sum.totalRest = factSum.incomeSum + factSum.restSum - factSum.expenseSum
       sum.nomenclatureBudgetRows = budgetSum.nomenclatureBudgetRows
+      sum.groupAccount = budgetSum.groupAccount
     } else if (postObject.isBudget) {
       sum = budgetSum
     }
     sum.billBudgetRest = budgetSum.billSum - factSum.billSum
     sum.accountBudgetRest = budgetSum.accountSum - factSum.accountSum
     sum.nomenclatureBudgetRest = budgetSum.nomenclatureSum - factSum.nomenclatureSum
-    if (factSum.nomenclature != 0 && budgetSum.nomenclature) {
-      sum.nomenclatureBudgetExecution = ((factSum.nomenclature / budgetSum.nomenclature) * 100).toFixed(2)
+    if (factSum.nomenclatureSum != 0 && budgetSum.nomenclatureSum != 0) {
+      sum.nomenclatureBudgetExecution = ((factSum.nomenclatureSum / budgetSum.nomenclatureSum) * 100).toFixed(2)
     } else {
       sum.nomenclatureBudgetExecution = 0
     }
-    if (factSum.account != 0 && budgetSum.account) {
-      sum.accountBudgetExecution = ((factSum.account / budgetSum.account) * 100).toFixed(2)
+    if (factSum.accountSum != 0 && budgetSum.accountSum != 0) {
+      sum.accountBudgetExecution = ((factSum.accountSum / budgetSum.accountSum) * 100).toFixed(2)
     } else {
       sum.accountBudgetExecution = 0
     }

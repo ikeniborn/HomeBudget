@@ -7,7 +7,7 @@ function updateCardDesc(postObject) {
       method: 'put',
       contentType: 'application/json'
     }
-    UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '?desc=' + postObject.cardDesc + '&' + postObject.keyAndToken, data)
+    UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '?desc=' + postObject.cardDescription + '&' + postObject.keyAndToken, data)
   } catch (e) {
     console.error('updateCardDesc: ' + e)
   }

@@ -12,9 +12,9 @@ function doPost(e) {
         //* добавление информации
         updateTrelloData(postObject)
         var description = getDescription(postObject)
-        postObject.cardDesc = description.text
+        postObject.cardDescription = description.text
         var comment = getComment(postObject)
-        postObject.balanceCardComment = comment.text
+        postObject.cardComment = comment.text
         //* обновление описание карточки
         updateCardDesc(postObject)
         //* обновление карточки баланса
@@ -34,7 +34,7 @@ function doPost(e) {
             postObjectBudget.isCurrBudget = true
             postObjectBudget.period = postObject.budgetPeriod
             postObjectBudget.ymd = getYMD(postObject.budgetPeriod).ymd
-            postObjectBudget.cardDesc = getDescription(postObjectBudget).text
+            postObjectBudget.cardDescription = getDescription(postObjectBudget).text
             updateCardDesc(postObjectBudget)
           }
           //* закрытие периода
@@ -62,7 +62,7 @@ function doPost(e) {
             postObjectFact.isCurrBudget = false
             postObjectFact.period = postObject.factPeriod
             postObjectFact.ymd = getYMD(postObject.factPeriod).ymd
-            postObjectFact.cardDesc = getDescription(postObjectFact).text
+            postObjectFact.cardDescription = getDescription(postObjectFact).text
             updateCardDesc(postObjectFact)
           }
         }
@@ -72,9 +72,9 @@ function doPost(e) {
         //* обновление данных при изменении комментария
         updateRowByActionId(postObject)
         var description = getDescription(postObject)
-        postObject.cardDesc = description.text
+        postObject.cardDescription = description.text
         var comment = getComment(postObject)
-        postObject.balanceCardComment = comment.text
+        postObject.cardComment = comment.text
         //* обновление описание карточки
         updateCardDesc(postObject)
         //* обновление карточки баланса
@@ -84,9 +84,9 @@ function doPost(e) {
         var deleteRow = deleteRowByActionId(postObject)
         postObject.sum = deleteRow.sum
         var description = getDescription(postObject)
-        postObject.cardDesc = description.text
+        postObject.cardDescription = description.text
         var comment = getComment(postObject)
-        postObject.balanceCardComment = comment.text
+        postObject.cardComment = comment.text
         //* обновление описание карточки
         updateCardDesc(postObject)
         //* обновление карточки баланса

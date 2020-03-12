@@ -48,7 +48,7 @@ function getTotalSum(postObject, source, type) {
       }
       return sum
     }, 0)
-    if (postObject.isBudget) {
+    if (type == 'budget') {
       //* данные по статьям с агрегацией
       var groupAccount = currData.reduce(function (newArray, array) {
         if (array.cfo == postObject.cfo) {

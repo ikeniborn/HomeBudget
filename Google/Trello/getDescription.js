@@ -55,7 +55,7 @@ function getDescription(postObject) {
       }
       //* данные по бюджетным заявкам
       if (sum.nomenclatureBudgetRows.length != 0 && postObject.nomenclature !== 'Баланс') {
-        var budgetRow = sum.nomenclatureBudgetRows.length
+        var budgetRow = sum.nomenclatureBudgetRows
         description.text += '**Бюджетные заявки**:' + postObject.lineBreak
         var i = 1
         budgetRow.forEach(function (row) {

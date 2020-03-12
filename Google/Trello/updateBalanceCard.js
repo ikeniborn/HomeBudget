@@ -11,7 +11,7 @@ function updateBalanceCard(postObject) {
   addCardComment(postObjectBalance)
   if (postObjectBalance.isBudget) {
     var description = getDescription(postObjectBalance)
-    postObjectBalance.cardDesc = description.text
+    postObjectBalance.cardDescription = description.text
     updateCardDesc(postObjectBalance)
   }
 }

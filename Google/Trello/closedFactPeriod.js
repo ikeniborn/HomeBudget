@@ -37,9 +37,9 @@ function closedFactPeriod(postObject) {
       postObjectCard.account = accounts.account
       var description = getDescription(postObjectCard)
       if (description.haveBudget && accounts.useDesc == 1) {
-        postObjectCard.cardDesc = description.text
+        postObjectCard.cardDescription = description.text
         //* обновление описание карточки
-        updateCardDesc(postObjectCard)
+        updatecardDescription(postObjectCard)
       }
     })
   } catch (e) {
