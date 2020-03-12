@@ -73,6 +73,15 @@ function getTotalSum(postObject, source, type) {
         sum: item.sum
       }
     })
+    total.rows.sort(function (a, b) {
+      var nameA = a.bill.toLowerCase()
+      var nameB = b.bill.toLowerCase()
+      if (nameA < nameB) // сортируем строки по возрастанию
+        return -1
+      if (nameA > nameB)
+        return 1
+      return 0 // Никакой сортировки
+    })
     return total
   } catch (e) {
     console.error('getTotalSum: ' + e)
