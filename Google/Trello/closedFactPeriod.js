@@ -30,7 +30,7 @@ function closedFactPeriod(postObject) {
         return row
       })
       var cardInfo = addCard(postObject, accounts.nomenclature, postObject.listId, accounts.id, label.id)
-      var postObjectCard = postObject
+      var postObjectCard = JSON.parse(JSON.stringify(postObject))
       postObjectCard.cardId = cardInfo.id
       postObjectCard.nomenclature = accounts.nomenclature
       postObjectCard.bill = accounts.bill

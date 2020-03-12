@@ -19,8 +19,7 @@ function getComment(postObject) {
       if (postObject.text.length !== 0) {
         comment.text += '**Комментарий**: ' + postObject.text + postObject.lineBreak
       }
-    }
-    if (postObject.isBudget) {
+    } else if (postObject.isBudget) {
       //* комментарий по бюджету
       comment.text = '**Бюджет**:' + postObject.lineBreak
       comment.text += '*' + postObject.nomenclature + '*: ' + sum.nomenclatureSum + ' р.' + postObject.lineBreak
@@ -35,7 +34,6 @@ function getComment(postObject) {
       }
       if (postObject.text.length !== 0) {
         comment.text += '**Комментарий**: ' + postObject.text + postObject.lineBreak
-
       }
     }
     return comment

@@ -1,12 +1,12 @@
 function getPreviousFact(postObject) {
   var sum = {}
-  var postObjectPrev1 = postObject
+  const postObjectPrev1 = JSON.parse(JSON.stringify(postObject))
   postObjectPrev1.period = postObject.factPeriod
   postObjectPrev1.ymd = getYMD(postObjectPrev1.period).ymd
   postObjectPrev1.isFact = true
   postObjectPrev1.isBudget = false
   sum.Prev1 = getSum(postObjectPrev1)
-  var postObjectPrev2 = postObject
+  const postObjectPrev2 = JSON.parse(JSON.stringify(postObject))
   postObjectPrev2.period = postObject.factPeriod0
   postObjectPrev2.ymd = getYMD(postObjectPrev2.period).ymd
   postObjectPrev2.isFact = true

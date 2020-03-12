@@ -4,7 +4,7 @@ function updateBalanceCard(postObject) {
    * @sumData - данные по суммам из учета
    */
   //* обновление карточки баланса
-  var postObjectBalance = postObject
+  var postObjectBalance = JSON.parse(JSON.stringify(postObject))
   postObjectBalance.nomenclature = 'Баланс'
   var balanceCard = getCards(postObjectBalance, postObjectBalance.listId).item
   postObjectBalance.cardId = balanceCard.id
