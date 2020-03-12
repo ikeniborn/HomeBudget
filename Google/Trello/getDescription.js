@@ -10,7 +10,7 @@ function getDescription(postObject) {
         description.text += '**По номенклатуре**: ' + postObject.lineBreak
         description.text += '*Остаток*: ' + sum.nomenclatureBudgetRest + ' р.' + postObject.lineBreak
         if (sum.nomenclatureBudgetExecution != 0) {
-          description.text += '*Исполнение*: ' + sum.executionBudgetNomenclature + encodeData('%', '%') + postObject.lineBreak
+          description.text += '*Исполнение*: ' + sum.nomenclatureBudgetExecution + encodeData('%', '%') + postObject.lineBreak
         }
         description.text += '**По статье**: ' + postObject.lineBreak
         description.text += '*Остаток*: ' + sum.accountBudgetRest + ' р.' + postObject.lineBreak
@@ -20,27 +20,19 @@ function getDescription(postObject) {
       } else if (postObject.isBudget) {
         if (postObject.nomenclature !== 'Баланс') {
           //* описание для бюджетных карточек
-          description.text += '**Итого бюджет на** *' + formatterDate(postObject.budgetPeriod).date + '*:' + postObject.lineBreak
+          description.text += '**Итого бюджет на** *' + formatterDate(postObject.period).date + '*:' + postObject.lineBreak
           description.text += '*По счету*: ' + sum.billSum + ' р.' + postObject.lineBreak
           description.text += '*По статье*: ' + sum.accountSum + ' р.' + postObject.lineBreak
           description.text += '*По номенклатуре*: ' + sum.nomenclatureSum + ' р.' + postObject.lineBreak
           if (postObject.isCurrBudget) {
             //* информация в рестроспективе за последние два месяца
-            var postObjectPrev1 = postObject
-            postObjectPrev1.period = postObject.factPeriod
-            postObjectPrev1.ymd = getYMD(postObjectPrev1.period).ymd
-            var sumPrev1 = getSum(postObjectPrev1)
-            var postObjectPrev2 = postObject
-            postObjectPrev2.period = postObject.factPeriod0
-            postObjectPrev2.ymd = getYMD(postObjectPrev2.period).ymd
-            var sumPrev2 = getSum(postObjectPrev1)
             description.text += '**Факт прошлых периодов:**' + postObject.lineBreak
-            description.text += formatterDate(postObject.factPeriod).date + ' - ' + sumPrev1.nomenclatureSum + ' р.' + postObject.lineBreak
-            description.text += formatterDate(postObject.factPeriod0).date + ' - ' + sumPrev2.nomenclatureSum + ' р.' + postObject.lineBreak
+            description.text += formatterDate(postObject.factPeriod).date + ' - ' + getPreviousFact(postObject).Prev1.nomenclatureSum + ' р.' + postObject.lineBreak
+            description.text += formatterDate(postObject.factPeriod0).date + ' - ' + getPreviousFact(postObject).Prev2.nomenclatureSum + ' р.' + postObject.lineBreak
           }
         } else if (postObject.nomenclature == 'Баланс') {
           //* описание карточки баланса
-          description.text = '**Итоговый бюджет** *' + formatterDate(postObject.budgetPeriod).date + '* **по статьям**' + ':' + postObject.lineBreak
+          description.text = '**Итоговый бюджет** *' + formatterDate(postObject.period).date + '* **по статьям**' + ':' + postObject.lineBreak
           if (sum.groupAccount.length !== 0) {
             var groupBudgetRows = sum.groupAccount
             var i = 1

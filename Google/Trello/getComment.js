@@ -11,9 +11,9 @@ function getComment(postObject) {
       comment.text += '**Остаток средств** ' + '*' + postObject.cfo + '*: ' + sum.totalRest + ' р.' + postObject.lineBreak
       if (postObject.actionType == 'commentCard') {
         comment.text += '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
-      } else if (postObject.actionType == 'updatecomment') {
+      } else if (postObject.actionType == 'updateСomment') {
         comment.text += '**Новая сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
-      } else if (postObject.actionType == 'deletecomment') {
+      } else if (postObject.actionType == 'deleteComment') {
         comment.text += '**Удаленная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
       }
       if (postObject.text.length !== 0) {
@@ -28,9 +28,9 @@ function getComment(postObject) {
       comment.text += '*' + postObject.bill + '*: ' + sum.billSum + ' р.' + postObject.lineBreak
       if (postObject.actionType == 'commentCard') {
         comment.text += '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
-      } else if (postObject.actionType == 'updatecomment') {
+      } else if (postObject.actionType == 'updateСomment') {
         comment.text += '**Новая сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
-      } else if (postObject.actionType == 'deletecomment') {
+      } else if (postObject.actionType == 'deleteComment') {
         comment.text += '**Удаленная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
       }
       if (postObject.text.length !== 0) {
