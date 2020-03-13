@@ -5,7 +5,7 @@ function getCurrData(array, ymd) {
       var ssData = array
     } else {
       ssData = array.filter(function (row) {
-        return getYMD(row.period).ymd == ymd
+        return row.ymd == ymd
       })
     }
     return ssData

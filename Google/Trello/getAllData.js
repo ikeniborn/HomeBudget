@@ -25,16 +25,16 @@ function getAllData(postObject, source, type) {
     data = postObject.targetSheetNameTargetArray
   }
   var sourceArray = []
-  var accountingItemArrya = postObject.accountingItem.arrya
   var getNewBill = function (bill, account, nomenclature) {
-    var row = {}
     var accountingItemArrya = postObject.accountingItem.array
-    accountingItemArrya.map(function (array) {
+    var findRow = accountingItemArrya.reduce(function (row, array) {
       if (array.bill == bill && array.account == account && array.nomenclature == nomenclature) {
-        row = array
+        row = {}
+        row = array.billNew
       }
-    })
-    return row.billNew
+      return row
+    }, {})
+    return findRow.billNew
   }
   data.reduce(function (row, array, index) {
     if (index == 0) {} else {

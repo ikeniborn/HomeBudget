@@ -20,9 +20,9 @@ function getSum(postObject) {
     if (postObject.cfo == 'Илья') {
       transferCoef = (70 / 100).toFixed(2)
     } else if (postObject.cfo == 'Оксана') {
-      transferCoef = 0
+      transferCoef = 1
     } else {
-      transferCoef = 0
+      transferCoef = 1
     }
     sum.firstTransferToFamilyAccount = (sum.restSum + sum.salarySum + sum.accumulationNomenclatureIncomeSum) - (sum.expenseSum - sum.transferToFamilyAccountSum) * transferCoef
     if (factSum.nomenclatureSum != 0 && budgetSum.nomenclatureSum != 0) {
@@ -35,7 +35,7 @@ function getSum(postObject) {
     } else {
       sum.accountBudgetExecution = 0
     }
-    budgetSum.nomenclatureSum !== 0 ? sum.haveBudget = true : sum.haveBudget = false
+    budgetSum.nomenclatureSum != 0 ? sum.haveBudget = true : sum.haveBudget = false
     return sum
   } catch (e) {
     console.error('getSum: ' + e)
