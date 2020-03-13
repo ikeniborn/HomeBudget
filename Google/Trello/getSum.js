@@ -11,10 +11,12 @@ function getSum(postObject) {
       sum.groupAccount = budgetSum.groupAccount
     } else if (postObject.isBudget) {
       sum = budgetSum
+      sum.restSum = factSum.restSum
     }
     sum.billBudgetRest = budgetSum.billSum - factSum.billSum
     sum.accountBudgetRest = budgetSum.accountSum - factSum.accountSum
     sum.nomenclatureBudgetRest = budgetSum.nomenclatureSum - factSum.nomenclatureSum
+    sum.firstTransferToFamilyAccount = (sum.restSum + sum.salarySum + sum.accumulationNomenclatureIncomeSum) - (sum.expenseSum - sum.transferToFamilyAccountSum)
     if (factSum.nomenclatureSum != 0 && budgetSum.nomenclatureSum != 0) {
       sum.nomenclatureBudgetExecution = ((factSum.nomenclatureSum / budgetSum.nomenclatureSum) * 100).toFixed(2)
     } else {

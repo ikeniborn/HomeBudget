@@ -76,9 +76,9 @@ function getTotalSum(postObject, source, type) {
       }
       return sum
     }, 0)
-    //* сумма по номенклатуре накопления в приходах
+    //* сумма по номенклатуре накопления в расходах
     total.accumulationNomenclatureExpenseSum = currData.reduce(function (sum, array) {
-      if (array.cfo == postObject.cfo && array.Расход == 'Приход' && array.nomenclature == 'Накопления') {
+      if (array.cfo == postObject.cfo && array.Расход == 'Расход' && array.nomenclature == 'Накопления') {
         sum += array.sum
       }
       return sum
@@ -86,6 +86,13 @@ function getTotalSum(postObject, source, type) {
     //* сумма по переводу на счет семьи
     total.transferToFamilyAccountSum = currData.reduce(function (sum, array) {
       if (array.cfo == postObject.cfo && array.Расход == 'Расход' && array.nomenclature == 'Перевод на счет Семьи') {
+        sum += array.sum
+      }
+      return sum
+    }, 0)
+    //* сумма по зарплате
+    total.salarySum = currData.reduce(function (sum, array) {
+      if (array.cfo == postObject.cfo && array.Расход == 'Приход' && array.nomenclature == 'Зарплата') {
         sum += array.sum
       }
       return sum
