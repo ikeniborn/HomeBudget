@@ -26,9 +26,13 @@ function getAllData(postObject, source, type) {
   }
   var sourceArray = []
   var accountingItemArrya = postObject.accountingItem.arrya
-  var getNewBill = function (nomenclature) {
-    var row = accountingItemArrya.filter(function (row) {
-      return row.nomenclature == nomenclature
+  var getNewBill = function (bill, account, nomenclature) {
+    var row = {}
+    var accountingItemArrya = postObject.accountingItem.array
+    accountingItemArrya.map(function (array) {
+      if (array.bill == bill && array.account == account && array.nomenclature == nomenclature) {
+        row = array
+      }
     })
     return row.billNew
   }
@@ -61,7 +65,7 @@ function getAllData(postObject, source, type) {
         row.mvz = array[3]
         row.cashFlow = null
         row.bill = array[4]
-        row.billNew = getNewBill(array[6])
+        row.billNew = getNewBill(array[4], array[5], array[6])
         row.account = array[5]
         row.nomenclature = array[6]
         row.sum = array[7]
@@ -78,7 +82,7 @@ function getAllData(postObject, source, type) {
         row.mvz = array[3]
         row.cashFlow = null
         row.bill = array[4]
-        row.billNew = getNewBill(array[6])
+        row.billNew = getNewBill(array[4], array[5], array[6])
         row.account = array[5]
         row.nomenclature = array[6]
         row.sum = array[7]

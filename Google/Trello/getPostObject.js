@@ -46,6 +46,11 @@ function getPostObject(postData) {
       postObject.listId = postData.action.data.list.id
       postObject.listName = postData.action.data.list.name
       postObject.cfo = getFinancialСenter(postObject).item.cfo
+      if (['Илья', 'Оксана'].indexOf(postObject.cfo) !== -1) {
+        postObject.privateBudget = true
+      } else {
+        postObject.privateBudget = false
+      }
       postObject.accountingItem = getAccountingItem(postObject)
       postObject.bill = postObject.accountingItem.item.bill
       postObject.billNew = postObject.accountingItem.item.billNew
@@ -112,6 +117,11 @@ function getPostObject(postData) {
       postObject.listId = postObject.list.id
       postObject.listName = postObject.list.name
       postObject.cfo = getFinancialСenter(postObject).item.cfo
+      if (['Илья', 'Оксана'].indexOf(postObject.cfo) !== -1) {
+        postObject.privateBudget = true
+      } else {
+        postObject.privateBudget = false
+      }
       postObject.accountingItem = getAccountingItem(postObject)
       postObject.bill = postObject.accountingItem.item.bill
       postObject.billNew = postObject.accountingItem.item.billNew
@@ -178,6 +188,11 @@ function getPostObject(postData) {
       postObject.listId = postObject.list.id
       postObject.listName = postObject.list.name
       postObject.cfo = getFinancialСenter(postObject).item.cfo
+      if (['Илья', 'Оксана'].indexOf(postObject.cfo) !== -1) {
+        postObject.privateBudget = true
+      } else {
+        postObject.privateBudget = false
+      }
       postObject.accountingItem = getAccountingItem(postObject)
       postObject.bill = postObject.accountingItem.item.bill
       postObject.billNew = postObject.accountingItem.item.billNew
@@ -245,6 +260,11 @@ function getPostObject(postData) {
       postObject.listId = postData.action.data.list.id
       postObject.listName = postData.action.data.list.name
       postObject.cfo = getFinancialСenter(postObject).item.cfo
+      if (['Илья', 'Оксана'].indexOf(postObject.cfo) !== -1) {
+        postObject.privateBudget = true
+      } else {
+        postObject.privateBudget = false
+      }
       postObject.accountingItem = getAccountingItem(postObject)
       postObject.bill = postObject.accountingItem.item.bill
       postObject.billNew = postObject.accountingItem.item.billNew

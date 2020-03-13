@@ -37,14 +37,14 @@ function getDescription(postObject) {
             var groupBudgetRows = sum.groupAccount
             var i = 1
             groupBudgetRows.forEach(function (row) {
-              var comma
-              groupBudgetRows.length > i ? comma = postObject.lineBreak : comma = ''
-              description.text += row.bill + ' - ' + row.account + ': ' + row.sum + ' р. ' + comma
+              description.text += row.bill + ' - ' + row.account + ': ' + row.sum + ' р. ' + postObject.lineBreak
               i += 1
             })
           }
           //* информация по переводам
-          description.text += 'Первый перевод на счет Семьи: ' + sum.firstTransferToFamilyAccount
+          if (postObject.privateBudget) {
+            description.text += 'Первый перевод на счет Семьи: ' + sum.firstTransferToFamilyAccount + postObject.lineBreak
+          }
         }
       }
       //* данные по бюджетным заявкам

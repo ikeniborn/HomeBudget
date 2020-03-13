@@ -50,49 +50,49 @@ function getTotalSum(postObject, source, type) {
     }, 0)
     //* сумма по статье затраты
     total.costSum = currData.reduce(function (sum, array) {
-      if (array.cfo == postObject.cfo && array.Расход == 'Расход' && array.billNew == 'Затраты') {
+      if (array.cfo == postObject.cfo && array.bill == 'Расход' && array.billNew == 'Затраты') {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по статье накопления в расходах
     total.accumulationBillExpenseSum = currData.reduce(function (sum, array) {
-      if (array.cfo == postObject.cfo && array.Расход == 'Расход' && array.billNew == 'Накопления') {
+      if (array.cfo == postObject.cfo && array.bill == 'Расход' && array.billNew == 'Накопления') {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по статье накопления в приходах
     total.accumulationBillIncomeSum = currData.reduce(function (sum, array) {
-      if (array.cfo == postObject.cfo && array.Расход == 'Приход' && array.billNew == 'Накопления') {
+      if (array.cfo == postObject.cfo && array.bill == 'Приход' && array.billNew == 'Накопления') {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по номенклатуре накопления в приходах
     total.accumulationNomenclatureIncomeSum = currData.reduce(function (sum, array) {
-      if (array.cfo == postObject.cfo && array.Расход == 'Приход' && array.nomenclature == 'Накопления') {
+      if (array.cfo == postObject.cfo && array.bill == 'Приход' && array.nomenclature == 'Накопления') {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по номенклатуре накопления в расходах
     total.accumulationNomenclatureExpenseSum = currData.reduce(function (sum, array) {
-      if (array.cfo == postObject.cfo && array.Расход == 'Расход' && array.nomenclature == 'Накопления') {
+      if (array.cfo == postObject.cfo && array.bill == 'Расход' && array.nomenclature == 'Накопления') {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по переводу на счет семьи
     total.transferToFamilyAccountSum = currData.reduce(function (sum, array) {
-      if (array.cfo == postObject.cfo && array.Расход == 'Расход' && array.nomenclature == 'Перевод на счет Семьи') {
+      if (array.cfo == postObject.cfo && array.bill == 'Расход' && array.nomenclature == 'Перевод на счет Семья') {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по зарплате
     total.salarySum = currData.reduce(function (sum, array) {
-      if (array.cfo == postObject.cfo && array.Расход == 'Приход' && array.nomenclature == 'Зарплата') {
+      if (array.cfo == postObject.cfo && array.bill == 'Приход' && array.nomenclature == 'Зарплата') {
         sum += array.sum
       }
       return sum
