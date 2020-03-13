@@ -44,8 +44,6 @@ function getDescription(postObject) {
             })
           }
           //* информация по переводам
-          description.text += 'Перечислить в накопления: ' + sum.accumulationNomenclatureIncomeSum
-          description.text += 'Снять с накоплений: ' + sum.accumulationNomenclatureExpenseSum
           description.text += 'Первый перевод на счет Семьи: ' + sum.firstTransferToFamilyAccount
         }
       }

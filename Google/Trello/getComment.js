@@ -16,8 +16,8 @@ function getComment(postObject) {
       } else if (postObject.actionType == 'deleteComment') {
         comment.text += '**Удаленная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
       }
-      if (postObject.text.length !== 0) {
-        comment.text += '**Комментарий**: ' + postObject.text + postObject.lineBreak
+      if (postObject.comment.length !== 0) {
+        comment.text += '**Комментарий**: ' + postObject.comment + postObject.lineBreak
       }
     } else if (postObject.isBudget) {
       //* комментарий по бюджету
@@ -32,8 +32,8 @@ function getComment(postObject) {
       } else if (postObject.actionType == 'deleteComment') {
         comment.text += '**Удаленная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
       }
-      if (postObject.text.length !== 0) {
-        comment.text += '**Комментарий**: ' + postObject.text + postObject.lineBreak
+      if (postObject.comment.length !== 0) {
+        comment.text += '**Комментарий**: ' + postObject.comment + postObject.lineBreak
       }
     }
     return comment
