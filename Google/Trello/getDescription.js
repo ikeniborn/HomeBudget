@@ -43,6 +43,8 @@ function getDescription(postObject) {
               i += 1
             })
           }
+          //* информация по переводам
+          description.text += row.bill + ' - ' + row.account + ': ' + row.sum + ' р. ' + comma
         }
       }
       //* данные по бюджетным заявкам
