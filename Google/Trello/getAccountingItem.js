@@ -17,6 +17,7 @@ function getAccountingItem(postObject) {
         row.budget = array[6]
         row.fact = array[7]
         row.target = array[8]
+        row.billNew = array[9]
         row.color = array[10]
         row.useDesc = array[11]
         account.item = row
@@ -32,6 +33,7 @@ function getAccountingItem(postObject) {
         row.budget = array[6]
         row.fact = array[7]
         row.target = array[8]
+        row.billNew = array[9]
         row.color = array[10]
         row.useDesc = array[11]
         account.array.push(row)

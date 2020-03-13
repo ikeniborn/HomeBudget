@@ -48,6 +48,7 @@ function getPostObject(postData) {
       postObject.cfo = getFinancialСenter(postObject).item.cfo
       postObject.accountingItem = getAccountingItem(postObject)
       postObject.bill = postObject.accountingItem.item.bill
+      postObject.billNew = postObject.accountingItem.item.billNew
       postObject.account = postObject.accountingItem.item.account
       postObject.nomenclature = postData.action.data.card.name
       postObject.useDesc = postObject.accountingItem.item.useDesc
@@ -113,6 +114,7 @@ function getPostObject(postData) {
       postObject.cfo = getFinancialСenter(postObject).item.cfo
       postObject.accountingItem = getAccountingItem(postObject)
       postObject.bill = postObject.accountingItem.item.bill
+      postObject.billNew = postObject.accountingItem.item.billNew
       postObject.account = postObject.accountingItem.item.account
       postObject.nomenclature = postData.action.data.card.name
       postObject.useDesc = postObject.accountingItem.item.useDesc
@@ -178,6 +180,7 @@ function getPostObject(postData) {
       postObject.cfo = getFinancialСenter(postObject).item.cfo
       postObject.accountingItem = getAccountingItem(postObject)
       postObject.bill = postObject.accountingItem.item.bill
+      postObject.billNew = postObject.accountingItem.item.billNew
       postObject.account = postObject.accountingItem.item.account
       postObject.nomenclature = postData.action.data.card.name
       postObject.useDesc = postObject.accountingItem.item.useDesc
@@ -244,6 +247,7 @@ function getPostObject(postData) {
       postObject.cfo = getFinancialСenter(postObject).item.cfo
       postObject.accountingItem = getAccountingItem(postObject)
       postObject.bill = postObject.accountingItem.item.bill
+      postObject.billNew = postObject.accountingItem.item.billNew
       postObject.account = postObject.accountingItem.item.account
       postObject.nomenclature = postData.action.data.card.name
       postObject.useDesc = postObject.accountingItem.item.useDesc
