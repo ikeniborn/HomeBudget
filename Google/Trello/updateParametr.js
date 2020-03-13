@@ -6,7 +6,7 @@ function updateParametr(postObject, paramentr, value) {
    * @value - значение параметра. Изменяемое
    * */
   try {
-    var ss = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.parametrSheetName);
+    var ss = postObject.parametrSheetOpen
     var indexRow = getParametr(postObject.parametrArray, paramentr).indexRow
     ss.getRange(indexRow, 3).setValue(value)
     ss.getRange(indexRow, 4).setValue(formatterDate().timestamp)
