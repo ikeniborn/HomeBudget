@@ -29,18 +29,7 @@ function closedFactPeriod(postObject) {
         }
         return row
       })
-      var cardInfo = addCard(postObject, accounts.nomenclature, postObject.listId, accounts.id, label.id)
-      var postObjectCard = JSON.parse(JSON.stringify(postObject))
-      postObjectCard.cardId = cardInfo.id
-      postObjectCard.nomenclature = accounts.nomenclature
-      postObjectCard.bill = accounts.bill
-      postObjectCard.account = accounts.account
-      var description = getDescription(postObjectCard)
-      if (description.haveBudget && accounts.useDesc == 1) {
-        postObjectCard.cardDescription = description.text
-        //* обновление описание карточки
-        updatecardDescription(postObjectCard)
-      }
+      addCard(postObject, accounts.nomenclature, postObject.listId, accounts.id, label.id)
     })
   } catch (e) {
     console.error('closedFactPeriod: ' + e)

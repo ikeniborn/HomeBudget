@@ -9,62 +9,67 @@ function doPost(e) {
       var ssTest = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName('test')
       ssTest.appendRow([postObject.webHookDate, postObject.actionType, postObject.actionId, postObject.memberUsername, postObject.isValidData])
       if (postObject.actionType == 'commentCard' && postObject.isValidData) {
-        //* добавление информации
-        updateTrelloData(postObject)
-        var description = getDescription(postObject)
-        postObject.cardDescription = description.text
-        var comment = getComment(postObject)
-        postObject.cardComment = comment.text
-        //* обновление описание карточки
-        updateCardDesc(postObject)
-        //* обновление карточки баланса
-        updateBalanceCard(postObject)
-        if (postObject.isCurrFact && !postObject.isSamePeriod) {
-          //* обновление карточек бюджета по данным факта
-          if (!postObject.isSamePeriod && ['Остатки'].indexOf(postObject.account) === -1) {
-            var budgetList = getList(postObject, postObject.boardIdBudget)
-            var budgetCard = getCards(postObject, budgetList.id).item
-            var postObjectBudget = JSON.parse(JSON.stringify(postObject))
-            postObjectBudget.boardId = postObject.boardIdFact
-            postObjectBudget.listId = budgetList.id
-            postObjectBudget.cardId = budgetCard.id
-            postObjectBudget.isFact = false
-            postObjectBudget.isCurrFact = false
-            postObjectBudget.isBudget = true
-            postObjectBudget.isCurrBudget = true
-            postObjectBudget.period = postObject.budgetPeriod
-            postObjectBudget.ymd = getYMD(postObject.budgetPeriod).ymd
-            postObjectBudget.cardDescription = getDescription(postObjectBudget).text
-            updateCardDesc(postObjectBudget)
-          }
+        try {
+          //* добавление информации
+          updateTrelloData(postObject)
+          var description = getDescription(postObject)
+          postObject.cardDescription = description.text
+          var comment = getComment(postObject)
+          postObject.cardComment = comment.text
+          //* обновление описание карточки
+          updateCardDesc(postObject)
+          //* обновление карточки баланса
+          updateBalanceCard(postObject)
           //* закрытие периода
-          if (['Остатки'].indexOf(postObject.account) !== -1 && !postObject.isSamePeriod) {
-            updateFactPeriod(postObject)
-            closedFactPeriod(postObject)
-            // reportBudgetOksana(postObject)
-          } else if (['Аванс'].indexOf(postObject.account) !== -1 && postObject.isSamePeriod) {
-            updateBudgetPeriod(postObject)
-            closedBudgetPeriod(postObject)
-          }
-        } else if (postObject.isCurrBudget) {
-          if (postObject.isSamePeriod) {
-            //* обновление фактической карточки при обновлении текущего бюджета
-            var factList = getList(postObject, postObject.boardIdFact)
-            var factCard = getCards(postObject, factList.id).item
-            var postObjectFact = JSON.parse(JSON.stringify(postObject))
-            postObjectFact.boardId = postObject.boardIdFact
-            postObjectFact.listId = factList.id
-            postObjectFact.cardId = factCard.id
-            postObjectFact.isFact = true
-            postObjectFact.isCurrFact = true
-            postObjectFact.isBudget = false
-            postObjectFact.isCurrBudget = false
-            postObjectFact.period = postObject.factPeriod
-            postObjectFact.ymd = getYMD(postObject.factPeriod).ymd
-            postObjectFact.cardDescription = getDescription(postObjectFact).text
-            updateCardDesc(postObjectFact)
-          }
+        } catch (e) {
+          console.error(':Добавление информации: ' + e)
         }
+        if (postObject.isCurrFact && ['Остатки'].indexOf(postObject.account) !== -1 && !postObject.isSamePeriod) {
+          updateFactPeriod(postObject)
+          closedFactPeriod(postObject)
+          updateDescForNewCards(postObject)
+          // reportBudgetOksana(postObject)
+        } else if (postObject.isCurrFact && ['Аванс'].indexOf(postObject.account) !== -1 && postObject.isSamePeriod) {
+          updateBudgetPeriod(postObject)
+          closedBudgetPeriod(postObject)
+        }
+        // if (postObject.isCurrFact && !postObject.isSamePeriod) {
+        //   //* обновление карточек бюджета по данным факта
+        //   if (!postObject.isSamePeriod && ['Остатки'].indexOf(postObject.account) === -1) {
+        //     var budgetList = getList(postObject, postObject.boardIdBudget)
+        //     var budgetCard = getCards(postObject, budgetList.id).item
+        //     var postObjectBudget = JSON.parse(JSON.stringify(postObject))
+        //     postObjectBudget.boardId = postObject.boardIdFact
+        //     postObjectBudget.listId = budgetList.id
+        //     postObjectBudget.cardId = budgetCard.id
+        //     postObjectBudget.isFact = false
+        //     postObjectBudget.isCurrFact = false
+        //     postObjectBudget.isBudget = true
+        //     postObjectBudget.isCurrBudget = true
+        //     postObjectBudget.period = postObject.budgetPeriod
+        //     postObjectBudget.ymd = getYMD(postObject.budgetPeriod).ymd
+        //     postObjectBudget.cardDescription = getDescription(postObjectBudget).text
+        //     updateCardDesc(postObjectBudget)
+        //   }
+        // } else if (postObject.isCurrBudget) {
+        //   if (postObject.isSamePeriod) {
+        //     //* обновление фактической карточки при обновлении текущего бюджета
+        //     var factList = getList(postObject, postObject.boardIdFact)
+        //     var factCard = getCards(postObject, factList.id).item
+        //     var postObjectFact = JSON.parse(JSON.stringify(postObject))
+        //     postObjectFact.boardId = postObject.boardIdFact
+        //     postObjectFact.listId = factList.id
+        //     postObjectFact.cardId = factCard.id
+        //     postObjectFact.isFact = true
+        //     postObjectFact.isCurrFact = true
+        //     postObjectFact.isBudget = false
+        //     postObjectFact.isCurrBudget = false
+        //     postObjectFact.period = postObject.factPeriod
+        //     postObjectFact.ymd = getYMD(postObject.factPeriod).ymd
+        //     postObjectFact.cardDescription = getDescription(postObjectFact).text
+        //     updateCardDesc(postObjectFact)
+        //   }
+        // }
         //* добавление реакции на комментарий
         addCardReaction(postObject)
       } else if (postObject.actionType == 'updateComment') {

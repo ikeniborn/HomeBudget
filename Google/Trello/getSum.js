@@ -35,7 +35,7 @@ function getSum(postObject) {
     } else {
       sum.accountBudgetExecution = 0
     }
-    budgetSum.nomenclatureSum != 0 ? sum.haveBudget = true : sum.haveBudget = false
+    budgetSum.nomenclatureBudgetRows.length != 0 ? sum.haveBudget = true : sum.haveBudget = false
     return sum
   } catch (e) {
     console.error('getSum: ' + e)

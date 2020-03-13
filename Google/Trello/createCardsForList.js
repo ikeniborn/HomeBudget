@@ -38,7 +38,7 @@ function createCardsForList(postObject) {
       postObjectCard.bill = accounts.bill
       postObjectCard.account = accounts.account
       var description = getDescription(postObjectCard)
-      if (description.haveBudget && accounts.useDesc == 1) {
+      if (description.haveBudget) {
         postObjectCard.cardDescription = description.text
         //* обновление описание карточки
         updatecardDescription(postObjectCard)

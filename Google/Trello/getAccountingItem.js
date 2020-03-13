@@ -20,6 +20,8 @@ function getAccountingItem(postObject) {
         row.billNew = array[9]
         row.color = array[10]
         row.useDesc = array[11]
+        row.operBudget = array[12]
+        row.transferBudget = array[13]
         account.item = row
         account.array.push(row)
       } else {
@@ -37,6 +39,8 @@ function getAccountingItem(postObject) {
           row.billNew = array[9]
           row.color = array[10]
           row.useDesc = array[11]
+          row.operBudget = array[12]
+          row.transferBudget = array[13]
           account.array.push(row)
         }
       }
