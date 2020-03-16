@@ -21,17 +21,16 @@ function doPost(e) {
           //* обновление карточки баланса
           updateBalanceCard(postObject)
           //* закрытие периода
-        } catch (e) {
-          console.error(':Добавление информации: ' + e)
-        }
-        if (postObject.isCurrFact && ['Остатки'].indexOf(postObject.account) !== -1 && !postObject.isSamePeriod) {
-          updateFactPeriod(postObject)
-          closedFactPeriod(postObject)
-          updateDescForNewCards(postObject)
-          // reportBudgetOksana(postObject)
-        } else if (postObject.isCurrFact && ['Аванс'].indexOf(postObject.account) !== -1 && postObject.isSamePeriod) {
-          updateBudgetPeriod(postObject)
-          closedBudgetPeriod(postObject)
+        } finally {
+          if (postObject.isCurrFact && ['Остатки'].indexOf(postObject.account) !== -1 && !postObject.isSamePeriod) {
+            updateFactPeriod(postObject)
+            closedFactPeriod(postObject)
+            updateDescForNewCards(postObject)
+            // reportBudgetOksana(postObject)
+          } else if (postObject.isCurrFact && ['Аванс'].indexOf(postObject.account) !== -1 && postObject.isSamePeriod) {
+            updateBudgetPeriod(postObject)
+            closedBudgetPeriod(postObject)
+          }
         }
         // if (postObject.isCurrFact && !postObject.isSamePeriod) {
         //   //* обновление карточек бюджета по данным факта
@@ -72,29 +71,34 @@ function doPost(e) {
         // }
         //* добавление реакции на комментарий
         addCardReaction(postObject)
-      } else if (postObject.actionType == 'updateComment') {
+      } else if (postObject.actionType == 'updateComment' && !postObject.isValidData) {
         //* обновление данных при изменении комментария
-        updateRowByActionId(postObject)
-        var description = getDescription(postObject)
-        postObject.cardDescription = description.text
-        var comment = getComment(postObject)
-        postObject.cardComment = comment.text
-        //* обновление описание карточки
-        updateCardDesc(postObject)
-        //* обновление карточки баланса
-        updateBalanceCard(postObject)
-      } else if (postObject.actionType == 'deleteComment') {
+        try {
+          updateRowByActionId(postObject)
+        } finally {
+          var description = getDescription(postObject)
+          postObject.cardDescription = description.text
+          var comment = getComment(postObject)
+          postObject.cardComment = comment.text
+          //* обновление описание карточки
+          updateCardDesc(postObject)
+          //* обновление карточки баланса
+          updateBalanceCard(postObject)
+        }
+      } else if (postObject.actionType == 'deleteComment' && !postObject.isValidData) {
         //* удаление строки при удалении комментария
-        var deleteRow = deleteRowByActionId(postObject)
-        postObject.sum = deleteRow.sum
-        var description = getDescription(postObject)
-        postObject.cardDescription = description.text
-        var comment = getComment(postObject)
-        postObject.cardComment = comment.text
-        //* обновление описание карточки
-        updateCardDesc(postObject)
-        //* обновление карточки баланса
-        updateBalanceCard(postObject)
+        try {
+          postObject.sum = deleteRowByActionId(postObject).sum
+        } finally {
+          var description = getDescription(postObject)
+          postObject.cardDescription = description.text
+          var comment = getComment(postObject)
+          postObject.cardComment = comment.text
+          //* обновление описание карточки
+          updateCardDesc(postObject)
+          //* обновление карточки баланса
+          updateBalanceCard(postObject)
+        }
       } else if (postObject.actionType == 'createList' && postObject.isTarget) {
         if (postObject.isFact || postObject.isBudget) {
           addFinancialCenter(postObject)
