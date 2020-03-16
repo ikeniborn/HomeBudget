@@ -26,7 +26,7 @@ function getAllData(postObject, source, type) {
   }
   var sourceArray = []
   data.reduce(function (row, array, index) {
-    if (index == 0) {} else {
+    if (index > 0) {
       row = {}
       if ([1].indexOf(dataStructure) !== -1) {
         //* данные из буфера трелло
@@ -37,30 +37,26 @@ function getAllData(postObject, source, type) {
         row.mvz = null
         row.cashFlow = null
         row.bill = null
-        row.billNew = null
         row.account = null
         row.nomenclature = array[3]
         row.sum = array[4]
         row.comment = array[5]
         row.actionId = array[6]
-        row.sourceList = null
         row.indexRow = index + 1
       } else if ([2].indexOf(dataStructure) !== -1) {
         //* данные из учета
         row.actionDate = array[0]
         row.period = array[1]
-        row.ymd = getYMD(array[1]).ymd
+        row.ymd = getYMD(row.period).ymd
         row.cfo = array[2]
         row.mvz = array[3]
-        row.cashFlow = null
-        row.bill = array[4]
-        row.billNew = null
-        row.account = array[5]
-        row.nomenclature = array[6]
-        row.sum = array[7]
-        row.comment = array[8]
-        row.actionId = array[9]
-        row.sourceList = array[10]
+        row.cashFlow = array[4]
+        row.bill = array[5]
+        row.account = array[6]
+        row.nomenclature = array[7]
+        row.sum = array[8]
+        row.comment = array[9]
+        row.actionId = array[10]
         row.indexRow = index + 1
       } else if ([4].indexOf(dataStructure) !== -1) {
         //* данные из буфера гуглформ
@@ -69,15 +65,13 @@ function getAllData(postObject, source, type) {
         row.ymd = getYMD(array[1]).ymd
         row.cfo = array[2]
         row.mvz = array[3]
-        row.cashFlow = null
-        row.bill = array[4]
-        row.billNew = null
-        row.account = array[5]
-        row.nomenclature = array[6]
-        row.sum = array[7]
-        row.comment = array[8]
+        row.cashFlow = array[4]
+        row.bill = array[5]
+        row.account = array[6]
+        row.nomenclature = array[7]
+        row.sum = array[8]
+        row.comment = array[9]
         row.actionId = null
-        row.sourceList = null
         row.indexRow = index + 1
       }
       return sourceArray.push(row)

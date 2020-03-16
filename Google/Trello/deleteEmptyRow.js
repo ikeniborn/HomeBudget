@@ -1,10 +1,23 @@
-function deleteEmptyRow(sheetId, sheetName) {
+function deleteEmptyRow(postObject) {
   try {
-    var ss = SpreadsheetApp.openById(sheetId).getSheetByName(sheetName)
-    var maxRows = ss.getMaxRows()
-    var lastRow = ss.getLastRow()
-    if (maxRows - lastRow !== 0) {
-      ss.deleteRows(lastRow + 1, maxRows - lastRow)
+    var ss
+    var ts
+    if (postObject.isFact) {
+      ss = postObject.sourceSheetNameFactTrelloOpen
+      ts = postObject.targetSheetNameFactOpen
+    } else if (postObject.isBudget) {
+      ss = postObject.sourceSheetNameBudgetTrelloOpen
+      ts = postObject.targetSheetNameBudgetOpen
+    }
+    var ssMaxRows = ss.getMaxRows()
+    var ssLastRow = ss.getLastRow()
+    if (ssMaxRows - ssLastRow !== 0) {
+      ss.deleteRows(ssLastRow + 1, ssMaxRows - ssLastRow)
+    }
+    var tsMaxRows = ts.getMaxRows()
+    var tsLastRow = ts.getLastRow()
+    if (tsMaxRows - tsMaxRows !== 0) {
+      ss.deleteRows(tsLastRow + 1, tsMaxRows - tsLastRow)
     }
   } catch (e) {
     console.error('deleteEmptyRow: ' + e)

@@ -2,14 +2,14 @@ function getPeriod(postObject) {
   try {
     var date = {}
     if (postObject.cfo == 'Илья') {
-      date.factPeriod = getParametr(postObject.parametrArray, 'periodFactIlya').value
-      date.budgetPeriod = getParametr(postObject.parametrArray, 'periodBudgetIlya').value
+      date.factPeriod = getParametr(postObject, 'periodFactIlya').item.value
+      date.budgetPeriod = getParametr(postObject, 'periodBudgetIlya').item.value
     } else if (postObject.cfo == 'Семья') {
-      date.factPeriod = getParametr(postObject.parametrArray, 'periodFactFamily').value
-      date.budgetPeriod = getParametr(postObject.parametrArray, 'periodBudgetFamily').value
+      date.factPeriod = getParametr(postObject, 'periodFactFamily').item.value
+      date.budgetPeriod = getParametr(postObject, 'periodBudgetFamily').item.value
     } else if (postObject.cfo == 'Оксана') {
-      date.factPeriod = getParametr(postObject.parametrArray, 'periodFactOksana').value
-      date.budgetPeriod = getParametr(postObject.parametrArray, 'periodBudgetOksana').value
+      date.factPeriod = getParametr(postObject, 'periodFactOksana').item.value
+      date.budgetPeriod = getParametr(postObject, 'periodBudgetOksana').item.value
     }
     if (postObject.boardId == postObject.boardIdFact) {
       date.period = date.factPeriod

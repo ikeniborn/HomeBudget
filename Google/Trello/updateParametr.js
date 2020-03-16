@@ -7,7 +7,7 @@ function updateParametr(postObject, paramentr, value) {
    * */
   try {
     var ss = postObject.parametrSheetOpen
-    var indexRow = getParametr(postObject.parametrArray, paramentr).indexRow
+    var indexRow = getParametr(postObject, paramentr).item.indexRow
     ss.getRange(indexRow, 3).setValue(value)
     ss.getRange(indexRow, 4).setValue(formatterDate().timestamp)
   } catch (e) {

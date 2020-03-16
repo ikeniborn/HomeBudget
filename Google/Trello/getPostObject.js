@@ -39,10 +39,10 @@ function getPostObject(postData) {
       }
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
-      postObject.cardDescription = ''
-      postObject.cardComment = ''
+      postObject.cardDescription = undefined
+      postObject.cardComment = undefined
       postObject.cardLabelColor = getCardLabel(postObject).item.color
-      postObject.list = null
+      postObject.list = undefined
       postObject.listId = postData.action.data.list.id
       postObject.listName = postData.action.data.list.name
       postObject.cfo = getFinancialСenter(postObject).item.cfo
@@ -52,11 +52,10 @@ function getPostObject(postData) {
         postObject.privateBudget = false
       }
       postObject.accountingItem = getAccountingItem(postObject)
+      postObject.cashFlow = postObject.accountingItem.item.cashFlow
       postObject.bill = postObject.accountingItem.item.bill
-      postObject.billNew = postObject.accountingItem.item.billNew
       postObject.account = postObject.accountingItem.item.account
       postObject.nomenclature = postData.action.data.card.name
-      postObject.useDesc = postObject.accountingItem.item.useDesc
       postObject.text = postData.action.data.text
       postObject.parseText = parseComment(postObject)
       postObject.sum = postObject.parseText.sum
@@ -110,8 +109,8 @@ function getPostObject(postData) {
       }
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
-      postObject.cardDescription = ''
-      postObject.cardComment = ''
+      postObject.cardDescription = undefined
+      postObject.cardComment = undefined
       postObject.cardLabelColor = getCardLabel(postObject).item.color
       postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
@@ -123,11 +122,10 @@ function getPostObject(postData) {
         postObject.privateBudget = false
       }
       postObject.accountingItem = getAccountingItem(postObject)
+      postObject.cashFlow = postObject.accountingItem.item.cashFlow
       postObject.bill = postObject.accountingItem.item.bill
-      postObject.billNew = postObject.accountingItem.item.billNew
       postObject.account = postObject.accountingItem.item.account
       postObject.nomenclature = postData.action.data.card.name
-      postObject.useDesc = postObject.accountingItem.item.useDesc
       postObject.text = postData.action.data.action.text
       postObject.parseText = parseComment(postObject)
       postObject.sum = postObject.parseText.sum
@@ -181,8 +179,8 @@ function getPostObject(postData) {
       }
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
-      postObject.cardDescription = ''
-      postObject.cardComment = ''
+      postObject.cardDescription = undefined
+      postObject.cardComment = undefined
       postObject.cardLabelColor = getCardLabel(postObject).item.color
       postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
@@ -194,16 +192,15 @@ function getPostObject(postData) {
         postObject.privateBudget = false
       }
       postObject.accountingItem = getAccountingItem(postObject)
+      postObject.cashFlow = postObject.accountingItem.item.cashFlow
       postObject.bill = postObject.accountingItem.item.bill
-      postObject.billNew = postObject.accountingItem.item.billNew
       postObject.account = postObject.accountingItem.item.account
       postObject.nomenclature = postData.action.data.card.name
-      postObject.useDesc = postObject.accountingItem.item.useDesc
-      postObject.text = ''
-      postObject.parseText = ''
+      postObject.text = undefined
+      postObject.parseText = undefined
       postObject.sum = 0
-      postObject.comment = ''
-      postObject.mvz = ''
+      postObject.comment = undefined
+      postObject.mvz = undefined
       postObject.date = getPeriod(postObject)
       postObject.period = postObject.date.period
       postObject.ymd = postObject.date.ymd
@@ -251,12 +248,12 @@ function getPostObject(postData) {
         postObject.isCurrBudget = false
         postObject.isTarget = true
       }
-      postObject.cardId = null
-      postObject.cardName = ''
-      postObject.cardDescription = ''
-      postObject.cardComment = ''
-      postObject.cardLabelColor = ''
-      postObject.list = null
+      postObject.cardId = undefined
+      postObject.cardName = undefined
+      postObject.cardDescription = undefined
+      postObject.cardComment = undefined
+      postObject.cardLabelColor = undefined
+      postObject.list = undefined
       postObject.listId = postData.action.data.list.id
       postObject.listName = postData.action.data.list.name
       postObject.cfo = getFinancialСenter(postObject).item.cfo
@@ -266,16 +263,15 @@ function getPostObject(postData) {
         postObject.privateBudget = false
       }
       postObject.accountingItem = getAccountingItem(postObject)
+      postObject.cashFlow = postObject.accountingItem.item.cashFlow
       postObject.bill = postObject.accountingItem.item.bill
-      postObject.billNew = postObject.accountingItem.item.billNew
       postObject.account = postObject.accountingItem.item.account
       postObject.nomenclature = postData.action.data.card.name
-      postObject.useDesc = postObject.accountingItem.item.useDesc
-      postObject.text = ''
-      postObject.parseText = ''
+      postObject.text = undefined
+      postObject.parseText = undefined
       postObject.sum = 0
-      postObject.comment = ''
-      postObject.mvz = ''
+      postObject.comment = undefined
+      postObject.mvz = undefined
       postObject.date = getPeriod(postObject)
       postObject.period = postObject.date.period
       postObject.ymd = postObject.date.ymd
