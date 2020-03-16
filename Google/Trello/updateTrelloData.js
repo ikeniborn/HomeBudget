@@ -12,14 +12,17 @@ function updateTrelloData(postObject) {
       ss = postObject.sourceSheetNameFactTrelloOpen
       sourceArray = postObject.sourceSheetNameFactTrelloArray
       ts = postObject.targetSheetNameFactOpen
+      targetArray = postObject.targetSheetNameFactArray
     } else if (postObject.isBudget) {
       ss = postObject.sourceSheetNameBudgetTrelloOpen
       sourceArray = postObject.sourceSheetNameBudgetTrelloArray
       ts = postObject.targetSheetNameBudgetOpen
+      targetArray = postObject.targetSheetNameBudgetArray
     } else if (postObject.isTarget) {
       ss = postObject.sourceSheetNameTargetTrelloOpen
       sourceArray = postObject.sourceSheetNameTargetTrelloArray
       ts = postObject.targetSheetNameTargetOpen
+      targetArray = postObject.targetSheetNameTargetArray
     }
     //* вставка значений в буфер
     pushBufferRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId]
@@ -47,7 +50,6 @@ function updateTrelloData(postObject) {
       } else if (postObject.cfo == 'Оксана') {
         pushAccountRow = [insertdate, postObject.period, 'Семья', 'Семья', 'Пополнение', 'Переводы', 'Приход со счета Оксана', 'Приход со счета Оксана', postObject.sum, postObject.comment, postObject.actionId]
         ts.appendRow(pushAccountRow)
-        targetArray.push(pushAccountRow)
         targetArray.push(pushAccountRow)
       }
     }
