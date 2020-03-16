@@ -12,10 +12,10 @@ function getComment(postObject) {
       } else if (postObject.actionType == 'deleteComment') {
         comment.text = '**Удаленная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
       }
+      comment.text += '**Остаток средств** ' + '*' + postObject.cfo + '*: ' + sum.totalRest + ' р.' + postObject.lineBreak
       if (postObject.comment.length !== 0) {
         comment.text += '**Комментарий**: ' + postObject.comment + postObject.lineBreak
       }
-      comment.text += '**Остаток средств** ' + '*' + postObject.cfo + '*: ' + sum.totalRest + ' р.' + postObject.lineBreak
       comment.text += '**Остаток бюджета**:' + postObject.lineBreak
       comment.text += 'Статья *' + postObject.nomenclature + '*: ' + sum.nomenclatureBudgetRest + ' р.' + postObject.lineBreak
       comment.text += 'Номенклатура *' + postObject.account + '*: ' + sum.accountBudgetRest + ' р.'
