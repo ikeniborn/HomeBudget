@@ -5,18 +5,6 @@ function getTotalSum(postObject, source, type) {
    */
   try {
     var currData = getCurrData(getAllData(postObject, source, type), postObject.ymd)
-    var getSignBudget = function (bill, account, nomenclature) {
-      var accountingItemArrya = postObject.accountingItem.array
-      var findRow = accountingItemArrya.reduce(function (row, array) {
-        if (array.bill == bill && array.account == account && array.nomenclature == nomenclature) {
-          row = {}
-          row.operBudget = array.operBudget
-          row.transferBudget = array.transferBudget
-        }
-        return row
-      }, {})
-      return findRow
-    }
     var total = {}
     //* сумма по счету
     total.billSum = currData.reduce(function (sum, array) {
@@ -62,21 +50,21 @@ function getTotalSum(postObject, source, type) {
     }, 0)
     //* сумма по статье затраты
     total.costSum = currData.reduce(function (sum, array) {
-      if (array.cfo == postObject.cfo && array.bill == 'Расход' && getSignBudget(array.bill, array.account, array.nomenclature).operBudget == 1) {
+      if (array.cfo == postObject.cfo && array.bill == 'Расход' && array.bill == 'Затраты') {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по статье накопления в расходах
     total.accumulationBillExpenseSum = currData.reduce(function (sum, array) {
-      if (array.cfo == postObject.cfo && array.bill == 'Расход' && getSignBudget(array.bill, array.account, array.nomenclature).transferBudget == 1) {
+      if (array.cfo == postObject.cfo && array.bill == 'Расход' && array.bill == 'Накопления') {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по статье накопления в приходах
     total.accumulationBillIncomeSum = currData.reduce(function (sum, array) {
-      if (array.cfo == postObject.cfo && array.bill == 'Приход' && getSignBudget(array.bill, array.account, array.nomenclature).transferBudget == 1) {
+      if (array.cfo == postObject.cfo && array.bill == 'Приход' && array.bill == 'Накопления') {
         sum += array.sum
       }
       return sum
