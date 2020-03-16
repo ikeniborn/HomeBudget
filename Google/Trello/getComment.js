@@ -13,12 +13,12 @@ function getComment(postObject) {
         comment.text = '**Удаленная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
       }
       comment.text += '**Остаток средств** ' + '*' + postObject.cfo + '*: ' + sum.totalRest + ' р.' + postObject.lineBreak
-      if (postObject.comment.length !== 0) {
-        comment.text += '**Комментарий**: ' + postObject.comment + postObject.lineBreak
-      }
       comment.text += '**Остаток бюджета**:' + postObject.lineBreak
       comment.text += 'Статья *' + postObject.nomenclature + '*: ' + sum.nomenclatureBudgetRest + ' р.' + postObject.lineBreak
-      comment.text += 'Номенклатура *' + postObject.account + '*: ' + sum.accountBudgetRest + ' р.'
+      comment.text += 'Номенклатура *' + postObject.account + '*: ' + sum.accountBudgetRest + ' р.' + postObject.lineBreak
+      if (postObject.comment.length !== 0) {
+        comment.text += '**Комментарий**: ' + postObject.comment
+      }
     } else if (postObject.isBudget) {
       //* комментарий по бюджетуы
       if (postObject.actionType == 'commentCard') {
@@ -28,13 +28,13 @@ function getComment(postObject) {
       } else if (postObject.actionType == 'deleteComment') {
         comment.text = '**Удаленная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
       }
-      if (postObject.comment.length !== 0) {
-        comment.text += '**Комментарий**: ' + postObject.comment + postObject.lineBreak
-      }
       comment.text += '**Бюджет**:' + postObject.lineBreak
       comment.text += 'Номенклатура *' + postObject.nomenclature + '*: ' + sum.nomenclatureSum + ' р.' + postObject.lineBreak
       comment.text += 'Статья *' + postObject.account + '*: ' + sum.accountSum + ' р.' + postObject.lineBreak
       comment.text += 'Счет *' + postObject.bill + '*: ' + sum.billSum + ' р.' + postObject.lineBreak
+      if (postObject.comment.length !== 0) {
+        comment.text += '**Комментарий**: ' + postObject.comment
+      }
     }
     return comment
   } catch (e) {
