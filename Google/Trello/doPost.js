@@ -12,10 +12,8 @@ function doPost(e) {
         try {
           //* добавление информации
           updateTrelloData(postObject)
-          var description = getDescription(postObject)
-          postObject.cardDescription = description.text
-          var comment = getComment(postObject)
-          postObject.cardComment = comment.text
+          postObject.cardDescription = getDescription(postObject).text
+          postObject.cardComment = getComment(postObject).text
           //* обновление описание карточки
           updateCardDesc(postObject)
           //* обновление карточки баланса
@@ -76,10 +74,8 @@ function doPost(e) {
         try {
           updateRowByActionId(postObject)
         } finally {
-          var description = getDescription(postObject)
-          postObject.cardDescription = description.text
-          var comment = getComment(postObject)
-          postObject.cardComment = comment.text
+          postObject.cardDescription = getDescription(postObject).text
+          postObject.cardComment = getComment(postObject).text
           //* обновление описание карточки
           updateCardDesc(postObject)
           //* обновление карточки баланса
@@ -90,10 +86,8 @@ function doPost(e) {
         try {
           postObject.sum = deleteRowByActionId(postObject).sum
         } finally {
-          var description = getDescription(postObject)
-          postObject.cardDescription = description.text
-          var comment = getComment(postObject)
-          postObject.cardComment = comment.text
+          postObject.cardDescription = getDescription(postObject).text
+          postObject.cardComment = getComment(postObject).text
           //* обновление описание карточки
           updateCardDesc(postObject)
           //* обновление карточки баланса
