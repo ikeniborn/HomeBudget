@@ -9,7 +9,7 @@ function updateBudgetPeriod(postObject) {
     } else if (['Семья'].indexOf(postObject.cfo) !== -1) {
       updateParametr(postObject, 'periodBudgetFamily', newBudgetPeriod)
     }
-    postObject.parametrArray = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.parametrSheetName).getDataRange().getValues()
+    postObject.parametrArray = getValues(postObject.parametrSheetOpen)
   } catch (e) {
     console.error('updateBudgetPeriod: ' + e)
   } finally {

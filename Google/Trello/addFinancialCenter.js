@@ -6,7 +6,7 @@ function addFinancialCenter(postObject) {
   try {
     var ss = postObject.costСenterSheetOpen
     var ssArray = postObject.costСenterArray
-    var newId = ssArray.reduce(function (row, array, index) {
+    var newId = ssArray.reduce(function (row, index) {
       row = index + 1
       return row
     })

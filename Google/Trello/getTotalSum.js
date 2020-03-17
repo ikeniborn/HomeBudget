@@ -1,97 +1,109 @@
-function getTotalSum(postObject, source, type) {
+function getTotalSum(postObject, array) {
   /*
-   * @source - истоник: buffer, account
-   * @type - тип данных: fact, budget, target
+   * @array - массив данных для расчета сумм
    */
   try {
-    var currData = getCurrData(getAllData(postObject, source, type), postObject.ymd)
     var total = {}
+    //* сумма по операции
+    total.cashFlowSum = array.reduce(function (sum, array) {
+      if (array.cfo == postObject.cfo && array.cashFlow == postObject.cashFlow) {
+        sum += array.sum
+      }
+      return sum
+    }, 0)
     //* сумма по счету
-    total.billSum = currData.reduce(function (sum, array) {
+    total.billSum = array.reduce(function (sum, array) {
       if (array.cfo == postObject.cfo && array.bill == postObject.bill) {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по статье
-    total.accountSum = currData.reduce(function (sum, array) {
+    total.accountSum = array.reduce(function (sum, array) {
       if (array.cfo == postObject.cfo && array.bill == postObject.bill && array.account == postObject.account) {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по номенклатуре
-    total.nomenclatureSum = currData.reduce(function (sum, array) {
+    total.nomenclatureSum = array.reduce(function (sum, array) {
       if (array.cfo == postObject.cfo && array.bill == postObject.bill && array.account == postObject.account && array.nomenclature == postObject.nomenclature) {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по операции пополнение
-    total.incomeSum = currData.reduce(function (sum, array) {
+    total.incomeSum = array.reduce(function (sum, array) {
       if (array.cfo == postObject.cfo && array.cashFlow == 'Пополнение') {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по операции списание
-    total.expenseSum = currData.reduce(function (sum, array) {
+    total.expenseSum = array.reduce(function (sum, array) {
       if (array.cfo == postObject.cfo && array.cashFlow == 'Списание') {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по статье остатки
-    total.restSum = currData.reduce(function (sum, array) {
+    total.restSum = array.reduce(function (sum, array) {
       if (array.cfo == postObject.cfo && array.bill == 'Остатки') {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по статье затраты
-    total.costSum = currData.reduce(function (sum, array) {
+    total.costSum = array.reduce(function (sum, array) {
       if (array.cfo == postObject.cfo && array.cashFlow == 'Списание' && array.bill == 'Затраты') {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по статье накопления в расходах
-    total.accumulationBillExpenseSum = currData.reduce(function (sum, array) {
+    total.accumulationBillExpenseSum = array.reduce(function (sum, array) {
       if (array.cfo == postObject.cfo && array.cashFlow == 'Списание' && array.bill == 'Накопления') {
         sum += array.sum
       }
       return sum
     }, 0)
+    //* сумма по статье переводы в расходах
+    total.transferBillExpenseSum = array.reduce(function (sum, array) {
+      if (array.cfo == postObject.cfo && array.cashFlow == 'Списание' && array.bill == 'Переводы') {
+        sum += array.sum
+      }
+      return sum
+    }, 0)
     //* сумма по статье накопления в приходах
-    total.accumulationBillIncomeSum = currData.reduce(function (sum, array) {
+    total.accumulationBillIncomeSum = array.reduce(function (sum, array) {
       if (array.cfo == postObject.cfo && array.cashFlow == 'Пополнение' && array.bill == 'Накопления') {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по номенклатуре накопления в приходах
-    total.accumulationNomenclatureIncomeSum = currData.reduce(function (sum, array) {
+    total.accumulationNomenclatureIncomeSum = array.reduce(function (sum, array) {
       if (array.cfo == postObject.cfo && array.cashFlow == 'Списание' && array.nomenclature == 'Накопления') {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по номенклатуре накопления в расходах
-    total.accumulationNomenclatureExpenseSum = currData.reduce(function (sum, array) {
+    total.accumulationNomenclatureExpenseSum = array.reduce(function (sum, array) {
       if (array.cfo == postObject.cfo && array.cashFlow == 'Списание' && array.nomenclature == 'Накопления') {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по переводу на счет семьи
-    total.transferToFamilyAccountSum = currData.reduce(function (sum, array) {
+    total.transferToFamilyAccountSum = array.reduce(function (sum, array) {
       if (array.cfo == postObject.cfo && array.cashFlow == 'Списание' && array.nomenclature == 'Перевод на счет Семья') {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по зарплате
-    total.salarySum = currData.reduce(function (sum, array) {
+    total.salarySum = array.reduce(function (sum, array) {
       if (array.cfo == postObject.cfo && array.cashFlow == 'Пополнение' && array.nomenclature == 'Зарплата') {
         sum += array.sum
       }
@@ -100,7 +112,7 @@ function getTotalSum(postObject, source, type) {
     //* суммы по бюджету
     if (type == 'budget') {
       //* данные по статьям с агрегацией
-      var groupAccount = currData.reduce(function (newArray, array) {
+      var groupAccount = array.reduce(function (newArray, array) {
         if (array.cfo == postObject.cfo) {
           if (!newArray[array.account]) {
             newArray[array.account] = {}
@@ -130,7 +142,7 @@ function getTotalSum(postObject, source, type) {
         return 0 // Никакой сортировки
       })
       //* данные по счету с агрегацией
-      var groupBill = currData.reduce(function (newArray, array) {
+      var groupBill = array.reduce(function (newArray, array) {
         if (array.cfo == postObject.cfo) {
           if (!newArray[array.bill]) {
             newArray[array.bill] = {}
@@ -149,7 +161,7 @@ function getTotalSum(postObject, source, type) {
         }
       })
       //* данные из учета
-      total.nomenclatureBudgetRows = currData.filter(function (array) {
+      total.nomenclatureBudgetRows = array.filter(function (array) {
         return array.cfo == postObject.cfo && array.bill == postObject.bill && array.account == postObject.account && array.nomenclature == postObject.nomenclature
       })
     }

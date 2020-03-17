@@ -2,8 +2,11 @@
 function getSum(postObject) {
   try {
     var sum = {}
-    var budgetSum = getTotalSum(postObject, 'account', 'budget')
-    var factSum = getTotalSum(postObject, 'account', 'fact')
+    var array = {}
+    array.budget = postObject.dataAccountBudgetCurr
+    array.fact = postObject.dataAccountFactCurr
+    var budgetSum = getTotalSum(postObject, array.budget)
+    var factSum = getTotalSum(postObject, array.fact)
     if (postObject.isFact) {
       sum = factSum
       sum.totalRest = factSum.incomeSum + factSum.restSum - factSum.expenseSum

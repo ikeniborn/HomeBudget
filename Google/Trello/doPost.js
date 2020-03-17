@@ -6,7 +6,7 @@ function doPost(e) {
     var botUser = ['5e2b5f3f409c544ebdb1b9d4']
     if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1) {
       var postObject = getPostObject(postData)
-      var ssTest = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName('test')
+      var ssTest = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.sourceSheetNameLog)
       ssTest.appendRow([postObject.webHookDate, postObject.actionType, postObject.actionId, postObject.memberUsername, postObject.isValidData])
       if (postObject.actionType == 'commentCard' && postObject.isValidData) {
         try {

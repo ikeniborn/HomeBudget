@@ -1,14 +1,7 @@
 function deleteEmptyRow(postObject) {
   try {
-    var ss
-    var ts
-    if (postObject.isFact) {
-      ss = postObject.sourceSheetNameFactTrelloOpen
-      ts = postObject.targetSheetNameFactOpen
-    } else if (postObject.isBudget) {
-      ss = postObject.sourceSheetNameBudgetTrelloOpen
-      ts = postObject.targetSheetNameBudgetOpen
-    }
+    var ss = postObject.sourceSheetNameTrelloOpen
+    var ts = postObject.targetSheetNameAccountOpen
     var ssMaxRows = ss.getMaxRows()
     var ssLastRow = ss.getLastRow()
     if (ssMaxRows - ssLastRow !== 0) {

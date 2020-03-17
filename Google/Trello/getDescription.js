@@ -20,6 +20,7 @@ function getDescription(postObject) {
       if (postObject.nomenclature !== 'Баланс') {
         //* описание для бюджетных карточек
         description.text += '**Итого бюджет на** *' + formatterDate(postObject.period).date + '*:' + postObject.lineBreak
+        description.text += '*По операции*: ' + sum.cashFlowSum + ' р.' + postObject.lineBreak
         description.text += '*По счету*: ' + sum.billSum + ' р.' + postObject.lineBreak
         description.text += '*По статье*: ' + sum.accountSum + ' р.' + postObject.lineBreak
         description.text += '*По номенклатуре*: ' + sum.nomenclatureSum + ' р.' + postObject.lineBreak
