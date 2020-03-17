@@ -110,61 +110,62 @@ function getTotalSum(postObject, array) {
       return sum
     }, 0)
     //* суммы по бюджету
-    if (type == 'budget') {
-      //* данные по статьям с агрегацией
-      var groupAccount = array.reduce(function (newArray, array) {
-        if (array.cfo == postObject.cfo) {
-          if (!newArray[array.account]) {
-            newArray[array.account] = {}
-            newArray[array.account].bill = array.bill
-            newArray[array.account].account = array.account
-            newArray[array.account].sum = 0
-          }
-          newArray[array.account].sum += array.sum
+    var budgetArray = array.filter(function (row) {
+      return row.source == 'Бюджет'
+    })
+    //* данные по статьям с агрегацией
+    var groupAccount = budgetArray.reduce(function (newArray, array) {
+      if (array.cfo == postObject.cfo) {
+        if (!newArray[array.account]) {
+          newArray[array.account] = {}
+          newArray[array.account].bill = array.bill
+          newArray[array.account].account = array.account
+          newArray[array.account].sum = 0
         }
-        return newArray
-      }, {})
-      total.groupAccount = Object.keys(groupAccount).map(function (k) {
-        const item = groupAccount[k]
-        return {
-          bill: item.bill,
-          account: item.account,
-          sum: item.sum
+        newArray[array.account].sum += array.sum
+      }
+      return newArray
+    }, {})
+    total.groupAccount = Object.keys(groupAccount).map(function (k) {
+      const item = groupAccount[k]
+      return {
+        bill: item.bill,
+        account: item.account,
+        sum: item.sum
+      }
+    })
+    total.groupAccount.sort(function (a, b) {
+      var nameA = a.bill.toLowerCase()
+      var nameB = b.bill.toLowerCase()
+      if (nameA < nameB) // сортируем строки по возрастанию
+        return -1
+      if (nameA > nameB)
+        return 1
+      return 0 // Никакой сортировки
+    })
+    //* данные по счету с агрегацией
+    var groupBill = budgetArray.reduce(function (newArray, array) {
+      if (array.cfo == postObject.cfo) {
+        if (!newArray[array.bill]) {
+          newArray[array.bill] = {}
+          newArray[array.bill].bill = array.bill
+          newArray[array.bill].sum = 0
         }
-      })
-      total.groupAccount.sort(function (a, b) {
-        var nameA = a.bill.toLowerCase()
-        var nameB = b.bill.toLowerCase()
-        if (nameA < nameB) // сортируем строки по возрастанию
-          return -1
-        if (nameA > nameB)
-          return 1
-        return 0 // Никакой сортировки
-      })
-      //* данные по счету с агрегацией
-      var groupBill = array.reduce(function (newArray, array) {
-        if (array.cfo == postObject.cfo) {
-          if (!newArray[array.bill]) {
-            newArray[array.bill] = {}
-            newArray[array.bill].bill = array.bill
-            newArray[array.bill].sum = 0
-          }
-          newArray[array.bill].sum += array.sum
-        }
-        return newArray
-      }, {})
-      total.groupBill = Object.keys(groupBill).map(function (k) {
-        const item = groupBill[k]
-        return {
-          bill: item.bill,
-          sum: item.sum
-        }
-      })
-      //* данные из учета
-      total.nomenclatureBudgetRows = array.filter(function (array) {
-        return array.cfo == postObject.cfo && array.bill == postObject.bill && array.account == postObject.account && array.nomenclature == postObject.nomenclature
-      })
-    }
+        newArray[array.bill].sum += array.sum
+      }
+      return newArray
+    }, {})
+    total.groupBill = Object.keys(groupBill).map(function (k) {
+      const item = groupBill[k]
+      return {
+        bill: item.bill,
+        sum: item.sum
+      }
+    })
+    //* данные из учета
+    total.nomenclatureBudgetRows = budgetArray.filter(function (array) {
+      return array.cfo == postObject.cfo && array.bill == postObject.bill && array.account == postObject.account && array.nomenclature == postObject.nomenclature
+    })
     return total
   } catch (e) {
     console.error('getTotalSum: ' + e)

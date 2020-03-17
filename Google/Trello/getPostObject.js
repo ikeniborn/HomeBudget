@@ -98,12 +98,12 @@ function getPostObject(postData) {
     postObject.budgetPeriod2 = postObject.date.budgetPeriod2
     postObject.budgetPeriod3 = postObject.date.budgetPeriod3
     postObject.isSamePeriod = postObject.date.isSamePeriod
-    postObject.dataTrello = getAllData(postObject, 'account')
+    postObject.dataTrello = getAllData(postObject, 'trello')
     postObject.dataTrelloAllCurr = postObject.dataTrello.allCurr
     postObject.dataAccount = getAllData(postObject, 'account')
     postObject.dataAccountAllCurr = postObject.dataAccount.allCurr
-    postObject.dataAccountFactCurr = postObject.dataAccountAll.factCurr
-    postObject.dataAccountBudgetCurr = postObject.dataAccountAll.budgetCurr
+    postObject.dataAccountFactCurr = postObject.dataAccount.factCurr
+    postObject.dataAccountBudgetCurr = postObject.dataAccount.budgetCurr
     if (postData.action.type == 'commentCard') {
       postObject.isValidData = isValidData(postObject)
     } else {

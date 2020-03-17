@@ -5,9 +5,9 @@ function updateTrelloData(postObject) {
     var insertdate
     var targetArray
     //* определение истоников
-    var ss = postObject.sourceSheetNameFactTrelloOpen
+    var ss = postObject.sourceSheetNameTrelloOpen
     var sourceArray = postObject.dataTrelloAllCurr
-    var ts = postObject.targetSheetNameFactOpen
+    var ts = postObject.targetSheetNameAccountOpen
     if (postObject.isFact) {
       targetArray = postObject.dataAccountFactCurr
     } else if (postObject.isBudget) {
@@ -45,6 +45,6 @@ function updateTrelloData(postObject) {
     //* Удаление пустых строк
     deleteEmptyRow(postObject)
   } catch (e) {
-    console.error('updateTrelloAccounting: ' + e)
+    console.error('updateTrelloData: ' + e)
   }
 }
