@@ -83,7 +83,7 @@ function getTotalSum(postObject, array) {
     }, 0)
     //* сумма по номенклатуре накопления в приходах
     total.accumulationNomenclatureIncomeSum = array.reduce(function (sum, array) {
-      if (array.cfo == postObject.cfo && array.cashFlow == 'Списание' && array.nomenclature == 'Накопления') {
+      if (array.cfo == postObject.cfo && array.cashFlow == 'Пополнение' && array.nomenclature == 'Накопления') {
         sum += array.sum
       }
       return sum

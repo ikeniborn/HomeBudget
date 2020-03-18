@@ -17,7 +17,7 @@ function getSum(postObject) {
     } else {
       transferCoef = 1
     }
-    totalSum.firstTransferToFamilyAccount = (factSum.restSum + budgetSum.salarySum + budgetSum.accumulationNomenclatureIncomeSum) - (budgetSum.expenseSum - budgetSum.transferToFamilyAccountSum) * transferCoef
+    totalSum.firstTransferToFamilyAccount = ((factSum.restSum + budgetSum.salarySum + budgetSum.accumulationNomenclatureIncomeSum) - (budgetSum.expenseSum - budgetSum.transferToFamilyAccountSum) * transferCoef).toFixed(0)
     if (factSum.nomenclatureSum != 0 && budgetSum.nomenclatureSum != 0) {
       totalSum.nomenclatureBudgetExecution = ((factSum.nomenclatureSum / budgetSum.nomenclatureSum) * 100).toFixed(2)
     } else {

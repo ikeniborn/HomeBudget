@@ -41,12 +41,13 @@ function getDescription(postObject) {
             i += 1
           })
         }
+        description.text += '**Остатки**: ' + sum.factSum.restSum + ' р.' + postObject.lineBreak
         description.text += '**Операционный бюджет**: ' + sum.budgetSum.costSum + ' р.' + postObject.lineBreak
         description.text += '**Бюджет отчислений**: ' + sum.budgetSum.accumulationBillExpenseSum + ' р.' + postObject.lineBreak
         //* информация по переводам
         if (postObject.privateBudget) {
           description.text += '**Перечисления**: ' + postObject.lineBreak
-          description.text += '*Первый перевод на счет Семьи*: ' + sum.budgetSum.firstTransferToFamilyAccount + postObject.lineBreak
+          description.text += '*Первый перевод на счет Семьи*: ' + sum.totalSum.firstTransferToFamilyAccount + postObject.lineBreak
           description.text += '*Перечислить в накопления*: ' + sum.budgetSum.accumulationNomenclatureExpenseSum + postObject.lineBreak
           description.text += '*Снять с накоплений*: ' + sum.budgetSum.accumulationNomenclatureIncomeSum
         }
