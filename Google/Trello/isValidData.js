@@ -1,7 +1,7 @@
 function isValidData(postObject) {
   try {
     //* добавление строк на страницу
-    var targetArray = postObject.dataAccountAllCurr
+    var targetArray = postObject.dataTrello
     var searchRow = targetArray.reduce(function (row, array) {
       array.actionId == postObject.actionId ? row = false : row = true
       return row

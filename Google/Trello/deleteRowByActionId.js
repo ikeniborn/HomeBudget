@@ -4,13 +4,12 @@ function deleteRowByActionId(postObject) {
     var sourceData
     var sourceRows
     var ts
-    var targetArray
     var targetData
-    var targetRows
-    var targetRowIndex
+    var targetRowIndex = []
+    var sum = 0
     //* удаление данных на листе источнике
     ss = postObject.sourceSheetNameTrelloOpen
-    sourceData = postObject.dataTrelloAllCurr
+    sourceData = postObject.dataTrello
     sourceRows = sourceData.reduce(function (row, array) {
       if (array.actionId == postObject.actionId) {
         row.push(array)
@@ -22,35 +21,28 @@ function deleteRowByActionId(postObject) {
     }, [])
     sourceRows.forEach(function (row) {
       ss.deleteRow(row.indexRow)
+      sum = row.sum
     })
     //* удаление данных на листе учета
     ts = postObject.targetSheetNameAccountOpen
-    targetData = postObject.dataAccountAllCurr
-    targetRows = targetData.reduce(function (row, array) {
-      if (array.actionId == postObject.actionId) {
-        row.push(array)
+    targetData = postObject.targetSheetNameAccountArray
+    targetData.reduce(function (row, array, index) {
+      if (array[10] == postObject.actionId) {
+        row = index + 1
+        targetRowIndex.push(row)
       }
-      row.sort(function (a, b) {
-        return b.indexRow - a.indexRow
-      })
       return row
     }, [])
-    targetRows.forEach(function (row) {
-      ts.deleteRow(row.indexRow)
+    targetRowIndex.forEach(function (row) {
+      ts.deleteRow(row)
+      //* удаление данных в массиве учета
+      targetData.splice(row - 1, 1)
     })
-    //* удаление данных в массиве учета
-    var accountArray = [postObject.dataAccountFactCurr, postObject.dataAccountBudgetCurr]
-    accountArray.forEach(function (array) {
-      targetArray = array
-      targetRowIndex = targetArray.reduce(function (row, array, index) {
-        if (array.actionId == postObject.actionId) {
-          row = index
-        }
-        return row
-      })
-      array.splice(targetRowIndex, 1)
-    })
-    return targetRows[0]
+    //* получение данных учета после обновления
+    postObject.dataAccount = getAllData(postObject, 'account')
+    postObject.dataAccountFactCurr = getCurrData(postObject, 'Факт')
+    postObject.dataAccountBudgetCurr = getCurrData(postObject, 'Бюджет')
+    return sum
   } catch (e) {
     console.error('deleteRowByActionId: ' + e)
   }

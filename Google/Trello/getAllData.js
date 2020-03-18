@@ -1,6 +1,6 @@
 function getAllData(postObject, source) {
   /*
-   * @source - истоник: buffer, account
+   * @source - истоник: trello, account
    */
   var dataStructure
   var data
@@ -11,13 +11,7 @@ function getAllData(postObject, source) {
     dataStructure = 2
     data = postObject.targetSheetNameAccountArray
   }
-  var sourceArray = {}
-  sourceArray.all = []
-  sourceArray.allCurr = []
-  sourceArray.fact = []
-  sourceArray.factCurr = []
-  sourceArray.budget = []
-  sourceArray.budgetCurr = []
+  var sourceArray = []
   data.reduce(function (row, array, index) {
     if (index > 0) {
       row = {}
@@ -35,7 +29,7 @@ function getAllData(postObject, source) {
         row.sum = array[4]
         row.comment = array[5]
         row.actionId = array[6]
-        row.source = array[7]
+        row.type = array[7]
         row.indexRow = index + 1
       } else if ([2].indexOf(dataStructure) !== -1) {
         //* данные из учета
@@ -51,24 +45,10 @@ function getAllData(postObject, source) {
         row.sum = array[8]
         row.comment = array[9]
         row.actionId = array[10]
-        row.source = array[11]
+        row.type = array[11]
         row.indexRow = index + 1
       }
-      sourceArray.all.push(row)
-      if (row.ymd == postObject.ymd) {
-        sourceArray.allCurr.push(row)
-      }
-      if (row.source == 'Факт') {
-        sourceArray.fact.push(row)
-        if (row.ymd == postObject.ymd) {
-          sourceArray.factCurr.push(row)
-        }
-      } else if (row.source == 'Бюджет') {
-        sourceArray.budget.push(row)
-        if (row.ymd == postObject.ymd) {
-          sourceArray.budgetCurr.push(row)
-        }
-      }
+      sourceArray.push(row)
     }
   }, [])
   return sourceArray

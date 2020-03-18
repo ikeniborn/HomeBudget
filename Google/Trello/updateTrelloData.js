@@ -3,29 +3,21 @@ function updateTrelloData(postObject) {
     var pushBufferRow
     var pushAccountRow
     var insertdate
-    var targetArray
-    //* определение истоников
-    var ss = postObject.sourceSheetNameTrelloOpen
-    var sourceArray = postObject.dataTrelloAllCurr
-    var ts = postObject.targetSheetNameAccountOpen
-    if (postObject.isFact) {
-      targetArray = postObject.dataAccountFactCurr
-    } else if (postObject.isBudget) {
-      targetArray = postObject.dataAccountBudgetCurr
-    }
     //* вставка значений в буфер
-    pushBufferRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.source]
+    var ss = postObject.sourceSheetNameTrelloOpen
+    pushBufferRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
     ss.appendRow(pushBufferRow)
-    sourceArray.push(pushBufferRow)
     //* вставка значений в учет
+    var ts = postObject.targetSheetNameAccountOpen
+    var targetArray = postObject.targetSheetNameAccountArray
     if (postObject.account == 'Остатки') {
       var newPeriod = postObject.budgetPeriod
       insertdate = new Date(postObject.actionDate.getTime() + 1000)
-      pushAccountRow = [insertdate, newPeriod, postObject.cfo, postObject.mvz, postObject.cashFlow, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.source]
+      pushAccountRow = [insertdate, newPeriod, postObject.cfo, postObject.mvz, postObject.cashFlow, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
       ts.appendRow(pushAccountRow)
       targetArray.push(pushAccountRow)
     } else {
-      pushAccountRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.cashFlow, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.source]
+      pushAccountRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.cashFlow, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
       ts.appendRow(pushAccountRow)
       targetArray.push(pushAccountRow)
     }
@@ -33,15 +25,19 @@ function updateTrelloData(postObject) {
     if (postObject.account == 'Перевод на счет Семья') {
       insertdate = new Date(postObject.actionDate.getTime() + 1000);
       if (postObject.cfo == 'Илья') {
-        pushAccountRow = [insertdate, postObject.period, 'Семья', 'Семья', 'Пополнение', 'Переводы', 'Приход со счета Илья', 'Приход со счета Илья', postObject.sum, postObject.comment, postObject.actionId, postObject.source]
+        pushAccountRow = [insertdate, postObject.period, 'Семья', 'Семья', 'Пополнение', 'Переводы', 'Приход со счета Илья', 'Приход со счета Илья', postObject.sum, postObject.comment, postObject.actionId, postObject.type]
         ts.appendRow(pushAccountRow)
         targetArray.push(pushAccountRow)
       } else if (postObject.cfo == 'Оксана') {
-        pushAccountRow = [insertdate, postObject.period, 'Семья', 'Семья', 'Пополнение', 'Переводы', 'Приход со счета Оксана', 'Приход со счета Оксана', postObject.sum, postObject.comment, postObject.actionId, postObject.source]
+        pushAccountRow = [insertdate, postObject.period, 'Семья', 'Семья', 'Пополнение', 'Переводы', 'Приход со счета Оксана', 'Приход со счета Оксана', postObject.sum, postObject.comment, postObject.actionId, postObject.type]
         ts.appendRow(pushAccountRow)
         targetArray.push(pushAccountRow)
       }
     }
+    //* получение данных учета после обновления
+    postObject.dataAccount = getAllData(postObject, 'account')
+    postObject.dataAccountFactCurr = getCurrData(postObject, 'Факт')
+    postObject.dataAccountBudgetCurr = getCurrData(postObject, 'Бюджет')
     //* Удаление пустых строк
     deleteEmptyRow(postObject)
   } catch (e) {

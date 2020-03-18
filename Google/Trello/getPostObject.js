@@ -3,7 +3,7 @@ function getPostObject(postData) {
     const postObject = getGlobalVariable()
     postObject.webHookDate = formatterDate().timestamp
     postObject.actionType = postData.action.type
-    if (postData.action.type == 'deleteComment') {
+    if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
       postObject.actionId = postData.action.data.action.id
     } else {
       postObject.actionId = postData.action.id
@@ -23,7 +23,7 @@ function getPostObject(postData) {
       postObject.isBudget = false
       postObject.isCurrBudget = false
       postObject.isTarget = false
-      postObject.source = 'Факт'
+      postObject.type = 'Факт'
     } else if ([postObject.boardIdBudget, postObject.boardIdBudget2, postObject.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
       postObject.isFact = false
       postObject.isCurrFact = false
@@ -34,14 +34,14 @@ function getPostObject(postData) {
         postObject.isCurrBudget = false
       }
       postObject.isTarget = false
-      postObject.source = 'Бюджет'
+      postObject.type = 'Бюджет'
     } else if ([postObject.boardIdTarget].indexOf(postObject.boardId) !== -1) {
       postObject.isFact = false
       postObject.isCurrFact = false
       postObject.isBudget = false
       postObject.isCurrBudget = false
       postObject.isTarget = true
-      postObject.source = 'Цель'
+      postObject.type = 'Цель'
     }
     if (postData.action.type == 'createList') {
       postObject.cardId = ''
@@ -83,7 +83,11 @@ function getPostObject(postData) {
       postObject.comment = ''
       postObject.mvz = ''
     } else {
-      postObject.text = postData.action.data.text
+      if (['updateComment'].indexOf(postData.action.type) !== -1) {
+        postObject.text = postData.action.data.action.text
+      } else {
+        postObject.text = postData.action.data.text
+      }
       postObject.parseText = parseComment(postObject)
       postObject.sum = postObject.parseText.sum
       postObject.comment = postObject.parseText.comment
@@ -99,11 +103,9 @@ function getPostObject(postData) {
     postObject.budgetPeriod3 = postObject.date.budgetPeriod3
     postObject.isSamePeriod = postObject.date.isSamePeriod
     postObject.dataTrello = getAllData(postObject, 'trello')
-    postObject.dataTrelloAllCurr = postObject.dataTrello.allCurr
-    postObject.dataAccount = getAllData(postObject, 'account')
-    postObject.dataAccountAllCurr = postObject.dataAccount.allCurr
-    postObject.dataAccountFactCurr = postObject.dataAccount.factCurr
-    postObject.dataAccountBudgetCurr = postObject.dataAccount.budgetCurr
+    postObject.dataAccount = []
+    postObject.dataAccountFactCurr = []
+    postObject.dataAccountBudgetCurr = []
     if (postData.action.type == 'commentCard') {
       postObject.isValidData = isValidData(postObject)
     } else {

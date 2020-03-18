@@ -13,21 +13,21 @@ function getTotalSum(postObject, array) {
     }, 0)
     //* сумма по счету
     total.billSum = array.reduce(function (sum, array) {
-      if (array.cfo == postObject.cfo && array.bill == postObject.bill) {
+      if (array.cfo == postObject.cfo && array.bill == postObject.bill && array.cashFlow == postObject.cashFlow) {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по статье
     total.accountSum = array.reduce(function (sum, array) {
-      if (array.cfo == postObject.cfo && array.bill == postObject.bill && array.account == postObject.account) {
+      if (array.cfo == postObject.cfo && array.bill == postObject.bill && array.account == postObject.account && array.cashFlow == postObject.cashFlow) {
         sum += array.sum
       }
       return sum
     }, 0)
     //* сумма по номенклатуре
     total.nomenclatureSum = array.reduce(function (sum, array) {
-      if (array.cfo == postObject.cfo && array.bill == postObject.bill && array.account == postObject.account && array.nomenclature == postObject.nomenclature) {
+      if (array.cfo == postObject.cfo && array.bill == postObject.bill && array.account == postObject.account && array.nomenclature == postObject.nomenclature && array.cashFlow == postObject.cashFlow) {
         sum += array.sum
       }
       return sum
@@ -48,7 +48,7 @@ function getTotalSum(postObject, array) {
     }, 0)
     //* сумма по статье остатки
     total.restSum = array.reduce(function (sum, array) {
-      if (array.cfo == postObject.cfo && array.bill == 'Остатки') {
+      if (array.cfo == postObject.cfo && array.bill == 'Остатки' && array.cashFlow == 'Баланс') {
         sum += array.sum
       }
       return sum
@@ -109,12 +109,8 @@ function getTotalSum(postObject, array) {
       }
       return sum
     }, 0)
-    //* суммы по бюджету
-    var budgetArray = array.filter(function (row) {
-      return row.source == 'Бюджет'
-    })
     //* данные по статьям с агрегацией
-    var groupAccount = budgetArray.reduce(function (newArray, array) {
+    var groupAccount = array.reduce(function (newArray, array) {
       if (array.cfo == postObject.cfo) {
         if (!newArray[array.account]) {
           newArray[array.account] = {}
@@ -144,7 +140,7 @@ function getTotalSum(postObject, array) {
       return 0 // Никакой сортировки
     })
     //* данные по счету с агрегацией
-    var groupBill = budgetArray.reduce(function (newArray, array) {
+    var groupBill = array.reduce(function (newArray, array) {
       if (array.cfo == postObject.cfo) {
         if (!newArray[array.bill]) {
           newArray[array.bill] = {}
@@ -163,7 +159,7 @@ function getTotalSum(postObject, array) {
       }
     })
     //* данные из учета
-    total.nomenclatureBudgetRows = budgetArray.filter(function (array) {
+    total.nomenclatureRows = array.filter(function (array) {
       return array.cfo == postObject.cfo && array.bill == postObject.bill && array.account == postObject.account && array.nomenclature == postObject.nomenclature
     })
     return total

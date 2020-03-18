@@ -1,34 +1,32 @@
 function doPost(e) {
   try {
     const postData = JSON.parse(e.postData.contents)
-    console.log([formatterDate().timestamp, postData.action.type, postData.action.id, postData.action.memberCreator.username])
-    var parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList']
-    var botUser = ['5e2b5f3f409c544ebdb1b9d4']
+    const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList']
+    const botUser = ['5e2b5f3f409c544ebdb1b9d4']
     if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1) {
+      console.info([formatterDate().timestamp, postData.action.type, postData.action.id, postData.action.memberCreator.username])
       var postObject = getPostObject(postData)
       var ssTest = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.sourceSheetNameLog)
       ssTest.appendRow([postObject.webHookDate, postObject.actionType, postObject.actionId, postObject.memberUsername, postObject.isValidData])
       if (postObject.actionType == 'commentCard' && postObject.isValidData) {
-        try {
-          //* добавление информации
-          updateTrelloData(postObject)
-          postObject.cardDescription = getDescription(postObject).text
-          postObject.cardComment = getComment(postObject).text
-          //* обновление описание карточки
-          updateCardDesc(postObject)
-          //* обновление карточки баланса
-          updateBalanceCard(postObject)
-          //* закрытие периода
-        } finally {
-          if (postObject.isCurrFact && ['Остатки'].indexOf(postObject.account) !== -1 && !postObject.isSamePeriod) {
-            updateFactPeriod(postObject)
-            closedFactPeriod(postObject)
-            updateDescForNewCards(postObject)
-            // reportBudgetOksana(postObject)
-          } else if (postObject.isCurrFact && ['Аванс'].indexOf(postObject.account) !== -1 && postObject.isSamePeriod) {
-            updateBudgetPeriod(postObject)
-            closedBudgetPeriod(postObject)
-          }
+        //* добавление информации
+        updateTrelloData(postObject)
+        //* получение описание карточки и комментария
+        postObject.cardDescription = getDescription(postObject).text
+        postObject.cardComment = getComment(postObject).text
+        //* обновление описание карточки
+        updateCardDesc(postObject)
+        //* обновление карточки баланса
+        updateBalanceCard(postObject)
+        //* закрытие периода
+        if (postObject.isCurrFact && ['Остатки'].indexOf(postObject.account) !== -1 && !postObject.isSamePeriod) {
+          updateFactPeriod(postObject)
+          closedFactPeriod(postObject)
+          updateDescForNewCards(postObject)
+          // reportBudgetOksana(postObject)
+        } else if (postObject.isCurrFact && ['Аванс'].indexOf(postObject.account) !== -1 && postObject.isSamePeriod) {
+          updateBudgetPeriod(postObject)
+          closedBudgetPeriod(postObject)
         }
         // if (postObject.isCurrFact && !postObject.isSamePeriod) {
         //   //* обновление карточек бюджета по данным факта
@@ -69,31 +67,25 @@ function doPost(e) {
         // }
         //* добавление реакции на комментарий
         addCardReaction(postObject)
-      } else if (postObject.actionType == 'updateComment' && !postObject.isValidData) {
+      } else if (postObject.actionType == 'updateComment') {
         //* обновление данных при изменении комментария
-        try {
-          updateRowByActionId(postObject)
-        } finally {
-          postObject.cardDescription = getDescription(postObject).text
-          postObject.cardComment = getComment(postObject).text
-          //* обновление описание карточки
-          updateCardDesc(postObject)
-          //* обновление карточки баланса
-          updateBalanceCard(postObject)
-        }
-      } else if (postObject.actionType == 'deleteComment' && !postObject.isValidData) {
+        updateRowByActionId(postObject)
+        postObject.cardDescription = getDescription(postObject).text
+        postObject.cardComment = getComment(postObject).text
+        //* обновление описание карточки
+        updateCardDesc(postObject)
+        //* обновление карточки баланса
+        updateBalanceCard(postObject)
+      } else if (postObject.actionType == 'deleteComment') {
         //* удаление строки при удалении комментария
-        try {
-          postObject.sum = deleteRowByActionId(postObject).sum
-        } finally {
-          postObject.cardDescription = getDescription(postObject).text
-          postObject.cardComment = getComment(postObject).text
-          //* обновление описание карточки
-          updateCardDesc(postObject)
-          //* обновление карточки баланса
-          updateBalanceCard(postObject)
-        }
-      } else if (postObject.actionType == 'createList' && postObject.isTarget) {
+        postObject.sum = deleteRowByActionId(postObject)
+        postObject.cardDescription = getDescription(postObject).text
+        postObject.cardComment = getComment(postObject).text
+        //* обновление описание карточки
+        updateCardDesc(postObject)
+        //* обновление карточки баланса
+        updateBalanceCard(postObject)
+      } else if (postObject.actionType == 'createList') {
         if (postObject.isFact || postObject.isBudget) {
           addFinancialCenter(postObject)
         } else if (postObject.isTarget) {

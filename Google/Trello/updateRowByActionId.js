@@ -8,10 +8,10 @@ function updateRowByActionId(postObject) {
     var sourceRows
     var ts
     var targetData
-    var targetRows
+    var targetRowIndex = []
     //* обновление данных на листе источнике
     ss = postObject.sourceSheetNameTrelloOpen
-    sourceData = postObject.dataTrelloAllCurr
+    sourceData = postObject.dataTrello
     sourceRows = sourceData.filter(function (row) {
       return row.actionId == postObject.actionId
     })
@@ -22,26 +22,31 @@ function updateRowByActionId(postObject) {
     })
     //* обновление данных на листе учета
     ts = postObject.targetSheetNameAccountOpen
-    targetData = postObject.dataAccountAllCurr
-    targetRows = targetData.filter(function (row) {
-      return row.actionId == postObject.actionId
-    })
-    targetRows.forEach(function (row) {
-      ts.getRange(row.indexRow, 1).setValue(postObject.actionDate)
-      ts.getRange(row.indexRow, 8).setValue(postObject.sum)
-      ts.getRange(row.indexRow, 9).setValue(postObject.comment)
+    targetData = postObject.targetSheetNameAccountArray
+    targetData.reduce(function (row, array, index) {
+      if (array[10] == postObject.actionId) {
+        row = index + 1
+        targetRowIndex.push(row)
+      }
+      return row
+    }, [])
+    targetRowIndex.forEach(function (row) {
+      ts.getRange(row, 1).setValue(postObject.actionDate)
+      ts.getRange(row, 9).setValue(postObject.sum)
+      ts.getRange(row, 10).setValue(postObject.comment)
     })
     //* обновление данных в массиве учета
-    var accountArray = [postObject.dataAccountFactCurr, postObject.dataAccountBudgetCurr]
-    accountArray.forEach(function (array) {
-      array.map(function (array) {
-        if (array.actionId == postObject.actionId) {
-          array.actionDate = postObject.actionDate
-          array.sum = postObject.sum
-          array.comment = postObject.comment
-        }
-      })
+    targetData.map(function (array) {
+      if (array[10] == postObject.actionId) {
+        array[0] = postObject.actionDate
+        array[8] = postObject.sum
+        array[9] = postObject.comment
+      }
     })
+    //* получение текущих данных после обновления
+    postObject.dataAccount = getAllData(postObject, 'account')
+    postObject.dataAccountFactCurr = getCurrData(postObject, 'Факт')
+    postObject.dataAccountBudgetCurr = getCurrData(postObject, 'Бюджет')
   } catch (e) {
     console.error('updateRowByActionId: ' + e)
   }
