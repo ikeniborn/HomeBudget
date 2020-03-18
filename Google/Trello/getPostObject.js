@@ -71,15 +71,17 @@ function getPostObject(postData) {
       postObject.bill = postObject.accountingItem.item.bill
       postObject.account = postObject.accountingItem.item.account
       postObject.nomenclature = postData.action.data.card.name
-      if (['updateComment'].indexOf(postData.action.type) !== -1) {
-        postObject.text = postData.action.data.action.text
-      } else {
-        postObject.text = postData.action.data.text
+      if (['updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
+        if (['updateComment'].indexOf(postData.action.type) !== -1) {
+          postObject.text = postData.action.data.action.text
+        } else {
+          postObject.text = postData.action.data.text
+        }
+        postObject.parseText = parseComment(postObject)
+        postObject.sum = postObject.parseText.sum
+        postObject.comment = postObject.parseText.comment
+        postObject.mvz = getCostСenter(postObject).item.mvz
       }
-      postObject.parseText = parseComment(postObject)
-      postObject.sum = postObject.parseText.sum
-      postObject.comment = postObject.parseText.comment
-      postObject.mvz = getCostСenter(postObject).item.mvz
       postObject.date = getPeriod(postObject)
       postObject.period = postObject.date.period
       postObject.ymd = postObject.date.ymd

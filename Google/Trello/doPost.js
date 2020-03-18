@@ -4,7 +4,6 @@ function doPost(e) {
     const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList']
     const botUser = ['5e2b5f3f409c544ebdb1b9d4']
     if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1) {
-      console.info([formatterDate().timestamp, postData.action.type, postData.action.id, postData.action.memberCreator.username])
       var postObject = getPostObject(postData)
       var ssTest = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.sourceSheetNameLog)
       ssTest.appendRow([postObject.webHookDate, postObject.actionType, postObject.actionId, postObject.memberUsername, postObject.isValidData])
@@ -97,5 +96,13 @@ function doPost(e) {
     }
   } catch (e) {
     console.error('doPost: ' + e)
+  } finally {
+    if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1) {
+      console.info('webHookDate: ' + postObject.webHookDate)
+      console.info('webHookActionId: ' + postData.action.id)
+      console.info('actionType: ' + postObject.actionType)
+      console.info('actionId: ' + postObject.actionId)
+      console.info('memberUsername: ' + postObject.memberUsername)
+    }
   }
 }
