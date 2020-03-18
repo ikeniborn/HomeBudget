@@ -9,9 +9,10 @@ function addFinancialCenter(postObject) {
     var cfoArray = array.map(function (array) {
       return array.cfo
     })
-    if (cfoArray.indexOf(postObject.cfo) === -1) {
+    var cfo = getFinancialСenter(postObject).item.cfo
+    if (cfo == undefined) {
       var newId = cfoArray.length + 1
-      ss.appendRow([newId, postObject.cfo, formatterDate().timestamp])
+      ss.appendRow([newId, postObject.listName, formatterDate().timestamp])
     }
   } catch (e) {
     console.error('addFinancialCenter: ' + e)
