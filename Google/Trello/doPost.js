@@ -89,7 +89,7 @@ function doPost(e) {
         if (postObject.isFact || postObject.isBudget) {
           addFinancialCenter(postObject)
         } else if (postObject.isTarget) {
-          // addTarget(postObject)
+          addTarget(postObject)
         }
         //* создание карточек для нового листа
         createCardsForList(postObject)

@@ -1,17 +1,17 @@
 // обновление параметра
-function addFinancialCenter(postObject) {
+function addTarget(postObject) {
   /*
    * @postObject - входные параметра запроса
    * */
   try {
-    var ss = postObject.financialCenterSheetOpen
-    var array = getFinancialСenter(postObject).array
+    var ss = postObject.goalsSheetOpen
+    var array = getTarget(postObject).array
     var cfoArray = array.map(function (array) {
-      return array.cfo
+      return array.name
     })
-    if (cfoArray.indexOf(postObject.cfo) === -1) {
+    if (cfoArray.indexOf(postObject.listName) === -1) {
       var newId = cfoArray.length + 1
-      ss.appendRow([newId, postObject.cfo, formatterDate().timestamp])
+      ss.appendRow([newId, postObject.listName, '', formatterDate().timestamp])
     }
   } catch (e) {
     console.error('addFinancialCenter: ' + e)
