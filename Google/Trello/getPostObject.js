@@ -43,13 +43,7 @@ function getPostObject(postData) {
       postObject.isTarget = true
       postObject.type = 'Цель'
     }
-    if (postData.action.type == 'createList') {
-      postObject.cardId = ''
-      postObject.cardName = ''
-      postObject.cardDescription = ''
-      postObject.cardComment = ''
-      postObject.cardLabelColor = ''
-    } else {
+    if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
       postObject.cardDescription = ''
@@ -71,18 +65,12 @@ function getPostObject(postData) {
     } else {
       postObject.privateBudget = false
     }
-    postObject.accountingItem = getAccountingItem(postObject)
-    postObject.cashFlow = postObject.accountingItem.item.cashFlow
-    postObject.bill = postObject.accountingItem.item.bill
-    postObject.account = postObject.accountingItem.item.account
-    postObject.nomenclature = postData.action.data.card.name
-    if (['deleteComment', 'createList'].indexOf(postData.action.type) !== -1) {
-      postObject.text = ''
-      postObject.parseText = ''
-      postObject.sum = 0
-      postObject.comment = ''
-      postObject.mvz = ''
-    } else {
+    if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
+      postObject.accountingItem = getAccountingItem(postObject)
+      postObject.cashFlow = postObject.accountingItem.item.cashFlow
+      postObject.bill = postObject.accountingItem.item.bill
+      postObject.account = postObject.accountingItem.item.account
+      postObject.nomenclature = postData.action.data.card.name
       if (['updateComment'].indexOf(postData.action.type) !== -1) {
         postObject.text = postData.action.data.action.text
       } else {
@@ -92,20 +80,20 @@ function getPostObject(postData) {
       postObject.sum = postObject.parseText.sum
       postObject.comment = postObject.parseText.comment
       postObject.mvz = getCostСenter(postObject).item.mvz
+      postObject.date = getPeriod(postObject)
+      postObject.period = postObject.date.period
+      postObject.ymd = postObject.date.ymd
+      postObject.factPeriod0 = postObject.date.factPeriod0
+      postObject.factPeriod = postObject.date.factPeriod
+      postObject.budgetPeriod = postObject.date.budgetPeriod
+      postObject.budgetPeriod2 = postObject.date.budgetPeriod2
+      postObject.budgetPeriod3 = postObject.date.budgetPeriod3
+      postObject.isSamePeriod = postObject.date.isSamePeriod
+      postObject.dataTrello = getAllData(postObject, 'trello')
+      postObject.dataAccount = []
+      postObject.dataAccountFactCurr = []
+      postObject.dataAccountBudgetCurr = []
     }
-    postObject.date = getPeriod(postObject)
-    postObject.period = postObject.date.period
-    postObject.ymd = postObject.date.ymd
-    postObject.factPeriod0 = postObject.date.factPeriod0
-    postObject.factPeriod = postObject.date.factPeriod
-    postObject.budgetPeriod = postObject.date.budgetPeriod
-    postObject.budgetPeriod2 = postObject.date.budgetPeriod2
-    postObject.budgetPeriod3 = postObject.date.budgetPeriod3
-    postObject.isSamePeriod = postObject.date.isSamePeriod
-    postObject.dataTrello = getAllData(postObject, 'trello')
-    postObject.dataAccount = []
-    postObject.dataAccountFactCurr = []
-    postObject.dataAccountBudgetCurr = []
     if (postData.action.type == 'commentCard') {
       postObject.isValidData = isValidData(postObject)
     } else {
