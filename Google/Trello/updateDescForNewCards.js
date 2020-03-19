@@ -1,14 +1,18 @@
 function updateDescForNewCards(postObject) {
   try {
-    var list = getList(postObject, postObject.boardIdFact)
+    var list = getList(postObject, postObject.boardId)
     var cards = getCards(postObject, list.id).array
+    var postObjectCard = JSON.parse(JSON.stringify(postObject))
+    postObjectCard.dataAccount = getAllData(postObject, 'account')
+    postObjectCard.dataAccountFactCurr = getCurrData(postObject, 'Факт')
+    postObjectCard.dataAccountBudgetCurr = getCurrData(postObject, 'Бюджет')
     //* обновление описание карточки
     cards.forEach(function (card) {
-      var postObjectCard = JSON.parse(JSON.stringify(postObject))
       postObjectCard.cardId = card.id
       postObjectCard.cardName = card.name
       postObjectCard.cardLabelColor = card.color
       postObjectCard.accountingItem = getAccountingItem(postObjectCard)
+      postObjectCard.cashFlow = postObjectCard.accountingItem.item.cashFlow
       postObjectCard.bill = postObjectCard.accountingItem.item.bill
       postObjectCard.account = postObjectCard.accountingItem.item.account
       postObjectCard.nomenclature = card.name

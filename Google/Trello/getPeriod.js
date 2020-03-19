@@ -10,6 +10,10 @@ function getPeriod(postObject) {
     } else if (postObject.cfo == 'Оксана') {
       date.factPeriod = getParametr(postObject, 'periodFactOksana').item.value
       date.budgetPeriod = getParametr(postObject, 'periodBudgetOksana').item.value
+    } else {
+      var currDate = new Date
+      date.factPeriod = new Date(currDate.getYear(), currDate.getMonth(), 1)
+      date.budgetPeriod = new Date(currDate.getYear(), currDate.getMonth() + 1, 1)
     }
     if (postObject.boardId == postObject.boardIdFact) {
       date.period = date.factPeriod

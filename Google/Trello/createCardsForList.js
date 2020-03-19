@@ -2,7 +2,7 @@
 /* eslint-disable spaced-comment */
 function createCardsForList(postObject) {
   try {
-    var accountArray = postObject.accountingItem.array
+    var accountArray = getAccountingItem(postObject).array
     var accountItems
     if (postObject.isFact) {
       accountItems = accountArray.filter(function (row) {
@@ -12,16 +12,13 @@ function createCardsForList(postObject) {
       accountItems = accountArray.filter(function (row) {
         return row.budget == 1
       })
-    } else if (postObject.isBudget) {
+    } else if (postObject.isTarget) {
       accountItems = accountArray.filter(function (row) {
         return row.target == 1
       })
     }
-    //* Перенос карточек на доску факт-1
-    var labelList = getBoardLabel(postObject, postObject.boardIdFact)
-    //* обновление текущего листа факта
-    var listName = postObject.cfo + ' ' + formatterDate(postObject.period).date
-    updateList(postObject, postObject.listId, listName)
+    //* Информация по меткам
+    var labelList = getBoardLabel(postObject, postObject.boardId)
     //* создание карточек на листе факт
     accountItems.forEach(function (accounts) {
       var label = labelList.reduce(function (row, arrya) {
@@ -31,22 +28,11 @@ function createCardsForList(postObject) {
         }
         return row
       })
-      var cardInfo = addCard(postObject, accounts.nomenclature, postObject.listId, accounts.id, label.id)
-      var postObjectCard = JSON.parse(JSON.stringify(postObject))
-      postObjectCard.cardId = cardInfo.id
-      postObjectCard.nomenclature = accounts.nomenclature
-      postObjectCard.bill = accounts.bill
-      postObjectCard.account = accounts.account
-      var description = getDescription(postObjectCard)
-      if (description.haveBudget) {
-        postObjectCard.cardDescription = description.text
-        //* обновление описание карточки
-        updatecardDescription(postObjectCard)
-      }
+      addCard(postObject, accounts.nomenclature, postObject.listId, accounts.id, label.id)
     })
   } catch (e) {
-    console.error('closedFactPeriod: ' + e)
+    console.error('createCardsForList: ' + e)
   } finally {
-    console.log('closedFactPeriod:complete')
+    console.log('createCardsForList:complete')
   }
 }

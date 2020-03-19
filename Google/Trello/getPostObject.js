@@ -82,15 +82,17 @@ function getPostObject(postData) {
         postObject.comment = postObject.parseText.comment
         postObject.mvz = getCostСenter(postObject).item.mvz
       }
-      postObject.date = getPeriod(postObject)
-      postObject.period = postObject.date.period
-      postObject.ymd = postObject.date.ymd
-      postObject.factPeriod0 = postObject.date.factPeriod0
-      postObject.factPeriod = postObject.date.factPeriod
-      postObject.budgetPeriod = postObject.date.budgetPeriod
-      postObject.budgetPeriod2 = postObject.date.budgetPeriod2
-      postObject.budgetPeriod3 = postObject.date.budgetPeriod3
-      postObject.isSamePeriod = postObject.date.isSamePeriod
+    }
+    postObject.date = getPeriod(postObject)
+    postObject.period = postObject.date.period
+    postObject.ymd = postObject.date.ymd
+    postObject.factPeriod0 = postObject.date.factPeriod0
+    postObject.factPeriod = postObject.date.factPeriod
+    postObject.budgetPeriod = postObject.date.budgetPeriod
+    postObject.budgetPeriod2 = postObject.date.budgetPeriod2
+    postObject.budgetPeriod3 = postObject.date.budgetPeriod3
+    postObject.isSamePeriod = postObject.date.isSamePeriod
+    if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
       postObject.dataTrello = getAllData(postObject, 'trello')
       postObject.dataAccount = []
       postObject.dataAccountFactCurr = []

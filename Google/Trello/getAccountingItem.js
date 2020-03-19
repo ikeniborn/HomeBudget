@@ -2,6 +2,10 @@
 function getAccountingItem(postObject) {
   try {
     var array = postObject.accountingItemArray
+    if (postObject.cardName == undefined) {
+      postObject.cardName = ''
+      postObject.cardLabelColor = ''
+    }
     var account = {}
     account.item = {}
     account.array = []
@@ -19,7 +23,6 @@ function getAccountingItem(postObject) {
           row.target = array[7]
           row.color = array[8]
           account.item = row
-          account.array.push(row)
         } else {
           row = {}
           row.id = array[0]

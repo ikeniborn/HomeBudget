@@ -75,6 +75,7 @@ function doPost(e) {
         updateCardDesc(postObject)
         //* обновление карточки баланса
         updateBalanceCard(postObject)
+        addCardReaction(postObject)
       } else if (postObject.actionType == 'deleteComment') {
         //* удаление строки при удалении комментария
         postObject.sum = deleteRowByActionId(postObject)
@@ -87,6 +88,8 @@ function doPost(e) {
       } else if (postObject.actionType == 'createList') {
         if (postObject.isFact || postObject.isBudget) {
           addFinancialCenter(postObject)
+          createCardsForList(postObject)
+          updateDescForNewCards(postObject)
         } else if (postObject.isTarget) {
           addTarget(postObject)
         }
