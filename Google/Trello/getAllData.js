@@ -6,10 +6,10 @@ function getAllData(postObject, source) {
   var data
   if (source == 'trello') {
     dataStructure = 1
-    data = postObject.sourceSheetNameTrelloArray
+    data = postObject.trelloArray
   } else if (source == 'account') {
     dataStructure = 2
-    data = postObject.targetSheetNameAccountArray
+    data = postObject.accountArray
   }
   var sourceArray = []
   data.reduce(function (row, array, index) {

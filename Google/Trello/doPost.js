@@ -5,9 +5,8 @@ function doPost(e) {
     const botUser = ['5e2b5f3f409c544ebdb1b9d4']
     if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1) {
       var postObject = getPostObject(postData)
-      var ssTest = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.sourceSheetNameLog)
-      ssTest.appendRow([postObject.webHookDate, postObject.actionType, postObject.actionId, postObject.memberUsername, postObject.isValidData])
-      if (postObject.actionType == 'commentCard' && postObject.isValidData) {
+      postObject.isNewAction = addLog(postData)
+      if (postObject.actionType == 'commentCard' && (postObject.isValidData || postObject.isNewAction)) {
         //* добавление информации
         updateTrelloData(postObject)
         //* получение описание карточки и комментария
@@ -66,7 +65,7 @@ function doPost(e) {
         // }
         //* добавление реакции на комментарий
         addCardReaction(postObject)
-      } else if (postObject.actionType == 'updateComment') {
+      } else if (postObject.actionType == 'updateComment' && postObject.isNewAction) {
         //* обновление данных при изменении комментария
         updateRowByActionId(postObject)
         postObject.cardDescription = getDescription(postObject).text
@@ -76,7 +75,7 @@ function doPost(e) {
         //* обновление карточки баланса
         updateBalanceCard(postObject)
         addCardReaction(postObject)
-      } else if (postObject.actionType == 'deleteComment') {
+      } else if (postObject.actionType == 'deleteComment' && postObject.isNewAction) {
         //* удаление строки при удалении комментария
         postObject.sum = deleteRowByActionId(postObject)
         postObject.cardDescription = getDescription(postObject).text
@@ -85,7 +84,7 @@ function doPost(e) {
         updateCardDesc(postObject)
         //* обновление карточки баланса
         updateBalanceCard(postObject)
-      } else if (postObject.actionType == 'createList') {
+      } else if (postObject.actionType == 'createList' && postObject.isNewAction) {
         if (postObject.isFact || postObject.isBudget) {
           addFinancialCenter(postObject)
           createCardsForList(postObject)

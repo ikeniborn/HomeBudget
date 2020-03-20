@@ -8,7 +8,7 @@ function deleteRowByActionId(postObject) {
     var targetRowIndex = []
     var sum = 0
     //* удаление данных на листе источнике
-    ss = postObject.sourceSheetNameTrelloOpen
+    ss = postObject.trelloOpen
     sourceData = postObject.dataTrello
     sourceRows = sourceData.reduce(function (row, array) {
       if (array.actionId == postObject.actionId) {
@@ -25,7 +25,7 @@ function deleteRowByActionId(postObject) {
     })
     //* удаление данных на листе учета
     ts = postObject.targetSheetNameAccountOpen
-    targetData = postObject.targetSheetNameAccountArray
+    targetData = postObject.accountArray
     targetData.reduce(function (row, array, index) {
       if (array[10] == postObject.actionId) {
         row = index + 1

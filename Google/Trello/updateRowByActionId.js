@@ -10,7 +10,7 @@ function updateRowByActionId(postObject) {
     var targetData
     var targetRowIndex = []
     //* обновление данных на листе источнике
-    ss = postObject.sourceSheetNameTrelloOpen
+    ss = postObject.trelloOpen
     sourceData = postObject.dataTrello
     sourceRows = sourceData.filter(function (row) {
       return row.actionId == postObject.actionId
@@ -22,7 +22,7 @@ function updateRowByActionId(postObject) {
     })
     //* обновление данных на листе учета
     ts = postObject.targetSheetNameAccountOpen
-    targetData = postObject.targetSheetNameAccountArray
+    targetData = postObject.accountArray
     targetData.reduce(function (row, array, index) {
       if (array[10] == postObject.actionId) {
         row = index + 1

@@ -4,12 +4,12 @@ function updateTrelloData(postObject) {
     var pushAccountRow
     var insertdate
     //* вставка значений в буфер
-    var ss = postObject.sourceSheetNameTrelloOpen
+    var ss = postObject.trelloOpen
     pushBufferRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
     ss.appendRow(pushBufferRow)
     //* вставка значений в учет
     var ts = postObject.targetSheetNameAccountOpen
-    var targetArray = postObject.targetSheetNameAccountArray
+    var targetArray = postObject.accountArray
     if (postObject.account == 'Остатки') {
       var newPeriod = postObject.budgetPeriod
       insertdate = new Date(postObject.actionDate.getTime() + 1000)
