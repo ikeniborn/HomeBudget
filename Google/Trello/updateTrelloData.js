@@ -8,7 +8,7 @@ function updateTrelloData(postObject) {
     pushBufferRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
     ss.appendRow(pushBufferRow)
     //* вставка значений в учет
-    var ts = postObject.AccountOpen
+    var ts = postObject.accountOpen
     var targetArray = postObject.accountArray
     if (postObject.account == 'Остатки') {
       var newPeriod = postObject.budgetPeriod

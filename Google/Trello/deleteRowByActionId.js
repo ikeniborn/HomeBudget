@@ -24,7 +24,7 @@ function deleteRowByActionId(postObject) {
       sum = row.sum
     })
     //* удаление данных на листе учета
-    ts = postObject.AccountOpen
+    ts = postObject.accountOpen
     targetData = postObject.accountArray
     targetData.reduce(function (row, array, index) {
       if (array[10] == postObject.actionId) {
