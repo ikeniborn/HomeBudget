@@ -19,7 +19,7 @@ function updateFactPeriod(postObject) {
       updateParametr(postObject, 'periodFactFamily', period.period)
       updateParametr(postObject, 'revenueDayFamily', period.day)
     }
-    postObject.parametrArray = SpreadsheetApp.openById(postObject.sourceSheetID).getSheetByName(postObject.parametrSheetName).getDataRange().getValues()
+    postObject.parametrArray = getValues(variable.parametrSheetOpen) s
   } catch (e) {
     console.error('updateFactPeriod: ' + e)
   } finally {

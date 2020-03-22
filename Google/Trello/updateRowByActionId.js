@@ -22,7 +22,7 @@ function updateRowByActionId(postObject) {
       ss.getRange(row.indexRow, 6).setValue(postObject.comment)
     })
     //* обновление данных на листе учета
-    ts = postObject.targetSheetNameAccountOpen
+    ts = postObject.AccountOpen
     targetData = postObject.accountArray
     targetData.reduce(function (row, array, index) {
       if (array[10] == postObject.actionId) {
