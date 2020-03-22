@@ -24,13 +24,11 @@ function addLog(postObject) {
     sourceOpen.deleteRows(startDeleteIndex, countDeleteRow)
   }
   var isNewAction = sourceArray.reduce(function (row, array) {
-    if (array[2] == postObject.actionId) {
-      row = false
-    }
+    array[2] == postObject.webHookActionId ? row = false : row = true
     return row
-  }, true)
+  }, false)
   if (isNewAction) {
-    sourceOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.actionId])
+    sourceOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId])
   }
   return isNewAction
 }

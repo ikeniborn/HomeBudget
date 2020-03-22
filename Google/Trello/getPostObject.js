@@ -3,6 +3,8 @@ function getPostObject(postData) {
     const postObject = getGlobalVariable()
     postObject.webHookDate = formatterDate().timestamp
     postObject.actionType = postData.action.type
+    postObject.webHookActionId = postObject.actionId = postData.action.id
+    postObject.isNewAction = addLog(postObject)
     if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
       postObject.actionId = postData.action.data.action.id
     } else {
