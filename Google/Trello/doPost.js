@@ -90,9 +90,8 @@ function doPost(e) {
           updateDescForNewCards(postObject)
         } else if (postObject.isTarget) {
           addTarget(postObject)
+          createCardsForList(postObject)
         }
-        //* создание карточек для нового листа
-        createCardsForList(postObject)
       }
     }
   } catch (e) {

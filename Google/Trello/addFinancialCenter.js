@@ -13,6 +13,7 @@ function addFinancialCenter(postObject) {
     if (postObject.cfo == undefined) {
       var newId = cfoArray.length + 1
       ss.appendRow([newId, postObject.listName, formatterDate().timestamp])
+      postObject.financialСenterArray = getValues(postObject.financialCenterSheetOpen)
     }
     //* обновление листа
     var listName = postObject.listName + ' ' + formatterDate(postObject.period).date

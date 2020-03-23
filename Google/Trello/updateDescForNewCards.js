@@ -1,7 +1,6 @@
 function updateDescForNewCards(postObject) {
   try {
-    var list = getList(postObject, postObject.boardId)
-    var cards = getCards(postObject, list.id).array
+    var cards = getCards(postObject, postObject.listId).array
     var postObjectCard = JSON.parse(JSON.stringify(postObject))
     postObjectCard.dataAccount = getAllData(postObject, 'account')
     postObjectCard.dataAccountFactCurr = getCurrData(postObject, 'Факт')
