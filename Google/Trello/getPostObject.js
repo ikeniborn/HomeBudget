@@ -4,10 +4,6 @@ function getPostObject(postData) {
     postObject.webHookDate = formatterDate().timestamp
     postObject.actionType = postData.action.type
     postObject.webHookActionId = postData.action.id
-    // добавление записи в лог
-    postObject.logOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameLog)
-    postObject.logArray = getGoogleValues(postObject.logOpen, postObject.sourceSheetNameLog)
-    postObject.isNewAction = addLog(postObject)
     // открытие листов
     postObject.financialCenterSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.financialCenterSheetName)
     postObject.accountingItemSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.accountingItemSheetName)
@@ -18,14 +14,14 @@ function getPostObject(postData) {
     postObject.accountOpen = openGoogleSheet(postObject.targetSheetID, postObject.targetSheetNameAccount)
     postObject.targetOpen = openGoogleSheet(postObject.targetSheetID, postObject.targetSheetNameTarget)
     // данные с листов
-    postObject.financialСenterArray = getGoogleValues(postObject.financialCenterSheetOpen, postObject.financialCenterSheetName)
-    postObject.accountingItemArray = getGoogleValues(postObject.accountingItemSheetOpen, postObject.accountingItemSheetName)
-    postObject.costСenterArray = getGoogleValues(postObject.costСenterSheetOpen, postObject.costСenterSheetName)
-    postObject.parametrArray = getGoogleValues(postObject.parametrSheetOpen, postObject.parametrSheetName)
-    postObject.goalsArray = getGoogleValues(postObject.goalsSheetOpen, postObject.goalsSheetName)
-    postObject.trelloArray = getGoogleValues(postObject.trelloOpen, postObject.sourceSheetNameTrello)
-    postObject.accountArray = getGoogleValues(postObject.accountOpen, postObject.targetSheetNameAccount)
-    postObject.targetArray = getGoogleValues(postObject.targetOpen, postObject.targetSheetNameTarget)
+    postObject.financialСenterArray = getGoogleSheetValues(postObject.financialCenterSheetOpen)
+    postObject.accountingItemArray = getGoogleSheetValues(postObject.accountingItemSheetOpen)
+    postObject.costСenterArray = getGoogleSheetValues(postObject.costСenterSheetOpen)
+    postObject.parametrArray = getGoogleSheetValues(postObject.parametrSheetOpen)
+    postObject.goalsArray = getGoogleSheetValues(postObject.goalsSheetOpen)
+    postObject.trelloArray = getGoogleSheetValues(postObject.trelloOpen)
+    postObject.accountArray = getGoogleSheetValues(postObject.accountOpen)
+    postObject.targetArray = getGoogleSheetValues(postObject.targetOpen)
     if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
       postObject.actionId = postData.action.data.action.id
     } else {

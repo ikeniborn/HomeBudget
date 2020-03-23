@@ -3,7 +3,7 @@ function isOldData(postObject) {
     //* добавление строк на страницу
     var targetArray = postObject.dataTrello
     var searchRow = targetArray.reduce(function (row, array) {
-      if (array.actionId == postObject.actionId) {
+      if (array.actionId.match(postObject.actionId)) {
         row = true
       }
       return row

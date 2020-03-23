@@ -1,10 +1,11 @@
-function addLog(postObject) {
-  var sourceOpen = postObject.logOpen
+function addLog(postData) {
+  var globalVariable = getGlobalVariable()
+  var sourceOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameLog)
   var endDate = new Date()
   var startDate = new Date()
   startDate.setDate(endDate.getDate() - 180)
   var deleteArrya = []
-  var sourceArray = postObject.logArray.reduce(function (row, array, index) {
+  var sourceArray = getGoogleSheetValues(sourceOpen).reduce(function (row, array, index) {
     if (index > 0) {
       if (array[0] >= startDate) {
         row.push(array)
@@ -24,13 +25,13 @@ function addLog(postObject) {
     sourceOpen.deleteRows(startDeleteIndex, countDeleteRow)
   }
   var isNewAction = sourceArray.reduce(function (row, array) {
-    if (array[2] !== postObject.webHookActionId) {
-      row = true
+    if (array[2].match(postData.action.id)) {
+      row = false
     }
     return row
-  }, false)
+  }, true)
   if (isNewAction) {
-    sourceOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId])
+    sourceOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id])
   }
   return isNewAction
 }
