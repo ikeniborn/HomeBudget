@@ -10,15 +10,17 @@ function getTarget(postObject) {
         if (listName.toLowerCase().match(array[1].toLowerCase())) {
           row = {}
           row.id = array[0]
-          row.name = array[1]
-          row.cfo = array[2]
+          row.listName = array[1]
+          row.goal = array[2]
+          row.cfo = array[3]
           obj.item = row
           obj.array.push(row)
         } else {
           row = {}
           row.id = array[0]
-          row.name = array[1]
-          row.cfo = array[2]
+          row.listName = array[1]
+          row.goal = array[2]
+          row.cfo = array[3]
           obj.array.push(row)
         }
       }

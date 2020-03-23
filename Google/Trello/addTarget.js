@@ -6,20 +6,18 @@ function addTarget(postObject) {
   try {
     var ss = postObject.goalsSheetOpen
     var array = getTarget(postObject).array
-    var goal = getTarget(postObject).item.name
+    var goal = getTarget(postObject).item.goal
     var cfo = getFinancialСenter(postObject).item.cfo
-    var objCfo = postObject.listName.toLowerCase().match(cfo.toLowerCase())
-    var newGoal = postObject.listName.replace(objCfo, '').trim()
+    var objGoal = postObject.listName.toLowerCase().replace(cfo.toLowerCase(), '').trim()
+    var newGoal = objGoal[0].toUpperCase() + objGoal.slice(1)
     var goalArray = array.map(function (array) {
       return array.name
     })
     if (goal == undefined) {
       var newId = goalArray.length + 1
-      ss.appendRow([newId, newGoal, cfo, formatterDate().timestamp])
+      ss.appendRow([newId, postObject.listName, newGoal, cfo, formatterDate().timestamp])
       postObject.goalsArray = getValues(postObject.goalsSheetOpen)
     }
-    //* обновление листа
-    updateList(postObject, postObject.listId, newGoal)
   } catch (e) {
     console.error('addFinancialCenter: ' + e)
   }
