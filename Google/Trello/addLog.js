@@ -24,7 +24,9 @@ function addLog(postObject) {
     sourceOpen.deleteRows(startDeleteIndex, countDeleteRow)
   }
   var isNewAction = sourceArray.reduce(function (row, array) {
-    array[2] == postObject.webHookActionId ? row = false : row = true
+    if (array[2] !== postObject.webHookActionId) {
+      row = true
+    }
     return row
   }, false)
   if (isNewAction) {

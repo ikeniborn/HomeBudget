@@ -1,10 +1,31 @@
 function getPostObject(postData) {
   try {
-    const postObject = getGlobalVariable()
+    var postObject = getGlobalVariable()
     postObject.webHookDate = formatterDate().timestamp
     postObject.actionType = postData.action.type
-    postObject.webHookActionId = postObject.actionId = postData.action.id
+    postObject.webHookActionId = postData.action.id
+    // добавление записи в лог
+    postObject.logOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameLog)
+    postObject.logArray = getGoogleValues(postObject.logOpen, postObject.sourceSheetNameLog)
     postObject.isNewAction = addLog(postObject)
+    // открытие листов
+    postObject.financialCenterSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.financialCenterSheetName)
+    postObject.accountingItemSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.accountingItemSheetName)
+    postObject.costСenterSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.costСenterSheetName)
+    postObject.parametrSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.parametrSheetName)
+    postObject.goalsSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.goalsSheetName)
+    postObject.trelloOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameTrello)
+    postObject.accountOpen = openGoogleSheet(postObject.targetSheetID, postObject.targetSheetNameAccount)
+    postObject.targetOpen = openGoogleSheet(postObject.targetSheetID, postObject.targetSheetNameTarget)
+    // данные с листов
+    postObject.financialСenterArray = getGoogleValues(postObject.financialCenterSheetOpen, postObject.financialCenterSheetName)
+    postObject.accountingItemArray = getGoogleValues(postObject.accountingItemSheetOpen, postObject.accountingItemSheetName)
+    postObject.costСenterArray = getGoogleValues(postObject.costСenterSheetOpen, postObject.costСenterSheetName)
+    postObject.parametrArray = getGoogleValues(postObject.parametrSheetOpen, postObject.parametrSheetName)
+    postObject.goalsArray = getGoogleValues(postObject.goalsSheetOpen, postObject.goalsSheetName)
+    postObject.trelloArray = getGoogleValues(postObject.trelloOpen, postObject.sourceSheetNameTrello)
+    postObject.accountArray = getGoogleValues(postObject.accountOpen, postObject.targetSheetNameAccount)
+    postObject.targetArray = getGoogleValues(postObject.targetOpen, postObject.targetSheetNameTarget)
     if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
       postObject.actionId = postData.action.data.action.id
     } else {
@@ -100,10 +121,10 @@ function getPostObject(postData) {
       postObject.dataAccountFactCurr = []
       postObject.dataAccountBudgetCurr = []
     }
-    if (postData.action.type == 'commentCard') {
-      postObject.isValidData = isValidData(postObject)
+    if (['deleteComment', 'updateComment'].indexOf(postData.action.type) !== -1) {
+      postObject.isOldData = isOldData(postObject)
     } else {
-      postObject.isValidData = false
+      postObject.isOldData = false
     }
     return postObject
   } catch (e) {
