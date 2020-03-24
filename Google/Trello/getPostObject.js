@@ -110,7 +110,6 @@ function getPostObject(postData) {
     postObject.budgetPeriod = postObject.date.budgetPeriod
     postObject.budgetPeriod2 = postObject.date.budgetPeriod2
     postObject.budgetPeriod3 = postObject.date.budgetPeriod3
-    postObject.isSamePeriod = postObject.date.isSamePeriod
     if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
       postObject.dataTrello = getAllData(postObject, 'trello')
       postObject.dataAccount = []

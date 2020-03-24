@@ -16,52 +16,15 @@ function doPost(e) {
         //* обновление карточки баланса
         updateBalanceCard(postObject)
         //* закрытие периода
-        if (postObject.isCurrFact && ['Остатки'].indexOf(postObject.account) !== -1 && !postObject.isSamePeriod) {
+        if (postObject.isCurrFact && ['Остатки'].indexOf(postObject.account) !== -1) {
           updateFactPeriod(postObject)
           closedFactPeriod(postObject)
           updateDescForNewCards(postObject)
           // reportBudgetOksana(postObject)
-        } else if (postObject.isCurrFact && ['Аванс'].indexOf(postObject.account) !== -1 && postObject.isSamePeriod) {
+        } else if (postObject.isCurrFact && ['Аванс'].indexOf(postObject.account) !== -1) {
           updateBudgetPeriod(postObject)
           closedBudgetPeriod(postObject)
         }
-        // if (postObject.isCurrFact && !postObject.isSamePeriod) {
-        //   //* обновление карточек бюджета по данным факта
-        //   if (!postObject.isSamePeriod && ['Остатки'].indexOf(postObject.account) === -1) {
-        //     var budgetList = getList(postObject, postObject.boardIdBudget)
-        //     var budgetCard = getCards(postObject, budgetList.id).item
-        //     var postObjectBudget = JSON.parse(JSON.stringify(postObject))
-        //     postObjectBudget.boardId = postObject.boardIdFact
-        //     postObjectBudget.listId = budgetList.id
-        //     postObjectBudget.cardId = budgetCard.id
-        //     postObjectBudget.isFact = false
-        //     postObjectBudget.isCurrFact = false
-        //     postObjectBudget.isBudget = true
-        //     postObjectBudget.isCurrBudget = true
-        //     postObjectBudget.period = postObject.budgetPeriod
-        //     postObjectBudget.ymd = getYMD(postObject.budgetPeriod).ymd
-        //     postObjectBudget.cardDescription = getDescription(postObjectBudget).text
-        //     updateCardDesc(postObjectBudget)
-        //   }
-        // } else if (postObject.isCurrBudget) {
-        //   if (postObject.isSamePeriod) {
-        //     //* обновление фактической карточки при обновлении текущего бюджета
-        //     var factList = getList(postObject, postObject.boardIdFact)
-        //     var factCard = getCards(postObject, factList.id).item
-        //     var postObjectFact = JSON.parse(JSON.stringify(postObject))
-        //     postObjectFact.boardId = postObject.boardIdFact
-        //     postObjectFact.listId = factList.id
-        //     postObjectFact.cardId = factCard.id
-        //     postObjectFact.isFact = true
-        //     postObjectFact.isCurrFact = true
-        //     postObjectFact.isBudget = false
-        //     postObjectFact.isCurrBudget = false
-        //     postObjectFact.period = postObject.factPeriod
-        //     postObjectFact.ymd = getYMD(postObject.factPeriod).ymd
-        //     postObjectFact.cardDescription = getDescription(postObjectFact).text
-        //     updateCardDesc(postObjectFact)
-        //   }
-        // }
         //* добавление реакции на комментарий
         addCardReaction(postObject)
       } else if (postObject.actionType == 'updateComment' && postObject.isOldData) {

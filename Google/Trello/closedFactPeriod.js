@@ -2,35 +2,19 @@
 /* eslint-disable spaced-comment */
 function closedFactPeriod(postObject) {
   try {
-    var accountArray = postObject.accountingItem.array
-    var accountItems = accountArray.filter(function (row) {
-      return row.fact == 1
-    })
+    const postObjectFact0 = JSON.parse(JSON.stringify(postObject))
+    postObjectFact0.boardId = postObjectFact0.boardIdFact0
+    postObjectFact0.listId = getList(postObjectFact0).id
+    postObjectFact0.listName = postObjectFact0.cfo + ' ' + formatterDate(postObjectBudget.factPeriod0).date
     //* закрытие листа на доске факт-1
-    var listFact0 = getList(postObject, postObject.boardIdFact0)
-    archiveAllCards(postObject, listFact0.id)
-    var factPeriod0 = getPeriod(postObject).factPeriod0
-    var listNameFact0 = postObject.cfo + ' ' + formatterDate(factPeriod0).date
-    updateList(postObject, listFact0.id, listNameFact0)
+    archiveAllCards(postObjectFact0)
+    updateList(postObjectFact0)
     //* Перенос карточек на доску факт-1
-    var listFactId = postObject.listId
-    var labelList = getBoardLabel(postObject, postObject.boardIdFact)
-    moveAllCards(postObject, listFactId, postObject.boardIdFact0, listFact0.id)
+    moveAllCards(postObject, postObjectFact0)
     //* обновление текущего листа факта
-    var factPeriod = getPeriod(postObject).factPeriod
-    var listNameFact = postObject.cfo + ' ' + formatterDate(factPeriod).date
-    updateList(postObject, listFactId, listNameFact)
+    updateList(postObject)
     //* создание карточек на листе факт
-    accountItems.forEach(function (accounts) {
-      var label = labelList.reduce(function (row, arrya) {
-        if (arrya.color.toUpperCase() == accounts.color.toUpperCase()) {
-          row = {}
-          row.id = arrya.id
-        }
-        return row
-      })
-      addCard(postObject, accounts.nomenclature, postObject.listId, accounts.id, label.id)
-    })
+    createCardsForList(postObject)
   } catch (e) {
     console.error('closedFactPeriod: ' + e)
   } finally {

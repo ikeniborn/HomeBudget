@@ -1,4 +1,4 @@
-function archiveAllCards(postObject, listId) {
+function archiveAllCards(postObject) {
   /*
    * @postObject - входные параметра запроса
    * @listId - входной параметр идентификатора листа trello
@@ -8,7 +8,7 @@ function archiveAllCards(postObject, listId) {
       method: 'post',
       contentType: 'application/json'
     }
-    UrlFetchApp.fetch(postObject.apiRoot + 'lists/' + listId + '/archiveAllCards?' + postObject.keyAndToken, data)
+    UrlFetchApp.fetch(postObject.apiRoot + 'lists/' + postObject.listId + '/archiveAllCards?' + postObject.keyAndToken, data)
   } catch (e) {
     console.error('archiveAllCards: ' + e)
   }

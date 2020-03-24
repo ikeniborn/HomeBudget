@@ -1,4 +1,4 @@
-function moveAllCards(postObject, oldListId, newBoardId, newListId) {
+function moveAllCards(postObjectOld, postObjectNew) {
   /*
    * @postObject - входные параметра запроса
    * @oldListId - входной параметр ID старой карточки trello
@@ -10,7 +10,7 @@ function moveAllCards(postObject, oldListId, newBoardId, newListId) {
       method: 'post',
       contentType: 'application/json'
     }
-    UrlFetchApp.fetch(postObject.apiRoot + 'lists/' + oldListId + '/moveAllCards?idBoard=' + newBoardId + '&idList=' + newListId + '&' + postObject.keyAndToken, data)
+    UrlFetchApp.fetch(postObjectOld.apiRoot + 'lists/' + postObjectOld.ListId + '/moveAllCards?idBoard=' + postObjectNew.BoardId + '&idList=' + postObjectNew.ListId + '&' + postObjectOld.keyAndToken, data)
   } catch (e) {
     console.error('moveAllCards: ' + e)
   }

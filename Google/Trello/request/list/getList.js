@@ -1,4 +1,4 @@
-function getList(postObject, boardId) {
+function getList(postObject) {
   /*
    * @postObject - входные параметра запроса
    * @boardId - входной параметр ID доски trello
@@ -8,7 +8,7 @@ function getList(postObject, boardId) {
       method: 'get',
       contentType: 'application/json'
     }
-    var resp = UrlFetchApp.fetch(postObject.apiRoot + 'boards/' + boardId + '/lists?cards=none&' + postObject.keyAndToken, data)
+    var resp = UrlFetchApp.fetch(postObject.apiRoot + 'boards/' + postObject.boardId + '/lists?cards=none&' + postObject.keyAndToken, data)
     var respData = JSON.parse(resp)
     var listArray = {}
     respData.reduce(function (variable, array) {

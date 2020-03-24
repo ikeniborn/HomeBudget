@@ -10,6 +10,6 @@ function getYMD(date) {
       ymd: y.toString() + m.toString() + d.toString()
     }
   } catch (e) {
-    console.error('getParametr: ' + e)
+    console.error('getYMD: ' + e)
   }
 }

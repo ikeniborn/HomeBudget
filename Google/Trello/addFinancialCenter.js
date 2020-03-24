@@ -5,19 +5,30 @@ function addFinancialCenter(postObject) {
    * */
   try {
     var ss = postObject.financialCenterSheetOpen
+    var ssParametr = postObject.parametrSheetOpen
     var array = getFinancialСenter(postObject).array
+    var arrayPаrametr = getParametr(postObject).array
     var cfoArray = array.map(function (array) {
-      return array.cfo
+      return array.id
     })
-    // var cfo = getFinancialСenter(postObject).item.cfo
+    var parametrArray = arrayPаrametr.map(function (array) {
+      return array.id
+    })
     if (postObject.cfo == undefined) {
       var newId = cfoArray.length + 1
       ss.appendRow([newId, postObject.listName, formatterDate().timestamp])
-      postObject.financialСenterArray = getValues(postObject.financialCenterSheetOpen)
+      postObject.financialСenterArray = getGoogleSheetValues(postObject.financialCenterSheetOpen)
+      var newIdParametr = parametrArray.length + 1
+      var currDate = new Date
+      var period = new Date(currDate.getYear(), currDate.getMonth(), 1)
+      ssParametr.appendRow([newIdParametr, 'Факт', postObject.listName, period, formatterDate().timestamp])
+      ssParametr.appendRow([newIdParametr + 1, 'Бюджет', postObject.listName, period, formatterDate().timestamp])
+      ssParametr.appendRow([newIdParametr + 2, 'Цель', postObject.listName, period, formatterDate().timestamp])
+      //* обновление листа
+      postObject.listName = postObject.listName + ' ' + formatterDate(period).date
+      updateList(postObject)
     }
-    //* обновление листа
-    var listName = postObject.listName + ' ' + formatterDate(postObject.period).date
-    updateList(postObject, postObject.listId, listName)
+
   } catch (e) {
     console.error('addFinancialCenter: ' + e)
   }

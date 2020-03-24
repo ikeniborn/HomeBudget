@@ -1,4 +1,4 @@
-function updateList(postObject, listId, listName) {
+function updateList(postObject) {
   /*
    * @postObject - входные параметра запроса
    * @listName - входной параметр ID листа trello
@@ -9,7 +9,7 @@ function updateList(postObject, listId, listName) {
       method: 'put',
       contentType: 'application/json'
     }
-    UrlFetchApp.fetch(postObject.apiRoot + 'lists/' + listId + '?name=' + listName + '&' + postObject.keyAndToken, data)
+    UrlFetchApp.fetch(postObject.apiRoot + 'lists/' + postObject.listId + '?name=' + postObject.listName + '&' + postObject.keyAndToken, data)
   } catch (e) {
     console.error('updateList: ' + e)
   }

@@ -16,7 +16,7 @@ function addTarget(postObject) {
     if (goal == undefined) {
       var newId = goalArray.length + 1
       ss.appendRow([newId, postObject.listName, newGoal, cfo, formatterDate().timestamp])
-      postObject.goalsArray = getValues(postObject.goalsSheetOpen)
+      postObject.goalsArray = getGoogleSheetValues(postObject.goalsSheetOpen)
     }
   } catch (e) {
     console.error('addFinancialCenter: ' + e)
