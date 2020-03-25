@@ -16,8 +16,8 @@ function doPost(e) {
           postObject.isFact = false
           postObject.isBudget = true
           postObjectBudget.type = 'Бюджет'
-          updateParametr(postObjectBudget, postObject.budgetPeriod2)
-          closedBudgetPeriod(postObjectBudget)
+          updateParametr(postObjectBudget)
+          closedBudgetPeriod(postObject)
         }
         //* добавление информации
         updateTrelloData(postObject)

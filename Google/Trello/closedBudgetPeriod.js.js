@@ -19,7 +19,8 @@ function closedBudgetPeriod(postObject) {
     postObjectBudget3.listId = getList(postObjectBudget3).id
     postObjectBudget3.listName = postObjectBudget3.cfo + ' ' + formatterDate(postObjectBudget3.budgetPeriod3).date
     moveAllCards(postObjectBudget3, postObjectBudget2)
-    updateList(postObjectBudget2)
+    createCardsForList(postObjectBudget3)
+    updateList(postObjectBudget3)
   } catch (e) {
     console.error('closedBudgetPeriod: ' + e)
   }

@@ -1,5 +1,5 @@
 // обновление параметра
-function updateParametr(postObject, value) {
+function updateParametr(postObject) {
   /*
    * @postObject - входные параметра запроса
    * @value - значение параметра. Изменяемое
@@ -7,7 +7,8 @@ function updateParametr(postObject, value) {
   try {
     var ss = postObject.parametrSheetOpen
     var indexRow = getParametr(postObject).item.indexRow
-    ss.getRange(indexRow, 4).setValue(value)
+    var value = new Date(postObject.budgetPeriod.getYear(), postObject.budgetPeriod.getMonth() + 1, 1)
+    ss.getRange(indexRow, 4).setValue(formatterDate(value).date)
     ss.getRange(indexRow, 5).setValue(formatterDate().timestamp)
     postObject.parametrArray = getGoogleSheetValues(postObject.parametrSheetOpen)
     postObject.date = getPeriod(postObject)
