@@ -26,7 +26,6 @@ function addFinancialCenter(postObject) {
       postObject.listName = postObject.listName + ' ' + formatterDate(period).date
       updateList(postObject)
     }
-
   } catch (e) {
     console.error('addFinancialCenter: ' + e)
   }
