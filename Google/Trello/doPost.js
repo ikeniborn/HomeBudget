@@ -13,6 +13,8 @@ function doPost(e) {
           // reportBudgetOksana(postObject)
         } else if (postObject.isCurrFact && ['Аванс'].indexOf(postObject.account) !== -1 && postObject.isSamePeriod) {
           const postObjectBudget = copyObject(postObject)
+          postObject.isFact = false
+          postObject.isBudget = true
           postObjectBudget.type = 'Бюджет'
           updateParametr(postObjectBudget, postObject.budgetPeriod2)
           closedBudgetPeriod(postObjectBudget)
