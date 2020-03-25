@@ -6,6 +6,14 @@ function doPost(e) {
     if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(postData)) {
       var postObject = getPostObject(postData)
       if (postObject.actionType == 'commentCard') {
+        //* закрытие периода
+        if (postObject.isCurrFact && ['Остатки'].indexOf(postObject.account) !== -1 && !postObject.isSamePeriod) {
+          closedFactPeriod(postObject)
+          updateDescForNewCards(postObject)
+          // reportBudgetOksana(postObject)
+        } else if (postObject.isCurrFact && ['Аванс'].indexOf(postObject.account) !== -1 && postObject.isSamePeriod) {
+          closedBudgetPeriod(postObject)
+        }
         //* добавление информации
         updateTrelloData(postObject)
         //* получение описание карточки и комментария
@@ -15,16 +23,6 @@ function doPost(e) {
         updateCardDesc(postObject)
         //* обновление карточки баланса
         updateBalanceCard(postObject)
-        //* закрытие периода
-        if (postObject.isCurrFact && ['Остатки'].indexOf(postObject.account) !== -1) {
-          updateFactPeriod(postObject)
-          closedFactPeriod(postObject)
-          updateDescForNewCards(postObject)
-          // reportBudgetOksana(postObject)
-        } else if (postObject.isCurrFact && ['Аванс'].indexOf(postObject.account) !== -1) {
-          updateBudgetPeriod(postObject)
-          closedBudgetPeriod(postObject)
-        }
         //* добавление реакции на комментарий
         addCardReaction(postObject)
       } else if (postObject.actionType == 'updateComment' && postObject.isOldData) {

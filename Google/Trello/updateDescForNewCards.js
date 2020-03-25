@@ -1,7 +1,7 @@
 function updateDescForNewCards(postObject) {
   try {
     var cards = getCards(postObject, postObject.listId).array
-    var postObjectCard = JSON.parse(JSON.stringify(postObject))
+    var postObjectCard = copyObject(postObject)
     postObjectCard.dataAccount = getAllData(postObject, 'account')
     postObjectCard.dataAccountFactCurr = getCurrData(postObject, 'Факт')
     postObjectCard.dataAccountBudgetCurr = getCurrData(postObject, 'Бюджет')

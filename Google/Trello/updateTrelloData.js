@@ -10,17 +10,9 @@ function updateTrelloData(postObject) {
     //* вставка значений в учет
     var ts = postObject.accountOpen
     var targetArray = postObject.accountArray
-    if (postObject.account == 'Остатки') {
-      var newPeriod = postObject.budgetPeriod
-      insertdate = new Date(postObject.actionDate.getTime() + 1000)
-      pushAccountRow = [insertdate, newPeriod, postObject.cfo, postObject.mvz, postObject.cashFlow, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
-      ts.appendRow(pushAccountRow)
-      targetArray.push(pushAccountRow)
-    } else {
-      pushAccountRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.cashFlow, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
-      ts.appendRow(pushAccountRow)
-      targetArray.push(pushAccountRow)
-    }
+    pushAccountRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.cashFlow, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
+    ts.appendRow(pushAccountRow)
+    targetArray.push(pushAccountRow)
     //* Проверка перевода на счет семьи
     if (postObject.account == 'Перевод на счет Семья') {
       insertdate = new Date(postObject.actionDate.getTime() + 1000);

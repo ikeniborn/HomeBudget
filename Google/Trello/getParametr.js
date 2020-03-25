@@ -11,7 +11,7 @@ function getParametr(postObject) {
           row.id = array[0]
           row.type = array[1]
           row.cfo = array[2]
-          row.value = array[3]
+          row.value = new Date(array[3])
           row.indexRow = index + 1
           parametr.item = row
           parametr.array.push(row)
@@ -20,7 +20,7 @@ function getParametr(postObject) {
           row.id = array[0]
           row.type = array[1]
           row.cfo = array[2]
-          row.value = array[3]
+          row.value = new Date(array[3])
           row.indexRow = index + 1
           parametr.array.push(row)
         }

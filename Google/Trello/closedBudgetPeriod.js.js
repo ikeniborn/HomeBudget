@@ -2,21 +2,16 @@
 /* eslint-disable spaced-comment */
 function closedBudgetPeriod(postObject) {
   try {
-    const postObjectBudget = JSON.parse(JSON.stringify(postObject))
+    updateParametr(postObject, postObject.budgetPeriod2)
+    const postObjectBudget = copyObject(postObject)
     postObjectBudget.boardId = postObjectBudget.boardIdBudget
     postObjectBudget.listId = getList(postObjectBudget).id
-    postObjectBudget.isFact = false
-    postObjectBudget.isBudget = true
-    postObjectBudget.date = getPeriod(postObjectBudget)
-    postObjectBudget.budgetPeriod = postObjectBudget.date.budgetPeriod
-    postObjectBudget.budgetPeriod2 = postObjectBudget.date.budgetPeriod2
-    postObjectBudget.budgetPeriod3 = postObjectBudget.date.budgetPeriod3
     postObjectBudget.listName = postObjectBudget.cfo + ' ' + formatterDate(postObjectBudget.budgetPeriod).date
-    const postObjectBudget2 = JSON.parse(JSON.stringify(postObjectBudget))
+    const postObjectBudget2 = copyObject(postObject)
     postObjectBudget2.boardId = postObjectBudget.boardIdBudget2
     postObjectBudget2.listId = getList(postObjectBudget2).id
     postObjectBudget2.listName = postObjectBudget2.cfo + ' ' + formatterDate(postObjectBudget2.budgetPeriod2).date
-    const postObjectBudget3 = JSON.parse(JSON.stringify(postObjectBudget2))
+    const postObjectBudget3 = copyObject(postObject)
     postObjectBudget3.boardId = postObjectBudget.boardIdBudget3
     postObjectBudget3.listId = getList(postObjectBudget3).id
     postObjectBudget3.listName = postObjectBudget3.cfo + ' ' + formatterDate(postObjectBudget3.budgetPeriod3).date

@@ -1,19 +1,22 @@
 function getPeriod(postObject) {
   try {
     var date = {}
-    var parametr = getParametr(postObject).item.value
     if (postObject.isFact || postObject.isTarget) {
-      date.factPeriod0 = new Date(parametr.getYear(), parametr.getMonth() - 1, 1)
-      date.factPeriod = parametr
-      date.budgetPeriod = new Date(parametr.getYear(), parametr.getMonth() + 1, 1)
-      date.budgetPeriod2 = new Date(parametr.getYear(), parametr.getMonth() + 2, 1)
-      date.budgetPeriod3 = new Date(parametr.getYear(), parametr.getMonth() + 3, 1)
+      var postObjectBudget = copyObject(postObject)
+      postObjectBudget.type = 'Бюджет'
+      date.factPeriod = getParametr(postObject).item.value
+      date.budgetPeriod = getParametr(postObjectBudget).item.value
+      date.factPeriod0 = new Date(date.factPeriod.getYear(), date.factPeriod.getMonth() - 1, 1)
+      date.budgetPeriod2 = new Date(date.budgetPeriod.getYear(), date.budgetPeriod.getMonth() + 1, 1)
+      date.budgetPeriod3 = new Date(date.budgetPeriod.getYear(), date.budgetPeriod.getMonth() + 2, 1)
     } else if (postObject.isBudget) {
-      date.factPeriod0 = new Date(parametr.getYear(), parametr.getMonth() - 2, 1)
-      date.factPeriod = new Date(parametr.getYear(), parametr.getMonth() - 1, 1)
-      date.budgetPeriod = parametr
-      date.budgetPeriod2 = new Date(parametr.getYear(), parametr.getMonth() + 1, 1)
-      date.budgetPeriod3 = new Date(parametr.getYear(), parametr.getMonth() + 2, 1)
+      var postObjectFact = copyObject(postObject)
+      postObjectFact.type = 'Факт'
+      date.factPeriod = getParametr(postObjectFact).item.value
+      date.budgetPeriod = getParametr(postObject).item.value
+      date.factPeriod0 = new Date(date.factPeriod.getYear(), date.factPeriod.getMonth() - 1, 1)
+      date.budgetPeriod2 = new Date(date.budgetPeriod.getYear(), date.budgetPeriod.getMonth() + 1, 1)
+      date.budgetPeriod3 = new Date(date.budgetPeriod.getYear(), date.budgetPeriod.getMonth() + 2, 1)
     }
     if (postObject.boardId == postObject.boardIdFact) {
       date.period = date.factPeriod
@@ -27,6 +30,11 @@ function getPeriod(postObject) {
       date.period = date.budgetPeriod3
     }
     date.ymd = getYMD(date.period).ymd
+    if (getYMD(date.factPeriod).ymd == getYMD(date.budgetPeriod).ymd) {
+      date.isSamePeriod = true
+    } else {
+      date.isSamePeriod = false
+    }
     return date
   } catch (e) {
     console.error('getPeriod: ' + e)
