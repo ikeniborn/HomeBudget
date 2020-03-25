@@ -49,12 +49,13 @@ function doPost(e) {
           addFinancialCenter(postObject)
           createCardsForList(postObject)
           updateDescForNewCards(postObject)
+          postObject.listname = postObject.listname + ' ' + formatterDate(postObject.period).date
+          updateList(postObject)
         } else if (postObject.isTarget) {
           addTarget(postObject)
           createCardsForList(postObject)
         }
       }
-
     }
   } catch (e) {
     console.error('doPost: ' + e)
