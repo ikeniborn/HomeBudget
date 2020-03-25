@@ -12,7 +12,10 @@ function doPost(e) {
           updateDescForNewCards(postObject)
           // reportBudgetOksana(postObject)
         } else if (postObject.isCurrFact && ['Аванс'].indexOf(postObject.account) !== -1 && postObject.isSamePeriod) {
-          closedBudgetPeriod(postObject)
+          const postObjectBudget = copyObject(postObject)
+          postObjectBudget.type = 'Бюджет'
+          updateParametr(postObjectBudget, postObject.budgetPeriod2)
+          closedBudgetPeriod(postObjectBudget)
         }
         //* добавление информации
         updateTrelloData(postObject)
