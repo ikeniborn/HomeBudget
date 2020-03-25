@@ -1,6 +1,6 @@
 function updateBudgetPeriod(postObject) {
   try {
-    updateParametr(postObject, postObject.budgetPeriod2)
+    updateParametr(postObject, postObject.budgetPeriod)
     postObject.parametrArray = getGoogleSheetValues(postObject.parametrSheetOpen)
   } catch (e) {
     console.error('updateBudgetPeriod: ' + e)
