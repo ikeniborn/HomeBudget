@@ -47,9 +47,15 @@ function doPost(e) {
       } else if (postObject.actionType == 'createList') {
         if (postObject.isFact || postObject.isBudget) {
           addFinancialCenter(postObject)
+          postObject.cfo = postObject.listName
+          if (postObject.isFact) {
+            postObject.type = 'Факт'
+          } else if (postObject.isBudget) {
+            postObject.type = 'Бюджет'
+          }
           createCardsForList(postObject)
           updateDescForNewCards(postObject)
-          postObject.listname = postObject.listname + ' ' + formatterDate(postObject.period).date
+          postObject.listName = postObject.cfo + ' ' + formatterDate(getPeriod(postObject).period).date
           updateList(postObject)
         } else if (postObject.isTarget) {
           addTarget(postObject)
