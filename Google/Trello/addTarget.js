@@ -15,7 +15,7 @@ function addTarget(postObject) {
     })
     if (goal == undefined) {
       var newId = goalArray.length + 1
-      ss.appendRow([newId, postObject.listName, newGoal, cfo, formatterDate().timestamp])
+      ss.appendRow([newId, postObject.listName, newGoal, cfo, formatterDate().timestamp, postObject.listId])
       postObject.goalsArray = getGoogleSheetValues(postObject.goalsSheetOpen)
     }
   } catch (e) {
