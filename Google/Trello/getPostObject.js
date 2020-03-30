@@ -73,14 +73,15 @@ function getPostObject(postData) {
       postObject.list = {}
       postObject.listId = postData.action.data.list.id
       postObject.listName = postData.action.data.list.name
+      if (['updateList'].indexOf(postData.action.type) !== -1) {
+        postObject.listClosed = postData.action.data.list.closed
+      }
     } else if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
       postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
       postObject.listName = postObject.list.name
     }
-    if (['updateList'].indexOf(postData.action.type) !== -1) {
-      postObject.listClosed = postObject.list.closed
-    }
+
     if (postObject.isTarget) {
       postObject.cfo = getTarget(postObject).item.cfo
     } else {
@@ -113,7 +114,7 @@ function getPostObject(postData) {
     } else {
       postObject.mvz = getCostСenter(postObject).item.mvz
     }
-    if (['createList'].indexOf(postData.action.type) !== -1) {
+    if (['createList', 'updateList'].indexOf(postData.action.type) !== -1) {
       var currDate = new Date
       postObject.period = new Date(currDate.getYear(), currDate.getMonth(), 1)
       postObject.ymd = getYMD(postObject.period)
