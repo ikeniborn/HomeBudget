@@ -14,6 +14,7 @@ function getTarget(postObject) {
           row.goal = array[2]
           row.cfo = array[3]
           row.listId = array[4]
+          row.status = array[5]
           obj.item = row
           obj.array.push(row)
         } else {
@@ -23,6 +24,7 @@ function getTarget(postObject) {
           row.goal = array[2]
           row.cfo = array[3]
           row.listId = array[4]
+          row.status = array[5]
           obj.array.push(row)
         }
       }

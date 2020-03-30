@@ -1,6 +1,6 @@
 function doPost(e) {
   try {
-    const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList']
+    const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList']
     const botUser = ['5e2b5f3f409c544ebdb1b9d4']
     var postData = JSON.parse(e.postData.contents)
     if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(postData)) {
@@ -62,6 +62,10 @@ function doPost(e) {
         } else if (postObject.isTarget) {
           addTarget(postObject)
           createCardsForList(postObject)
+        }
+      } else if (postObject.actionType == 'updateList') {
+        if (postObject.isTarget && postObject.listClosed) {
+          updateTarget(postObject)
         }
       }
     }

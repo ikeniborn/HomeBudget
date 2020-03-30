@@ -69,7 +69,7 @@ function getPostObject(postData) {
       postObject.cardComment = ''
       postObject.cardLabelColor = getCardLabel(postObject).item.color
     }
-    if (['commentCard', 'createList'].indexOf(postData.action.type) !== -1) {
+    if (['commentCard', 'createList', 'updateList'].indexOf(postData.action.type) !== -1) {
       postObject.list = {}
       postObject.listId = postData.action.data.list.id
       postObject.listName = postData.action.data.list.name
@@ -77,6 +77,9 @@ function getPostObject(postData) {
       postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
       postObject.listName = postObject.list.name
+    }
+    if (['updateList'].indexOf(postData.action.type) !== -1) {
+      postObject.listClosed = postObject.list.closed
     }
     if (postObject.isTarget) {
       postObject.cfo = getTarget(postObject).item.cfo
