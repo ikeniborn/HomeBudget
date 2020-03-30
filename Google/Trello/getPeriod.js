@@ -1,19 +1,28 @@
 function getPeriod(postObject) {
   try {
+    var postObjectCopy
     var date = {}
-    if (postObject.isFact || postObject.isTarget) {
-      var postObjectBudget = copyObject(postObject)
-      postObjectBudget.type = 'Бюджет'
+    if (postObject.isFact) {
+      postObjectCopy = copyObject(postObject)
+      postObjectCopy.type = 'Бюджет'
       date.factPeriod = getParametr(postObject).item.value
-      date.budgetPeriod = getParametr(postObjectBudget).item.value
+      date.budgetPeriod = getParametr(postObjectCopy).item.value
       date.factPeriod0 = new Date(date.factPeriod.getYear(), date.factPeriod.getMonth() - 1, 1)
       date.budgetPeriod2 = new Date(date.budgetPeriod.getYear(), date.budgetPeriod.getMonth() + 1, 1)
       date.budgetPeriod3 = new Date(date.budgetPeriod.getYear(), date.budgetPeriod.getMonth() + 2, 1)
     } else if (postObject.isBudget) {
-      var postObjectFact = copyObject(postObject)
-      postObjectFact.type = 'Факт'
-      date.factPeriod = getParametr(postObjectFact).item.value
+      postObjectCopy = copyObject(postObject)
+      postObjectCopy.type = 'Факт'
+      date.factPeriod = getParametr(postObjectCopy).item.value
       date.budgetPeriod = getParametr(postObject).item.value
+      date.factPeriod0 = new Date(date.factPeriod.getYear(), date.factPeriod.getMonth() - 1, 1)
+      date.budgetPeriod2 = new Date(date.budgetPeriod.getYear(), date.budgetPeriod.getMonth() + 1, 1)
+      date.budgetPeriod3 = new Date(date.budgetPeriod.getYear(), date.budgetPeriod.getMonth() + 2, 1)
+    } else if (postObject.isTarget) {
+      postObjectCopy = copyObject(postObject)
+      postObjectCopy.type = 'Бюджет'
+      date.factPeriod = getParametr(postObject).item.value
+      date.budgetPeriod = getParametr(postObjectCopy).item.value
       date.factPeriod0 = new Date(date.factPeriod.getYear(), date.factPeriod.getMonth() - 1, 1)
       date.budgetPeriod2 = new Date(date.budgetPeriod.getYear(), date.budgetPeriod.getMonth() + 1, 1)
       date.budgetPeriod3 = new Date(date.budgetPeriod.getYear(), date.budgetPeriod.getMonth() + 2, 1)
