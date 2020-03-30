@@ -79,7 +79,7 @@ function getPostObject(postData) {
       postObject.listName = postObject.list.name
     }
     if (postObject.isTarget) {
-      postObject.mvz = getTarget(postObject).item.cfo
+      postObject.cfo = getTarget(postObject).item.cfo
     } else {
       postObject.cfo = getFinancialСenter(postObject).item.cfo
     }
