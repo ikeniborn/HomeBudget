@@ -5,7 +5,7 @@ function updateTrelloData(postObject) {
     var insertdate
     //* вставка значений в буфер
     var ss = postObject.trelloOpen
-    pushBufferRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
+    pushBufferRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
     ss.appendRow(pushBufferRow)
     //* вставка значений в учет
     var ts = postObject.accountOpen

@@ -21,15 +21,15 @@ function getAllData(postObject, source) {
         row.period = array[1]
         row.ymd = getYMD(array[1]).ymd
         row.cfo = array[2]
-        row.mvz = null
+        row.mvz = array[3]
         row.cashFlow = null
         row.bill = null
         row.account = null
-        row.nomenclature = array[3]
-        row.sum = array[4]
-        row.comment = array[5]
-        row.actionId = array[6]
-        row.type = array[7]
+        row.nomenclature = array[4]
+        row.sum = array[5]
+        row.comment = array[6]
+        row.actionId = array[7]
+        row.type = array[8]
         row.indexRow = index + 1
       } else if ([2].indexOf(dataStructure) !== -1) {
         //* данные из учета
