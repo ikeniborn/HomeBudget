@@ -8,15 +8,12 @@ function doPost(e) {
       if (postObject.actionType == 'commentCard') {
         //* закрытие периода
         if (postObject.isCurrFact && ['Остатки'].indexOf(postObject.account) !== -1 && !postObject.isSamePeriod) {
+          updateParametr(postObject)
           closedFactPeriod(postObject)
           updateDescForNewCards(postObject)
           // reportBudgetOksana(postObject)
         } else if (postObject.isCurrFact && ['Аванс'].indexOf(postObject.account) !== -1 && postObject.isSamePeriod) {
-          const postObjectBudget = copyObject(postObject)
-          postObject.isFact = false
-          postObject.isBudget = true
-          postObjectBudget.type = 'Бюджет'
-          updateParametr(postObjectBudget)
+          updateParametr(postObject)
           closedBudgetPeriod(postObject)
         }
         //* добавление информации

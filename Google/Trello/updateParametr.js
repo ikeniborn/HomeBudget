@@ -6,10 +6,26 @@ function updateParametr(postObject) {
    * */
   try {
     var ss = postObject.parametrSheetOpen
-    var indexRow = getParametr(postObject).item.indexRow
-    var value = new Date(postObject.budgetPeriod.getYear(), postObject.budgetPeriod.getMonth() + 1, 1)
-    ss.getRange(indexRow, 4).setValue(formatterDate(value).date)
-    ss.getRange(indexRow, 5).setValue(formatterDate().timestamp)
+    var indexRow
+    var value
+    const postObjectCopy = copyObject(postObject)
+    if (['Остатки'].indexOf(postObject.account) !== -1) {
+      ['Цель', 'Факт'].forEach(function (type) {
+        postObjectCopy.type = type
+        indexRow = getParametr(postObjectCopy).item.indexRow
+        value = new Date(postObjectCopy.factPeriod.getYear(), postObjectCopy.factPeriod.getMonth() + 1, 1)
+        ss.getRange(indexRow, 4).setValue(formatterDate(value).date)
+        ss.getRange(indexRow, 5).setValue(formatterDate().timestamp)
+      })
+    } else if (['Аванс'].indexOf(postObject.account) !== -1) {
+      postObjectCopy.isFact = false
+      postObjectCopy.isBudget = true
+      postObjectCopy.type = 'Бюджет'
+      indexRow = getParametr(postObjectCopy).item.indexRow
+      value = new Date(postObjectCopy.budgetPeriod.getYear(), postObjectCopy.budgetPeriod.getMonth() + 1, 1)
+      ss.getRange(indexRow, 4).setValue(formatterDate(value).date)
+      ss.getRange(indexRow, 5).setValue(formatterDate().timestamp)
+    }
     postObject.parametrArray = getGoogleSheetValues(postObject.parametrSheetOpen)
     postObject.date = getPeriod(postObject)
     postObject.period = postObject.date.period
