@@ -103,7 +103,6 @@ function getPostObject(postData) {
         postObject.parseText = parseComment(postObject)
         postObject.sum = postObject.parseText.sum
         postObject.comment = postObject.parseText.comment
-        postObject.mvz = getCostСenter(postObject).item.mvz
       }
     }
     if (postObject.isTarget) {
