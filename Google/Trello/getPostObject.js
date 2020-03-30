@@ -78,7 +78,11 @@ function getPostObject(postData) {
       postObject.listId = postObject.list.id
       postObject.listName = postObject.list.name
     }
-    postObject.cfo = getFinancialСenter(postObject).item.cfo
+    if (postObject.isTarget) {
+      postObject.mvz = getTarget(postObject).item.cfo
+    } else {
+      postObject.cfo = getFinancialСenter(postObject).item.cfo
+    }
     if (['Илья', 'Оксана'].indexOf(postObject.cfo) !== -1) {
       postObject.privateBudget = true
     } else {
@@ -101,6 +105,11 @@ function getPostObject(postData) {
         postObject.comment = postObject.parseText.comment
         postObject.mvz = getCostСenter(postObject).item.mvz
       }
+    }
+    if (postObject.isTarget) {
+      postObject.mvz = getTarget(postObject).item.goal
+    } else {
+      postObject.mvz = getCostСenter(postObject).item.mvz
     }
     if (['createList'].indexOf(postData.action.type) !== -1) {
       var currDate = new Date
