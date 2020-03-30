@@ -37,6 +37,8 @@ function getPeriod(postObject) {
       date.period = date.budgetPeriod2
     } else if (postObject.boardId == postObject.boardIdBudget3) {
       date.period = date.budgetPeriod3
+    } else if (postObject.boardId == postObject.boardIdTarget) {
+      date.period = date.factPeriod
     }
     date.ymd = getYMD(date.period).ymd
     if (getYMD(date.factPeriod).ymd == getYMD(date.budgetPeriod).ymd) {
