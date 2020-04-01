@@ -36,7 +36,7 @@ function getDescription(postObject) {
         if (sum.budgetSum.groupAccount.length !== 0) {
           var groupBudgetRows = sum.budgetSum.groupAccount
           var i = 1
-          groupBudgetRows.for(function (row) {
+          groupBudgetRows.forEach(function (row) {
             description.text += row.bill + ' - ' + row.account + ': ' + row.sum + ' р. ' + postObject.lineBreak
             i += 1
           })
@@ -58,7 +58,7 @@ function getDescription(postObject) {
       var budgetRow = sum.budgetSum.nomenclatureRows
       description.text += '**Бюджетные заявки**:' + postObject.lineBreak
       var i = 1
-      budgetRow.for(function (row) {
+      budgetRow.forEach(function (row) {
         var comma
         budgetRow.length > i ? comma = postObject.lineBreak : comma = ''
         description.text += formatterDate(row.actionDate).time + ': ' + row.sum + ' р. ' + row.comment + comma

@@ -20,7 +20,7 @@ function createCardsForList(postObject) {
     //* Информация по меткам
     var labelList = getBoardLabel(postObject, postObject.boardId)
     //* создание карточек на листе факт
-    accountItems.for(function (accounts) {
+    accountItems.forEach(function (accounts) {
       var label = labelList.reduce(function (row, arrya) {
         if (arrya.color.toUpperCase() == accounts.color.toUpperCase()) {
           row = {}

@@ -6,7 +6,7 @@ function updateDescForNewCards(postObject) {
     postObjectCard.dataAccountFactCurr = getCurrData(postObject, 'Факт')
     postObjectCard.dataAccountBudgetCurr = getCurrData(postObject, 'Бюджет')
     //* обновление описание карточки
-    cards.for(function (card) {
+    cards.forEach(function (card) {
       postObjectCard.cardId = card.id
       postObjectCard.cardName = card.name
       postObjectCard.cardLabelColor = card.color
