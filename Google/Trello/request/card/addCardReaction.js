@@ -15,7 +15,7 @@ function addCardReaction(postObject) {
     } else {
       reactions.push(postObject.moneyBag)
     }
-    reactions.forEach(function (reaction) {
+    reactions.for(function (reaction) {
       var payload = JSON.stringify(reaction)
       var data = {
         method: 'post',

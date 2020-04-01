@@ -10,7 +10,7 @@ function updateParametr(postObject) {
     var value
     const postObjectCopy = copyObject(postObject)
     if (['Остатки'].indexOf(postObject.account) !== -1) {
-      ['Цель', 'Факт'].forEach(function (type) {
+      ['Цель', 'Факт'].for(function (type) {
         postObjectCopy.type = type
         indexRow = getParametr(postObjectCopy).item.indexRow
         value = new Date(postObjectCopy.factPeriod.getFullYear(), postObjectCopy.factPeriod.getMonth() + 1, 1)

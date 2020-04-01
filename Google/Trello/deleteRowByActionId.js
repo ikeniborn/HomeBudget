@@ -19,7 +19,7 @@ function deleteRowByActionId(postObject) {
       })
       return row
     }, [])
-    sourceRows.forEach(function (row) {
+    sourceRows.for(function (row) {
       ss.deleteRow(row.indexRow)
       sum = row.sum
     })
@@ -33,7 +33,7 @@ function deleteRowByActionId(postObject) {
       }
       return row
     }, [])
-    targetRowIndex.forEach(function (row) {
+    targetRowIndex.for(function (row) {
       ts.deleteRow(row)
       //* удаление данных в массиве учета
       targetData.splice(row - 1, 1)

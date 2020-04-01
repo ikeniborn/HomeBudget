@@ -15,7 +15,7 @@ function updateRowByActionId(postObject) {
     sourceRows = sourceData.filter(function (row) {
       return row.actionId == postObject.actionId
     })
-    sourceRows.forEach(function (row) {
+    sourceRows.for(function (row) {
       ss.getRange(row.indexRow, 1).setValue(postObject.actionDate)
       ss.getRange(row.indexRow, 5).setValue(postObject.sum)
       ss.getRange(row.indexRow, 6).setValue(postObject.comment)
@@ -30,7 +30,7 @@ function updateRowByActionId(postObject) {
       }
       return row
     }, [])
-    targetRowIndex.forEach(function (row) {
+    targetRowIndex.for(function (row) {
       ts.getRange(row, 1).setValue(postObject.actionDate)
       ts.getRange(row, 9).setValue(postObject.sum)
       ts.getRange(row, 10).setValue(postObject.comment)
