@@ -11,6 +11,7 @@ function getPostObject(postData) {
     postObject.parametrSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.parametrSheetName)
     postObject.goalsSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.goalsSheetName)
     postObject.trelloOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameTrello)
+    postObject.errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
     postObject.accountOpen = openGoogleSheet(postObject.targetSheetID, postObject.targetSheetNameAccount)
     postObject.targetOpen = openGoogleSheet(postObject.targetSheetID, postObject.targetSheetNameTarget)
     // данные с листов
@@ -81,7 +82,6 @@ function getPostObject(postData) {
       postObject.listId = postObject.list.id
       postObject.listName = postObject.list.name
     }
-
     if (postObject.isTarget) {
       postObject.cfo = getTarget(postObject).item.cfo
     } else {
@@ -107,12 +107,12 @@ function getPostObject(postData) {
         postObject.parseText = parseComment(postObject)
         postObject.sum = postObject.parseText.sum
         postObject.comment = postObject.parseText.comment
+        if (postObject.isTarget) {
+          postObject.mvz = getTarget(postObject).item.goal
+        } else {
+          postObject.mvz = getCostСenter(postObject).item.mvz
+        }
       }
-    }
-    if (postObject.isTarget) {
-      postObject.mvz = getTarget(postObject).item.goal
-    } else {
-      postObject.mvz = getCostСenter(postObject).item.mvz
     }
     if (['createList', 'updateList'].indexOf(postData.action.type) !== -1) {
       var currDate = new Date
@@ -142,6 +142,7 @@ function getPostObject(postData) {
     }
     return postObject
   } catch (e) {
-    console.error('getPostObject: ' + e)
+    postObject.error = 'getPostObject: ' + e
+    addError(postObject)
   }
 }
