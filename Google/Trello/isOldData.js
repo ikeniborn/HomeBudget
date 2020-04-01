@@ -10,6 +10,6 @@ function isOldData(postObject) {
     }, false)
     return searchRow
   } catch (e) {
-    console.error('isValidData: ' + e)
+    console.error('isOldData: ' + e)
   }
 }
