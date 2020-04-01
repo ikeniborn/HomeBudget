@@ -243,9 +243,9 @@ function addFinancialCenter(postObject) {
       ss.appendRow([newId, postObject.listName, formatterDate().timestamp])
       postObject.financialСenterArray = getGoogleSheetValues(postObject.financialCenterSheetOpen)
       var newIdParametr = parametrArray.length + 1
-      ssParametr.appendRow([newIdParametr, 'Факт', postObject.listName, postObject.period, formatterDate().timestamp])
-      ssParametr.appendRow([newIdParametr + 1, 'Бюджет', postObject.listName, postObject.period, formatterDate().timestamp])
-      ssParametr.appendRow([newIdParametr + 2, 'Цель', postObject.listName, postObject.period, formatterDate().timestamp])
+      ssParametr.appendRow([newIdParametr, 'Факт', postObject.listName, postObject.factPeriod, formatterDate().timestamp])
+      ssParametr.appendRow([newIdParametr + 1, 'Бюджет', postObject.listName, postObject.budgetPeriod, formatterDate().timestamp])
+      ssParametr.appendRow([newIdParametr + 2, 'Цель', postObject.listName, postObject.factPeriod, formatterDate().timestamp])
       //* обновление листа
       postObject.listName = postObject.listName + ' ' + formatterDate(postObject.period).date
       updateList(postObject)
