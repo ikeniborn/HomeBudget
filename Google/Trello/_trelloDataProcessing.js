@@ -1,7 +1,7 @@
 /* eslint-disable space-before-function-paren */
 function addError(postObject) {
   let errorOpen = postObject.errorOpen
-  let startDate = getPreviousDate(180)
+  let startDate = getPreviousDate(30)
   let deleteArrya = postObject.errorArray.reduce(function (row, array, index) {
     if (index > 0) {
       if (array[0] <= startDate) {
