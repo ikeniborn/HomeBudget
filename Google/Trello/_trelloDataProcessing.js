@@ -187,6 +187,12 @@ function getPostObject(postData) {
       var currDate = new Date
       postObject.period = new Date(currDate.getFullYear(), currDate.getMonth(), 1)
       postObject.ymd = getYMD(postObject.period)
+      postObject.factPeriod0 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() - 1, 1)
+      postObject.factPeriod = postObject.period
+      postObject.budgetPeriod = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 1, 1)
+      postObject.budgetPeriod2 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 2, 1)
+      postObject.budgetPeriod3 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 3, 1)
+      postObject.isSamePeriod = false
     } else {
       postObject.date = getPeriod(postObject)
       postObject.period = postObject.date.period
@@ -211,7 +217,7 @@ function getPostObject(postData) {
     }
     return postObject
   } catch (e) {
-    postObject.error = 'getPostObject: ' + e
+    postObject.error = arguments.callee.name + ': ' + e
     addError(postObject)
   }
 }
@@ -237,11 +243,11 @@ function addFinancialCenter(postObject) {
       ss.appendRow([newId, postObject.listName, formatterDate().timestamp])
       postObject.financialСenterArray = getGoogleSheetValues(postObject.financialCenterSheetOpen)
       var newIdParametr = parametrArray.length + 1
-      ssParametr.appendRow([newIdParametr, 'Факт', postObject.listName, period, formatterDate().timestamp])
-      ssParametr.appendRow([newIdParametr + 1, 'Бюджет', postObject.listName, period, formatterDate().timestamp])
-      ssParametr.appendRow([newIdParametr + 2, 'Цель', postObject.listName, period, formatterDate().timestamp])
+      ssParametr.appendRow([newIdParametr, 'Факт', postObject.listName, postObject.period, formatterDate().timestamp])
+      ssParametr.appendRow([newIdParametr + 1, 'Бюджет', postObject.listName, postObject.period, formatterDate().timestamp])
+      ssParametr.appendRow([newIdParametr + 2, 'Цель', postObject.listName, postObject.period, formatterDate().timestamp])
       //* обновление листа
-      postObject.listName = postObject.listName + ' ' + formatterDate(period).date
+      postObject.listName = postObject.listName + ' ' + formatterDate(postObject.period).date
       updateList(postObject)
     }
   } catch (e) {
