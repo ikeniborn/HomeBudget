@@ -1,6 +1,6 @@
 function getYMD(date) {
   try {
-    var y = new Date(date).getYear()
+    var y = new Date(date).getFullYear()
     var m = new Date(date).getMonth() + 1
     var d = new Date(date).getDate()
     return {

@@ -116,7 +116,7 @@ function getPostObject(postData) {
     }
     if (['createList', 'updateList'].indexOf(postData.action.type) !== -1) {
       var currDate = new Date
-      postObject.period = new Date(currDate.getYear(), currDate.getMonth(), 1)
+      postObject.period = new Date(currDate.getFullYear(), currDate.getMonth(), 1)
       postObject.ymd = getYMD(postObject.period)
     } else {
       postObject.date = getPeriod(postObject)

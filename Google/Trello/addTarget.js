@@ -13,12 +13,19 @@ function addTarget(postObject) {
     var goalArray = array.map(function (array) {
       return array.name
     })
+    var ssMvz = postObject.costСenterSheetOpen
+    var postObjectCopy = copyObject(postObject)
+    postObjectCopy.comment = objGoal
+    var arrayMvz = getCostСenter(postObjectCopy).array
+    var tagMvz = objGoal.toLowerCase().replace(/\s+/g, '').trim()
+    var newIdMvz = arrayMvz.length + 1
     if (goal == undefined) {
       var newId = goalArray.length + 1
       ss.appendRow([newId, postObject.listName, newGoal, cfo, formatterDate().timestamp, postObject.listId, 'actual'])
+      ssMvz.appendRow([newIdMvz, objGoal, tagMvz])
       postObject.goalsArray = getGoogleSheetValues(postObject.goalsSheetOpen)
     }
   } catch (e) {
-    console.error('addFinancialCenter: ' + e)
+    console.error('addTarget: ' + e)
   }
 }

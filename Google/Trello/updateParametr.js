@@ -13,7 +13,7 @@ function updateParametr(postObject) {
       ['Цель', 'Факт'].forEach(function (type) {
         postObjectCopy.type = type
         indexRow = getParametr(postObjectCopy).item.indexRow
-        value = new Date(postObjectCopy.factPeriod.getYear(), postObjectCopy.factPeriod.getMonth() + 1, 1)
+        value = new Date(postObjectCopy.factPeriod.getFullYear(), postObjectCopy.factPeriod.getMonth() + 1, 1)
         ss.getRange(indexRow, 4).setValue(formatterDate(value).date)
         ss.getRange(indexRow, 5).setValue(formatterDate().timestamp)
       })
@@ -22,7 +22,7 @@ function updateParametr(postObject) {
       postObjectCopy.isBudget = true
       postObjectCopy.type = 'Бюджет'
       indexRow = getParametr(postObjectCopy).item.indexRow
-      value = new Date(postObjectCopy.budgetPeriod.getYear(), postObjectCopy.budgetPeriod.getMonth() + 1, 1)
+      value = new Date(postObjectCopy.budgetPeriod.getFullYear(), postObjectCopy.budgetPeriod.getMonth() + 1, 1)
       ss.getRange(indexRow, 4).setValue(formatterDate(value).date)
       ss.getRange(indexRow, 5).setValue(formatterDate().timestamp)
     }
