@@ -17,8 +17,8 @@ function updateRowByActionId(postObject) {
     })
     sourceRows.forEach(function (row) {
       ss.getRange(row.indexRow, 1).setValue(postObject.actionDate)
-      ss.getRange(row.indexRow, 5).setValue(postObject.sum)
-      ss.getRange(row.indexRow, 6).setValue(postObject.comment)
+      ss.getRange(row.indexRow, 6).setValue(postObject.sum)
+      ss.getRange(row.indexRow, 7).setValue(postObject.comment)
     })
     //* обновление данных на листе учета
     ts = postObject.accountOpen
