@@ -22,6 +22,14 @@ function addError(postObject) {
   errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.error])
 }
 
+function copyObject(object) {
+  if (Object.prototype.toString.call(object) == '[object Object]') {
+    return Object.assign({}, object)
+  } else {
+    return {}
+  }
+}
+
 // обновление параметра
 function addFinancialCenter(postObject) {
   /*
