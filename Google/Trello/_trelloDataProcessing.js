@@ -708,7 +708,7 @@ function getComment(postObject) {
     }
     return comment
   } catch (e) {
-    postObject.error = 'getComment: ' + e
+    postObject.error = arguments.callee.name + ': ' + e
     addError(postObject)
   }
 }
@@ -717,7 +717,6 @@ function getCostСenter(postObject) {
   try {
     var array = postObject.costСenterArray
     var text = postObject.comment
-    var cfo = postObject.cfo
     var mvz = {}
     mvz.item = {}
     mvz.array = []
@@ -725,13 +724,6 @@ function getCostСenter(postObject) {
       array.reduce(function (row, array, index) {
         if (index > 0) {
           if (text.toLowerCase().replace(/\s+/g, '').trim().match(array[2].toLowerCase())) {
-            row = {}
-            row.id = array[0]
-            row.mvz = array[1]
-            row.tag = array[2]
-            mvz.item = row
-            mvz.array.push(row)
-          } else if (cfo.toLowerCase().replace(/\s+/g, '').trim().match(array[2].toLowerCase())) {
             row = {}
             row.id = array[0]
             row.mvz = array[1]
@@ -747,12 +739,13 @@ function getCostСenter(postObject) {
           }
         }
       }, {})
-    } else {
-      mvz = postObject.cfo
+    }
+    if (mvz.item.mvz == undefined) {
+      mvz.item.mvz = postObject.cfo
     }
     return mvz
   } catch (e) {
-    postObject.error = 'getCostСenter: ' + e
+    postObject.error = arguments.callee.name + ': ' + e
     addError(postObject)
   }
 }
@@ -841,7 +834,7 @@ function getDescription(postObject) {
     description.haveBudget = sum.totalSum.haveBudget
     return description
   } catch (e) {
-    postObject.error = 'getDescription: ' + e
+    postObject.error = arguments.callee.name + ': ' + e
     addError(postObject)
   }
 }
@@ -871,7 +864,7 @@ function getFinancialСenter(postObject) {
     }, {})
     return cfo
   } catch (e) {
-    postObject.error = 'getFinancialСenter: ' + e
+    postObject.error = arguments.callee.name + ': ' + e
     addError(postObject)
   }
 }
@@ -1356,7 +1349,7 @@ function updateBalanceCard(postObject) {
       updateCardDesc(postObjectBalance)
     }
   } catch (e) {
-    postObject.error = 'updateBalanceCard: ' + e
+    postObject.error = arguments.callee.name + ': ' + e
     addError(postObject)
   }
 }
