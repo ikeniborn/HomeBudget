@@ -1331,11 +1331,13 @@ function updateDescForNewCards(postObject) {
       postObjectCard.bill = postObjectCard.accountingItem.item.bill
       postObjectCard.account = postObjectCard.accountingItem.item.account
       postObjectCard.nomenclature = card.name
-      var description = getDescription(postObjectCard)
-      if (description.haveBudget) {
-        postObjectCard.cardDescription = description.text
-        updateCardDesc(postObjectCard)
-      }
+      postObjectCard.cardDescription = 'TEST'
+      updateCardDesc(postObjectCard)
+      // var description = getDescription(postObjectCard)
+      // if (description.haveBudget) {
+      // postObjectCard.cardDescription = description.text
+      // updateCardDesc(postObjectCard)
+      // }
     })
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
