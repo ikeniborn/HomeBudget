@@ -15,7 +15,7 @@ function addList(postObject, listName, boardId) {
     variable.name = JSON.parse(resp).name
     return variable
   } catch (e) {
-    postObject.error = arguments.callee.name + ': ' + e
+    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreak
     addError(postObject)
   }
 }
@@ -32,7 +32,7 @@ function closedList(postObject, listId) {
     }
     UrlFetchApp.fetch(postObject.apiRoot + 'lists/' + listId + '/closed?value=true&' + postObject.keyAndToken, data)
   } catch (e) {
-    postObject.error = arguments.callee.name + ': ' + e
+    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreak
     addError(postObject)
   }
 }
@@ -55,7 +55,7 @@ function copyList(postObject, listName, boardId, idListSource) {
     variable.name = JSON.parse(resp).name
     return variable
   } catch (e) {
-    postObject.error = arguments.callee.name + ': ' + e
+    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreak
     addError(postObject)
   }
 }
@@ -85,7 +85,7 @@ function getList(postObject) {
     }, {})
     return listArray
   } catch (e) {
-    postObject.error = arguments.callee.name + ': ' + e
+    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreak
     addError(postObject)
   }
 }
@@ -103,7 +103,7 @@ function moveList(postObject, listId, boardId) {
     }
     UrlFetchApp.fetch(postObject.apiRoot + 'lists/' + listId + '/idBoard?value=' + boardId + '&' + postObject.keyAndToken, data)
   } catch (e) {
-    postObject.error = arguments.callee.name + ': ' + e
+    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreak
     addError(postObject)
   }
 }
@@ -121,7 +121,7 @@ function updateList(postObject) {
     }
     UrlFetchApp.fetch(postObject.apiRoot + 'lists/' + postObject.listId + '?name=' + postObject.listName + '&' + postObject.keyAndToken, data)
   } catch (e) {
-    postObject.error = arguments.callee.name + ': ' + e
+    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreak
     addError(postObject)
   }
 }
