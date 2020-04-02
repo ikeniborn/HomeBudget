@@ -510,7 +510,7 @@ function doPost(e) {
             postObject.type = 'Бюджет'
           }
           createCardsForList(postObject)
-          postObject.listName = postObject.cfo + ' ' + formatterDate(getPeriod(postObject).period).date
+          postObject.listName = postObject.cfo + ' ' + formatterDate(postObject.period).date
           updateList(postObject)
           updateDescForNewCards(postObject)
         } else if (postObject.isTarget) {
