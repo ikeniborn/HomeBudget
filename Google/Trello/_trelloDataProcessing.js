@@ -206,9 +206,6 @@ function getPostObject(postData) {
     }
     if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
       postObject.dataTrello = getAllData(postObject, 'trello')
-      postObject.dataAccount = []
-      postObject.dataAccountFactCurr = []
-      postObject.dataAccountBudgetCurr = []
     }
     if (['deleteComment', 'updateComment'].indexOf(postData.action.type) !== -1) {
       postObject.isOldData = isOldData(postObject)
@@ -411,7 +408,7 @@ function deleteRowByActionId(postObject) {
     var sum = 0
     //* удаление данных на листе источнике
     ss = postObject.trelloOpen
-    sourceData = postObject.dataTrello
+    sourceData = postObject.dataTrello.all
     sourceRows = sourceData.reduce(function (row, array) {
       if (array.actionId == postObject.actionId) {
         row.push(array)
@@ -442,8 +439,6 @@ function deleteRowByActionId(postObject) {
     })
     //* получение данных учета после обновления
     postObject.dataAccount = getAllData(postObject, 'account')
-    postObject.dataAccountFactCurr = getCurrData(postObject, 'Факт')
-    postObject.dataAccountBudgetCurr = getCurrData(postObject, 'Бюджет')
     return sum
   } catch (e) {
     postObject.error = arguments.callee.name + ': ' + e
@@ -750,21 +745,6 @@ function getCostСenter(postObject) {
   }
 }
 
-function getCurrData(postObject, type) {
-  /*
-   * @type - истоник: Бюджет, Факт
-   */
-  try {
-    return postObject.dataAccount.filter(function (row) {
-      return row.ymd == postObject.ymd && row.type == type
-    })
-  } catch (e) {
-    postObject.error = arguments.callee.name + ': ' + e
-    addError(postObject)
-  }
-}
-
-/* eslint-disable no-undef */
 function getDescription(postObject) {
   try {
     var description = {}
@@ -985,8 +965,9 @@ function getSum(postObject) {
   try {
     var sum = {}
     var totalSum = {}
-    var budgetSum = getTotalSum(postObject, postObject.dataAccountBudgetCurr)
-    var factSum = getTotalSum(postObject, postObject.dataAccountFactCurr)
+    var budgetSum = getTotalSum(postObject, postObject.dataAccount.current.budget)
+    var factSum = getTotalSum(postObject, postObject.dataAccount.current.fact)
+    var targetSum = getTotalSum(postObject, postObject.dataAccount.current.target)
     totalSum.totalRest = factSum.restSum + factSum.incomeSum - factSum.expenseSum
     totalSum.billBudgetRest = budgetSum.billSum - factSum.billSum
     totalSum.accountBudgetRest = budgetSum.accountSum - factSum.accountSum
@@ -1252,7 +1233,7 @@ function getYMD(date) {
 function isOldData(postObject) {
   try {
     //* добавление строк на страницу
-    var targetArray = postObject.dataTrello
+    var targetArray = postObject.dataTrello.all
     var searchRow = targetArray.reduce(function (row, array) {
       if (array.actionId.match(postObject.actionId)) {
         row = true
@@ -1356,11 +1337,9 @@ function updateBalanceCard(postObject) {
 
 function updateDescForNewCards(postObject) {
   try {
-    var cards = getCards(postObject, postObject.listId).array
+    var cards = getCards(postObject).array
     var postObjectCard = copyObject(postObject)
-    postObjectCard.dataAccount = getAllData(postObject, 'account')
-    postObjectCard.dataAccountFactCurr = getCurrData(postObject, 'Факт')
-    postObjectCard.dataAccountBudgetCurr = getCurrData(postObject, 'Бюджет')
+    postObjectCard.dataAccount = getAllData(postObjectCard, 'account')
     //* обновление описание карточки
     cards.forEach(function (card) {
       postObjectCard.cardId = card.id
@@ -1439,7 +1418,7 @@ function updateRowByActionId(postObject) {
     var targetRowIndex = []
     //* обновление данных на листе источнике
     ss = postObject.trelloOpen
-    sourceData = postObject.dataTrello
+    sourceData = postObject.dataTrello.all
     sourceRows = sourceData.filter(function (row) {
       return row.actionId == postObject.actionId
     })
@@ -1473,8 +1452,6 @@ function updateRowByActionId(postObject) {
     })
     //* получение текущих данных после обновления
     postObject.dataAccount = getAllData(postObject, 'account')
-    postObject.dataAccountFactCurr = getCurrData(postObject, 'Факт')
-    postObject.dataAccountBudgetCurr = getCurrData(postObject, 'Бюджет')
   } catch (e) {
     postObject.error = arguments.callee.name + ': ' + e
     addError(postObject)
@@ -1529,8 +1506,6 @@ function updateTrelloData(postObject) {
     }
     //* получение данных учета после обновления
     postObject.dataAccount = getAllData(postObject, 'account')
-    postObject.dataAccountFactCurr = getCurrData(postObject, 'Факт')
-    postObject.dataAccountBudgetCurr = getCurrData(postObject, 'Бюджет')
     //* Удаление пустых строк
     deleteEmptyRow(postObject)
   } catch (e) {
@@ -1553,7 +1528,9 @@ function getAllData(postObject, source) {
       dataStructure = 2
       data = postObject.accountArray
     }
-    var sourceArray = []
+    var sourceArray = {}
+    sourceArray.all = []
+    sourceArray.current = {}
     data.reduce(function (row, array, index) {
       if (index > 0) {
         row = {}
@@ -1590,9 +1567,18 @@ function getAllData(postObject, source) {
           row.type = array[11]
           row.indexRow = index + 1
         }
-        sourceArray.push(row)
+        sourceArray.all.push(row)
       }
     }, [])
+    sourceArray.current.fact = sourceArray.all.filter(function (row) {
+      return row.ymd == postObject.ymd && row.type == 'Факт'
+    })
+    sourceArray.current.budget = sourceArray.all.filter(function (row) {
+      return row.ymd == postObject.ymd && row.type == 'Бюджет'
+    })
+    sourceArray.current.target = sourceArray.all.filter(function (row) {
+      return row.ymd == postObject.ymd && row.type == 'Цель'
+    })
     return sourceArray
   } catch (e) {
     postObject.error = arguments.callee.name + ': ' + e
@@ -1607,15 +1593,11 @@ function getPreviousFact(postObject) {
     postObjectPrev1.period = postObject.factPeriod
     postObjectPrev1.ymd = getYMD(postObjectPrev1.period).ymd
     postObjectPrev1.dataAccount = getAllData(postObjectPrev1, 'account')
-    postObjectPrev1.dataAccountFactCurr = getCurrData(postObjectPrev1, 'Факт')
-    postObjectPrev1.dataAccountBudgetCurr = getCurrData(postObjectPrev1, 'Бюджет')
     sum.Prev1 = getSum(postObjectPrev1)
     const postObjectPrev2 = copyObject(postObject)
     postObjectPrev2.period = postObject.factPeriod0
     postObjectPrev2.ymd = getYMD(postObjectPrev2.period).ymd
     postObjectPrev2.dataAccount = getAllData(postObjectPrev2, 'account')
-    postObjectPrev2.dataAccountFactCurr = getCurrData(postObjectPrev2, 'Факт')
-    postObjectPrev2.dataAccountBudgetCurr = getCurrData(postObjectPrev2, 'Бюджет')
     sum.Prev2 = getSum(postObjectPrev2)
     return sum
   } catch (e) {
