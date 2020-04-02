@@ -240,8 +240,8 @@ function moveAllCards(postObjectOld, postObjectNew) {
     }
     UrlFetchApp.fetch(postObjectOld.apiRoot + 'lists/' + postObjectOld.listId + '/moveAllCards?idBoard=' + postObjectNew.boardId + '&idList=' + postObjectNew.listId + '&' + postObjectOld.keyAndToken, data)
   } catch (e) {
-    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
-    addError(postObject)
+    postObjectOld.error += arguments.callee.name + ': ' + e + postObjectOld.lineBreakCell
+    addError(postObjectOld)
   }
 }
 
