@@ -37,6 +37,7 @@ function addLog(postData) {
 }
 
 function addError(postObject) {
+  try{
   let errorOpen = postObject.errorOpen
   let startDate = getPreviousDate(30)
   let deleteArrya = postObject.errorArray.reduce(function (row, array, index) {
@@ -57,6 +58,11 @@ function addError(postObject) {
     errorOpen.deleteRows(startDeleteIndex, countDeleteRow)
   }
   errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.error])
+    } catch (e) {
+    postObject.error = arguments.callee.name + ': ' + e
+    let errorOpen = postObject.errorOpen
+    errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.error])
+  }
 }
 
 function copyObject(object) {
