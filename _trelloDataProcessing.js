@@ -1348,9 +1348,10 @@ function updateDescForNewCards(postObject) {
     postObjectCard.dataAccount = getAllData(postObjectCard, 'account')
     //* обновление описание карточки
     cards.forEach(function (card) {
-      postObjectCard.cardId = card.id
-      postObjectCard.cardName = card.name
-      postObjectCard.cardLabelColor = card.color
+      let cardData = getCardLabel(postObject).item
+      postObjectCard.cardId = cardData.id
+      postObjectCard.cardName = cardData.name
+      postObjectCard.cardLabelColor = cardData.color
       postObjectCard.accountingItem = getAccountingItem(postObjectCard)
       postObjectCard.cashFlow = postObjectCard.accountingItem.item.cashFlow
       postObjectCard.bill = postObjectCard.accountingItem.item.bill
