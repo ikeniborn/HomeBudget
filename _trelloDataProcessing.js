@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable space-before-function-paren */
 function addLog(postData) {
   var globalVariable = getGlobalVariable()
