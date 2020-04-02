@@ -759,18 +759,18 @@ function getDescription(postObject) {
   try {
     var description = {}
     var sum = getSum(postObject)
-    description.text = '*Дата обновления*: ' + formatterDate(postObject.actionDate).tim + e + postObject.lineBreakCell
+    description.text = '*Дата обновления*: ' + formatterDate(postObject.actionDate).time + postObject.lineBreakCell
     if (postObject.isFact) {
       //* описание для фактических карточек
       description.text += '**По номенклатуре**: ' + postObject.lineBreak
       description.text += '*Остаток*: ' + sum.totalSum.nomenclatureBudgetRest + ' р.' + postObject.lineBreak
       if (sum.totalSum.nomenclatureBudgetExecution != 0) {
-        description.text += '*Исполнение*: ' + sum.totalSum.nomenclatureBudgetExecution + e + postObject.lineBreakCellncodeData('%', '%') + postObject.lineBreak
+        description.text += '*Исполнение*: ' + sum.totalSum.nomenclatureBudgetExecution + encodeData('%', '%') + postObject.lineBreak
       }
       description.text += '**По статье**: ' + postObject.lineBreak
       description.text += '*Остаток*: ' + sum.totalSum.accountBudgetRest + ' р.' + postObject.lineBreak
       if (sum.totalSum.accountBudgetExecution != 0) {
-        description.text += '*Исполнение*: ' + sum.totalSum.accountBudgetExecution + e + postObject.lineBreakCellncodeData('%', '%') + postObject.lineBreak
+        description.text += '*Исполнение*: ' + sum.totalSum.accountBudgetExecution + encodeData('%', '%') + postObject.lineBreak
       }
     } else if (postObject.isBudget) {
       if (postObject.nomenclature !== 'Баланс') {
