@@ -37,30 +37,29 @@ function addLog(postData) {
 }
 
 function addError(postObject) {
-  try{
-  let errorOpen = postObject.errorOpen
-  let startDate = getPreviousDate(30)
-  let deleteArrya = postObject.errorArray.reduce(function (row, array, index) {
-    if (index > 0) {
-      if (array[0] <= startDate) {
-        row.push(array)
+  try {
+    const errorOpen = postObject.errorOpen
+    let startDate = getPreviousDate(30)
+    let deleteArrya = postObject.errorArray.reduce(function (row, array, index) {
+      if (index > 0) {
+        if (array[0] <= startDate) {
+          row.push(array)
+        }
       }
+      return row
+    }, [])
+    if (deleteArrya.length > 0) {
+      var startDeleteIndex = deleteArrya.reduce(function (a, b) {
+        return a < b ? a : b
+      })
+      var countDeleteRow = deleteArrya.reduce(function (a, b) {
+        return a > b ? a : b
+      })
+      errorOpen.deleteRows(startDeleteIndex, countDeleteRow)
     }
-    return row
-  }, [])
-  if (deleteArrya.length > 0) {
-    var startDeleteIndex = deleteArrya.reduce(function (a, b) {
-      return a < b ? a : b
-    })
-    var countDeleteRow = deleteArrya.reduce(function (a, b) {
-      return a > b ? a : b
-    })
-    errorOpen.deleteRows(startDeleteIndex, countDeleteRow)
-  }
-  errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.error])
-    } catch (e) {
+    errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.error])
+  } catch (e) {
     postObject.error = arguments.callee.name + ': ' + e
-    let errorOpen = postObject.errorOpen
     errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.error])
   }
 }
@@ -511,9 +510,9 @@ function doPost(e) {
             postObject.type = 'Бюджет'
           }
           createCardsForList(postObject)
-          updateDescForNewCards(postObject)
           postObject.listName = postObject.cfo + ' ' + formatterDate(getPeriod(postObject).period).date
           updateList(postObject)
+          updateDescForNewCards(postObject)
         } else if (postObject.isTarget) {
           addTarget(postObject)
           createCardsForList(postObject)

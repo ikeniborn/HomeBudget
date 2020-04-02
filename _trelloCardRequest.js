@@ -220,7 +220,7 @@ function getCards(postObject) {
         variable.name = array.name
         cards.array.push(variable)
       }
-    }, {})
+    }, [])
     return cards
   } catch (e) {
     postObject.error = arguments.callee.name + ': ' + e
