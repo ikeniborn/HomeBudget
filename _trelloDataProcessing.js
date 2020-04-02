@@ -759,7 +759,7 @@ function getDescription(postObject) {
   try {
     var description = {}
     var sum = getSum(postObject)
-    description.text = '*Дата обновления*: ' + formatterDate(postObject.actionDate).time + postObject.lineBreakCell
+    description.text = '*Дата обновления*: ' + formatterDate(postObject.actionDate).time + postObject.lineBreak
     if (postObject.isFact) {
       //* описание для фактических карточек
       description.text += '**По номенклатуре**: ' + postObject.lineBreak
