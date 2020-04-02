@@ -255,10 +255,10 @@ function addFinancialCenter(postObject) {
       ssParametr.appendRow([newIdParametr, 'Факт', postObject.listName, postObject.factPeriod, formatterDate().timestamp])
       ssParametr.appendRow([newIdParametr + 1, 'Бюджет', postObject.listName, postObject.budgetPeriod, formatterDate().timestamp])
       ssParametr.appendRow([newIdParametr + 2, 'Цель', postObject.listName, postObject.factPeriod, formatterDate().timestamp])
-      //* обновление листа
-      postObject.listName = postObject.listName + ' ' + formatterDate(postObject.period).date
-      updateList(postObject)
     }
+    //* обновление листа
+    postObject.listName = postObject.listName + ' ' + formatterDate(postObject.period).date
+    updateList(postObject)
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
     addError(postObject)
