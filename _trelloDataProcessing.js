@@ -64,14 +64,6 @@ function addError(postObject) {
   }
 }
 
-function copyObject(object) {
-  if (Object.prototype.toString.call(object) == '[object Object]') {
-    return Object.assign({}, object)
-  } else {
-    return {}
-  }
-}
-
 function getPostObject(postData) {
   try {
     var postObject = getGlobalVariable()
@@ -222,6 +214,19 @@ function getPostObject(postData) {
     return postObject
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreak + postObject.lineBreak
+    addError(postObject)
+  }
+}
+
+function copyObject(object) {
+  try {
+    if (Object.prototype.toString.call(object) == '[object Object]') {
+      return Object.assign({}, object)
+    } else {
+      return {}
+    }
+  } catch (e) {
+    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreak
     addError(postObject)
   }
 }
