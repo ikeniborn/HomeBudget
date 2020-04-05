@@ -1090,9 +1090,9 @@ function getTotalSum(postObject, array) {
       }
       return sum
     }, 0)
-    //* сумма по статье остатки
+    //* сумма по операции остатки
     total.restSum = array.reduce(function (sum, array) {
-      if (array.cfo == postObject.cfo && array.bill == 'Остатки' && array.cashFlow == 'Баланс') {
+      if (array.cfo == postObject.cfo && array.cashFlow == 'Остатки') {
         sum += array.sum
       }
       return sum
