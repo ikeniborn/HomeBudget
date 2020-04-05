@@ -128,7 +128,7 @@ function getPostObject(postData) {
       postObject.isBudget = false
       postObject.isCurrBudget = false
       postObject.isTarget = true
-      postObject.type = 'Цель'
+      postObject.type = 'Факт'
     }
     if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
       postObject.cardId = postData.action.data.card.id
@@ -254,7 +254,6 @@ function addFinancialCenter(postObject) {
       var newIdParametr = parametrArray.length + 1
       ssParametr.appendRow([newIdParametr, 'Факт', postObject.listName, postObject.factPeriod, formatterDate().timestamp])
       ssParametr.appendRow([newIdParametr + 1, 'Бюджет', postObject.listName, postObject.budgetPeriod, formatterDate().timestamp])
-      ssParametr.appendRow([newIdParametr + 2, 'Цель', postObject.listName, postObject.factPeriod, formatterDate().timestamp])
     }
     //* обновление листа
     postObject.listName = postObject.listName + ' ' + formatterDate(postObject.period).date
@@ -907,7 +906,7 @@ function getPeriod(postObject) {
   try {
     var postObjectCopy
     var date = {}
-    if (postObject.isFact) {
+    if (postObject.isFact || postObject.isTarget) {
       postObjectCopy = copyObject(postObject)
       postObjectCopy.type = 'Бюджет'
       date.factPeriod = getParametr(postObject).item.value
@@ -920,14 +919,6 @@ function getPeriod(postObject) {
       postObjectCopy.type = 'Факт'
       date.factPeriod = getParametr(postObjectCopy).item.value
       date.budgetPeriod = getParametr(postObject).item.value
-      date.factPeriod0 = new Date(date.factPeriod.getFullYear(), date.factPeriod.getMonth() - 1, 1)
-      date.budgetPeriod2 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 1, 1)
-      date.budgetPeriod3 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 2, 1)
-    } else if (postObject.isTarget) {
-      postObjectCopy = copyObject(postObject)
-      postObjectCopy.type = 'Бюджет'
-      date.factPeriod = getParametr(postObject).item.value
-      date.budgetPeriod = getParametr(postObjectCopy).item.value
       date.factPeriod0 = new Date(date.factPeriod.getFullYear(), date.factPeriod.getMonth() - 1, 1)
       date.budgetPeriod2 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 1, 1)
       date.budgetPeriod3 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 2, 1)
@@ -977,7 +968,6 @@ function getSum(postObject) {
     var totalSum = {}
     var budgetSum = getTotalSum(postObject, postObject.dataAccount.current.budget)
     var factSum = getTotalSum(postObject, postObject.dataAccount.current.fact)
-    var targetSum = getTotalSum(postObject, postObject.dataAccount.current.target)
     totalSum.totalRest = factSum.restSum + factSum.incomeSum - factSum.expenseSum
     totalSum.billBudgetRest = budgetSum.billSum - factSum.billSum
     totalSum.accountBudgetRest = budgetSum.accountSum - factSum.accountSum
@@ -1214,7 +1204,7 @@ function getTotalSum(postObject, array) {
     })
     //* данные из учета
     total.nomenclatureRows = array.filter(function (array) {
-      return array.cfo == postObject.cfo && array.bill == postObject.bill && array.account == postObject.account && array.nomenclature == postObject.nomenclature
+      return array.cfo == postObject.cfo && array.bill == postObject.bill && array.account == postObject.account && array.nomenclature == postObject.nomenclature && array.cashFlow == postObject.cashFlow
     })
     return total
   } catch (e) {
@@ -1356,13 +1346,11 @@ function updateParametr(postObject) {
     var value
     const postObjectCopy = copyObject(postObject)
     if (['Остатки'].indexOf(postObject.account) !== -1) {
-      ['Цель', 'Факт'].forEach(function (type) {
-        postObjectCopy.type = type
-        indexRow = getParametr(postObjectCopy).item.indexRow
-        value = new Date(postObjectCopy.factPeriod.getFullYear(), postObjectCopy.factPeriod.getMonth() + 1, 1)
-        ss.getRange(indexRow, 4).setValue(formatterDate(value).date)
-        ss.getRange(indexRow, 5).setValue(formatterDate().timestamp)
-      })
+      postObjectCopy.type = 'Факт'
+      indexRow = getParametr(postObjectCopy).item.indexRow
+      value = new Date(postObjectCopy.factPeriod.getFullYear(), postObjectCopy.factPeriod.getMonth() + 1, 1)
+      ss.getRange(indexRow, 4).setValue(formatterDate(value).date)
+      ss.getRange(indexRow, 5).setValue(formatterDate().timestamp)
     } else if (['Аванс'].indexOf(postObject.account) !== -1) {
       postObjectCopy.isFact = false
       postObjectCopy.isBudget = true
@@ -1557,9 +1545,6 @@ function getAllData(postObject, source) {
     })
     sourceArray.current.budget = sourceArray.all.filter(function (row) {
       return row.ymd == postObject.ymd && row.type == 'Бюджет'
-    })
-    sourceArray.current.target = sourceArray.all.filter(function (row) {
-      return row.ymd == postObject.ymd && row.type == 'Цель'
     })
     return sourceArray
   } catch (e) {
