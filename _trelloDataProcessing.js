@@ -1506,16 +1506,16 @@ function updateTargetList(postObject) {
     var targetSumOld
     var targetSumNew
     if (postObject.bill == 'Накопления') {
-      if (postObject.nomenclature == 'Цели') {
+      if (postObject.account == 'Цели') {
         targetColumn = 18
         targetSumOld = targetItem.targetSum
-      } else if (postObject.nomenclature == 'Депозит') {
+      } else if (postObject.account == 'Депозит') {
         targetColumn = 19
         targetSumOld = targetItem.depositSum
-      } else if (postObject.nomenclature == 'Биржа') {
+      } else if (postObject.account == 'Биржа') {
         targetColumn = 20
         targetSumOld = targetItem.exchangeSum
-      } else if (postObject.nomenclature == 'ИИС') {
+      } else if (postObject.account == 'ИИС') {
         targetColumn = 21
         targetSumOld = targetItem.iisSum
       }
@@ -1533,6 +1533,9 @@ function updateTargetList(postObject) {
     ssTargetOpen.getRange(targetItem.indexRow, targetColumn).setValue(+targetSumNew)
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
+    addError(postObject)
+  } finally {
+    postObject.error = postObject
     addError(postObject)
   }
 }
