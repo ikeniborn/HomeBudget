@@ -219,7 +219,7 @@ function getPostObject(postData) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
     addError(postObject)
   } finally {
-    postObject.error = postObject.oldSum
+    postObject.error = postData
     addError(postObject)
   }
 }
