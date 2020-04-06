@@ -1500,8 +1500,8 @@ function updateTrelloData(postObject) {
 
 function updateTargetList(postObject) {
   try {
-    let targetItem = getAllTarget(postObject).item
-    let ssTargetOpen = postObject.targetOpen
+    var targetItem = getAllTarget(postObject).item
+    var ssTargetOpen = postObject.targetOpen
     var targetColumn
     var targetSumOld
     var targetSumNew
