@@ -174,7 +174,7 @@ function getPostObject(postData) {
         postObject.parseText = parseComment(postObject)
         postObject.sum = postObject.parseText.sum
         if (['updateComment'].indexOf(postData.action.type) !== -1) {
-          var postObjectOld = copyObject(postObjectOld)
+          var postObjectOld = copyObject(postObject)
           postObjectOld.text = postData.action.data.old.text
           postObject.oldSum = parseComment(postObjectOld).sum
         }
