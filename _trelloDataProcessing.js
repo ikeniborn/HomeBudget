@@ -1525,6 +1525,7 @@ function updateTargetList(postObject) {
         targetColumn = 21
         targetSumOld = targetItem.iisSum
       }
+      //? продумать как определять цель при списании в затраты
     } else if (postObject.bill == 'Затраты') {
       if (targetItem.goal == postObject.mvz) {
         targetColumn = 22
