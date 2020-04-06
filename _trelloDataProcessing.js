@@ -1539,7 +1539,7 @@ function updateTargetList(postObject) {
     } else if (postObject.actionType == 'deleteComment') {
       actionSum = -1 * postObject.sum
     } else if (postObject.actionType == 'updateComment') {
-      actionSum = postObject.sum - postObject.oldSumm
+      actionSum = postObject.sum - postObject.oldSum
     }
     if (postObject.cashFlow == 'Списание') {
       targetSumNew = targetSumOld + actionSum
@@ -1549,6 +1549,9 @@ function updateTargetList(postObject) {
     ssTargetOpen.getRange(targetItem.indexRow, targetColumn).setValue(+targetSumNew)
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
+    addError(postObject)
+  } finally {
+    postObject.error = [postObject.sum, postObject.oldSum, actionSum, targetSumNew]
     addError(postObject)
   }
 }
