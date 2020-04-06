@@ -477,6 +477,10 @@ function doPost(e) {
         }
         //* добавление информации
         updateTrelloData(postObject)
+        if (postObject.isTarget) {
+          //* обновление листа цель
+          updateTargetList(postObject)
+        }
         //* получение описание карточки и комментария
         postObject.cardDescription = getDescription(postObject).text
         postObject.cardComment = getComment(postObject).text
@@ -489,6 +493,10 @@ function doPost(e) {
       } else if (postObject.actionType == 'updateComment' && postObject.isOldData) {
         //* обновление данных при изменении комментария
         updateRowByActionId(postObject)
+        if (postObject.isTarget) {
+          //* обновление листа цель
+          updateTargetList(postObject)
+        }
         postObject.cardDescription = getDescription(postObject).text
         postObject.cardComment = getComment(postObject).text
         //* обновление описание карточки
@@ -499,6 +507,10 @@ function doPost(e) {
       } else if (postObject.actionType == 'deleteComment' && postObject.isOldData) {
         //* удаление строки при удалении комментария
         postObject.sum = deleteRowByActionId(postObject)
+        if (postObject.isTarget) {
+          //* обновление листа цель
+          updateTargetList(postObject)
+        }
         postObject.cardDescription = getDescription(postObject).text
         postObject.cardComment = getComment(postObject).text
         //* обновление описание карточки
@@ -642,6 +654,7 @@ function getAllTarget(postObject) {
           row.depositSum = +array[18]
           row.exchangeSum = +array[19]
           row.iisSum = +array[20]
+          row.disbursedFunds = +array[21]
           row.indexRow = index + 1
           obj.item = row
           obj.array.push(row)
@@ -667,6 +680,7 @@ function getAllTarget(postObject) {
           row.depositSum = +array[18]
           row.exchangeSum = +array[19]
           row.iisSum = +array[20]
+          row.disbursedFunds = +array[21]
           row.indexRow = index + 1
           obj.array.push(row)
         }
@@ -1478,6 +1492,45 @@ function updateTrelloData(postObject) {
     postObject.dataAccount = getAllData(postObject, 'account')
     //* Удаление пустых строк
     deleteEmptyRow(postObject)
+  } catch (e) {
+    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
+    addError(postObject)
+  }
+}
+
+function updateTargetList(postObject) {
+  try {
+    let targetItem = getAllTarget(postObject).item
+    let ssTargetOpen = postObject.targetOpen
+    var targetColumn
+    var targetSumOld
+    var targetSumNew
+    if (postObject.bill == 'Накопления') {
+      if (postObject.nomenclature == 'Цели') {
+        targetColumn = 18
+        targetSumOld = targetItem.targetSum
+      } else if (postObject.nomenclature == 'Депозит') {
+        targetColumn = 19
+        targetSumOld = targetItem.depositSum
+      } else if (postObject.nomenclature == 'Биржа') {
+        targetColumn = 20
+        targetSumOld = targetItem.exchangeSum
+      } else if (postObject.nomenclature == 'ИИС') {
+        targetColumn = 21
+        targetSumOld = targetItem.iisSum
+      }
+    } else if (postObject.bill == 'Затраты') {
+      if (targetItem.goal == postObject.mvz) {
+        targetColumn = 22
+        targetSumOld = targetItem.disbursedFunds
+      }
+    }
+    if (postObject.cashFlow == 'Списание') {
+      targetSumNew = targetSumOld + postObject.sum
+    } else if (postObject.cashFlow == 'Пополнение') {
+      targetSumNew = targetSumOld - postObject.sum
+    }
+    ssTargetOpen.getRange(targetItem.indexRow, targetColumn).setValue(+targetSumNew)
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
     addError(postObject)
