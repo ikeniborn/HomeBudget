@@ -1505,6 +1505,7 @@ function updateTargetList(postObject) {
     var targetColumn
     var targetSumOld
     var targetSumNew
+    var actionCoef
     if (postObject.bill == 'Накопления') {
       if (postObject.account == 'Цели') {
         targetColumn = 18
@@ -1525,17 +1526,19 @@ function updateTargetList(postObject) {
         targetSumOld = targetItem.disbursedFunds
       }
     }
+    if (postObject.actionType == 'commentCard') {
+      actionCoef = 1
+    } else if (postObject.actionType == 'deleteComment') {
+      actionCoef = -1
+    }
     if (postObject.cashFlow == 'Списание') {
-      targetSumNew = targetSumOld + postObject.sum
+      targetSumNew = targetSumOld + postObject.sum * actionCoef
     } else if (postObject.cashFlow == 'Пополнение') {
-      targetSumNew = targetSumOld - postObject.sum
+      targetSumNew = targetSumOld - postObject.sum * actionCoef
     }
     ssTargetOpen.getRange(targetItem.indexRow, targetColumn).setValue(+targetSumNew)
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
-    addError(postObject)
-  } finally {
-    postObject.error = postObject
     addError(postObject)
   }
 }
