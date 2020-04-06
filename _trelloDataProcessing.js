@@ -220,9 +220,6 @@ function getPostObject(postData) {
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
     addError(postObject)
-  } finally {
-    postObject.error = [postObject.sum, postObject.oldSum]
-    addError(postObject)
   }
 }
 
@@ -1549,9 +1546,6 @@ function updateTargetList(postObject) {
     ssTargetOpen.getRange(targetItem.indexRow, targetColumn).setValue(+targetSumNew)
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
-    addError(postObject)
-  } finally {
-    postObject.error = [postObject.sum, postObject.oldSum, actionSum, targetSumNew]
     addError(postObject)
   }
 }
