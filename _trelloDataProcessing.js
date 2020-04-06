@@ -1533,7 +1533,7 @@ function updateTargetList(postObject) {
       actionSum = postObject.sum
     } else if (postObject.actionType == 'deleteComment') {
       actionSum = -1 * postObject.sum
-    } else if (postObject.actionType == 'deleteComment') {
+    } else if (postObject.actionType == 'updateComment') {
       actionSum = postObject.sum - postObject.oldSumm
     }
     if (postObject.cashFlow == 'Списание') {
