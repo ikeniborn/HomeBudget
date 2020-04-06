@@ -220,6 +220,9 @@ function getPostObject(postData) {
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
     addError(postObject)
+  } finally {
+    postObject.error = [postObject.sum, postObject.oldSum]
+    addError(postObject)
   }
 }
 
