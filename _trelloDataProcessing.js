@@ -39,7 +39,7 @@ function addLog(postData) {
 function addError(postObject) {
   try {
     const errorOpen = postObject.errorOpen
-    let startDate = getPreviousDate(30)
+    let startDate = getPreviousDate(5)
     let deleteArrya = postObject.errorArray.reduce(function (row, array, index) {
       if (index > 0) {
         if (array[0] <= startDate) {
