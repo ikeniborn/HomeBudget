@@ -3,7 +3,7 @@
 function addLog(postData) {
   var globalVariable = getGlobalVariable()
   var sourceOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameLog)
-  var startDate = getPreviousDate(180)
+  var startDate = getPreviousDate(90)
   var deleteArrya = []
   var sourceArray = getGoogleSheetValues(sourceOpen).reduce(function (row, array, index) {
     if (index > 0) {
@@ -90,132 +90,130 @@ function getPostObject(postData) {
     postObject.errorArray = getGoogleSheetValues(postObject.errorOpen)
     postObject.accountArray = getGoogleSheetValues(postObject.accountOpen)
     postObject.targetArray = getGoogleSheetValues(postObject.targetOpen)
-    if (['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList'].indexOf(postData.action.type) !== -1) {
-      if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
-        postObject.actionId = postData.action.data.action.id
+    if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
+      postObject.actionId = postData.action.data.action.id
+    } else {
+      postObject.actionId = postData.action.id
+    }
+    postObject.actionDate = new Date(postData.action.date)
+    postObject.memberId = postData.action.memberCreator.id
+    postObject.memberUsername = postData.action.memberCreator.username
+    postObject.boardId = postData.action.data.board.id
+    postObject.boardName = postData.action.data.board.name
+    if ([postObject.boardIdFact, postObject.boardIdFact0].indexOf(postObject.boardId) !== -1) {
+      postObject.isFact = true
+      if ([postObject.boardIdFact].indexOf(postObject.boardId) !== -1) {
+        postObject.isCurrFact = true
       } else {
-        postObject.actionId = postData.action.id
+        postObject.isCurrFact = true
       }
-      postObject.actionDate = new Date(postData.action.date)
-      postObject.memberId = postData.action.memberCreator.id
-      postObject.memberUsername = postData.action.memberCreator.username
-      postObject.boardId = postData.action.data.board.id
-      postObject.boardName = postData.action.data.board.name
-      if ([postObject.boardIdFact, postObject.boardIdFact0].indexOf(postObject.boardId) !== -1) {
-        postObject.isFact = true
-        if ([postObject.boardIdFact].indexOf(postObject.boardId) !== -1) {
-          postObject.isCurrFact = true
-        } else {
-          postObject.isCurrFact = true
-        }
-        postObject.isBudget = false
+      postObject.isBudget = false
+      postObject.isCurrBudget = false
+      postObject.isTarget = false
+      postObject.type = 'Факт'
+    } else if ([postObject.boardIdBudget, postObject.boardIdBudget2, postObject.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
+      postObject.isFact = false
+      postObject.isCurrFact = false
+      postObject.isBudget = true
+      if ([postObject.boardIdBudget].indexOf(postObject.boardId) !== -1) {
+        postObject.isCurrBudget = true
+      } else {
         postObject.isCurrBudget = false
-        postObject.isTarget = false
-        postObject.type = 'Факт'
-      } else if ([postObject.boardIdBudget, postObject.boardIdBudget2, postObject.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-        postObject.isFact = false
-        postObject.isCurrFact = false
-        postObject.isBudget = true
-        if ([postObject.boardIdBudget].indexOf(postObject.boardId) !== -1) {
-          postObject.isCurrBudget = true
+      }
+      postObject.isTarget = false
+      postObject.type = 'Бюджет'
+    } else if ([postObject.boardIdTarget].indexOf(postObject.boardId) !== -1) {
+      postObject.isFact = false
+      postObject.isCurrFact = false
+      postObject.isBudget = false
+      postObject.isCurrBudget = false
+      postObject.isTarget = true
+      postObject.type = 'Факт'
+    }
+    if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
+      postObject.cardId = postData.action.data.card.id
+      postObject.cardName = postData.action.data.card.name
+      postObject.cardDescription = ''
+      postObject.cardComment = ''
+      postObject.cardLabelColor = getCardLabel(postObject).item.color
+    }
+    if (['commentCard', 'createList', 'updateList'].indexOf(postData.action.type) !== -1) {
+      postObject.list = {}
+      postObject.listId = postData.action.data.list.id
+      postObject.listName = postData.action.data.list.name
+      if (['updateList'].indexOf(postData.action.type) !== -1) {
+        postObject.listClosed = postData.action.data.list.closed
+      }
+    } else if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
+      postObject.list = getCardList(postObject)
+      postObject.listId = postObject.list.id
+      postObject.listName = postObject.list.name
+    }
+    if (postObject.isTarget) {
+      postObject.cfo = getTarget(postObject).item.cfo
+    } else {
+      postObject.cfo = getFinancialСenter(postObject).item.cfo
+    }
+    if (['Илья', 'Оксана'].indexOf(postObject.cfo) !== -1) {
+      postObject.privateBudget = true
+    } else {
+      postObject.privateBudget = false
+    }
+    if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
+      postObject.accountingItem = getAccountingItem(postObject)
+      postObject.cashFlow = postObject.accountingItem.item.cashFlow
+      postObject.bill = postObject.accountingItem.item.bill
+      postObject.account = postObject.accountingItem.item.account
+      postObject.nomenclature = postData.action.data.card.name
+      if (['updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
+        if (['updateComment'].indexOf(postData.action.type) !== -1) {
+          postObject.text = postData.action.data.action.text
         } else {
-          postObject.isCurrBudget = false
+          postObject.text = postData.action.data.text
         }
-        postObject.isTarget = false
-        postObject.type = 'Бюджет'
-      } else if ([postObject.boardIdTarget].indexOf(postObject.boardId) !== -1) {
-        postObject.isFact = false
-        postObject.isCurrFact = false
-        postObject.isBudget = false
-        postObject.isCurrBudget = false
-        postObject.isTarget = true
-        postObject.type = 'Факт'
-      }
-      if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
-        postObject.cardId = postData.action.data.card.id
-        postObject.cardName = postData.action.data.card.name
-        postObject.cardDescription = ''
-        postObject.cardComment = ''
-        postObject.cardLabelColor = getCardLabel(postObject).item.color
-      }
-      if (['commentCard', 'createList', 'updateList'].indexOf(postData.action.type) !== -1) {
-        postObject.list = {}
-        postObject.listId = postData.action.data.list.id
-        postObject.listName = postData.action.data.list.name
-        if (['updateList'].indexOf(postData.action.type) !== -1) {
-          postObject.listClosed = postData.action.data.list.closed
+        postObject.parseText = parseComment(postObject)
+        postObject.sum = postObject.parseText.sum
+        if (['updateComment'].indexOf(postData.action.type) !== -1) {
+          var postObjectOld = copyObject(postObject)
+          postObjectOld.text = postData.action.data.old.text
+          postObject.oldSum = parseComment(postObjectOld).sum
         }
-      } else if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
-        postObject.list = getCardList(postObject)
-        postObject.listId = postObject.list.id
-        postObject.listName = postObject.list.name
-      }
-      if (postObject.isTarget) {
-        postObject.cfo = getTarget(postObject).item.cfo
-      } else {
-        postObject.cfo = getFinancialСenter(postObject).item.cfo
-      }
-      if (['Илья', 'Оксана'].indexOf(postObject.cfo) !== -1) {
-        postObject.privateBudget = true
-      } else {
-        postObject.privateBudget = false
-      }
-      if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
-        postObject.accountingItem = getAccountingItem(postObject)
-        postObject.cashFlow = postObject.accountingItem.item.cashFlow
-        postObject.bill = postObject.accountingItem.item.bill
-        postObject.account = postObject.accountingItem.item.account
-        postObject.nomenclature = postData.action.data.card.name
-        if (['updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
-          if (['updateComment'].indexOf(postData.action.type) !== -1) {
-            postObject.text = postData.action.data.action.text
-          } else {
-            postObject.text = postData.action.data.text
-          }
-          postObject.parseText = parseComment(postObject)
-          postObject.sum = postObject.parseText.sum
-          if (['updateComment'].indexOf(postData.action.type) !== -1) {
-            var postObjectOld = copyObject(postObject)
-            postObjectOld.text = postData.action.data.old.text
-            postObject.oldSum = parseComment(postObjectOld).sum
-          }
-          postObject.comment = postObject.parseText.comment
-          if (postObject.isTarget) {
-            postObject.mvz = getTarget(postObject).item.goal
-          } else {
-            postObject.mvz = getCostСenter(postObject).item.mvz
-          }
+        postObject.comment = postObject.parseText.comment
+        if (postObject.isTarget) {
+          postObject.mvz = getTarget(postObject).item.goal
+        } else {
+          postObject.mvz = getCostСenter(postObject).item.mvz
         }
       }
-      if (['createList', 'updateList'].indexOf(postData.action.type) !== -1) {
-        var currDate = new Date
-        postObject.period = new Date(currDate.getFullYear(), currDate.getMonth(), 1)
-        postObject.ymd = getYMD(postObject.period)
-        postObject.factPeriod0 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() - 1, 1)
-        postObject.factPeriod = postObject.period
-        postObject.budgetPeriod = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 1, 1)
-        postObject.budgetPeriod2 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 2, 1)
-        postObject.budgetPeriod3 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 3, 1)
-        postObject.isSamePeriod = false
-      } else {
-        postObject.date = getPeriod(postObject)
-        postObject.period = postObject.date.period
-        postObject.ymd = postObject.date.ymd
-        postObject.factPeriod0 = postObject.date.factPeriod0
-        postObject.factPeriod = postObject.date.factPeriod
-        postObject.budgetPeriod = postObject.date.budgetPeriod
-        postObject.budgetPeriod2 = postObject.date.budgetPeriod2
-        postObject.budgetPeriod3 = postObject.date.budgetPeriod3
-        postObject.isSamePeriod = postObject.date.isSamePeriod
-      }
-      if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
-        postObject.dataTrello = getAllData(postObject, 'trello')
-      }
-      if (['deleteComment', 'updateComment'].indexOf(postData.action.type) !== -1) {
-        postObject.isOldData = isOldData(postObject)
-      } else {
-        postObject.isOldData = false
-      }
+    }
+    if (['createList', 'updateList'].indexOf(postData.action.type) !== -1) {
+      var currDate = new Date
+      postObject.period = new Date(currDate.getFullYear(), currDate.getMonth(), 1)
+      postObject.ymd = getYMD(postObject.period)
+      postObject.factPeriod0 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() - 1, 1)
+      postObject.factPeriod = postObject.period
+      postObject.budgetPeriod = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 1, 1)
+      postObject.budgetPeriod2 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 2, 1)
+      postObject.budgetPeriod3 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 3, 1)
+      postObject.isSamePeriod = false
+    } else {
+      postObject.date = getPeriod(postObject)
+      postObject.period = postObject.date.period
+      postObject.ymd = postObject.date.ymd
+      postObject.factPeriod0 = postObject.date.factPeriod0
+      postObject.factPeriod = postObject.date.factPeriod
+      postObject.budgetPeriod = postObject.date.budgetPeriod
+      postObject.budgetPeriod2 = postObject.date.budgetPeriod2
+      postObject.budgetPeriod3 = postObject.date.budgetPeriod3
+      postObject.isSamePeriod = postObject.date.isSamePeriod
+    }
+    if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
+      postObject.dataTrello = getAllData(postObject, 'trello')
+    }
+    if (['deleteComment', 'updateComment'].indexOf(postData.action.type) !== -1) {
+      postObject.isOldData = isOldData(postObject)
+    } else {
+      postObject.isOldData = false
     }
     postObject.error = ''
     return postObject
@@ -466,9 +464,14 @@ function deleteRowByActionId(postObject) {
 
 function doPost(e) {
   try {
-    const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
+    const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList']
     const botUser = ['5e2b5f3f409c544ebdb1b9d4']
     var postData = JSON.parse(e.postData.contents)
+    if (['updateCard'].indexOf(postData.action.type) !== -1) {
+      let postObject = getGlobalVariable()
+      let errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
+      errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, '', '', '', '', postData])
+    }
     if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(postData)) {
       var postObject = getPostObject(postData)
       if (postObject.actionType == 'commentCard') {
