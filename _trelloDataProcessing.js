@@ -39,8 +39,8 @@ function addLog(postData) {
 function addError(postObject) {
   try {
     const errorOpen = postObject.errorOpen
-    let startDate = getPreviousDate(90)
-    let deleteArrya = postObject.errorArray.reduce(function (row, array, index) {
+    var startDate = getPreviousDate(5)
+    var deleteArrya = postObject.errorArray.reduce(function (row, array, index) {
       if (index > 0) {
         if (array[0] <= startDate) {
           row.push(array)
@@ -57,10 +57,10 @@ function addError(postObject) {
       })
       errorOpen.deleteRows(startDeleteIndex, countDeleteRow)
     }
-    errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, postObject.cardId, postObject.error])
+    errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, postObject.error])
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
-    errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, postObject.cardId, postObject.error])
+    errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, postObject.error])
   }
 }
 
@@ -130,19 +130,22 @@ function getPostObject(postData) {
       postObject.isTarget = true
       postObject.type = 'Факт'
     }
-    if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
+    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
       postObject.cardDescription = ''
       postObject.cardComment = ''
       postObject.cardLabelColor = getCardLabel(postObject).item.color
     }
-    if (['commentCard', 'createList', 'updateList'].indexOf(postData.action.type) !== -1) {
+    if (['commentCard', 'createList', 'updateList', 'updateCard'].indexOf(postData.action.type) !== -1) {
       postObject.list = {}
       postObject.listId = postData.action.data.list.id
       postObject.listName = postData.action.data.list.name
       if (['updateList'].indexOf(postData.action.type) !== -1) {
         postObject.listClosed = postData.action.data.list.closed
+      }
+      if (['updateCard'].indexOf(postData.action.type) !== -1) {
+        postObject.cardClosed = postData.action.data.card.closed
       }
     } else if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
       postObject.list = getCardList(postObject)
@@ -159,7 +162,7 @@ function getPostObject(postData) {
     } else {
       postObject.privateBudget = false
     }
-    if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
+    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
       postObject.accountingItem = getAccountingItem(postObject)
       postObject.cashFlow = postObject.accountingItem.item.cashFlow
       postObject.bill = postObject.accountingItem.item.bill
@@ -464,27 +467,17 @@ function deleteRowByActionId(postObject) {
 
 function doPost(e) {
   try {
-    const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList']
+    const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
     const botUser = ['5e2b5f3f409c544ebdb1b9d4']
     var postData = JSON.parse(e.postData.contents)
-    if (['updateCard'].indexOf(postData.action.type) !== -1) {
-      let postObject = getGlobalVariable()
-      let errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
-      errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, '', '', '', '', postData])
-    }
+    // if (['updateCard'].indexOf(postData.action.type) !== -1) {
+    //   let postObject = getGlobalVariable()
+    //   let errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
+    //   errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, '', '', '', '', postData])
+    // }
     if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(postData)) {
       var postObject = getPostObject(postData)
       if (postObject.actionType == 'commentCard') {
-        //* закрытие периода
-        if (postObject.isCurrFact && ['Остатки'].indexOf(postObject.account) !== -1 && !postObject.isSamePeriod) {
-          updateParametr(postObject)
-          closedFactPeriod(postObject)
-          updateDescForNewCards(postObject)
-          // reportBudgetOksana(postObject)
-        } else if (postObject.isCurrFact && ['Аванс'].indexOf(postObject.account) !== -1 && postObject.isSamePeriod) {
-          updateParametr(postObject)
-          closedBudgetPeriod(postObject)
-        }
         //* добавление информации
         updateTrelloData(postObject)
         if (postObject.isTarget) {
@@ -545,6 +538,19 @@ function doPost(e) {
       } else if (postObject.actionType == 'updateList') {
         if (postObject.isTarget && postObject.listClosed) {
           updateTarget(postObject)
+        }
+      } else if (postObject.actionType == 'updateCard') {
+        if (postObject.cardClosed && postObject.cardName == 'Баланс') {
+          if (postObject.isCurrFact && !postObject.isSamePeriod) {
+            //* закрытие фактического периода
+            updateParametr(postObject)
+            closedFactPeriod(postObject)
+            updateDescForNewCards(postObject)
+          } else if (postObject.isCurrBudget && postObject.isSamePeriod) {
+            //* закрытие бюджетного периода
+            updateParametr(postObject)
+            closedBudgetPeriod(postObject)
+          }
         }
       }
     }
