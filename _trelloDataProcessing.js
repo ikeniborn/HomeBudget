@@ -222,9 +222,6 @@ function getPostObject(postData) {
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
     addError(postObject)
-  } finally {
-    postObject.error = postData
-    addError(postObject)
   }
 }
 
@@ -472,7 +469,6 @@ function doPost(e) {
     const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
     const botUser = ['5e2b5f3f409c544ebdb1b9d4']
     var postData = JSON.parse(e.postData.contents)
-    // if (botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(postData)) {
     if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(postData)) {
       var postObject = getPostObject(postData)
       if (postObject.actionType == 'commentCard') {
