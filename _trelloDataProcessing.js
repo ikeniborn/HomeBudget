@@ -1,6 +1,10 @@
 /* eslint-disable prefer-const */
 /* eslint-disable no-undef */
 /* eslint-disable space-before-function-paren */
+function objectToString(data) {
+  return JSON.stringify(data)
+}
+
 function addLog(postData) {
   try {
     var globalVariable = getGlobalVariable()
@@ -1541,10 +1545,10 @@ function getAllData(postObject, source) {
       }
     }, [])
     sourceArray.current.fact = sourceArray.all.filter(function (row) {
-      return row.ymd == postObject.ymd && row.type == 'Факт'
+      return row.ymd == getYMD(postObject.factPeriod).ymd && row.type == 'Факт'
     })
     sourceArray.current.budget = sourceArray.all.filter(function (row) {
-      return row.ymd == postObject.ymd && row.type == 'Бюджет'
+      return row.ymd == getYMD(postObject.budgetPeriod).ymd && row.type == 'Бюджет'
     })
     return sourceArray
   } catch (e) {
