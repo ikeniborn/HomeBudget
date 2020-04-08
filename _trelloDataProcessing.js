@@ -160,7 +160,7 @@ function getPostObject(postData) {
       if ([postObject.boardIdFact].indexOf(postObject.boardId) !== -1) {
         postObject.isCurrFact = true
       } else {
-        postObject.isCurrFact = true
+        postObject.isCurrFact = false
       }
       postObject.isBudget = false
       postObject.isCurrBudget = false
