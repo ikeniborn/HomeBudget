@@ -406,6 +406,7 @@ function closedFactPeriod(postObject) {
     //* Перенос карточек на доску факт-1
     moveAllCards(postObject, postObjectFact0)
     //* обновление текущего листа факта
+    postObject.listName = postObject.cfo + ' ' + formatterDate(postObject.factPeriod).date
     updateList(postObject)
     //* создание карточек на листе факт
     createCardsForList(postObject)
@@ -537,8 +538,9 @@ function encodeData(data, symbol) {
   }
 }
 
-// форматирование даты
+
 function formatterDate(date) {
+  //* форматирование даты
   try {
     if (date == undefined) {
       date = new Date()
@@ -554,8 +556,9 @@ function formatterDate(date) {
   }
 }
 
-// получаение справочника статей
+
 function getAccountingItem(postObject) {
+  //* получаение справочника статей
   try {
     var array = postObject.accountingItemArray
     if (postObject.cardName == undefined) {
