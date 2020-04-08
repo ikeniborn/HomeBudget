@@ -110,6 +110,15 @@ function openGoogleSheet(sheetID, sheetName) {
   }
 }
 
+function getGoogleSheetValues(openSheet) {
+  try {
+    return openSheet.getDataRange().getValues()
+  } catch (e) {
+    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
+    addError(postObject)
+  }
+}
+
 function getPostObject(postData) {
   try {
     var postObject = getGlobalVariable()
@@ -557,32 +566,31 @@ function getAccountingItem(postObject) {
     account.item = {}
     account.array = []
     array.reduce(function (row, array, index) {
-      if (index > 0) {
-        if (array[4].toUpperCase().trim() == postObject.cardName.toUpperCase().trim() && array[8].toUpperCase().trim() == postObject.cardLabelColor.toUpperCase().trim()) {
-          row = {}
-          row.id = array[0]
-          row.cashFlow = array[1]
-          row.bill = array[2]
-          row.account = array[3]
-          row.nomenclature = array[4]
-          row.budget = array[5]
-          row.fact = array[6]
-          row.target = array[7]
-          row.color = array[8]
-          account.item = row
-        } else {
-          row = {}
-          row.id = array[0]
-          row.cashFlow = array[1]
-          row.bill = array[2]
-          row.account = array[3]
-          row.nomenclature = array[4]
-          row.budget = array[5]
-          row.fact = array[6]
-          row.target = array[7]
-          row.color = array[8]
-          account.array.push(row)
-        }
+      if (array[4].toUpperCase().trim() == postObject.cardName.toUpperCase().trim() && array[8].toUpperCase().trim() == postObject.cardLabelColor.toUpperCase().trim()) {
+        row = {}
+        row.id = array[0]
+        row.cashFlow = array[1]
+        row.bill = array[2]
+        row.account = array[3]
+        row.nomenclature = array[4]
+        row.budget = array[5]
+        row.fact = array[6]
+        row.target = array[7]
+        row.color = array[8]
+        account.item = row
+        account.array.push(row)
+      } else if (index > 0) {
+        row = {}
+        row.id = array[0]
+        row.cashFlow = array[1]
+        row.bill = array[2]
+        row.account = array[3]
+        row.nomenclature = array[4]
+        row.budget = array[5]
+        row.fact = array[6]
+        row.target = array[7]
+        row.color = array[8]
+        account.array.push(row)
       }
     }, {})
     return account
@@ -841,14 +849,6 @@ function getFinancialСenter(postObject) {
   }
 }
 
-function getGoogleSheetValues(openSheet) {
-  try {
-    return openSheet.getDataRange().getValues()
-  } catch (e) {
-    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
-    addError(postObject)
-  }
-}
 
 function getParametr(postObject) {
   try {
