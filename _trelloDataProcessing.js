@@ -198,7 +198,6 @@ function getPostObject(postData) {
       postObject.budgetPeriod = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 1, 1)
       postObject.budgetPeriod2 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 2, 1)
       postObject.budgetPeriod3 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 3, 1)
-      postObject.isSamePeriod = false
     } else {
       postObject.date = getPeriod(postObject)
       postObject.period = postObject.date.period
@@ -208,7 +207,6 @@ function getPostObject(postData) {
       postObject.budgetPeriod = postObject.date.budgetPeriod
       postObject.budgetPeriod2 = postObject.date.budgetPeriod2
       postObject.budgetPeriod3 = postObject.date.budgetPeriod3
-      postObject.isSamePeriod = postObject.date.isSamePeriod
     }
     if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
       postObject.dataTrello = getAllData(postObject, 'trello')
@@ -541,12 +539,12 @@ function doPost(e) {
         }
       } else if (postObject.actionType == 'updateCard') {
         if (postObject.cardClosed && postObject.cardName == 'Баланс') {
-          if (postObject.isCurrFact && !postObject.isSamePeriod) {
+          if (postObject.isCurrFact) {
             //* закрытие фактического периода
             updateParametr(postObject)
             closedFactPeriod(postObject)
             updateDescForNewCards(postObject)
-          } else if (postObject.isCurrBudget && postObject.isSamePeriod) {
+          } else if (postObject.isCurrBudget) {
             //* закрытие бюджетного периода
             updateParametr(postObject)
             closedBudgetPeriod(postObject)
@@ -967,11 +965,6 @@ function getPeriod(postObject) {
       date.period = date.factPeriod
     }
     date.ymd = getYMD(date.period).ymd
-    if (getYMD(date.factPeriod).ymd == getYMD(date.budgetPeriod).ymd) {
-      date.isSamePeriod = true
-    } else {
-      date.isSamePeriod = false
-    }
     return date
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
