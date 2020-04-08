@@ -471,9 +471,8 @@ function doPost(e) {
     const botUser = ['5e2b5f3f409c544ebdb1b9d4']
     var postData = JSON.parse(e.postData.contents)
     if (['updateCard'].indexOf(postData.action.type) !== -1) {
-      let postObject = getGlobalVariable()
-      let errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
       let postObject = getPostObject(postData)
+      let errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
       errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, '', '', '', '', postObject])
     }
     if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(postData)) {
