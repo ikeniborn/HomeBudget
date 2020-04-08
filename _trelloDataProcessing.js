@@ -803,7 +803,6 @@ function getDescription(postObject) {
         i += 1
       })
     }
-    sss
     description.haveBudget = sum.totalSum.haveBudget
     return description
   } catch (e) {
@@ -1545,7 +1544,6 @@ function getAllData(postObject, source) {
     sourceArray.current.budget = sourceArray.all.filter(function (row) {
       return row.ymd == postObject.ymd && row.type == 'Бюджет'
     })
-    sss
     return sourceArray
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
