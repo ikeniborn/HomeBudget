@@ -388,7 +388,7 @@ function closedFactPeriod(postObject) {
     postObjectFact0.listId = getList(postObjectFact0).id
     postObjectFact0.listName = postObjectFact0.cfo + ' ' + formatterDate(postObjectFact0.factPeriod0).date
     if (postObjectFact0.listId == undefined) {
-      postObjectFact0.listId = addList(postObject).id
+      postObjectFact0.listId = addList(postObjectFact0).id
     } else {
       //* закрытие листа на доске факт-1
       archiveAllCards(postObjectFact0)
