@@ -4,13 +4,42 @@ function addLog(postData) {
   try {
     var globalVariable = getGlobalVariable()
     var sourceOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameLog)
-    var startDate = getPreviousDate(90)
-    var deleteArrya = []
+    var startDate = getPreviousDate(180)
     var sourceArray = getGoogleSheetValues(sourceOpen).reduce(function (row, array, index) {
       if (index > 0) {
         if (array[0] >= startDate) {
           row.push(array)
-        } else {
+        }
+      }
+      return row
+    }, [])
+    var isNewAction = sourceArray.reduce(function (row, array) {
+      if (array[2].match(postData.action.id)) {
+        row = false
+      }
+      return row
+    }, true)
+    if (isNewAction) {
+      sourceOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id])
+    }
+    return isNewAction
+  } catch (e) {
+    let postObject = getGlobalVariable()
+    let error = arguments.callee.name + ': ' + e
+    errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
+    errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, '', '', '', error])
+  }
+}
+
+function deleteLog(postObject) {
+  try {
+    var globalVariable = getGlobalVariable()
+    var sourceOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameLog)
+    var startDate = getPreviousDate(90)
+    var deleteArrya = []
+    getGoogleSheetValues(sourceOpen).reduce(function (row, array, index) {
+      if (index > 0) {
+        if (array[0] <= startDate) {
           deleteArrya.push(index + 1)
         }
       }
@@ -24,29 +53,33 @@ function addLog(postData) {
         return a > b ? a : b
       })
     }
-    var isNewAction = sourceArray.reduce(function (row, array) {
-      if (array[2].match(postData.action.id)) {
-        row = false
-      }
-      return row
-    }, true)
-    if (isNewAction) {
-      sourceOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id])
-    }
-    return isNewAction
-  } catch (e) {} finally {
     sourceOpen.deleteRows(startDeleteIndex, countDeleteRow)
+  } catch (e) {
+    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
+    addError(postObject)
   }
+
 }
 
 function addError(postObject) {
   try {
     const errorOpen = postObject.errorOpen
+    errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, postObject.error])
+  } catch (e) {
+    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
+    errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, postObject.error])
+  }
+}
+
+function deleteError(postObject) {
+  try {
+    const errorOpen = postObject.errorOpen
     var startDate = getPreviousDate(1)
-    var deleteArrya = postObject.errorArray.reduce(function (row, array, index) {
+    var deleteArrya = []
+    postObject.errorArray.reduce(function (row, array, index) {
       if (index > 0) {
         if (array[0] <= startDate) {
-          row.push(array)
+          deleteArrya.push(index + 1)
         }
       }
       return row
@@ -59,12 +92,10 @@ function addError(postObject) {
         return a > b ? a : b
       })
     }
-    errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, postObject.error])
+    errorOpen.deleteRows(startDeleteIndex, countDeleteRow)
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
-    errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, postObject.error])
-  } finally {
-    errorOpen.deleteRows(startDeleteIndex, countDeleteRow)
+    addError(postObject)
   }
 }
 
@@ -1418,8 +1449,6 @@ function updateTrelloData(postObject) {
     }
     //* получение данных учета после обновления
     postObject.dataAccount = getAllData(postObject, 'account')
-    //* Удаление пустых строк
-    deleteEmptyRow(postObject)
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
     addError(postObject)
@@ -1655,5 +1684,12 @@ function doPost(e) {
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
     addError(postObject)
+  } finally {
+    //* удаление старых логов
+    deleteLog(postObject)
+    //* удаление старых ошибок
+    deleteError(postObject)
+    //* Удаление пустых строк
+    deleteEmptyRow(postObject)
   }
 }
