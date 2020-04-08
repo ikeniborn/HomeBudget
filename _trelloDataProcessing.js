@@ -608,59 +608,57 @@ function getAllTarget(postObject) {
     obj.item = {}
     obj.array = []
     array.reduce(function (row, array, index) {
-      if (index > 0) {
-        if (target.goal == array[1] && target.cfo == array[2]) {
-          row = {}
-          row.timestamp = array[0]
-          row.goal = array[1]
-          row.cfo = array[2]
-          row.startDate = new Date(array[3])
-          row.duration = +array[4]
-          row.cost = +array[5]
-          row.inflation = +array[6]
-          row.isIis = +array[7]
-          row.restCost = +array[8]
-          row.endDate = new Date(array[9])
-          row.restDay = +array[10]
-          row.complete = array[11]
-          row.budget = +array[12]
-          row.newCost = +array[13]
-          row.monthDeductionSum = +array[14]
-          row.currentListedSum = +array[15]
-          row.targetSum = +array[17]
-          row.depositSum = +array[18]
-          row.exchangeSum = +array[19]
-          row.iisSum = +array[20]
-          row.disbursedFunds = +array[21]
-          row.indexRow = index + 1
-          obj.item = row
-          obj.array.push(row)
-        } else {
-          row = {}
-          row.timestamp = array[0]
-          row.goal = array[1]
-          row.cfo = array[2]
-          row.startDate = new Date(array[3])
-          row.duration = +array[4]
-          row.cost = +array[5]
-          row.inflation = +array[6]
-          row.isIis = +array[7]
-          row.restCost = +array[8]
-          row.endDate = new Date(array[9])
-          row.restDay = +array[10]
-          row.complete = array[11]
-          row.budget = +array[12]
-          row.newCost = +array[13]
-          row.monthDeductionSum = +array[14]
-          row.currentListedSum = +array[15]
-          row.targetSum = +array[17]
-          row.depositSum = +array[18]
-          row.exchangeSum = +array[19]
-          row.iisSum = +array[20]
-          row.disbursedFunds = +array[21]
-          row.indexRow = index + 1
-          obj.array.push(row)
-        }
+      if (target.goal == array[1] && target.cfo == array[2]) {
+        row = {}
+        row.timestamp = array[0]
+        row.goal = array[1]
+        row.cfo = array[2]
+        row.startDate = new Date(array[3])
+        row.duration = +array[4]
+        row.cost = +array[5]
+        row.inflation = +array[6]
+        row.isIis = +array[7]
+        row.restCost = +array[8]
+        row.endDate = new Date(array[9])
+        row.restDay = +array[10]
+        row.complete = array[11]
+        row.budget = +array[12]
+        row.newCost = +array[13]
+        row.monthDeductionSum = +array[14]
+        row.currentListedSum = +array[15]
+        row.targetSum = +array[17]
+        row.depositSum = +array[18]
+        row.exchangeSum = +array[19]
+        row.iisSum = +array[20]
+        row.disbursedFunds = +array[21]
+        row.indexRow = index + 1
+        obj.item = row
+        obj.array.push(row)
+      } else if (index > 0) {
+        row = {}
+        row.timestamp = array[0]
+        row.goal = array[1]
+        row.cfo = array[2]
+        row.startDate = new Date(array[3])
+        row.duration = +array[4]
+        row.cost = +array[5]
+        row.inflation = +array[6]
+        row.isIis = +array[7]
+        row.restCost = +array[8]
+        row.endDate = new Date(array[9])
+        row.restDay = +array[10]
+        row.complete = array[11]
+        row.budget = +array[12]
+        row.newCost = +array[13]
+        row.monthDeductionSum = +array[14]
+        row.currentListedSum = +array[15]
+        row.targetSum = +array[17]
+        row.depositSum = +array[18]
+        row.exchangeSum = +array[19]
+        row.iisSum = +array[20]
+        row.disbursedFunds = +array[21]
+        row.indexRow = index + 1
+        obj.array.push(row)
       }
     }, {})
     return obj
@@ -717,21 +715,19 @@ function getCostСenter(postObject) {
     mvz.array = []
     if (Object.prototype.toString.call(postObject.comment) == '[object String]') {
       array.reduce(function (row, array, index) {
-        if (index > 0) {
-          if (text.toLowerCase().replace(/\s+/g, '').trim().match(array[2].toLowerCase())) {
-            row = {}
-            row.id = array[0]
-            row.mvz = array[1]
-            row.tag = array[2]
-            mvz.item = row
-            mvz.array.push(row)
-          } else {
-            row = {}
-            row.id = array[0]
-            row.mvz = array[1]
-            row.tag = array[2]
-            mvz.array.push(row)
-          }
+        if (text.toLowerCase().replace(/\s+/g, '').trim().match(array[2].toLowerCase())) {
+          row = {}
+          row.id = array[0]
+          row.mvz = array[1]
+          row.tag = array[2]
+          mvz.item = row
+          mvz.array.push(row)
+        } else if (index > 0) {
+          row = {}
+          row.id = array[0]
+          row.mvz = array[1]
+          row.tag = array[2]
+          mvz.array.push(row)
         }
       }, {})
     }
@@ -827,19 +823,17 @@ function getFinancialСenter(postObject) {
     cfo.item = {}
     cfo.array = []
     array.reduce(function (row, array, index) {
-      if (index > 0) {
-        if (listName.toLowerCase().match(array[1].toLowerCase())) {
-          row = {}
-          row.id = array[0]
-          row.cfo = array[1]
-          cfo.item = row
-          cfo.array.push(row)
-        } else {
-          row = {}
-          row.id = array[0]
-          row.cfo = array[1]
-          cfo.array.push(row)
-        }
+      if (listName.toLowerCase().match(array[1].toLowerCase())) {
+        row = {}
+        row.id = array[0]
+        row.cfo = array[1]
+        cfo.item = row
+        cfo.array.push(row)
+      } else if (index > 0) {
+        row = {}
+        row.id = array[0]
+        row.cfo = array[1]
+        cfo.array.push(row)
       }
     }, {})
     return cfo
@@ -857,25 +851,23 @@ function getParametr(postObject) {
     parametr.item = {}
     parametr.array = []
     array.reduce(function (row, array, index) {
-      if (index > 0) {
-        if (postObject.cfo == array[2] && array[1] == postObject.type) {
-          row = {}
-          row.id = array[0]
-          row.type = array[1]
-          row.cfo = array[2]
-          row.value = new Date(array[3])
-          row.indexRow = index + 1
-          parametr.item = row
-          parametr.array.push(row)
-        } else {
-          row = {}
-          row.id = array[0]
-          row.type = array[1]
-          row.cfo = array[2]
-          row.value = new Date(array[3])
-          row.indexRow = index + 1
-          parametr.array.push(row)
-        }
+      if (postObject.cfo == array[2] && array[1] == postObject.type) {
+        row = {}
+        row.id = array[0]
+        row.type = array[1]
+        row.cfo = array[2]
+        row.value = new Date(array[3])
+        row.indexRow = index + 1
+        parametr.item = row
+        parametr.array.push(row)
+      } else if (index > 0) {
+        row = {}
+        row.id = array[0]
+        row.type = array[1]
+        row.cfo = array[2]
+        row.value = new Date(array[3])
+        row.indexRow = index + 1
+        parametr.array.push(row)
       }
     }, {})
     return parametr
@@ -1323,13 +1315,13 @@ function updateParametr(postObject) {
     var indexRow
     var value
     const postObjectCopy = copyObject(postObject)
-    if (['Остатки'].indexOf(postObject.account) !== -1) {
+    if (postObject.isCurrFact) {
       postObjectCopy.type = 'Факт'
       indexRow = getParametr(postObjectCopy).item.indexRow
       value = new Date(postObjectCopy.factPeriod.getFullYear(), postObjectCopy.factPeriod.getMonth() + 1, 1)
       ss.getRange(indexRow, 4).setValue(formatterDate(value).date)
       ss.getRange(indexRow, 5).setValue(formatterDate().timestamp)
-    } else if (['Аванс'].indexOf(postObject.account) !== -1) {
+    } else if (postObject.isCurrBudget) {
       postObjectCopy.isFact = false
       postObjectCopy.isBudget = true
       postObjectCopy.type = 'Бюджет'
