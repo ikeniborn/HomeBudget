@@ -63,9 +63,10 @@ function deleteLog(postObject) {
 
 function addError(postObject) {
   try {
-    const errorOpen = postObject.errorOpen
     if (postObject.error.length > 0) {
-      let error = ''
+      let globalVariable = getGlobalVariable()
+      errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
+      var error = ''
       postObject.error.map(function (row) {
         error += row + '\n'
         return row
@@ -274,7 +275,6 @@ function getPostObject(postData) {
     } else {
       postObject.isOldData = false
     }
-    postObject.error = []
     return postObject
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
