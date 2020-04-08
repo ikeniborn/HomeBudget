@@ -58,27 +58,27 @@ function deleteLog(postObject) {
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
-
 }
 
 function addError(postObject) {
   try {
     if (postObject.error.length > 0) {
-      let globalVariable = getGlobalVariable()
-      errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
-      let error = ''
-      let i = 0
-      let errorArray = postObject.error
+      var globalVariable = getGlobalVariable()
+      var errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
+      var errorText = ''
+      var i = 0
+      var errorArray = postObject.error
+      var errorArrayLength = postObject.error.length
       errorArray.map(function (row) {
         i += 1
-        error += row + postObject.error.length == i ? '' : '\n'
+        errorText += row + errorArrayLength == i ? '' : '\n'
         return row
       })
-      errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, error])
+      errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, errorText])
     }
   } catch (e) {
-    error = arguments.callee.name + ': ' + e
-    errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, error])
+    errorText = arguments.callee.name + ': ' + e
+    errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, errorText])
   }
 }
 
