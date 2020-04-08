@@ -63,21 +63,24 @@ function deleteLog(postObject) {
 function addError(postObject) {
   try {
     if (postObject.error.length > 0) {
-      var globalVariable = getGlobalVariable()
-      var errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
-      var errorText = ''
-      var i = 0
-      var errorArray = postObject.error
-      var errorArrayLength = postObject.error.length
+      let globalVariable = getGlobalVariable()
+      let errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
+      let errorText = ''
+      let i = 0
+      let errorArray = postObject.error
+      let errorArrayLenght = postObject.error.length
       errorArray.map(function (row) {
         i += 1
-        errorText += row + errorArrayLength == i ? '' : '\n'
+        errorText += row
+        errorArrayLenght == i ? errorText += '' : errorText += '\n'
         return row
       })
       errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, errorText])
     }
   } catch (e) {
-    errorText = arguments.callee.name + ': ' + e
+    let globalVariable = getGlobalVariable()
+    let errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
+    let errorText = arguments.callee.name + ': ' + e
     errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, errorText])
   }
 }
@@ -127,8 +130,8 @@ function getGoogleSheetValues(openSheet) {
 }
 
 function getPostObject(postData) {
+  var postObject = getGlobalVariable()
   try {
-    var postObject = getGlobalVariable()
     postObject.webHookDate = formatterDate().timestamp
     postObject.actionType = postData.action.type
     postObject.webHookActionId = postData.action.id
