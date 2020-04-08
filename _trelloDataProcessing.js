@@ -67,8 +67,10 @@ function addError(postObject) {
       let globalVariable = getGlobalVariable()
       errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
       var error = ''
+      let i = 0
       postObject.error.map(function (row) {
-        error += row + '\n'
+        i += 1
+        error += row + postObject.error.length == i ? '' : '\n'
         return row
       })
       errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, error])
