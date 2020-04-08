@@ -65,9 +65,9 @@ function addError(postObject) {
   try {
     const errorOpen = postObject.errorOpen
     if (postObject.error.length > 0) {
-      let error = postObject.error.reduce(function (row, array) {
-        row = ''
-        row += array + postObject.lineBreak
+      let error = ''
+      postObject.error.map(function (row) {
+        error += row + '\n'
         return row
       })
       errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, error])
