@@ -473,7 +473,7 @@ function doPost(e) {
     if (['updateCard'].indexOf(postData.action.type) !== -1) {
       let postObject = getPostObject(postData)
       let errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
-      errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, '', '', '', '', postObject])
+      errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, '', '', '', postObject])
     }
     if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(postData)) {
       var postObject = getPostObject(postData)
