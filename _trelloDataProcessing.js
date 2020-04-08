@@ -76,6 +76,8 @@ function addError(postObject) {
         return row
       })
       errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, errorText])
+      let subject = postObject.webHookDate + ' - ' + postObject.actionType
+      MailApp.sendEmail('ikeniborn@gmail.com', subject, errorText)
     }
   } catch (e) {
     let globalVariable = getGlobalVariable()
