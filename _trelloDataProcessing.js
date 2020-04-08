@@ -557,9 +557,6 @@ function doPost(e) {
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
     addError(postObject)
-  } finally {
-    postObject.error = postData
-    addError(postObject)
   }
 }
 
