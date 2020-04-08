@@ -66,9 +66,10 @@ function addError(postObject) {
     if (postObject.error.length > 0) {
       let globalVariable = getGlobalVariable()
       errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
-      var error = ''
+      let error = ''
       let i = 0
-      postObject.error.map(function (row) {
+      let errorArray = postObject.error
+      errorArray.map(function (row) {
         i += 1
         error += row + postObject.error.length == i ? '' : '\n'
         return row
