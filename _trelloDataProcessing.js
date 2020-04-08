@@ -46,14 +46,14 @@ function deleteLog(postObject) {
       return row
     }, [])
     if (deleteArrya.length > 0) {
-      var startDeleteIndex = deleteArrya.reduce(function (a, b) {
+      let startDeleteIndex = deleteArrya.reduce(function (a, b) {
         return a < b ? a : b
       })
-      var countDeleteRow = deleteArrya.reduce(function (a, b) {
+      let countDeleteRow = deleteArrya.reduce(function (a, b) {
         return a > b ? a : b
       })
+      sourceOpen.deleteRows(startDeleteIndex, countDeleteRow)
     }
-    sourceOpen.deleteRows(startDeleteIndex, countDeleteRow)
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
     addError(postObject)
@@ -85,14 +85,14 @@ function deleteError(postObject) {
       return row
     }, [])
     if (deleteArrya.length > 0) {
-      var startDeleteIndex = deleteArrya.reduce(function (a, b) {
+      let startDeleteIndex = deleteArrya.reduce(function (a, b) {
         return a < b ? a : b
       })
-      var countDeleteRow = deleteArrya.reduce(function (a, b) {
+      let countDeleteRow = deleteArrya.reduce(function (a, b) {
         return a > b ? a : b
       })
+      errorOpen.deleteRows(startDeleteIndex, countDeleteRow)
     }
-    errorOpen.deleteRows(startDeleteIndex, countDeleteRow)
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
     addError(postObject)
@@ -386,9 +386,13 @@ function closedFactPeriod(postObject) {
     postObjectFact0.boardId = postObjectFact0.boardIdFact0
     postObjectFact0.listId = getList(postObjectFact0).id
     postObjectFact0.listName = postObjectFact0.cfo + ' ' + formatterDate(postObjectFact0.factPeriod0).date
-    //* закрытие листа на доске факт-1
-    archiveAllCards(postObjectFact0)
-    updateList(postObjectFact0)
+    if (postObjectFact0.listId == undefined) {
+      postObjectFact0.listId = addList(postObject).id
+    } else {
+      //* закрытие листа на доске факт-1
+      archiveAllCards(postObjectFact0)
+      updateList(postObjectFact0)
+    }
     //* Перенос карточек на доску факт-1
     moveAllCards(postObject, postObjectFact0)
     //* обновление текущего листа факта
@@ -1597,11 +1601,11 @@ function doPost(e) {
     const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
     const botUser = ['5e2b5f3f409c544ebdb1b9d4']
     var postData = JSON.parse(e.postData.contents)
-    if (['updateCard'].indexOf(postData.action.type) !== -1) {
-      let postObject = getPostObject(postData)
-      let errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
-      errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, '', '', '', JSON.parse(JSON.stringify(postObject))])
-    }
+    // if (['updateCard'].indexOf(postData.action.type) !== -1) {
+    //   let postObject = getPostObject(postData)
+    //   let errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
+    //   errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, '', '', '', JSON.parse(JSON.stringify(postObject))])
+    // }
     if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(postData)) {
       var postObject = getPostObject(postData)
       if (postObject.actionType == 'commentCard') {

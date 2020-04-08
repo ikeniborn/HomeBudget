@@ -1,4 +1,4 @@
-function addList(postObject, listName, boardId) {
+function addList(postObject) {
   /*
    * @postObject - входные параметра запроса
    * @labelName - входной параметр имени метки
@@ -9,7 +9,7 @@ function addList(postObject, listName, boardId) {
       method: 'post',
       contentType: 'application/json'
     }
-    var resp = UrlFetchApp.fetch(postObject.apiRoot + 'lists/?name=' + listName + '&idBoard=' + boardId + '&' + postObject.keyAndToken, data)
+    var resp = UrlFetchApp.fetch(postObject.apiRoot + 'lists/?name=' + postObject.listName + '&idBoard=' + postObject.boardId + '&' + postObject.keyAndToken, data)
     var variable = {}
     variable.id = JSON.parse(resp).id
     variable.name = JSON.parse(resp).name
@@ -20,7 +20,7 @@ function addList(postObject, listName, boardId) {
   }
 }
 
-function closedList(postObject, listId) {
+function closedList(postObject) {
   /*
    * @postObject - входные параметра запроса
    * @listId - входной параметр ID листа trello
@@ -30,26 +30,24 @@ function closedList(postObject, listId) {
       method: 'put',
       contentType: 'application/json'
     }
-    UrlFetchApp.fetch(postObject.apiRoot + 'lists/' + listId + '/closed?value=true&' + postObject.keyAndToken, data)
+    UrlFetchApp.fetch(postObject.apiRoot + 'lists/' + postObject.listId + '/closed?value=true&' + postObject.keyAndToken, data)
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
     addError(postObject)
   }
 }
 
-function copyList(postObject, listName, boardId, idListSource) {
+function copyList(postObject, postObjectNew) {
   /*
    * @postObject - входные параметра запроса
-   * @listName - входной параметр ID листа trello
-   * @boardId - входной параметр ID доски.Изменяем trello
-   * @idListSource - входной параметр ID листа - исходника trello
+   * @postObjectNew - входной параметр обновленные
    **/
   try {
     var data = {
       method: 'post',
       contentType: 'application/json'
     }
-    var resp = UrlFetchApp.fetch(postObject.apiRoot + 'lists/?name=' + listName + '&idBoard=' + boardId + '&idListSource=' + idListSource + '&pos=bottom&' + postObject.keyAndToken, data)
+    var resp = UrlFetchApp.fetch(postObject.apiRoot + 'lists/?name=' + postObjectNew.listName + '&idBoard=' + postObjectNew.boardId + '&idListSource=' + postObject.idListSource + '&pos=bottom&' + postObject.keyAndToken, data)
     var variable = {}
     variable.id = JSON.parse(resp).id
     variable.name = JSON.parse(resp).name
@@ -90,18 +88,17 @@ function getList(postObject) {
   }
 }
 
-function moveList(postObject, listId, boardId) {
+function moveList(postObject, postObjectNew) {
   /*
    * @postObject - входные параметра запроса
-   * @listId - входной параметр ID листа trello
-   * @boardId - входной параметр ID доски trello
+   * @postObjectNew - входной параметр обновленный
    */
   try {
     var data = {
       method: 'put',
       contentType: 'application/json'
     }
-    UrlFetchApp.fetch(postObject.apiRoot + 'lists/' + listId + '/idBoard?value=' + boardId + '&' + postObject.keyAndToken, data)
+    UrlFetchApp.fetch(postObject.apiRoot + 'lists/' + postObject.listId + '/idBoard?value=' + postObjectNew.boardId + '&' + postObject.keyAndToken, data)
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
     addError(postObject)
