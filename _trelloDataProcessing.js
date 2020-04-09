@@ -1293,7 +1293,7 @@ function updateBalanceCard(postObject) {
     var balanceCard = getCards(postObjectBalance, postObjectBalance.listId).item
     postObjectBalance.cardId = balanceCard.id
     addCardComment(postObjectBalance)
-    if (postObjectBalance.isBudget) {
+    if (postObjectBalance.isBudget || postObjectBalance.isTarget) {
       var description = getDescription(postObjectBalance)
       postObjectBalance.cardDescription = description.text
       updateCardDesc(postObjectBalance)
