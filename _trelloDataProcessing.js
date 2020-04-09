@@ -1520,7 +1520,7 @@ function updateTargetList(postObject) {
       targetSumNew = targetSumOld - actionSum
     }
     ssTargetOpen.getRange(targetItem.indexRow, targetColumn).setValue(+targetSumNew)
-    postObject.goalsArray = getGoogleSheetValues(postObject.targetOpen)
+    postObject.targetArray = getGoogleSheetValues(postObject.targetOpen)
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
