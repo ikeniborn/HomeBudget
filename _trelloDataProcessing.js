@@ -264,7 +264,8 @@ function getPostObject(postData) {
       var currDate = new Date
       postObject.period = new Date(currDate.getFullYear(), currDate.getMonth(), 1)
       postObject.ymd = getYMD(postObject.period)
-      postObject.factPeriod0 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() - 1, 1)
+      postObject.factPeriod2 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() - 2, 1)
+      postObject.factPeriod1 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() - 1, 1)
       postObject.factPeriod = postObject.period
       postObject.budgetPeriod = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 1, 1)
       postObject.budgetPeriod2 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 2, 1)
@@ -273,7 +274,8 @@ function getPostObject(postData) {
       postObject.date = getPeriod(postObject)
       postObject.period = postObject.date.period
       postObject.ymd = postObject.date.ymd
-      postObject.factPeriod0 = postObject.date.factPeriod0
+      postObject.factPeriod2 = postObject.date.factPeriod2
+      postObject.factPeriod1 = postObject.date.factPeriod1
       postObject.factPeriod = postObject.date.factPeriod
       postObject.budgetPeriod = postObject.date.budgetPeriod
       postObject.budgetPeriod2 = postObject.date.budgetPeriod2
@@ -405,7 +407,7 @@ function closedFactPeriod(postObject) {
     const postObjectFact0 = copyObject(postObject)
     postObjectFact0.boardId = postObjectFact0.boardIdFact0
     postObjectFact0.listId = getList(postObjectFact0).id
-    postObjectFact0.listName = postObjectFact0.cfo + ' ' + formatterDate(postObjectFact0.factPeriod0).date
+    postObjectFact0.listName = postObjectFact0.cfo + ' ' + formatterDate(postObjectFact0.factPeriod1).date
     if (postObjectFact0.listId == undefined) {
       postObjectFact0.listId = addList(postObjectFact0).id
     } else {
@@ -636,6 +638,8 @@ function getAllTarget(postObject) {
         row.exchangeSum = +array[19]
         row.iisSum = +array[20]
         row.disbursedFunds = +array[21]
+        row.inStock = +array[22]
+        row.completePersent = +array[23]
         row.indexRow = index + 1
         obj.item = row
         obj.array.push(row)
@@ -662,6 +666,8 @@ function getAllTarget(postObject) {
         row.exchangeSum = +array[19]
         row.iisSum = +array[20]
         row.disbursedFunds = +array[21]
+        row.inStock = +array[22]
+        row.completePersent = +array[23]
         row.indexRow = index + 1
         obj.array.push(row)
       }
@@ -748,68 +754,82 @@ function getDescription(postObject) {
     var description = {}
     var sum = getSum(postObject)
     description.text = '*Дата обновления*: ' + formatterDate(postObject.actionDate).time + postObject.lineBreak
-    if (postObject.isFact) {
-      //* описание для фактических карточек
-      description.text += '**По номенклатуре**: ' + postObject.lineBreak
-      description.text += '*Остаток*: ' + sum.totalSum.nomenclatureBudgetRest + ' р.' + postObject.lineBreak
-      if (sum.totalSum.nomenclatureBudgetExecution != 0) {
-        description.text += '*Исполнение*: ' + sum.totalSum.nomenclatureBudgetExecution + encodeData('%', '%') + postObject.lineBreak
+    if (postObject.isFact || postObject.isBudget) {
+      if (postObject.isFact) {
+        //* описание для фактических карточек
+        description.text += '**По номенклатуре**: ' + postObject.lineBreak
+        description.text += '*Остаток*: ' + sum.totalSum.nomenclatureBudgetRest + ' р.' + postObject.lineBreak
+        if (sum.totalSum.nomenclatureBudgetExecution != 0) {
+          description.text += '*Исполнение*: ' + sum.totalSum.nomenclatureBudgetExecution + encodeData('%', '%') + postObject.lineBreak
+        }
+        description.text += '**По статье**: ' + postObject.lineBreak
+        description.text += '*Остаток*: ' + sum.totalSum.accountBudgetRest + ' р.' + postObject.lineBreak
+        if (sum.totalSum.accountBudgetExecution != 0) {
+          description.text += '*Исполнение*: ' + sum.totalSum.accountBudgetExecution + encodeData('%', '%') + postObject.lineBreak
+        }
+      } else if (postObject.isBudget) {
+        if (!isMatch(postObject.nomenclature, 'Баланс')) {
+          //* описание для бюджетных карточек
+          description.text += '**Итого бюджет на** *' + formatterDate(postObject.period).date + '*:' + postObject.lineBreak
+          description.text += '*По операции*: ' + sum.budgetSum.cashFlowSum + ' р.' + postObject.lineBreak
+          description.text += '*По счету*: ' + sum.budgetSum.billSum + ' р.' + postObject.lineBreak
+          description.text += '*По статье*: ' + sum.budgetSum.accountSum + ' р.' + postObject.lineBreak
+          description.text += '*По номенклатуре*: ' + sum.budgetSum.nomenclatureSum + ' р.' + postObject.lineBreak
+          if (postObject.isCurrBudget) {
+            //* информация в рестроспективе за последние два месяца
+            description.text += '**Факт прошлых периодов:**' + postObject.lineBreak
+            description.text += formatterDate(postObject.factPeriod).date + ' - ' + getPreviousFact(postObject).Prev1.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
+            description.text += formatterDate(postObject.factPeriod1).date + ' - ' + getPreviousFact(postObject).Prev2.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
+          }
+        } else if (isMatch(postObject.nomenclature, 'Баланс')) {
+          //* описание карточки баланса
+          description.text = '**Итоговый бюджет** *' + formatterDate(postObject.period).date + '* **по статьям**' + ':' + postObject.lineBreak
+          if (sum.budgetSum.groupAccount.length !== 0) {
+            var groupBudgetRows = sum.budgetSum.groupAccount
+            var i = 1
+            groupBudgetRows.forEach(function (row) {
+              description.text += row.bill + ' - ' + row.account + ': ' + row.sum + ' р. ' + postObject.lineBreak
+              i += 1
+            })
+          }
+          description.text += '**Остатки**: ' + sum.factSum.restSum + ' р.' + postObject.lineBreak
+          description.text += '**Операционный бюджет**: ' + sum.budgetSum.costSum + ' р.' + postObject.lineBreak
+          description.text += '**Бюджет отчислений**: ' + sum.budgetSum.accumulationBillExpenseSum + ' р.' + postObject.lineBreak
+          //* информация по переводам
+          if (postObject.privateBudget) {
+            description.text += '**Перечисления**: ' + postObject.lineBreak
+            description.text += '*Первый перевод на счет Семьи*: ' + sum.totalSum.firstTransferToFamilyAccount + postObject.lineBreak
+            description.text += '*Перечислить в накопления*: ' + sum.budgetSum.accumulationNomenclatureExpenseSum + postObject.lineBreak
+            description.text += '*Снять с накоплений*: ' + sum.budgetSum.accumulationNomenclatureIncomeSum
+          }
+        }
       }
-      description.text += '**По статье**: ' + postObject.lineBreak
-      description.text += '*Остаток*: ' + sum.totalSum.accountBudgetRest + ' р.' + postObject.lineBreak
-      if (sum.totalSum.accountBudgetExecution != 0) {
-        description.text += '*Исполнение*: ' + sum.totalSum.accountBudgetExecution + encodeData('%', '%') + postObject.lineBreak
+      //* данные по бюджетным заявкам
+      if (sum.budgetSum.nomenclatureRows.length != 0 && !isMatch(postObject.nomenclature, 'Баланс')) {
+        var budgetRow = sum.budgetSum.nomenclatureRows
+        description.text += '**Бюджетные заявки**:' + postObject.lineBreak
+        var i = 1
+        budgetRow.forEach(function (row) {
+          var comma
+          budgetRow.length > i ? comma = postObject.lineBreak : comma = ''
+          description.text += formatterDate(row.actionDate).time + ': ' + row.sum + ' р. ' + row.comment + comma
+          i += 1
+        })
       }
-    } else if (postObject.isBudget) {
-      if (!isMatch(postObject.nomenclature, 'Баланс')) {
-        //* описание для бюджетных карточек
-        description.text += '**Итого бюджет на** *' + formatterDate(postObject.period).date + '*:' + postObject.lineBreak
-        description.text += '*По операции*: ' + sum.budgetSum.cashFlowSum + ' р.' + postObject.lineBreak
-        description.text += '*По счету*: ' + sum.budgetSum.billSum + ' р.' + postObject.lineBreak
-        description.text += '*По статье*: ' + sum.budgetSum.accountSum + ' р.' + postObject.lineBreak
-        description.text += '*По номенклатуре*: ' + sum.budgetSum.nomenclatureSum + ' р.' + postObject.lineBreak
-        if (postObject.isCurrBudget) {
-          //* информация в рестроспективе за последние два месяца
-          description.text += '**Факт прошлых периодов:**' + postObject.lineBreak
-          description.text += formatterDate(postObject.factPeriod).date + ' - ' + getPreviousFact(postObject).Prev1.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
-          description.text += formatterDate(postObject.factPeriod0).date + ' - ' + getPreviousFact(postObject).Prev2.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
-        }
-      } else if (isMatch(postObject.nomenclature, 'Баланс')) {
-        //* описание карточки баланса
-        description.text = '**Итоговый бюджет** *' + formatterDate(postObject.period).date + '* **по статьям**' + ':' + postObject.lineBreak
-        if (sum.budgetSum.groupAccount.length !== 0) {
-          var groupBudgetRows = sum.budgetSum.groupAccount
-          var i = 1
-          groupBudgetRows.forEach(function (row) {
-            description.text += row.bill + ' - ' + row.account + ': ' + row.sum + ' р. ' + postObject.lineBreak
-            i += 1
-          })
-        }
-        description.text += '**Остатки**: ' + sum.factSum.restSum + ' р.' + postObject.lineBreak
-        description.text += '**Операционный бюджет**: ' + sum.budgetSum.costSum + ' р.' + postObject.lineBreak
-        description.text += '**Бюджет отчислений**: ' + sum.budgetSum.accumulationBillExpenseSum + ' р.' + postObject.lineBreak
-        //* информация по переводам
-        if (postObject.privateBudget) {
-          description.text += '**Перечисления**: ' + postObject.lineBreak
-          description.text += '*Первый перевод на счет Семьи*: ' + sum.totalSum.firstTransferToFamilyAccount + postObject.lineBreak
-          description.text += '*Перечислить в накопления*: ' + sum.budgetSum.accumulationNomenclatureExpenseSum + postObject.lineBreak
-          description.text += '*Снять с накоплений*: ' + sum.budgetSum.accumulationNomenclatureIncomeSum
-        }
+      description.haveBudget = sum.totalSum.haveBudget
+    } else if (postObject.isTarget) {
+      if (isMatch(postObject.nomenclature, 'Баланс')) {
+        let targetItem = getAllTarget(postObject).item
+        description.text += 'Перечислено в т.м.: ' + targetItem.currentListedSum + ' р. ' + postObject.lineBreak
+        description.text += 'Цели: ' + targetItem.targetSum + ' р. ' + postObject.lineBreak
+        description.text += 'Депозит: ' + targetItem.depositSum + ' р. ' + postObject.lineBreak
+        description.text += 'Биржа: ' + targetItem.exchangeSum + ' р. ' + postObject.lineBreak
+        description.text += 'ИИС: ' + targetItem.iisSum + ' р. ' + postObject.lineBreak
+        description.text += 'Освоено: ' + targetItem.disbursedFunds + ' р. ' + postObject.lineBreak
+        description.text += 'В наличии: ' + targetItem.inStock + ' р. ' + postObject.lineBreak
+        description.text += 'Накоплено., ' + encodeData('%', '%') + (targetItem.completePersent * 100).toFixed(2) + encodeData(' % ', ' % ')
       }
     }
-    //* данные по бюджетным заявкам
-    if (sum.budgetSum.nomenclatureRows.length != 0 && !isMatch(postObject.nomenclature, 'Баланс')) {
-      var budgetRow = sum.budgetSum.nomenclatureRows
-      description.text += '**Бюджетные заявки**:' + postObject.lineBreak
-      var i = 1
-      budgetRow.forEach(function (row) {
-        var comma
-        budgetRow.length > i ? comma = postObject.lineBreak : comma = ''
-        description.text += formatterDate(row.actionDate).time + ': ' + row.sum + ' р. ' + row.comment + comma
-        i += 1
-      })
-    }
-    description.haveBudget = sum.totalSum.haveBudget
     return description
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
@@ -886,7 +906,8 @@ function getPeriod(postObject) {
       postObjectCopy.type = 'Бюджет'
       date.factPeriod = getParametr(postObject).item.value
       date.budgetPeriod = getParametr(postObjectCopy).item.value
-      date.factPeriod0 = new Date(date.factPeriod.getFullYear(), date.factPeriod.getMonth() - 1, 1)
+      date.factPeriod1 = new Date(date.factPeriod.getFullYear(), date.factPeriod.getMonth() - 1, 1)
+      date.factPeriod2 = new Date(date.factPeriod.getFullYear(), date.factPeriod.getMonth() - 2, 1)
       date.budgetPeriod2 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 1, 1)
       date.budgetPeriod3 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 2, 1)
     } else if (postObject.isBudget) {
@@ -894,14 +915,15 @@ function getPeriod(postObject) {
       postObjectCopy.type = 'Факт'
       date.factPeriod = getParametr(postObjectCopy).item.value
       date.budgetPeriod = getParametr(postObject).item.value
-      date.factPeriod0 = new Date(date.factPeriod.getFullYear(), date.factPeriod.getMonth() - 1, 1)
+      date.factPeriod1 = new Date(date.factPeriod.getFullYear(), date.factPeriod.getMonth() - 1, 1)
+      date.factPeriod2 = new Date(date.factPeriod.getFullYear(), date.factPeriod.getMonth() - 2, 1)
       date.budgetPeriod2 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 1, 1)
       date.budgetPeriod3 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 2, 1)
     }
     if (isMatch(postObject.boardId, postObject.boardIdFact)) {
       date.period = date.factPeriod
     } else if (isMatch(postObject.boardId, postObject.boardIdFact0)) {
-      date.period = date.factPeriod0
+      date.period = date.factPeriod1
     } else if (isMatch(postObject.boardId, postObject.boardIdBudget)) {
       date.period = date.budgetPeriod
     } else if (isMatch(postObject.boardId, postObject.boardIdBudget2)) {
@@ -1339,7 +1361,7 @@ function updateParametr(postObject) {
     postObject.date = getPeriod(postObject)
     postObject.period = postObject.date.period
     postObject.ymd = postObject.date.ymd
-    postObject.factPeriod0 = postObject.date.factPeriod0
+    postObject.factPeriod1 = postObject.date.factPeriod1
     postObject.factPeriod = postObject.date.factPeriod
     postObject.budgetPeriod = postObject.date.budgetPeriod
     postObject.budgetPeriod2 = postObject.date.budgetPeriod2
@@ -1495,6 +1517,7 @@ function updateTargetList(postObject) {
       targetSumNew = targetSumOld - actionSum
     }
     ssTargetOpen.getRange(targetItem.indexRow, targetColumn).setValue(+targetSumNew)
+    postObject.goalsArray = getGoogleSheetValues(postObject.goalsSheetOpen)
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
@@ -1572,10 +1595,11 @@ function getPreviousFact(postObject) {
   try {
     var sum = {}
     const postObjectPrev1 = copyObject(postObject)
+    postObjectPrev1.factPeriod = postObject.factPeriod1
     postObjectPrev1.dataAccount = getAllData(postObjectPrev1, 'account')
     sum.Prev1 = getSum(postObjectPrev1)
     const postObjectPrev2 = copyObject(postObject)
-    postObjectPrev2.factPeriod = postObject.factPeriod0
+    postObjectPrev2.factPeriod = postObject.factPeriod2
     postObjectPrev2.dataAccount = getAllData(postObjectPrev2, 'account')
     sum.Prev2 = getSum(postObjectPrev2)
     return sum
