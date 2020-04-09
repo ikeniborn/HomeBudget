@@ -710,9 +710,7 @@ function getComment(postObject) {
       }
     } else if (postObject.isTarget) {
       //* комментарий по цели
-      comment.text += '*ЦФО*:' + postObject.cfo + postObject.lineBreak
-      comment.text += '*Цель*:' + postObject.mvz + postObject.lineBreak
-      comment.text += '*Номенклатура* - ' + postObject.nomenclature + ': ' + postObject.sum + ' р.'
+      comment.text += '*Счет* - ' + postObject.nomenclature
     }
     return comment
   } catch (e) {
