@@ -708,6 +708,9 @@ function getComment(postObject) {
       if (isValidString(postObject.comment)) {
         comment.text += '**Комментарий**: ' + postObject.comment
       }
+    } else if (postObject.isTarget) {
+      //* комментарий по цели
+      comment.text += '*Номенклатура* - ' + postObject.nomenclature + ': ' + postObject.sum + ' р.'
     }
     return comment
   } catch (e) {
@@ -827,7 +830,7 @@ function getDescription(postObject) {
         description.text += 'ИИС: ' + targetItem.iisSum + ' р. ' + postObject.lineBreak
         description.text += 'Освоено: ' + targetItem.disbursedFunds + ' р. ' + postObject.lineBreak
         description.text += 'В наличии: ' + targetItem.inStock + ' р. ' + postObject.lineBreak
-        description.text += 'Накоплено., ' + encodeData('%', '%') + (targetItem.completePersent * 100).toFixed(2) + encodeData(' % ', ' % ')
+        description.text += 'Накоплено, ' + encodeData('%', '%') + ': ' + (targetItem.completePersent * 100).toFixed(2) + encodeData(' % ', ' % ')
       }
     }
     return description
@@ -1517,7 +1520,7 @@ function updateTargetList(postObject) {
       targetSumNew = targetSumOld - actionSum
     }
     ssTargetOpen.getRange(targetItem.indexRow, targetColumn).setValue(+targetSumNew)
-    postObject.goalsArray = getGoogleSheetValues(postObject.goalsSheetOpen)
+    postObject.goalsArray = getGoogleSheetValues(postObject.targetOpen)
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
