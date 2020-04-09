@@ -710,6 +710,8 @@ function getComment(postObject) {
       }
     } else if (postObject.isTarget) {
       //* комментарий по цели
+      comment.text += '*ЦФО*:' + postObject.cfo + postObject.lineBreak
+      comment.text += '*Цель*:' + postObject.mvz + postObject.lineBreak
       comment.text += '*Номенклатура* - ' + postObject.nomenclature + ': ' + postObject.sum + ' р.'
     }
     return comment
@@ -830,7 +832,7 @@ function getDescription(postObject) {
         description.text += 'ИИС: ' + targetItem.iisSum + ' р. ' + postObject.lineBreak
         description.text += 'Освоено: ' + targetItem.disbursedFunds + ' р. ' + postObject.lineBreak
         description.text += 'В наличии: ' + targetItem.inStock + ' р. ' + postObject.lineBreak
-        description.text += 'Накоплено, ' + encodeData('%', '%') + ': ' + (targetItem.completePersent * 100).toFixed(2) + encodeData(' % ', ' % ')
+        description.text += 'Выполнено: ' + (targetItem.completePersent * 100).toFixed(2) + encodeData('%', '%')
       }
     }
     return description
