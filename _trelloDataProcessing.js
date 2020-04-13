@@ -5,6 +5,12 @@ function objectToString(data) {
   return JSON.stringify(data)
 }
 
+function addErrorItem(error) {
+  let postObject = getGlobalVariable()
+  errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
+  errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, '', '', '', error])
+}
+
 function addLog(postData) {
   try {
     var globalVariable = getGlobalVariable()
@@ -29,10 +35,75 @@ function addLog(postData) {
     }
     return isNewAction
   } catch (e) {
-    let postObject = getGlobalVariable()
-    let error = arguments.callee.name + ': ' + e
-    errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
-    errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, '', '', '', error])
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
+function openGoogleSheet(sheetID, sheetName) {
+  try {
+    // открытие листа
+    return SpreadsheetApp.openById(sheetID).getSheetByName(sheetName)
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
+function getGoogleSheetValues(openSheet) {
+  try {
+    return openSheet.getDataRange().getValues()
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
+function isValidDate(d) {
+  try {
+    if (Object.prototype.toString.call(d) !== '[object Date]')
+      return false;
+    return !isNaN(d.getTime())
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
+function isValidString(d) {
+  try {
+    if (Object.prototype.toString.call(d) == '[object String]') {
+      return true
+    } else {
+      return false
+    }
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
+function isMatch(where, what) {
+  try {
+    if (isValidString(where) && isValidString(what)) {
+      if (where.toLowerCase().replace(/\s+/g, '').trim().match(what.toLowerCase().replace(/\s+/g, '').trim())) {
+        return true
+      } else {
+        return false
+      }
+    } else {
+      return false
+    }
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
+function getYMD(date) {
+  try {
+    const object = {}
+    object.y = new Date(date).getFullYear()
+    object.m = new Date(date).getMonth() + 1
+    object.d = new Date(date).getDate()
+    object.ymd = y.toString() + m.toString() + d.toString()
+    return object
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -64,7 +135,7 @@ function deleteLog(postObject) {
   }
 }
 
-function addError(postObject) {
+function addErrorArray(postObject) {
   try {
     if (postObject.error.length > 0) {
       let globalVariable = getGlobalVariable()
@@ -84,10 +155,21 @@ function addError(postObject) {
       MailApp.sendEmail('ikeniborn@gmail.com', subject, errorText)
     }
   } catch (e) {
-    let globalVariable = getGlobalVariable()
-    let errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
-    let errorText = arguments.callee.name + ': ' + e
-    errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, errorText])
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
+function getPreviousDate(n) {
+  /*
+   * n - количество дней
+   */
+  try {
+    var endDate = new Date()
+    var startDate = new Date()
+    startDate.setDate(endDate.getDate() - n)
+    return startDate
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -113,24 +195,6 @@ function deleteError(postObject) {
       })
       errorOpen.deleteRows(startDeleteIndex, countDeleteRow)
     }
-  } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
-  }
-}
-
-function openGoogleSheet(sheetID, sheetName) {
-  try {
-    // открытие листа
-    return SpreadsheetApp.openById(sheetID).getSheetByName(sheetName)
-  } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
-  }
-}
-
-function getGoogleSheetValues(openSheet) {
-  try {
-    let values = openSheet.getDataRange().getValues()
-    return values
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
@@ -566,16 +630,16 @@ function formatterDate(date) {
 function getAccountingItem(postObject) {
   //* получаение справочника статей
   try {
-    var array = postObject.accountingItemArray
+    let array = postObject.accountingItemArray
     if (postObject.cardName == undefined) {
       postObject.cardName = ''
       postObject.cardLabelColor = ''
     }
-    var account = {}
-    account.item = {}
-    account.array = []
+    const object = {}
+    object.item = {}
+    object.array = []
     array.reduce(function (row, array, index) {
-      if (isMatch(array[4], postObject.cardName) && isMatch(array[8], postObject.cardLabelColor)) {
+      if (index != 0) {
         row = {}
         row.id = array[0]
         row.cashFlow = array[1]
@@ -586,23 +650,16 @@ function getAccountingItem(postObject) {
         row.fact = array[6]
         row.target = array[7]
         row.color = array[8]
-        account.item = row
-        account.array.push(row)
-      } else if (index > 0) {
-        row = {}
-        row.id = array[0]
-        row.cashFlow = array[1]
-        row.bill = array[2]
-        row.account = array[3]
-        row.nomenclature = array[4]
-        row.budget = array[5]
-        row.fact = array[6]
-        row.target = array[7]
-        row.color = array[8]
-        account.array.push(row)
+        object.array.push(row)
       }
     }, [])
-    return account
+    object.item = object.array.reduce(function (row, array) {
+      if (isMatch(array[4], postObject.cardName) && isMatch(array[8], postObject.cardLabelColor)) {
+        row = array
+      }
+      return row
+    })
+    return object
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
@@ -610,13 +667,13 @@ function getAccountingItem(postObject) {
 
 function getAllTarget(postObject) {
   try {
-    var array = postObject.targetArray
-    var target = getTarget(postObject).item
-    var obj = {}
-    obj.item = {}
-    obj.array = []
+    let array = postObject.targetArray
+    let target = getTarget(postObject).item
+    const object = {}
+    object.item = {}
+    object.array = []
     array.reduce(function (row, array, index) {
-      if (isMatch(target.goal, array[1]) && isMatch(target.cfo, array[2])) {
+      if (index != 0) {
         row = {}
         row.timestamp = array[0]
         row.goal = array[1]
@@ -642,38 +699,16 @@ function getAllTarget(postObject) {
         row.inStock = +array[22]
         row.completePersent = +array[23]
         row.indexRow = index + 1
-        obj.item = row
-        obj.array.push(row)
-      } else if (index > 0) {
-        row = {}
-        row.timestamp = array[0]
-        row.goal = array[1]
-        row.cfo = array[2]
-        row.startDate = new Date(array[3])
-        row.duration = +array[4]
-        row.cost = +array[5]
-        row.inflation = +array[6]
-        row.isIis = +array[7]
-        row.restCost = +array[8]
-        row.endDate = new Date(array[9])
-        row.restDay = +array[10]
-        row.complete = array[11]
-        row.budget = +array[12]
-        row.newCost = +array[13]
-        row.monthDeductionSum = +array[14]
-        row.currentListedSum = +array[15]
-        row.targetSum = +array[17]
-        row.depositSum = +array[18]
-        row.exchangeSum = +array[19]
-        row.iisSum = +array[20]
-        row.disbursedFunds = +array[21]
-        row.inStock = +array[22]
-        row.completePersent = +array[23]
-        row.indexRow = index + 1
-        obj.array.push(row)
+        object.array.push(row)
       }
     }, [])
-    return obj
+    object.item = object.array.reduce(function (row, array) {
+      if (isMatch(target.goal, array[1]) && isMatch(target.cfo, array[2])) {
+        row = array
+      }
+      return row
+    })
+    return object
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
@@ -721,33 +756,30 @@ function getComment(postObject) {
 
 function getCostСenter(postObject) {
   try {
-    var array = postObject.costСenterArray
-    var text = postObject.comment
-    var mvz = {}
-    mvz.item = {}
-    mvz.array = []
-    if (Object.prototype.toString.call(postObject.comment) == '[object String]') {
-      array.reduce(function (row, array, index) {
-        if (isMatch(text, array[2])) {
-          row = {}
-          row.id = array[0]
-          row.mvz = array[1]
-          row.tag = array[2]
-          mvz.item = row
-          mvz.array.push(row)
-        } else if (index > 0) {
-          row = {}
-          row.id = array[0]
-          row.mvz = array[1]
-          row.tag = array[2]
-          mvz.array.push(row)
+    let array = postObject.costСenterArray
+    const object = {}
+    object.item = {}
+    object.array = []
+    array.reduce(function (row, array, index) {
+      if (index != 0) {
+        row = {}
+        row.id = array[0]
+        row.mvz = array[1]
+        row.tag = array[2]
+        object.array.push(row)
+      }
+    }, [])
+    if (isValidString(postObject.comment)) {
+      object.item = object.array.reduce(function (row, array) {
+        if (isMatch(postObject.comment, array[2])) {
+          row = array
         }
-      }, [])
+        return row
+      })
+    } else {
+      object.item.mvz = postObject.cfo
     }
-    if (mvz.item.mvz == undefined) {
-      mvz.item.mvz = postObject.cfo
-    }
-    return mvz
+    return object
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
@@ -755,7 +787,7 @@ function getCostСenter(postObject) {
 
 function getDescription(postObject) {
   try {
-    var description = {}
+    const description = {}
     var sum = getSum(postObject)
     description.text = '*Дата обновления*: ' + formatterDate(postObject.actionDate).time + postObject.lineBreak
     if (postObject.isFact || postObject.isBudget) {
@@ -842,26 +874,25 @@ function getDescription(postObject) {
 
 function getFinancialСenter(postObject) {
   try {
-    var array = postObject.financialСenterArray
-    var listName = postObject.listName
-    var cfo = {}
-    cfo.item = {}
-    cfo.array = []
+    let array = postObject.financialСenterArray
+    const object = {}
+    object.item = {}
+    object.array = []
     array.reduce(function (row, array, index) {
-      if (isMatch(listName, array[1])) {
+      if (index != 0) {
         row = {}
         row.id = array[0]
         row.cfo = array[1]
-        cfo.item = row
-        cfo.array.push(row)
-      } else if (index > 0) {
-        row = {}
-        row.id = array[0]
-        row.cfo = array[1]
-        cfo.array.push(row)
+        object.array.push(row)
       }
     }, [])
-    return cfo
+    object.item = object.array.reduce(function (row, array) {
+      if (isMatch(postObject.listName, array[1])) {
+        row = array
+      }
+      return row
+    })
+    return object
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
@@ -869,31 +900,28 @@ function getFinancialСenter(postObject) {
 
 function getParametr(postObject) {
   try {
-    var array = postObject.parametrArray
-    var parametr = {}
-    parametr.item = {}
-    parametr.array = []
+    let array = post.parametrArray
+    const object = {}
+    object.item = {}
+    object.array = []
     array.reduce(function (row, array, index) {
-      if (isMatch(postObject.cfo, array[2]) && isMatch(array[1], postObject.type)) {
+      if (index != 0) {
         row = {}
         row.id = array[0]
         row.type = array[1]
         row.cfo = array[2]
         row.value = new Date(array[3])
         row.indexRow = index + 1
-        parametr.item = row
-        parametr.array.push(row)
-      } else if (index > 0) {
-        row = {}
-        row.id = array[0]
-        row.type = array[1]
-        row.cfo = array[2]
-        row.value = new Date(array[3])
-        row.indexRow = index + 1
-        parametr.array.push(row)
+        object.array.push(row)
       }
     }, [])
-    return parametr
+    object.item = object.array.reduce(function (row, array) {
+      if (isMatch(row[2], postObject.cfo) && isMatch(row[1], postObject.type)) {
+        row = array
+      }
+      return row
+    })
+    return object
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
@@ -902,7 +930,7 @@ function getParametr(postObject) {
 function getPeriod(postObject) {
   try {
     var postObjectCopy
-    var date = {}
+    const date = {}
     if (postObject.isFact || postObject.isTarget) {
       postObjectCopy = copyObject(postObject)
       postObjectCopy.type = 'Бюджет'
@@ -942,23 +970,6 @@ function getPeriod(postObject) {
   }
 }
 
-
-// Get date before some day from now. n - day
-function getPreviousDate(n) {
-  try {
-    /*
-     * n - количество дней
-     */
-    var endDate = new Date()
-    var startDate = new Date()
-    startDate.setDate(endDate.getDate() - n)
-    return startDate
-  } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
-  }
-}
-
-/* eslint-disable no-undef */
 function getSum(postObject) {
   try {
     var sum = {}
@@ -998,52 +1009,34 @@ function getSum(postObject) {
   }
 }
 
-function isMatch(postObject, where, what) {
-  try {
-    if (where.toLowerCase().replace(/\s+/g, '').trim().match(what.toLowerCase().replace(/\s+/g, '').trim())) {
-      return true
-    } else {
-      return false
-    }
-  } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
-  }
-}
+
 
 function getTarget(postObject) {
   try {
-    var array = postObject.goalsArray
-    var listName = postObject.listName
-    var obj = {}
-    obj.item = {}
-    obj.array = []
+    let array = postObject.goalsArray
+    const object = {}
+    object.item = {}
+    object.array = []
     array.reduce(function (row, array, index) {
-      if (index > 0) {
-        if (isMatch(listName, array[1])) {
-          row = {}
-          row.id = array[0]
-          row.listName = array[1]
-          row.goal = array[2]
-          row.cfo = array[3]
-          row.listId = array[5]
-          row.status = array[6]
-          row.indexRow = index + 1
-          obj.item = row
-          obj.array.push(row)
-        } else {
-          row = {}
-          row.id = array[0]
-          row.listName = array[1]
-          row.goal = array[2]
-          row.cfo = array[3]
-          row.listId = array[5]
-          row.status = array[6]
-          row.indexRow = index + 1
-          obj.array.push(row)
-        }
+      if (index != 0) {
+        row = {}
+        row.id = array[0]
+        row.listName = array[1]
+        row.goal = array[2]
+        row.cfo = array[3]
+        row.listId = array[5]
+        row.status = array[6]
+        row.indexRow = index + 1
+        object.array.push(row)
       }
     }, [])
-    return obj
+    object.item = object.array.reduce(function (row, array) {
+      if (isMatch(postObject.listName, array[1])) {
+        row = array
+      }
+      return row
+    })
+    return object
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
@@ -1054,7 +1047,7 @@ function getTotalSum(postObject, array) {
    * @array - массив данных для расчета сумм
    */
   try {
-    var total = {}
+    const total = {}
     //* сумма по операции
     total.cashFlowSum = array.reduce(function (sum, array) {
       if (isMatch(postObject.cfo, array.cfo) && isMatch(postObject.cashFlow, array.cashFlow)) {
@@ -1219,22 +1212,6 @@ function getTotalSum(postObject, array) {
   }
 }
 
-function getYMD(date) {
-  try {
-    var y = new Date(date).getFullYear()
-    var m = new Date(date).getMonth() + 1
-    var d = new Date(date).getDate()
-    return {
-      y: y,
-      m: m,
-      d: d,
-      ymd: y.toString() + m.toString() + d.toString()
-    }
-  } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
-  }
-}
-
 function isOldData(postObject) {
   try {
     //* добавление строк на страницу
@@ -1246,26 +1223,6 @@ function isOldData(postObject) {
       return row
     }, false)
     return searchRow
-  } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
-  }
-}
-
-function isValidDate(d) {
-  try {
-    if (Object.prototype.toString.call(d) !== '[object Date]')
-      return false;
-    return !isNaN(d.getTime())
-  } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
-  }
-}
-
-function isValidString(d) {
-  try {
-    if (Object.prototype.toString.call(d) !== '[object String]')
-      return false
-    return d
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
@@ -1530,8 +1487,8 @@ function getAllData(postObject, source) {
    * @source - истоник: trello, account
    */
   try {
-    var dataStructure
-    var data
+    let dataStructure
+    let data
     if (isMatch(source, 'trello')) {
       dataStructure = 1
       data = postObject.trelloArray
@@ -1539,11 +1496,11 @@ function getAllData(postObject, source) {
       dataStructure = 2
       data = postObject.accountArray
     }
-    var sourceArray = {}
-    sourceArray.all = []
-    sourceArray.current = {}
+    const object = {}
+    object.all = []
+    object.current = {}
     data.reduce(function (row, array, index) {
-      if (index > 0) {
+      if (index != 0) {
         row = {}
         if ([1].indexOf(dataStructure) !== -1) {
           //* данные из буфера трелло
@@ -1578,16 +1535,16 @@ function getAllData(postObject, source) {
           row.type = array[11]
           row.indexRow = index + 1
         }
-        sourceArray.all.push(row)
+        object.all.push(row)
       }
     }, [])
-    sourceArray.current.fact = sourceArray.all.filter(function (row) {
+    object.current.fact = object.all.filter(function (row) {
       return row.ymd == getYMD(postObject.factPeriod).ymd && isMatch(row.type, 'Факт')
     })
-    sourceArray.current.budget = sourceArray.all.filter(function (row) {
+    object.current.budget = object.all.filter(function (row) {
       return row.ymd == getYMD(postObject.budgetPeriod).ymd && isMatch(row.type, 'Бюджет')
     })
-    return sourceArray
+    return object
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
@@ -1595,7 +1552,7 @@ function getAllData(postObject, source) {
 
 function getPreviousFact(postObject) {
   try {
-    var sum = {}
+    const sum = {}
     const postObjectPrev1 = copyObject(postObject)
     postObjectPrev1.factPeriod = postObject.factPeriod1
     postObjectPrev1.dataAccount = getAllData(postObjectPrev1, 'account')
@@ -1703,7 +1660,7 @@ function doPost(e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   } finally {
     //* запись ошибок
-    addError(postObject)
+    addErrorArray(postObject)
     //* удаление старых логов
     deleteLog(postObject)
     //* удаление старых ошибок
