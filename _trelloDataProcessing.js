@@ -998,7 +998,7 @@ function getSum(postObject) {
   }
 }
 
-function isMatch(where, what) {
+function isMatch(postObject, where, what) {
   try {
     if (where.toLowerCase().replace(/\s+/g, '').trim().match(what.toLowerCase().replace(/\s+/g, '').trim())) {
       return true
