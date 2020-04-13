@@ -1,7 +1,7 @@
 function addErrorItem(error) {
   try {
-    var postObject = getGlobalVariable()
-    var errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
+    var globalVariable = getGlobalVariable()
+    var errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
     errorOpen.appendRow([formatterDate().timestamp, '', '', error])
   } catch (e) {
     console.log(arguments.callee.name + ': ' + e)
@@ -12,8 +12,7 @@ function objectToString(data) {
   try {
     return JSON.stringify(data)
   } catch (e) {
-    var error = arguments.callee.name + ': ' + e
-    addErrorItem(error)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -41,8 +40,7 @@ function addLog(postData) {
     }
     return isNewAction
   } catch (e) {
-    var error = arguments.callee.name + ': ' + e
-    addErrorItem(error)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -51,7 +49,7 @@ function openGoogleSheet(sheetID, sheetName) {
     return SpreadsheetApp.openById(sheetID).getSheetByName(sheetName)
   } catch (e) {
     var error = arguments.callee.name + ': ' + e
-    addErrorItem(error)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -59,8 +57,7 @@ function getGoogleSheetValues(openSheet) {
   try {
     return openSheet.getDataRange().getValues()
   } catch (e) {
-    var error = arguments.callee.name + ': ' + e
-    addErrorItem(error)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -72,8 +69,7 @@ function isValidDate(d) {
       return !isNaN(d.getTime())
     }
   } catch (e) {
-    var error = arguments.callee.name + ': ' + e
-    addErrorItem(error)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -85,8 +81,7 @@ function isValidString(d) {
       return false
     }
   } catch (e) {
-    var error = arguments.callee.name + ': ' + e
-    addErrorItem(error)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -102,8 +97,7 @@ function isMatch(where, what) {
       return false
     }
   } catch (e) {
-    var error = arguments.callee.name + ': ' + e
-    addErrorItem(error)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -116,8 +110,7 @@ function getYMD(date) {
     object.ymd = y.toString() + m.toString() + d.toString()
     return object
   } catch (e) {
-    var error = arguments.callee.name + ': ' + e
-    addErrorItem(error)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -129,8 +122,7 @@ function copyObject(object) {
       return {}
     }
   } catch (e) {
-    var error = arguments.callee.name + ': ' + e
-    addErrorItem(error)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -144,8 +136,7 @@ function getPreviousDate(n) {
     startDate.setDate(endDate.getDate() - n)
     return startDate
   } catch (e) {
-    var error = arguments.callee.name + ': ' + e
-    addErrorItem(error)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
