@@ -129,7 +129,8 @@ function openGoogleSheet(sheetID, sheetName) {
 
 function getGoogleSheetValues(openSheet) {
   try {
-    return openSheet.getDataRange().getValues()
+    let values = openSheet.getDataRange().getValues()
+    return values
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
