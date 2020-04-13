@@ -387,7 +387,7 @@ function getPostObject(postData) {
     }
     return postObject
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -620,7 +620,7 @@ function formatterDate(date) {
     formatter.timestamp = Utilities.formatDate(new Date(date), 'GMT+3', 'dd.MM.yyyy HH:mm:ss')
     return formatter
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -1564,11 +1564,11 @@ function getPreviousFact(postObject) {
   }
 }
 
-function doPost(e) {
+function doPost(post) {
   try {
     const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
     const botUser = ['5e2b5f3f409c544ebdb1b9d4']
-    var postData = JSON.parse(e.postData.contents)
+    var postData = JSON.parse(post.postData.contents)
     if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(postData)) {
       var postObject = getPostObject(postData)
       if (isMatch(postObject.actionType, 'commentCard')) {
@@ -1649,7 +1649,7 @@ function doPost(e) {
       }
     }
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   } finally {
     //* запись ошибок
     addErrorArray(postObject)
