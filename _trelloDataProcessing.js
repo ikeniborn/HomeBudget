@@ -4,8 +4,7 @@ function addErrorItem(error) {
     let errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
     errorOpen.appendRow([formatterDate().timestamp, '', '', error])
   } catch (e) {
-    let error = arguments.callee.name + ': ' + e
-    console.log(error)
+    console.log(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -13,7 +12,7 @@ function objectToString(data) {
   try {
     return JSON.stringify(data)
   } catch (e) {
-    let error = arguments.callee.name + ': ' + e
+    var error = arguments.callee.name + ': ' + e
     addErrorItem(error)
   }
 }
@@ -42,7 +41,7 @@ function addLog(postData) {
     }
     return isNewAction
   } catch (e) {
-    let error = arguments.callee.name + ': ' + e
+    var error = arguments.callee.name + ': ' + e
     addErrorItem(error)
   }
 }
@@ -51,7 +50,7 @@ function openGoogleSheet(sheetID, sheetName) {
   try {
     return SpreadsheetApp.openById(sheetID).getSheetByName(sheetName)
   } catch (e) {
-    let error = arguments.callee.name + ': ' + e
+    var error = arguments.callee.name + ': ' + e
     addErrorItem(error)
   }
 }
@@ -60,7 +59,7 @@ function getGoogleSheetValues(openSheet) {
   try {
     return openSheet.getDataRange().getValues()
   } catch (e) {
-    let error = arguments.callee.name + ': ' + e
+    var error = arguments.callee.name + ': ' + e
     addErrorItem(error)
   }
 }
@@ -73,7 +72,7 @@ function isValidDate(d) {
       return !isNaN(d.getTime())
     }
   } catch (e) {
-    let error = arguments.callee.name + ': ' + e
+    var error = arguments.callee.name + ': ' + e
     addErrorItem(error)
   }
 }
@@ -86,7 +85,7 @@ function isValidString(d) {
       return false
     }
   } catch (e) {
-    let error = arguments.callee.name + ': ' + e
+    var error = arguments.callee.name + ': ' + e
     addErrorItem(error)
   }
 }
@@ -103,7 +102,7 @@ function isMatch(where, what) {
       return false
     }
   } catch (e) {
-    let error = arguments.callee.name + ': ' + e
+    var error = arguments.callee.name + ': ' + e
     addErrorItem(error)
   }
 }
@@ -117,7 +116,7 @@ function getYMD(date) {
     object.ymd = y.toString() + m.toString() + d.toString()
     return object
   } catch (e) {
-    let error = arguments.callee.name + ': ' + e
+    var error = arguments.callee.name + ': ' + e
     addErrorItem(error)
   }
 }
@@ -130,7 +129,7 @@ function copyObject(object) {
       return {}
     }
   } catch (e) {
-    let error = arguments.callee.name + ': ' + e
+    var error = arguments.callee.name + ': ' + e
     addErrorItem(error)
   }
 }
@@ -145,7 +144,7 @@ function getPreviousDate(n) {
     startDate.setDate(endDate.getDate() - n)
     return startDate
   } catch (e) {
-    let error = arguments.callee.name + ': ' + e
+    var error = arguments.callee.name + ': ' + e
     addErrorItem(error)
   }
 }
@@ -198,8 +197,7 @@ function addErrorArray(postObject) {
       MailApp.sendEmail('ikeniborn@gmail.com', subject, errorText)
     }
   } catch (e) {
-    let error = arguments.callee.name + ': ' + e
-    addErrorItem(error)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
