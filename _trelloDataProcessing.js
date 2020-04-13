@@ -232,193 +232,162 @@ function deleteError(postObject) {
 
 function getPostObject(postData) {
   try {
-    var postObject = getGlobalVariable()
-    postObject.webHookDate = formatterDate().timestamp
-    postObject.actionType = postData.action.type
-    postObject.webHookActionId = postData.action.id
+    var object = Object.assign({}, postData)
+    object.webHookDate = formatterDate().timestamp
+    object.actionType = object.action.type
+    object.webHookActionId = object.action.id
     // открытие листов
-    postObject.financialCenterSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.financialCenterSheetName)
-    postObject.accountingItemSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.accountingItemSheetName)
-    postObject.costСenterSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.costСenterSheetName)
-    postObject.parametrSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.parametrSheetName)
-    postObject.goalsSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.goalsSheetName)
-    postObject.trelloOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameTrello)
-    postObject.errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
-    postObject.logOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameLog)
-    postObject.accountOpen = openGoogleSheet(postObject.targetSheetID, postObject.targetSheetNameAccount)
-    postObject.targetOpen = openGoogleSheet(postObject.targetSheetID, postObject.targetSheetNameTarget)
+    object.financialCenterSheetOpen = openGoogleSheet(object.sourceSheetID, object.financialCenterSheetName)
+    object.accountingItemSheetOpen = openGoogleSheet(object.sourceSheetID, object.accountingItemSheetName)
+    object.costСenterSheetOpen = openGoogleSheet(object.sourceSheetID, object.costСenterSheetName)
+    object.parametrSheetOpen = openGoogleSheet(object.sourceSheetID, object.parametrSheetName)
+    object.goalsSheetOpen = openGoogleSheet(object.sourceSheetID, object.goalsSheetName)
+    object.trelloOpen = openGoogleSheet(object.sourceSheetID, object.sourceSheetNameTrello)
+    object.errorOpen = openGoogleSheet(object.sourceSheetID, object.sourceSheetNameError)
+    object.logOpen = openGoogleSheet(object.sourceSheetID, object.sourceSheetNameLog)
+    object.accountOpen = openGoogleSheet(object.targetSheetID, object.targetSheetNameAccount)
+    object.targetOpen = openGoogleSheet(object.targetSheetID, object.targetSheetNameTarget)
     // данные с листов
-    postObject.financialСenterArray = getGoogleSheetValues(postObject.financialCenterSheetOpen)
-    postObject.accountingItemArray = getGoogleSheetValues(postObject.accountingItemSheetOpen)
-    postObject.costСenterArray = getGoogleSheetValues(postObject.costСenterSheetOpen)
-    postObject.parametrArray = getGoogleSheetValues(postObject.parametrSheetOpen)
-    postObject.goalsArray = getGoogleSheetValues(postObject.goalsSheetOpen)
-    postObject.trelloArray = getGoogleSheetValues(postObject.trelloOpen)
-    postObject.errorArray = getGoogleSheetValues(postObject.errorOpen)
-    postObject.accountArray = getGoogleSheetValues(postObject.accountOpen)
-    postObject.targetArray = getGoogleSheetValues(postObject.targetOpen)
-    if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
-      postObject.actionId = postData.action.data.action.id
+    object.financialСenterArray = getGoogleSheetValues(object.financialCenterSheetOpen)
+    object.accountingItemArray = getGoogleSheetValues(object.accountingItemSheetOpen)
+    object.costСenterArray = getGoogleSheetValues(object.costСenterSheetOpen)
+    object.parametrArray = getGoogleSheetValues(object.parametrSheetOpen)
+    object.goalsArray = getGoogleSheetValues(object.goalsSheetOpen)
+    object.trelloArray = getGoogleSheetValues(object.trelloOpen)
+    object.errorArray = getGoogleSheetValues(object.errorOpen)
+    object.accountArray = getGoogleSheetValues(object.accountOpen)
+    object.targetArray = getGoogleSheetValues(object.targetOpen)
+    if (['updateComment', 'deleteComment'].indexOf(object.action.type) !== -1) {
+      object.actionId = object.action.data.action.id
     } else {
-      postObject.actionId = postData.action.id
+      object.actionId = object.action.id
     }
-    postObject.actionDate = new Date(postData.action.date)
-    postObject.memberId = postData.action.memberCreator.id
-    postObject.memberUsername = postData.action.memberCreator.username
-    postObject.boardId = postData.action.data.board.id
-    postObject.boardName = postData.action.data.board.name
-    if ([postObject.boardIdFact, postObject.boardIdFact0].indexOf(postObject.boardId) !== -1) {
-      postObject.isFact = true
-      if ([postObject.boardIdFact].indexOf(postObject.boardId) !== -1) {
-        postObject.isCurrFact = true
+    object.actionDate = new Date(object.action.date)
+    object.memberId = object.action.memberCreator.id
+    object.memberUsername = object.action.memberCreator.username
+    object.boardId = object.action.data.board.id
+    object.boardName = object.action.data.board.name
+    if ([object.boardIdFact, object.boardIdFact0].indexOf(object.boardId) !== -1) {
+      object.isFact = true
+      if ([object.boardIdFact].indexOf(object.boardId) !== -1) {
+        object.isCurrFact = true
       } else {
-        postObject.isCurrFact = false
+        object.isCurrFact = false
       }
-      postObject.isBudget = false
-      postObject.isCurrBudget = false
-      postObject.isTarget = false
-      postObject.type = 'Факт'
-    } else if ([postObject.boardIdBudget, postObject.boardIdBudget2, postObject.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-      postObject.isFact = false
-      postObject.isCurrFact = false
-      postObject.isBudget = true
-      if ([postObject.boardIdBudget].indexOf(postObject.boardId) !== -1) {
-        postObject.isCurrBudget = true
+      object.isBudget = false
+      object.isCurrBudget = false
+      object.isTarget = false
+      object.type = 'Факт'
+    } else if ([object.boardIdBudget, object.boardIdBudget2, object.boardIdBudget3].indexOf(object.boardId) !== -1) {
+      object.isFact = false
+      object.isCurrFact = false
+      object.isBudget = true
+      if ([object.boardIdBudget].indexOf(object.boardId) !== -1) {
+        object.isCurrBudget = true
       } else {
-        postObject.isCurrBudget = false
+        object.isCurrBudget = false
       }
-      postObject.isTarget = false
-      postObject.type = 'Бюджет'
-    } else if ([postObject.boardIdTarget].indexOf(postObject.boardId) !== -1) {
-      postObject.isFact = false
-      postObject.isCurrFact = false
-      postObject.isBudget = false
-      postObject.isCurrBudget = false
-      postObject.isTarget = true
-      postObject.type = 'Факт'
+      object.isTarget = false
+      object.type = 'Бюджет'
+    } else if ([object.boardIdTarget].indexOf(object.boardId) !== -1) {
+      object.isFact = false
+      object.isCurrFact = false
+      object.isBudget = false
+      object.isCurrBudget = false
+      object.isTarget = true
+      object.type = 'Факт'
     }
-    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
-      postObject.cardId = postData.action.data.card.id
-      postObject.cardName = postData.action.data.card.name
-      postObject.cardDescription = ''
-      postObject.cardComment = ''
-      postObject.cardLabelColor = getCardLabel(postObject).item.color
+    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(object.action.type) !== -1) {
+      object.cardId = object.action.data.card.id
+      object.cardName = object.action.data.card.name
+      object.cardDescription = ''
+      object.cardComment = ''
+      object.cardLabelColor = getCardLabel(object).item.color
     }
-    if (['commentCard', 'createList', 'updateList', 'updateCard'].indexOf(postData.action.type) !== -1) {
-      postObject.list = {}
-      postObject.listId = postData.action.data.list.id
-      postObject.listName = postData.action.data.list.name
-      if (['updateList'].indexOf(postData.action.type) !== -1) {
-        postObject.listClosed = postData.action.data.list.closed
+    if (['commentCard', 'createList', 'updateList', 'updateCard'].indexOf(object.action.type) !== -1) {
+      object.list = {}
+      object.listId = object.action.data.list.id
+      object.listName = object.action.data.list.name
+      if (['updateList'].indexOf(object.action.type) !== -1) {
+        object.listClosed = object.action.data.list.closed
       }
-      if (['updateCard'].indexOf(postData.action.type) !== -1) {
-        postObject.cardClosed = postData.action.data.card.closed
+      if (['updateCard'].indexOf(object.action.type) !== -1) {
+        object.cardClosed = object.action.data.card.closed
       }
-    } else if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
-      postObject.list = getCardList(postObject)
-      postObject.listId = postObject.list.id
-      postObject.listName = postObject.list.name
+    } else if (['updateComment', 'deleteComment'].indexOf(object.action.type) !== -1) {
+      object.list = getCardList(object)
+      object.listId = object.list.id
+      object.listName = object.list.name
     }
-    if (postObject.isTarget) {
-      postObject.cfo = getTarget(postObject).item.cfo
+    if (object.isTarget) {
+      object.cfo = getTarget(object).item.cfo
     } else {
-      postObject.cfo = getFinancialСenter(postObject).item.cfo
+      object.cfo = getFinancialСenter(object).item.cfo
     }
-    if (['Илья', 'Оксана'].indexOf(postObject.cfo) !== -1) {
-      postObject.privateBudget = true
+    if (['Илья', 'Оксана'].indexOf(object.cfo) !== -1) {
+      object.privateBudget = true
     } else {
-      postObject.privateBudget = false
+      object.privateBudget = false
     }
-    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
-      postObject.accountingItem = getAccountingItem(postObject)
-      postObject.cashFlow = postObject.accountingItem.item.cashFlow
-      postObject.bill = postObject.accountingItem.item.bill
-      postObject.account = postObject.accountingItem.item.account
-      postObject.nomenclature = postData.action.data.card.name
-      if (['updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
-        if (['updateComment'].indexOf(postData.action.type) !== -1) {
-          postObject.text = postData.action.data.action.text
+    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(object.action.type) !== -1) {
+      object.accountingItem = getAccountingItem(object)
+      object.cashFlow = object.accountingItem.item.cashFlow
+      object.bill = object.accountingItem.item.bill
+      object.account = object.accountingItem.item.account
+      object.nomenclature = object.action.data.card.name
+      if (['updateComment', 'commentCard'].indexOf(object.action.type) !== -1) {
+        if (['updateComment'].indexOf(object.action.type) !== -1) {
+          object.text = object.action.data.action.text
         } else {
-          postObject.text = postData.action.data.text
+          object.text = object.action.data.text
         }
-        postObject.parseText = parseComment(postObject)
-        postObject.sum = postObject.parseText.sum
-        if (['updateComment'].indexOf(postData.action.type) !== -1) {
-          var postObjectOld = copyObject(postObject)
-          postObjectOld.text = postData.action.data.old.text
-          postObject.oldSum = parseComment(postObjectOld).sum
+        object.parseText = parseComment(object)
+        object.sum = object.parseText.sum
+        if (['updateComment'].indexOf(object.action.type) !== -1) {
+          var objectOld = copyObject(object)
+          objectOld.text = object.action.data.old.text
+          object.oldSum = parseComment(objectOld).sum
         }
-        postObject.comment = postObject.parseText.comment
-        if (postObject.isTarget) {
-          postObject.mvz = getTarget(postObject).item.goal
+        object.comment = object.parseText.comment
+        if (object.isTarget) {
+          object.mvz = getTarget(object).item.goal
         } else {
-          postObject.mvz = getCostСenter(postObject).item.mvz
+          object.mvz = getCostСenter(object).item.mvz
         }
       }
     }
-    if (['createList', 'updateList'].indexOf(postData.action.type) !== -1) {
+    if (['createList', 'updateList'].indexOf(object.action.type) !== -1) {
       var currDate = new Date()
-      postObject.period = new Date(currDate.getFullYear(), currDate.getMonth(), 1)
-      postObject.ymd = getYMD(postObject.period)
-      postObject.factPeriod2 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() - 2, 1)
-      postObject.factPeriod1 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() - 1, 1)
-      postObject.factPeriod = postObject.period
-      postObject.budgetPeriod = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 1, 1)
-      postObject.budgetPeriod2 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 2, 1)
-      postObject.budgetPeriod3 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 3, 1)
+      object.period = new Date(currDate.getFullYear(), currDate.getMonth(), 1)
+      object.ymd = getYMD(object.period)
+      object.factPeriod2 = new Date(object.period.getFullYear(), object.period.getMonth() - 2, 1)
+      object.factPeriod1 = new Date(object.period.getFullYear(), object.period.getMonth() - 1, 1)
+      object.factPeriod = object.period
+      object.budgetPeriod = new Date(object.period.getFullYear(), object.period.getMonth() + 1, 1)
+      object.budgetPeriod2 = new Date(object.period.getFullYear(), object.period.getMonth() + 2, 1)
+      object.budgetPeriod3 = new Date(object.period.getFullYear(), object.period.getMonth() + 3, 1)
     } else {
-      postObject.date = getPeriod(postObject)
-      postObject.period = postObject.date.period
-      postObject.ymd = postObject.date.ymd
-      postObject.factPeriod2 = postObject.date.factPeriod2
-      postObject.factPeriod1 = postObject.date.factPeriod1
-      postObject.factPeriod = postObject.date.factPeriod
-      postObject.budgetPeriod = postObject.date.budgetPeriod
-      postObject.budgetPeriod2 = postObject.date.budgetPeriod2
-      postObject.budgetPeriod3 = postObject.date.budgetPeriod3
+      object.date = getPeriod(object)
+      object.period = object.date.period
+      object.ymd = object.date.ymd
+      object.factPeriod2 = object.date.factPeriod2
+      object.factPeriod1 = object.date.factPeriod1
+      object.factPeriod = object.date.factPeriod
+      object.budgetPeriod = object.date.budgetPeriod
+      object.budgetPeriod2 = object.date.budgetPeriod2
+      object.budgetPeriod3 = object.date.budgetPeriod3
     }
-    if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
-      postObject.dataTrello = getAllData(postObject, 'trello')
+    if (['deleteComment', 'updateComment', 'commentCard'].indexOf(object.action.type) !== -1) {
+      object.dataTrello = getAllData(object, 'trello')
     }
-    if (['deleteComment', 'updateComment'].indexOf(postData.action.type) !== -1) {
-      postObject.isOldData = isOldData(postObject)
+    if (['deleteComment', 'updateComment'].indexOf(object.action.type) !== -1) {
+      object.isOldData = isOldData(object)
     } else {
-      postObject.isOldData = false
+      object.isOldData = false
     }
-    return postObject
+    return object
   } catch (e) {
-    addErrorItem(arguments.callee.name + ': ' + e)
-  }
-}
-
-function addFinancialCenter(postObject) {
-  /*
-   * @postObject - входные параметра запроса
-   * */
-  try {
-    var ss = postObject.financialCenterSheetOpen
-    var ssParametr = postObject.parametrSheetOpen
-    var array = getFinancialСenter(postObject).array
-    var arrayPаrametr = getParametr(postObject).array
-    var cfoArray = array.map(function (array) {
-      return array.id
-    })
-    var parametrArray = arrayPаrametr.map(function (array) {
-      return array.id
-    })
-    if (postObject.cfo == undefined) {
-      var newId = cfoArray.length + 1
-      ss.appendRow([newId, postObject.listName, formatterDate().timestamp])
-      postObject.financialСenterArray = getGoogleSheetValues(postObject.financialCenterSheetOpen)
-      var newIdParametr = parametrArray.length + 1
-      ssParametr.appendRow([newIdParametr, 'Факт', postObject.listName, postObject.factPeriod, formatterDate().timestamp])
-      ssParametr.appendRow([newIdParametr + 1, 'Бюджет', postObject.listName, postObject.budgetPeriod, formatterDate().timestamp])
-    }
-    //* обновление листа
-    postObject.listName = postObject.listName + ' ' + formatterDate(postObject.period).date
-    updateList(postObject)
-  } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    object.error.push(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -1564,12 +1533,14 @@ function getPreviousFact(postObject) {
   }
 }
 
-function doPost(post) {
+function doPost(e) {
   try {
     const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
     const botUser = ['5e2b5f3f409c544ebdb1b9d4']
-    var postData = JSON.parse(post.postData.contents)
-    if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(postData)) {
+    var doPost = JSON.parse(e.postData.contents)
+    if (parseAction.indexOf(doPost.action.type) !== -1 && botUser.indexOf(doPost.action.memberCreator.id) === -1 && addLog(doPost)) {
+      var globalVariable = getGlobalVariable()
+      var postData = Object.assign(doPost, globalVariable)
       var postObject = getPostObject(postData)
       if (isMatch(postObject.actionType, 'commentCard')) {
         //* добавление информации
