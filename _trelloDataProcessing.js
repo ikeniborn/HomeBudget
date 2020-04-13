@@ -1,8 +1,19 @@
-/* eslint-disable prefer-const */
-/* eslint-disable no-undef */
-/* eslint-disable space-before-function-paren */
+function addErrorItem(error) {
+  try {
+    var globalVariable = getGlobalVariable()
+    var errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
+    errorOpen.appendRow([formatterDate().timestamp, '', '', error])
+  } catch (e) {
+    console.error(arguments.callee.name + ': ' + e)
+  }
+}
+
 function objectToString(data) {
-  return JSON.stringify(data)
+  try {
+    return JSON.stringify(data)
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
 }
 
 function addLog(postData) {
@@ -29,101 +40,15 @@ function addLog(postData) {
     }
     return isNewAction
   } catch (e) {
-    let postObject = getGlobalVariable()
-    let error = arguments.callee.name + ': ' + e
-    errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
-    errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, '', '', '', error])
-  }
-}
-
-function deleteLog(postObject) {
-  try {
-    var globalVariable = getGlobalVariable()
-    var sourceOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameLog)
-    var startDate = getPreviousDate(90)
-    var deleteArrya = []
-    getGoogleSheetValues(sourceOpen).reduce(function (row, array, index) {
-      if (index > 0) {
-        if (array[0] <= startDate) {
-          deleteArrya.push(index + 1)
-        }
-      }
-      return row
-    }, [])
-    if (deleteArrya.length > 0) {
-      let startDeleteIndex = deleteArrya.reduce(function (a, b) {
-        return a < b ? a : b
-      })
-      let countDeleteRow = deleteArrya.reduce(function (a, b) {
-        return a > b ? a : b
-      })
-      sourceOpen.deleteRows(startDeleteIndex, countDeleteRow)
-    }
-  } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
-  }
-}
-
-function addError(postObject) {
-  try {
-    if (postObject.error.length > 0) {
-      let globalVariable = getGlobalVariable()
-      let errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
-      let errorText = ''
-      let i = 0
-      let errorArray = postObject.error
-      let errorArrayLenght = postObject.error.length
-      errorArray.map(function (row) {
-        i += 1
-        errorText += row
-        errorArrayLenght == i ? errorText += '' : errorText += '\n'
-        return row
-      })
-      errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, errorText])
-      let subject = postObject.webHookDate + ' - ' + postObject.actionType
-      MailApp.sendEmail('ikeniborn@gmail.com', subject, errorText)
-    }
-  } catch (e) {
-    let globalVariable = getGlobalVariable()
-    let errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
-    let errorText = arguments.callee.name + ': ' + e
-    errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, errorText])
-  }
-}
-
-function deleteError(postObject) {
-  try {
-    const errorOpen = postObject.errorOpen
-    var startDate = getPreviousDate(1)
-    var deleteArrya = []
-    postObject.errorArray.reduce(function (row, array, index) {
-      if (index > 0) {
-        if (array[0] <= startDate) {
-          deleteArrya.push(index + 1)
-        }
-      }
-      return row
-    }, [])
-    if (deleteArrya.length > 0) {
-      let startDeleteIndex = deleteArrya.reduce(function (a, b) {
-        return a < b ? a : b
-      })
-      let countDeleteRow = deleteArrya.reduce(function (a, b) {
-        return a > b ? a : b
-      })
-      errorOpen.deleteRows(startDeleteIndex, countDeleteRow)
-    }
-  } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
 function openGoogleSheet(sheetID, sheetName) {
   try {
-    // открытие листа
     return SpreadsheetApp.openById(sheetID).getSheetByName(sheetName)
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -131,167 +56,60 @@ function getGoogleSheetValues(openSheet) {
   try {
     return openSheet.getDataRange().getValues()
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
-function getPostObject(postData) {
-  var postObject = getGlobalVariable()
+function isValidDate(d) {
   try {
-    postObject.webHookDate = formatterDate().timestamp
-    postObject.actionType = postData.action.type
-    postObject.webHookActionId = postData.action.id
-    // открытие листов
-    postObject.financialCenterSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.financialCenterSheetName)
-    postObject.accountingItemSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.accountingItemSheetName)
-    postObject.costСenterSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.costСenterSheetName)
-    postObject.parametrSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.parametrSheetName)
-    postObject.goalsSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.goalsSheetName)
-    postObject.trelloOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameTrello)
-    postObject.errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
-    postObject.accountOpen = openGoogleSheet(postObject.targetSheetID, postObject.targetSheetNameAccount)
-    postObject.targetOpen = openGoogleSheet(postObject.targetSheetID, postObject.targetSheetNameTarget)
-    // данные с листов
-    postObject.financialСenterArray = getGoogleSheetValues(postObject.financialCenterSheetOpen)
-    postObject.accountingItemArray = getGoogleSheetValues(postObject.accountingItemSheetOpen)
-    postObject.costСenterArray = getGoogleSheetValues(postObject.costСenterSheetOpen)
-    postObject.parametrArray = getGoogleSheetValues(postObject.parametrSheetOpen)
-    postObject.goalsArray = getGoogleSheetValues(postObject.goalsSheetOpen)
-    postObject.trelloArray = getGoogleSheetValues(postObject.trelloOpen)
-    postObject.errorArray = getGoogleSheetValues(postObject.errorOpen)
-    postObject.accountArray = getGoogleSheetValues(postObject.accountOpen)
-    postObject.targetArray = getGoogleSheetValues(postObject.targetOpen)
-    if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
-      postObject.actionId = postData.action.data.action.id
+    if (Object.prototype.toString.call(d) !== '[object Date]') {
+      return false
     } else {
-      postObject.actionId = postData.action.id
+      return !isNaN(d.getTime())
     }
-    postObject.actionDate = new Date(postData.action.date)
-    postObject.memberId = postData.action.memberCreator.id
-    postObject.memberUsername = postData.action.memberCreator.username
-    postObject.boardId = postData.action.data.board.id
-    postObject.boardName = postData.action.data.board.name
-    if ([postObject.boardIdFact, postObject.boardIdFact0].indexOf(postObject.boardId) !== -1) {
-      postObject.isFact = true
-      if ([postObject.boardIdFact].indexOf(postObject.boardId) !== -1) {
-        postObject.isCurrFact = true
-      } else {
-        postObject.isCurrFact = false
-      }
-      postObject.isBudget = false
-      postObject.isCurrBudget = false
-      postObject.isTarget = false
-      postObject.type = 'Факт'
-    } else if ([postObject.boardIdBudget, postObject.boardIdBudget2, postObject.boardIdBudget3].indexOf(postObject.boardId) !== -1) {
-      postObject.isFact = false
-      postObject.isCurrFact = false
-      postObject.isBudget = true
-      if ([postObject.boardIdBudget].indexOf(postObject.boardId) !== -1) {
-        postObject.isCurrBudget = true
-      } else {
-        postObject.isCurrBudget = false
-      }
-      postObject.isTarget = false
-      postObject.type = 'Бюджет'
-    } else if ([postObject.boardIdTarget].indexOf(postObject.boardId) !== -1) {
-      postObject.isFact = false
-      postObject.isCurrFact = false
-      postObject.isBudget = false
-      postObject.isCurrBudget = false
-      postObject.isTarget = true
-      postObject.type = 'Факт'
-    }
-    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
-      postObject.cardId = postData.action.data.card.id
-      postObject.cardName = postData.action.data.card.name
-      postObject.cardDescription = ''
-      postObject.cardComment = ''
-      postObject.cardLabelColor = getCardLabel(postObject).item.color
-    }
-    if (['commentCard', 'createList', 'updateList', 'updateCard'].indexOf(postData.action.type) !== -1) {
-      postObject.list = {}
-      postObject.listId = postData.action.data.list.id
-      postObject.listName = postData.action.data.list.name
-      if (['updateList'].indexOf(postData.action.type) !== -1) {
-        postObject.listClosed = postData.action.data.list.closed
-      }
-      if (['updateCard'].indexOf(postData.action.type) !== -1) {
-        postObject.cardClosed = postData.action.data.card.closed
-      }
-    } else if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
-      postObject.list = getCardList(postObject)
-      postObject.listId = postObject.list.id
-      postObject.listName = postObject.list.name
-    }
-    if (postObject.isTarget) {
-      postObject.cfo = getTarget(postObject).item.cfo
-    } else {
-      postObject.cfo = getFinancialСenter(postObject).item.cfo
-    }
-    if (['Илья', 'Оксана'].indexOf(postObject.cfo) !== -1) {
-      postObject.privateBudget = true
-    } else {
-      postObject.privateBudget = false
-    }
-    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
-      postObject.accountingItem = getAccountingItem(postObject)
-      postObject.cashFlow = postObject.accountingItem.item.cashFlow
-      postObject.bill = postObject.accountingItem.item.bill
-      postObject.account = postObject.accountingItem.item.account
-      postObject.nomenclature = postData.action.data.card.name
-      if (['updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
-        if (['updateComment'].indexOf(postData.action.type) !== -1) {
-          postObject.text = postData.action.data.action.text
-        } else {
-          postObject.text = postData.action.data.text
-        }
-        postObject.parseText = parseComment(postObject)
-        postObject.sum = postObject.parseText.sum
-        if (['updateComment'].indexOf(postData.action.type) !== -1) {
-          var postObjectOld = copyObject(postObject)
-          postObjectOld.text = postData.action.data.old.text
-          postObject.oldSum = parseComment(postObjectOld).sum
-        }
-        postObject.comment = postObject.parseText.comment
-        if (postObject.isTarget) {
-          postObject.mvz = getTarget(postObject).item.goal
-        } else {
-          postObject.mvz = getCostСenter(postObject).item.mvz
-        }
-      }
-    }
-    if (['createList', 'updateList'].indexOf(postData.action.type) !== -1) {
-      var currDate = new Date
-      postObject.period = new Date(currDate.getFullYear(), currDate.getMonth(), 1)
-      postObject.ymd = getYMD(postObject.period)
-      postObject.factPeriod2 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() - 2, 1)
-      postObject.factPeriod1 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() - 1, 1)
-      postObject.factPeriod = postObject.period
-      postObject.budgetPeriod = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 1, 1)
-      postObject.budgetPeriod2 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 2, 1)
-      postObject.budgetPeriod3 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() + 3, 1)
-    } else {
-      postObject.date = getPeriod(postObject)
-      postObject.period = postObject.date.period
-      postObject.ymd = postObject.date.ymd
-      postObject.factPeriod2 = postObject.date.factPeriod2
-      postObject.factPeriod1 = postObject.date.factPeriod1
-      postObject.factPeriod = postObject.date.factPeriod
-      postObject.budgetPeriod = postObject.date.budgetPeriod
-      postObject.budgetPeriod2 = postObject.date.budgetPeriod2
-      postObject.budgetPeriod3 = postObject.date.budgetPeriod3
-    }
-    if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
-      postObject.dataTrello = getAllData(postObject, 'trello')
-    }
-    if (['deleteComment', 'updateComment'].indexOf(postData.action.type) !== -1) {
-      postObject.isOldData = isOldData(postObject)
-    } else {
-      postObject.isOldData = false
-    }
-    return postObject
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
+function isValidString(d) {
+  try {
+    if (Object.prototype.toString.call(d) == '[object String]') {
+      return true
+    } else {
+      return false
+    }
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
+function isMatch(where, what) {
+  try {
+    if (isValidString(where) && isValidString(what)) {
+      if (where.toLowerCase().replace(/\s+/g, '').trim().match(what.toLowerCase().replace(/\s+/g, '').trim())) {
+        return true
+      } else {
+        return false
+      }
+    } else {
+      return false
+    }
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
+function getYMD(date) {
+  try {
+    var object = {}
+    object.y = new Date(date).getFullYear()
+    object.m = new Date(date).getMonth() + 1
+    object.d = new Date(date).getDate()
+    object.ymd = object.y.toString() + object.m.toString() + object.d.toString()
+    return object
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -303,39 +121,273 @@ function copyObject(object) {
       return {}
     }
   } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
+function getPreviousDate(n) {
+  /*
+   * n - количество дней
+   */
+  try {
+    var endDate = new Date()
+    var startDate = new Date()
+    startDate.setDate(endDate.getDate() - n)
+    return startDate
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
+function encodeData(data, symbol) {
+  try {
+    var encodeSymbol = encodeURIComponent(symbol)
+    var encodeData = encodeURIComponent(data)
+    if (isMatch(encodeData, encodeSymbol)) {
+      return data.replace(symbol, encodeURIComponent(symbol))
+    } else {
+      return data
+    }
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
+function addErrorArray(postObject) {
+  try {
+    if (postObject.error.length > 0) {
+      var errorOpen = postObject.errorOpen
+      var errorText = ''
+      var i = 0
+      var errorArray = postObject.error
+      var errorArrayLenght = postObject.error.length
+      errorArray.map(function (row) {
+        i += 1
+        errorText += row
+        errorArrayLenght == i ? errorText += '' : errorText += '\n'
+        return row
+      })
+      errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, errorText])
+      var subject = postObject.webHookDate + ' - ' + postObject.actionType
+      MailApp.sendEmail('ikeniborn@gmail.com', subject, errorText)
+    }
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
+function deleteLog(postObject) {
+  try {
+    var sourceOpen = postObject.logOpen
+    var startDate = getPreviousDate(90)
+    var deleteArrya = []
+    getGoogleSheetValues(sourceOpen).reduce(function (row, array, index) {
+      if (index > 0) {
+        if (array[0] <= startDate) {
+          deleteArrya.push(index + 1)
+        }
+      }
+      return row
+    }, [])
+    if (deleteArrya.length > 0) {
+      var startDeleteIndex = deleteArrya.reduce(function (a, b) {
+        return a < b ? a : b
+      })
+      var countDeleteRow = deleteArrya.reduce(function (a, b) {
+        return a > b ? a : b
+      })
+      sourceOpen.deleteRows(startDeleteIndex, countDeleteRow)
+    }
+  } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
 }
 
-// обновление параметра
-function addFinancialCenter(postObject) {
-  /*
-   * @postObject - входные параметра запроса
-   * */
+function deleteError(postObject) {
   try {
-    var ss = postObject.financialCenterSheetOpen
-    var ssParametr = postObject.parametrSheetOpen
-    var array = getFinancialСenter(postObject).array
-    var arrayPаrametr = getParametr(postObject).array
-    var cfoArray = array.map(function (array) {
-      return array.id
-    })
-    var parametrArray = arrayPаrametr.map(function (array) {
-      return array.id
-    })
-    if (postObject.cfo == undefined) {
-      var newId = cfoArray.length + 1
-      ss.appendRow([newId, postObject.listName, formatterDate().timestamp])
-      postObject.financialСenterArray = getGoogleSheetValues(postObject.financialCenterSheetOpen)
-      var newIdParametr = parametrArray.length + 1
-      ssParametr.appendRow([newIdParametr, 'Факт', postObject.listName, postObject.factPeriod, formatterDate().timestamp])
-      ssParametr.appendRow([newIdParametr + 1, 'Бюджет', postObject.listName, postObject.budgetPeriod, formatterDate().timestamp])
+    var errorOpen = postObject.errorOpen
+    var startDate = getPreviousDate(1)
+    var deleteArrya = []
+    postObject.errorArray.reduce(function (row, array, index) {
+      if (index > 0) {
+        if (array[0] <= startDate) {
+          deleteArrya.push(index + 1)
+        }
+      }
+      return row
+    }, [])
+    if (deleteArrya.length > 0) {
+      var startDeleteIndex = deleteArrya.reduce(function (a, b) {
+        return a < b ? a : b
+      })
+      var countDeleteRow = deleteArrya.reduce(function (a, b) {
+        return a > b ? a : b
+      })
+      errorOpen.deleteRows(startDeleteIndex, countDeleteRow)
     }
-    //* обновление листа
-    postObject.listName = postObject.listName + ' ' + formatterDate(postObject.period).date
-    updateList(postObject)
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
+  }
+}
+
+function getPostObject(postData) {
+  try {
+    var object = Object.assign({}, postData)
+    object.webHookDate = formatterDate().timestamp
+    object.actionType = object.action.type
+    object.webHookActionId = object.action.id
+    // открытие листов
+    object.financialCenterSheetOpen = openGoogleSheet(object.sourceSheetID, object.financialCenterSheetName)
+    object.accountingItemSheetOpen = openGoogleSheet(object.sourceSheetID, object.accountingItemSheetName)
+    object.costСenterSheetOpen = openGoogleSheet(object.sourceSheetID, object.costСenterSheetName)
+    object.parametrSheetOpen = openGoogleSheet(object.sourceSheetID, object.parametrSheetName)
+    object.goalsSheetOpen = openGoogleSheet(object.sourceSheetID, object.goalsSheetName)
+    object.trelloOpen = openGoogleSheet(object.sourceSheetID, object.sourceSheetNameTrello)
+    object.errorOpen = openGoogleSheet(object.sourceSheetID, object.sourceSheetNameError)
+    object.logOpen = openGoogleSheet(object.sourceSheetID, object.sourceSheetNameLog)
+    object.accountOpen = openGoogleSheet(object.targetSheetID, object.targetSheetNameAccount)
+    object.targetOpen = openGoogleSheet(object.targetSheetID, object.targetSheetNameTarget)
+    // данные с листов
+    object.financialСenterArray = getGoogleSheetValues(object.financialCenterSheetOpen)
+    object.accountingItemArray = getGoogleSheetValues(object.accountingItemSheetOpen)
+    object.costСenterArray = getGoogleSheetValues(object.costСenterSheetOpen)
+    object.parametrArray = getGoogleSheetValues(object.parametrSheetOpen)
+    object.goalsArray = getGoogleSheetValues(object.goalsSheetOpen)
+    object.trelloArray = getGoogleSheetValues(object.trelloOpen)
+    object.errorArray = getGoogleSheetValues(object.errorOpen)
+    object.accountArray = getGoogleSheetValues(object.accountOpen)
+    object.targetArray = getGoogleSheetValues(object.targetOpen)
+    if (['updateComment', 'deleteComment'].indexOf(object.action.type) !== -1) {
+      object.actionId = object.action.data.action.id
+    } else {
+      object.actionId = object.action.id
+    }
+    object.actionDate = new Date(object.action.date)
+    object.memberId = object.action.memberCreator.id
+    object.memberUsername = object.action.memberCreator.username
+    object.boardId = object.action.data.board.id
+    object.boardName = object.action.data.board.name
+    if ([object.boardIdFact, object.boardIdFact0].indexOf(object.boardId) !== -1) {
+      object.isFact = true
+      if ([object.boardIdFact].indexOf(object.boardId) !== -1) {
+        object.isCurrFact = true
+      } else {
+        object.isCurrFact = false
+      }
+      object.isBudget = false
+      object.isCurrBudget = false
+      object.isTarget = false
+      object.type = 'Факт'
+    } else if ([object.boardIdBudget, object.boardIdBudget2, object.boardIdBudget3].indexOf(object.boardId) !== -1) {
+      object.isFact = false
+      object.isCurrFact = false
+      object.isBudget = true
+      if ([object.boardIdBudget].indexOf(object.boardId) !== -1) {
+        object.isCurrBudget = true
+      } else {
+        object.isCurrBudget = false
+      }
+      object.isTarget = false
+      object.type = 'Бюджет'
+    } else if ([object.boardIdTarget].indexOf(object.boardId) !== -1) {
+      object.isFact = false
+      object.isCurrFact = false
+      object.isBudget = false
+      object.isCurrBudget = false
+      object.isTarget = true
+      object.type = 'Факт'
+    }
+    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(object.action.type) !== -1) {
+      object.cardId = object.action.data.card.id
+      object.cardName = object.action.data.card.name
+      object.cardDescription = ''
+      object.cardComment = ''
+      object.cardLabelColor = getCardLabel(object).item.color
+    }
+    if (['commentCard', 'createList', 'updateList', 'updateCard'].indexOf(object.action.type) !== -1) {
+      object.list = {}
+      object.listId = object.action.data.list.id
+      object.listName = object.action.data.list.name
+      if (['updateList'].indexOf(object.action.type) !== -1) {
+        object.listClosed = object.action.data.list.closed
+      }
+      if (['updateCard'].indexOf(object.action.type) !== -1) {
+        object.cardClosed = object.action.data.card.closed
+      }
+    } else if (['updateComment', 'deleteComment'].indexOf(object.action.type) !== -1) {
+      object.list = getCardList(object)
+      object.listId = object.list.id
+      object.listName = object.list.name
+    }
+    if (object.isTarget) {
+      object.cfo = getTarget(object).item.cfo
+    } else {
+      object.cfo = getFinancialСenter(object).item.cfo
+    }
+    if (['Илья', 'Оксана'].indexOf(object.cfo) !== -1) {
+      object.privateBudget = true
+    } else {
+      object.privateBudget = false
+    }
+    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(object.action.type) !== -1) {
+      object.accountingItem = getAccountingItem(object)
+      object.cashFlow = object.accountingItem.item.cashFlow
+      object.bill = object.accountingItem.item.bill
+      object.account = object.accountingItem.item.account
+      object.nomenclature = object.action.data.card.name
+      if (['updateComment', 'commentCard'].indexOf(object.action.type) !== -1) {
+        if (['updateComment'].indexOf(object.action.type) !== -1) {
+          object.text = object.action.data.action.text
+        } else {
+          object.text = object.action.data.text
+        }
+        object.parseText = parseComment(object)
+        object.sum = object.parseText.sum
+        if (['updateComment'].indexOf(object.action.type) !== -1) {
+          var objectOld = copyObject(object)
+          objectOld.text = object.action.data.old.text
+          object.oldSum = parseComment(objectOld).sum
+        }
+        object.comment = object.parseText.comment
+        if (object.isTarget) {
+          object.mvz = getTarget(object).item.goal
+        } else {
+          object.mvz = getCostСenter(object).item.mvz
+        }
+      }
+    }
+    if (['createList', 'updateList'].indexOf(object.action.type) !== -1) {
+      var currDate = new Date()
+      object.period = new Date(currDate.getFullYear(), currDate.getMonth(), 1)
+      object.ymd = getYMD(object.period)
+      object.factPeriod2 = new Date(object.period.getFullYear(), object.period.getMonth() - 2, 1)
+      object.factPeriod1 = new Date(object.period.getFullYear(), object.period.getMonth() - 1, 1)
+      object.factPeriod = object.period
+      object.budgetPeriod = new Date(object.period.getFullYear(), object.period.getMonth() + 1, 1)
+      object.budgetPeriod2 = new Date(object.period.getFullYear(), object.period.getMonth() + 2, 1)
+      object.budgetPeriod3 = new Date(object.period.getFullYear(), object.period.getMonth() + 3, 1)
+    } else {
+      object.date = getPeriod(object)
+      object.period = object.date.period
+      object.ymd = object.date.ymd
+      object.factPeriod2 = object.date.factPeriod2
+      object.factPeriod1 = object.date.factPeriod1
+      object.factPeriod = object.date.factPeriod
+      object.budgetPeriod = object.date.budgetPeriod
+      object.budgetPeriod2 = object.date.budgetPeriod2
+      object.budgetPeriod3 = object.date.budgetPeriod3
+    }
+    if (['deleteComment', 'updateComment', 'commentCard'].indexOf(object.action.type) !== -1) {
+      object.dataTrello = getAllData(object, 'trello')
+    }
+    if (['deleteComment', 'updateComment'].indexOf(object.action.type) !== -1) {
+      object.isOldData = isOldData(object)
+    } else {
+      object.isOldData = false
+    }
+    return object
+  } catch (e) {
+    object.error.push(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -372,23 +424,21 @@ function addTarget(postObject) {
   }
 }
 
-/* eslint-disable no-undef */
-/* eslint-disable spaced-comment */
 function closedBudgetPeriod(postObject) {
   try {
-    const postObjectBudget = copyObject(postObject)
+    var postObjectBudget = copyObject(postObject)
     postObjectBudget.boardId = postObjectBudget.boardIdBudget
     postObjectBudget.listId = getList(postObjectBudget).id
     postObjectBudget.listName = postObjectBudget.cfo + ' ' + formatterDate(postObjectBudget.budgetPeriod).date
     archiveAllCards(postObjectBudget)
     updateList(postObjectBudget)
-    const postObjectBudget2 = copyObject(postObjectBudget)
+    var postObjectBudget2 = copyObject(postObjectBudget)
     postObjectBudget2.boardId = postObjectBudget2.boardIdBudget2
     postObjectBudget2.listId = getList(postObjectBudget2).id
     postObjectBudget2.listName = postObjectBudget2.cfo + ' ' + formatterDate(postObjectBudget2.budgetPeriod2).date
     moveAllCards(postObjectBudget2, postObjectBudget)
     updateList(postObjectBudget2)
-    const postObjectBudget3 = copyObject(postObjectBudget2)
+    var postObjectBudget3 = copyObject(postObjectBudget2)
     postObjectBudget3.boardId = postObjectBudget3.boardIdBudget3
     postObjectBudget3.listId = getList(postObjectBudget3).id
     postObjectBudget3.listName = postObjectBudget3.cfo + ' ' + formatterDate(postObjectBudget3.budgetPeriod3).date
@@ -400,11 +450,9 @@ function closedBudgetPeriod(postObject) {
   }
 }
 
-/* eslint-disable no-undef */
-/* eslint-disable spaced-comment */
 function closedFactPeriod(postObject) {
   try {
-    const postObjectFact0 = copyObject(postObject)
+    var postObjectFact0 = copyObject(postObject)
     postObjectFact0.boardId = postObjectFact0.boardIdFact0
     postObjectFact0.listId = getList(postObjectFact0).id
     postObjectFact0.listName = postObjectFact0.cfo + ' ' + formatterDate(postObjectFact0.factPeriod1).date
@@ -427,8 +475,6 @@ function closedFactPeriod(postObject) {
   }
 }
 
-/* eslint-disable no-undef */
-/* eslint-disable spaced-comment */
 function createCardsForList(postObject) {
   try {
     var accountArray = getAccountingItem(postObject).array
@@ -531,34 +577,19 @@ function deleteRowByActionId(postObject) {
   }
 }
 
-function encodeData(data, symbol) {
-  try {
-    var encodeSymbol = encodeURIComponent(symbol)
-    var encodeData = encodeURIComponent(data)
-    if (isMatch(encodeData, encodeSymbol)) {
-      return data.replace(symbol, encodeURIComponent(symbol))
-    } else {
-      return data
-    }
-  } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
-  }
-}
-
-
 function formatterDate(date) {
   //* форматирование даты
   try {
     if (date == undefined) {
       date = new Date()
     }
-    const formatter = {}
+    var formatter = {}
     formatter.date = Utilities.formatDate(new Date(date), 'GMT+3', 'dd.MM.yyyy')
     formatter.time = Utilities.formatDate(new Date(date), 'GMT+3', 'dd.MM.yyyy HH:mm')
     formatter.timestamp = Utilities.formatDate(new Date(date), 'GMT+3', 'dd.MM.yyyy HH:mm:ss')
     return formatter
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -570,11 +601,11 @@ function getAccountingItem(postObject) {
       postObject.cardName = ''
       postObject.cardLabelColor = ''
     }
-    var account = {}
-    account.item = {}
-    account.array = []
+    var object = {}
+    object.item = {}
+    object.array = []
     array.reduce(function (row, array, index) {
-      if (isMatch(array[4], postObject.cardName) && isMatch(array[8], postObject.cardLabelColor)) {
+      if (index != 0) {
         row = {}
         row.id = array[0]
         row.cashFlow = array[1]
@@ -585,23 +616,16 @@ function getAccountingItem(postObject) {
         row.fact = array[6]
         row.target = array[7]
         row.color = array[8]
-        account.item = row
-        account.array.push(row)
-      } else if (index > 0) {
-        row = {}
-        row.id = array[0]
-        row.cashFlow = array[1]
-        row.bill = array[2]
-        row.account = array[3]
-        row.nomenclature = array[4]
-        row.budget = array[5]
-        row.fact = array[6]
-        row.target = array[7]
-        row.color = array[8]
-        account.array.push(row)
+        object.array.push(row)
       }
-    }, {})
-    return account
+    }, [])
+    object.item = object.array.reduce(function (row, array) {
+      if (isMatch(array[4], postObject.cardName) && isMatch(array[8], postObject.cardLabelColor)) {
+        row = array
+      }
+      return row
+    })
+    return object
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
@@ -611,11 +635,11 @@ function getAllTarget(postObject) {
   try {
     var array = postObject.targetArray
     var target = getTarget(postObject).item
-    var obj = {}
-    obj.item = {}
-    obj.array = []
+    var object = {}
+    object.item = {}
+    object.array = []
     array.reduce(function (row, array, index) {
-      if (isMatch(target.goal, array[1]) && isMatch(target.cfo, array[2])) {
+      if (index != 0) {
         row = {}
         row.timestamp = array[0]
         row.goal = array[1]
@@ -641,38 +665,16 @@ function getAllTarget(postObject) {
         row.inStock = +array[22]
         row.completePersent = +array[23]
         row.indexRow = index + 1
-        obj.item = row
-        obj.array.push(row)
-      } else if (index > 0) {
-        row = {}
-        row.timestamp = array[0]
-        row.goal = array[1]
-        row.cfo = array[2]
-        row.startDate = new Date(array[3])
-        row.duration = +array[4]
-        row.cost = +array[5]
-        row.inflation = +array[6]
-        row.isIis = +array[7]
-        row.restCost = +array[8]
-        row.endDate = new Date(array[9])
-        row.restDay = +array[10]
-        row.complete = array[11]
-        row.budget = +array[12]
-        row.newCost = +array[13]
-        row.monthDeductionSum = +array[14]
-        row.currentListedSum = +array[15]
-        row.targetSum = +array[17]
-        row.depositSum = +array[18]
-        row.exchangeSum = +array[19]
-        row.iisSum = +array[20]
-        row.disbursedFunds = +array[21]
-        row.inStock = +array[22]
-        row.completePersent = +array[23]
-        row.indexRow = index + 1
-        obj.array.push(row)
+        object.array.push(row)
       }
-    }, {})
-    return obj
+    }, [])
+    object.item = object.array.reduce(function (row, array) {
+      if (isMatch(target.goal, array[1]) && isMatch(target.cfo, array[2])) {
+        row = array
+      }
+      return row
+    })
+    return object
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
@@ -721,32 +723,29 @@ function getComment(postObject) {
 function getCostСenter(postObject) {
   try {
     var array = postObject.costСenterArray
-    var text = postObject.comment
-    var mvz = {}
-    mvz.item = {}
-    mvz.array = []
-    if (Object.prototype.toString.call(postObject.comment) == '[object String]') {
-      array.reduce(function (row, array, index) {
-        if (isMatch(text, array[2])) {
-          row = {}
-          row.id = array[0]
-          row.mvz = array[1]
-          row.tag = array[2]
-          mvz.item = row
-          mvz.array.push(row)
-        } else if (index > 0) {
-          row = {}
-          row.id = array[0]
-          row.mvz = array[1]
-          row.tag = array[2]
-          mvz.array.push(row)
+    var object = {}
+    object.item = {}
+    object.array = []
+    array.reduce(function (row, array, index) {
+      if (index != 0) {
+        row = {}
+        row.id = array[0]
+        row.mvz = array[1]
+        row.tag = array[2]
+        object.array.push(row)
+      }
+    }, [])
+    if (isValidString(postObject.comment)) {
+      object.item = object.array.reduce(function (row, array) {
+        if (isMatch(postObject.comment, array[2])) {
+          row = array
         }
-      }, {})
+        return row
+      })
+    } else {
+      object.item.mvz = postObject.cfo
     }
-    if (mvz.item.mvz == undefined) {
-      mvz.item.mvz = postObject.cfo
-    }
-    return mvz
+    return object
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
@@ -822,7 +821,7 @@ function getDescription(postObject) {
       description.haveBudget = sum.totalSum.haveBudget
     } else if (postObject.isTarget) {
       if (isMatch(postObject.nomenclature, 'Баланс')) {
-        let targetItem = getAllTarget(postObject).item
+        var targetItem = getAllTarget(postObject).item
         description.text += 'Перечислено в т.м.: ' + targetItem.currentListedSum + ' р. ' + postObject.lineBreak
         description.text += 'Цели: ' + targetItem.targetSum + ' р. ' + postObject.lineBreak
         description.text += 'Депозит: ' + targetItem.depositSum + ' р. ' + postObject.lineBreak
@@ -842,61 +841,55 @@ function getDescription(postObject) {
 function getFinancialСenter(postObject) {
   try {
     var array = postObject.financialСenterArray
-    var listName = postObject.listName
-    var cfo = {}
-    cfo.item = {}
-    cfo.array = []
+    var object = {}
+    object.item = {}
+    object.array = []
     array.reduce(function (row, array, index) {
-      if (isMatch(listName, array[1])) {
+      if (index != 0) {
         row = {}
         row.id = array[0]
         row.cfo = array[1]
-        cfo.item = row
-        cfo.array.push(row)
-      } else if (index > 0) {
-        row = {}
-        row.id = array[0]
-        row.cfo = array[1]
-        cfo.array.push(row)
+        object.array.push(row)
       }
-    }, {})
-    return cfo
+    }, [])
+    object.item = object.array.reduce(function (row, array) {
+      if (isMatch(postObject.listName, array[1])) {
+        row = array
+      }
+      return row
+    })
+    return object
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
 }
 
-
 function getParametr(postObject) {
   try {
-    var array = postObject.parametrArray
-    var parametr = {}
-    parametr.item = {}
-    parametr.array = []
+    var array = post.parametrArray
+    var object = {}
+    object.item = {}
+    object.array = []
     array.reduce(function (row, array, index) {
-      if (isMatch(postObject.cfo, array[2]) && isMatch(array[1], postObject.type)) {
+      if (index != 0) {
         row = {}
         row.id = array[0]
         row.type = array[1]
         row.cfo = array[2]
         row.value = new Date(array[3])
         row.indexRow = index + 1
-        parametr.item = row
-        parametr.array.push(row)
-      } else if (index > 0) {
-        row = {}
-        row.id = array[0]
-        row.type = array[1]
-        row.cfo = array[2]
-        row.value = new Date(array[3])
-        row.indexRow = index + 1
-        parametr.array.push(row)
+        object.array.push(row)
       }
-    }, {})
-    return parametr
+    }, [])
+    object.item = object.array.reduce(function (row, array) {
+      if (isMatch(row[2], postObject.cfo) && isMatch(row[1], postObject.type)) {
+        row = array
+      }
+      return row
+    })
+    return object
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
-
   }
 }
 
@@ -943,23 +936,6 @@ function getPeriod(postObject) {
   }
 }
 
-
-// Get date before some day from now. n - day
-function getPreviousDate(n) {
-  try {
-    /*
-     * n - количество дней
-     */
-    var endDate = new Date()
-    var startDate = new Date()
-    startDate.setDate(endDate.getDate() - n)
-    return startDate
-  } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
-  }
-}
-
-/* eslint-disable no-undef */
 function getSum(postObject) {
   try {
     var sum = {}
@@ -999,52 +975,34 @@ function getSum(postObject) {
   }
 }
 
-function isMatch(where, what) {
-  try {
-    if (where.toLowerCase().replace(/\s+/g, '').trim().match(what.toLowerCase().replace(/\s+/g, '').trim())) {
-      return true
-    } else {
-      return false
-    }
-  } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
-  }
-}
+
 
 function getTarget(postObject) {
   try {
     var array = postObject.goalsArray
-    var listName = postObject.listName
-    var obj = {}
-    obj.item = {}
-    obj.array = []
+    var object = {}
+    object.item = {}
+    object.array = []
     array.reduce(function (row, array, index) {
-      if (index > 0) {
-        if (isMatch(listName, array[1])) {
-          row = {}
-          row.id = array[0]
-          row.listName = array[1]
-          row.goal = array[2]
-          row.cfo = array[3]
-          row.listId = array[5]
-          row.status = array[6]
-          row.indexRow = index + 1
-          obj.item = row
-          obj.array.push(row)
-        } else {
-          row = {}
-          row.id = array[0]
-          row.listName = array[1]
-          row.goal = array[2]
-          row.cfo = array[3]
-          row.listId = array[5]
-          row.status = array[6]
-          row.indexRow = index + 1
-          obj.array.push(row)
-        }
+      if (index != 0) {
+        row = {}
+        row.id = array[0]
+        row.listName = array[1]
+        row.goal = array[2]
+        row.cfo = array[3]
+        row.listId = array[5]
+        row.status = array[6]
+        row.indexRow = index + 1
+        object.array.push(row)
       }
-    }, {})
-    return obj
+    }, [])
+    object.item = object.array.reduce(function (row, array) {
+      if (isMatch(postObject.listName, array[1])) {
+        row = array
+      }
+      return row
+    })
+    return object
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
@@ -1175,7 +1133,7 @@ function getTotalSum(postObject, array) {
       return newArray
     }, {})
     total.groupAccount = Object.keys(groupAccount).map(function (k) {
-      const item = groupAccount[k]
+      var item = groupAccount[k]
       return {
         bill: item.bill,
         account: item.account,
@@ -1204,7 +1162,7 @@ function getTotalSum(postObject, array) {
       return newArray
     }, {})
     total.groupBill = Object.keys(groupBill).map(function (k) {
-      const item = groupBill[k]
+      var item = groupBill[k]
       return {
         bill: item.bill,
         sum: item.sum
@@ -1215,22 +1173,6 @@ function getTotalSum(postObject, array) {
       return isMatch(array.cfo, postObject.cfo) && isMatch(array.bill, postObject.bill) && isMatch(array.account, postObject.account) && isMatch(array.nomenclature, postObject.nomenclature) && isMatch(array.cashFlow, postObject.cashFlow)
     })
     return total
-  } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
-  }
-}
-
-function getYMD(date) {
-  try {
-    var y = new Date(date).getFullYear()
-    var m = new Date(date).getMonth() + 1
-    var d = new Date(date).getDate()
-    return {
-      y: y,
-      m: m,
-      d: d,
-      ymd: y.toString() + m.toString() + d.toString()
-    }
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
@@ -1252,29 +1194,9 @@ function isOldData(postObject) {
   }
 }
 
-function isValidDate(d) {
-  try {
-    if (Object.prototype.toString.call(d) !== '[object Date]')
-      return false;
-    return !isNaN(d.getTime())
-  } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
-  }
-}
-
-function isValidString(d) {
-  try {
-    if (Object.prototype.toString.call(d) !== '[object String]')
-      return false
-    return d
-  } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
-  }
-}
-
 function parseComment(postObject) {
   try {
-    const parseData = {}
+    var parseData = {}
     var text = postObject.text
     parseData.sum = +text.match(/^\d+/)
     parseData.comment = text.split(parseData.sum).join('').replace(/^[.,\,, ,\-,\/,\\]/, ' ').trim()
@@ -1344,7 +1266,7 @@ function updateParametr(postObject) {
     var ss = postObject.parametrSheetOpen
     var indexRow
     var value
-    const postObjectCopy = copyObject(postObject)
+    var postObjectCopy = copyObject(postObject)
     if (postObject.isCurrFact) {
       postObjectCopy.type = 'Факт'
       indexRow = getParametr(postObjectCopy).item.indexRow
@@ -1540,11 +1462,11 @@ function getAllData(postObject, source) {
       dataStructure = 2
       data = postObject.accountArray
     }
-    var sourceArray = {}
-    sourceArray.all = []
-    sourceArray.current = {}
+    var object = {}
+    object.all = []
+    object.current = {}
     data.reduce(function (row, array, index) {
-      if (index > 0) {
+      if (index != 0) {
         row = {}
         if ([1].indexOf(dataStructure) !== -1) {
           //* данные из буфера трелло
@@ -1579,16 +1501,16 @@ function getAllData(postObject, source) {
           row.type = array[11]
           row.indexRow = index + 1
         }
-        sourceArray.all.push(row)
+        object.all.push(row)
       }
     }, [])
-    sourceArray.current.fact = sourceArray.all.filter(function (row) {
+    object.current.fact = object.all.filter(function (row) {
       return row.ymd == getYMD(postObject.factPeriod).ymd && isMatch(row.type, 'Факт')
     })
-    sourceArray.current.budget = sourceArray.all.filter(function (row) {
+    object.current.budget = object.all.filter(function (row) {
       return row.ymd == getYMD(postObject.budgetPeriod).ymd && isMatch(row.type, 'Бюджет')
     })
-    return sourceArray
+    return object
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
@@ -1597,11 +1519,11 @@ function getAllData(postObject, source) {
 function getPreviousFact(postObject) {
   try {
     var sum = {}
-    const postObjectPrev1 = copyObject(postObject)
+    var postObjectPrev1 = copyObject(postObject)
     postObjectPrev1.factPeriod = postObject.factPeriod1
     postObjectPrev1.dataAccount = getAllData(postObjectPrev1, 'account')
     sum.Prev1 = getSum(postObjectPrev1)
-    const postObjectPrev2 = copyObject(postObject)
+    var postObjectPrev2 = copyObject(postObject)
     postObjectPrev2.factPeriod = postObject.factPeriod2
     postObjectPrev2.dataAccount = getAllData(postObjectPrev2, 'account')
     sum.Prev2 = getSum(postObjectPrev2)
@@ -1615,13 +1537,10 @@ function doPost(e) {
   try {
     const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
     const botUser = ['5e2b5f3f409c544ebdb1b9d4']
-    var postData = JSON.parse(e.postData.contents)
-    // if (['updateCard'].indexOf(postData.action.type) !== -1) {
-    //   let postObject = getPostObject(postData)
-    //   let errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
-    //   errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, '', '', '', JSON.parse(JSON.stringify(postObject))])
-    // }
-    if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(postData)) {
+    var doPost = JSON.parse(e.postData.contents)
+    if (parseAction.indexOf(doPost.action.type) !== -1 && botUser.indexOf(doPost.action.memberCreator.id) === -1 && addLog(doPost)) {
+      var globalVariable = getGlobalVariable()
+      var postData = Object.assign(doPost, globalVariable)
       var postObject = getPostObject(postData)
       if (isMatch(postObject.actionType, 'commentCard')) {
         //* добавление информации
@@ -1701,10 +1620,10 @@ function doPost(e) {
       }
     }
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   } finally {
     //* запись ошибок
-    addError(postObject)
+    addErrorArray(postObject)
     //* удаление старых логов
     deleteLog(postObject)
     //* удаление старых ошибок
