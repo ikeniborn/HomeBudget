@@ -2,14 +2,24 @@
 /* eslint-disable prefer-const */
 /* eslint-disable no-undef */
 /* eslint-disable space-before-function-paren */
-function objectToString(data) {
-  return JSON.stringify(data)
+function addErrorItem(error) {
+  try {
+    let postObject = getGlobalVariable()
+    errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
+    errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, error])
+  } catch (e) {
+    let error = arguments.callee.name + ': ' + e
+    console.log(error)
+  }
 }
 
-function addErrorItem(error) {
-  let postObject = getGlobalVariable()
-  errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
-  errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, error])
+function objectToString(data) {
+  try {
+    return JSON.stringify(data)
+  } catch (e) {
+    let error = arguments.callee.name + ': ' + e
+    addErrorItem(error)
+  }
 }
 
 function addLog(postData) {
@@ -102,7 +112,7 @@ function isMatch(where, what) {
 
 function getYMD(date) {
   try {
-    const object = {}
+    let object = {}
     object.y = new Date(date).getFullYear()
     object.m = new Date(date).getMonth() + 1
     object.d = new Date(date).getDate()
@@ -196,7 +206,7 @@ function getPreviousDate(n) {
 
 function deleteError(postObject) {
   try {
-    const errorOpen = postObject.errorOpen
+    let errorOpen = postObject.errorOpen
     var startDate = getPreviousDate(1)
     var deleteArrya = []
     postObject.errorArray.reduce(function (row, array, index) {
@@ -449,19 +459,19 @@ function addTarget(postObject) {
 /* eslint-disable spaced-comment */
 function closedBudgetPeriod(postObject) {
   try {
-    const postObjectBudget = copyObject(postObject)
+    let postObjectBudget = copyObject(postObject)
     postObjectBudget.boardId = postObjectBudget.boardIdBudget
     postObjectBudget.listId = getList(postObjectBudget).id
     postObjectBudget.listName = postObjectBudget.cfo + ' ' + formatterDate(postObjectBudget.budgetPeriod).date
     archiveAllCards(postObjectBudget)
     updateList(postObjectBudget)
-    const postObjectBudget2 = copyObject(postObjectBudget)
+    let postObjectBudget2 = copyObject(postObjectBudget)
     postObjectBudget2.boardId = postObjectBudget2.boardIdBudget2
     postObjectBudget2.listId = getList(postObjectBudget2).id
     postObjectBudget2.listName = postObjectBudget2.cfo + ' ' + formatterDate(postObjectBudget2.budgetPeriod2).date
     moveAllCards(postObjectBudget2, postObjectBudget)
     updateList(postObjectBudget2)
-    const postObjectBudget3 = copyObject(postObjectBudget2)
+    let postObjectBudget3 = copyObject(postObjectBudget2)
     postObjectBudget3.boardId = postObjectBudget3.boardIdBudget3
     postObjectBudget3.listId = getList(postObjectBudget3).id
     postObjectBudget3.listName = postObjectBudget3.cfo + ' ' + formatterDate(postObjectBudget3.budgetPeriod3).date
@@ -477,7 +487,7 @@ function closedBudgetPeriod(postObject) {
 /* eslint-disable spaced-comment */
 function closedFactPeriod(postObject) {
   try {
-    const postObjectFact0 = copyObject(postObject)
+    let postObjectFact0 = copyObject(postObject)
     postObjectFact0.boardId = postObjectFact0.boardIdFact0
     postObjectFact0.listId = getList(postObjectFact0).id
     postObjectFact0.listName = postObjectFact0.cfo + ' ' + formatterDate(postObjectFact0.factPeriod1).date
@@ -624,7 +634,7 @@ function formatterDate(date) {
     if (date == undefined) {
       date = new Date()
     }
-    const formatter = {}
+    let formatter = {}
     formatter.date = Utilities.formatDate(new Date(date), 'GMT+3', 'dd.MM.yyyy')
     formatter.time = Utilities.formatDate(new Date(date), 'GMT+3', 'dd.MM.yyyy HH:mm')
     formatter.timestamp = Utilities.formatDate(new Date(date), 'GMT+3', 'dd.MM.yyyy HH:mm:ss')
@@ -642,7 +652,7 @@ function getAccountingItem(postObject) {
       postObject.cardName = ''
       postObject.cardLabelColor = ''
     }
-    const object = {}
+    let object = {}
     object.item = {}
     object.array = []
     array.reduce(function (row, array, index) {
@@ -676,7 +686,7 @@ function getAllTarget(postObject) {
   try {
     let array = postObject.targetArray
     let target = getTarget(postObject).item
-    const object = {}
+    let object = {}
     object.item = {}
     object.array = []
     array.reduce(function (row, array, index) {
@@ -764,7 +774,7 @@ function getComment(postObject) {
 function getCostСenter(postObject) {
   try {
     let array = postObject.costСenterArray
-    const object = {}
+    let object = {}
     object.item = {}
     object.array = []
     array.reduce(function (row, array, index) {
@@ -794,7 +804,7 @@ function getCostСenter(postObject) {
 
 function getDescription(postObject) {
   try {
-    const description = {}
+    let description = {}
     var sum = getSum(postObject)
     description.text = '*Дата обновления*: ' + formatterDate(postObject.actionDate).time + postObject.lineBreak
     if (postObject.isFact || postObject.isBudget) {
@@ -882,7 +892,7 @@ function getDescription(postObject) {
 function getFinancialСenter(postObject) {
   try {
     let array = postObject.financialСenterArray
-    const object = {}
+    let object = {}
     object.item = {}
     object.array = []
     array.reduce(function (row, array, index) {
@@ -908,7 +918,7 @@ function getFinancialСenter(postObject) {
 function getParametr(postObject) {
   try {
     let array = post.parametrArray
-    const object = {}
+    let object = {}
     object.item = {}
     object.array = []
     array.reduce(function (row, array, index) {
@@ -937,7 +947,7 @@ function getParametr(postObject) {
 function getPeriod(postObject) {
   try {
     var postObjectCopy
-    const date = {}
+    let date = {}
     if (postObject.isFact || postObject.isTarget) {
       postObjectCopy = copyObject(postObject)
       postObjectCopy.type = 'Бюджет'
@@ -1021,7 +1031,7 @@ function getSum(postObject) {
 function getTarget(postObject) {
   try {
     let array = postObject.goalsArray
-    const object = {}
+    let object = {}
     object.item = {}
     object.array = []
     array.reduce(function (row, array, index) {
@@ -1054,7 +1064,7 @@ function getTotalSum(postObject, array) {
    * @array - массив данных для расчета сумм
    */
   try {
-    const total = {}
+    let total = {}
     //* сумма по операции
     total.cashFlowSum = array.reduce(function (sum, array) {
       if (isMatch(postObject.cfo, array.cfo) && isMatch(postObject.cashFlow, array.cashFlow)) {
@@ -1174,7 +1184,7 @@ function getTotalSum(postObject, array) {
       return newArray
     }, {})
     total.groupAccount = Object.keys(groupAccount).map(function (k) {
-      const item = groupAccount[k]
+      let item = groupAccount[k]
       return {
         bill: item.bill,
         account: item.account,
@@ -1203,7 +1213,7 @@ function getTotalSum(postObject, array) {
       return newArray
     }, {})
     total.groupBill = Object.keys(groupBill).map(function (k) {
-      const item = groupBill[k]
+      let item = groupBill[k]
       return {
         bill: item.bill,
         sum: item.sum
@@ -1237,7 +1247,7 @@ function isOldData(postObject) {
 
 function parseComment(postObject) {
   try {
-    const parseData = {}
+    let parseData = {}
     var text = postObject.text
     parseData.sum = +text.match(/^\d+/)
     parseData.comment = text.split(parseData.sum).join('').replace(/^[.,\,, ,\-,\/,\\]/, ' ').trim()
@@ -1307,7 +1317,7 @@ function updateParametr(postObject) {
     var ss = postObject.parametrSheetOpen
     var indexRow
     var value
-    const postObjectCopy = copyObject(postObject)
+    let postObjectCopy = copyObject(postObject)
     if (postObject.isCurrFact) {
       postObjectCopy.type = 'Факт'
       indexRow = getParametr(postObjectCopy).item.indexRow
@@ -1503,7 +1513,7 @@ function getAllData(postObject, source) {
       dataStructure = 2
       data = postObject.accountArray
     }
-    const object = {}
+    let object = {}
     object.all = []
     object.current = {}
     data.reduce(function (row, array, index) {
@@ -1559,12 +1569,12 @@ function getAllData(postObject, source) {
 
 function getPreviousFact(postObject) {
   try {
-    const sum = {}
-    const postObjectPrev1 = copyObject(postObject)
+    let sum = {}
+    let postObjectPrev1 = copyObject(postObject)
     postObjectPrev1.factPeriod = postObject.factPeriod1
     postObjectPrev1.dataAccount = getAllData(postObjectPrev1, 'account')
     sum.Prev1 = getSum(postObjectPrev1)
-    const postObjectPrev2 = copyObject(postObject)
+    let postObjectPrev2 = copyObject(postObject)
     postObjectPrev2.factPeriod = postObject.factPeriod2
     postObjectPrev2.dataAccount = getAllData(postObjectPrev2, 'account')
     sum.Prev2 = getSum(postObjectPrev2)
