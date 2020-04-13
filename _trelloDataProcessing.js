@@ -1,10 +1,10 @@
 function addErrorItem(error) {
   try {
     var globalVariable = getGlobalVariable()
-    var errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
+    var errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globallglobalVariableetiable.sourceSheetNameError)
     errorOpen.appendRow([formatterDate().timestamp, '', '', error])
   } catch (e) {
-    console.log(arguments.callee.name + ': ' + e)
+    console.error(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -140,28 +140,28 @@ function getPreviousDate(n) {
   }
 }
 
-function devareLog(postObject) {
+function deleteLog(postObject) {
   try {
     var globalVariable = getGlobalVariable()
     var sourceOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameLog)
     var startDate = getPreviousDate(90)
-    var devareArrya = []
+    var deleteArrya = []
     getGoogleSheetValues(sourceOpen).reduce(function (row, array, index) {
       if (index > 0) {
         if (array[0] <= startDate) {
-          devareArrya.push(index + 1)
+          deleteArrya.push(index + 1)
         }
       }
       return row
     }, [])
-    if (devareArrya.length > 0) {
-      var startDevareIndex = devareArrya.reduce(function (a, b) {
+    if (deleteArrya.length > 0) {
+      var startDeleteIndex = deleteArrya.reduce(function (a, b) {
         return a < b ? a : b
       })
-      var countDevareRow = devareArrya.reduce(function (a, b) {
+      var countDeleteRow = deleteArrya.reduce(function (a, b) {
         return a > b ? a : b
       })
-      sourceOpen.devareRows(startDevareIndex, countDevareRow)
+      sourceOpen.deleteRows(startDeleteIndex, countDeleteRow)
     }
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
@@ -192,27 +192,27 @@ function addErrorArray(postObject) {
   }
 }
 
-function devareError(postObject) {
+function deleteError(postObject) {
   try {
     var errorOpen = postObject.errorOpen
     var startDate = getPreviousDate(1)
-    var devareArrya = []
+    var deleteArrya = []
     postObject.errorArray.reduce(function (row, array, index) {
       if (index > 0) {
         if (array[0] <= startDate) {
-          devareArrya.push(index + 1)
+          deleteArrya.push(index + 1)
         }
       }
       return row
     }, [])
-    if (devareArrya.length > 0) {
-      var startDevareIndex = devareArrya.reduce(function (a, b) {
+    if (deleteArrya.length > 0) {
+      var startDeleteIndex = deleteArrya.reduce(function (a, b) {
         return a < b ? a : b
       })
-      var countDevareRow = devareArrya.reduce(function (a, b) {
+      var countDeleteRow = deleteArrya.reduce(function (a, b) {
         return a > b ? a : b
       })
-      errorOpen.devareRows(startDevareIndex, countDevareRow)
+      errorOpen.deleteRows(startDeleteIndex, countDeleteRow)
     }
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
@@ -245,7 +245,7 @@ function getPostObject(postData) {
     postObject.errorArray = getGoogleSheetValues(postObject.errorOpen)
     postObject.accountArray = getGoogleSheetValues(postObject.accountOpen)
     postObject.targetArray = getGoogleSheetValues(postObject.targetOpen)
-    if (['updateComment', 'devareComment'].indexOf(postData.action.type) !== -1) {
+    if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
       postObject.actionId = postData.action.data.action.id
     } else {
       postObject.actionId = postData.action.id
@@ -285,7 +285,7 @@ function getPostObject(postData) {
       postObject.isTarget = true
       postObject.type = 'Факт'
     }
-    if (['devareComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
+    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
       postObject.cardId = postData.action.data.card.id
       postObject.cardName = postData.action.data.card.name
       postObject.cardDescription = ''
@@ -302,7 +302,7 @@ function getPostObject(postData) {
       if (['updateCard'].indexOf(postData.action.type) !== -1) {
         postObject.cardClosed = postData.action.data.card.closed
       }
-    } else if (['updateComment', 'devareComment'].indexOf(postData.action.type) !== -1) {
+    } else if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
       postObject.list = getCardList(postObject)
       postObject.listId = postObject.list.id
       postObject.listName = postObject.list.name
@@ -317,7 +317,7 @@ function getPostObject(postData) {
     } else {
       postObject.privateBudget = false
     }
-    if (['devareComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
+    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
       postObject.accountingItem = getAccountingItem(postObject)
       postObject.cashFlow = postObject.accountingItem.item.cashFlow
       postObject.bill = postObject.accountingItem.item.bill
@@ -365,10 +365,10 @@ function getPostObject(postData) {
       postObject.budgetPeriod2 = postObject.date.budgetPeriod2
       postObject.budgetPeriod3 = postObject.date.budgetPeriod3
     }
-    if (['devareComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
+    if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
       postObject.dataTrello = getAllData(postObject, 'trello')
     }
-    if (['devareComment', 'updateComment'].indexOf(postData.action.type) !== -1) {
+    if (['deleteComment', 'updateComment'].indexOf(postData.action.type) !== -1) {
       postObject.isOldData = isOldData(postObject)
     } else {
       postObject.isOldData = false
@@ -535,26 +535,26 @@ function createCardsForList(postObject) {
   }
 }
 
-function devareEmptyRow(postObject) {
+function deleteEmptyRow(postObject) {
   try {
     var ss = postObject.trelloOpen
     var ts = postObject.accountOpen
     var ssMaxRows = ss.getMaxRows()
     var ssLastRow = ss.getLastRow()
     if (ssMaxRows - ssLastRow !== 0) {
-      ss.devareRows(ssLastRow + 1, ssMaxRows - ssLastRow)
+      ss.deleteRows(ssLastRow + 1, ssMaxRows - ssLastRow)
     }
     var tsMaxRows = ts.getMaxRows()
     var tsLastRow = ts.getLastRow()
     if (tsMaxRows - tsMaxRows !== 0) {
-      ss.devareRows(tsLastRow + 1, tsMaxRows - tsLastRow)
+      ss.deleteRows(tsLastRow + 1, tsMaxRows - tsLastRow)
     }
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
 }
 
-function devareRowByActionId(postObject) {
+function deleteRowByActionId(postObject) {
   try {
     var ss
     var sourceData
@@ -576,7 +576,7 @@ function devareRowByActionId(postObject) {
       return row
     }, [])
     sourceRows.forEach(function (row) {
-      ss.devareRow(row.indexRow)
+      ss.deleteRow(row.indexRow)
       sum = row.sum
     })
     //* удаление данных на листе учета
@@ -590,7 +590,7 @@ function devareRowByActionId(postObject) {
       return row
     }, [])
     targetRowIndex.forEach(function (row) {
-      ts.devareRow(row)
+      ts.deleteRow(row)
       //* удаление данных в массиве учета
       targetData.splice(row - 1, 1)
     })
@@ -691,7 +691,7 @@ function getAllTarget(postObject) {
         row.restCost = +array[8]
         row.endDate = new Date(array[9])
         row.restDay = +array[10]
-        row.compvare = array[11]
+        row.complete = array[11]
         row.budget = +array[12]
         row.newCost = +array[13]
         row.monthDeductionSum = +array[14]
@@ -702,7 +702,7 @@ function getAllTarget(postObject) {
         row.iisSum = +array[20]
         row.disbursedFunds = +array[21]
         row.inStock = +array[22]
-        row.compvarePersent = +array[23]
+        row.completePersent = +array[23]
         row.indexRow = index + 1
         object.array.push(row)
       }
@@ -728,7 +728,7 @@ function getComment(postObject) {
       comment.text = '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
     } else if (isMatch(postObject.actionType, 'updateComment')) {
       comment.text = '**Новая сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
-    } else if (isMatch(postObject.actionType, 'devareComment')) {
+    } else if (isMatch(postObject.actionType, 'deleteComment')) {
       comment.text = '**Удаленная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
     }
     if (postObject.isFact) {
@@ -868,7 +868,7 @@ function getDescription(postObject) {
         description.text += 'ИИС: ' + targetItem.iisSum + ' р. ' + postObject.lineBreak
         description.text += 'Освоено: ' + targetItem.disbursedFunds + ' р. ' + postObject.lineBreak
         description.text += 'В наличии: ' + targetItem.inStock + ' р. ' + postObject.lineBreak
-        description.text += 'Выполнено: ' + (targetItem.compvarePersent * 100).toFixed(2) + encodeData('%', '%')
+        description.text += 'Выполнено: ' + (targetItem.completePersent * 100).toFixed(2) + encodeData('%', '%')
       }
     }
     return description
@@ -1470,7 +1470,7 @@ function updateTargetList(postObject) {
     }
     if (isMatch(postObject.actionType, 'commentCard')) {
       actionSum = postObject.sum
-    } else if (isMatch(postObject.actionType, 'devareComment')) {
+    } else if (isMatch(postObject.actionType, 'deleteComment')) {
       actionSum = -1 * postObject.sum
     } else if (isMatch(postObject.actionType, 'updateComment')) {
       actionSum = postObject.sum - postObject.oldSum
@@ -1574,7 +1574,7 @@ function getPreviousFact(postObject) {
 
 function doPost(e) {
   try {
-    const parseAction = ['commentCard', 'updateComment', 'devareComment', 'createList', 'updateList', 'updateCard']
+    const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
     const botUser = ['5e2b5f3f409c544ebdb1b9d4']
     var postData = JSON.parse(e.postData.contents)
     // if (['updateCard'].indexOf(postData.action.type) !== -1) {
@@ -1614,9 +1614,9 @@ function doPost(e) {
         //* обновление карточки баланса
         updateBalanceCard(postObject)
         addCardReaction(postObject)
-      } else if (isMatch(postObject.actionType, 'devareComment') && postObject.isOldData) {
+      } else if (isMatch(postObject.actionType, 'deleteComment') && postObject.isOldData) {
         //* удаление строки при удалении комментария
-        postObject.sum = devareRowByActionId(postObject)
+        postObject.sum = deleteRowByActionId(postObject)
         if (postObject.isTarget) {
           //* обновление листа цель
           updateTargetList(postObject)
@@ -1667,10 +1667,10 @@ function doPost(e) {
     //* запись ошибок
     addErrorArray(postObject)
     //* удаление старых логов
-    devareLog(postObject)
+    deleteLog(postObject)
     //* удаление старых ошибок
-    devareError(postObject)
+    deleteError(postObject)
     //* Удаление пустых строк
-    devareEmptyRow(postObject)
+    deleteEmptyRow(postObject)
   }
 }
