@@ -140,10 +140,46 @@ function getPreviousDate(n) {
   }
 }
 
+function encodeData(data, symbol) {
+  try {
+    var encodeSymbol = encodeURIComponent(symbol)
+    var encodeData = encodeURIComponent(data)
+    if (isMatch(encodeData, encodeSymbol)) {
+      return data.replace(symbol, encodeURIComponent(symbol))
+    } else {
+      return data
+    }
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
+function addErrorArray(postObject) {
+  try {
+    if (postObject.error.length > 0) {
+      var errorOpen = postObject.errorOpen
+      var errorText = ''
+      var i = 0
+      var errorArray = postObject.error
+      var errorArrayLenght = postObject.error.length
+      errorArray.map(function (row) {
+        i += 1
+        errorText += row
+        errorArrayLenght == i ? errorText += '' : errorText += '\n'
+        return row
+      })
+      errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, errorText])
+      var subject = postObject.webHookDate + ' - ' + postObject.actionType
+      MailApp.sendEmail('ikeniborn@gmail.com', subject, errorText)
+    }
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
 function deleteLog(postObject) {
   try {
-    var globalVariable = getGlobalVariable()
-    var sourceOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameLog)
+    var sourceOpen = postObject.logOpen
     var startDate = getPreviousDate(90)
     var deleteArrya = []
     getGoogleSheetValues(sourceOpen).reduce(function (row, array, index) {
@@ -165,30 +201,6 @@ function deleteLog(postObject) {
     }
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
-  }
-}
-
-function addErrorArray(postObject) {
-  try {
-    if (postObject.error.length > 0) {
-      var globalVariable = getGlobalVariable()
-      var errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
-      var errorText = ''
-      var i = 0
-      var errorArray = postObject.error
-      var errorArrayLenght = postObject.error.length
-      errorArray.map(function (row) {
-        i += 1
-        errorText += row
-        errorArrayLenght == i ? errorText += '' : errorText += '\n'
-        return row
-      })
-      errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, errorText])
-      var subject = postObject.webHookDate + ' - ' + postObject.actionType
-      MailApp.sendEmail('ikeniborn@gmail.com', subject, errorText)
-    }
-  } catch (e) {
-    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -233,6 +245,7 @@ function getPostObject(postData) {
     postObject.goalsSheetOpen = openGoogleSheet(postObject.sourceSheetID, postObject.goalsSheetName)
     postObject.trelloOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameTrello)
     postObject.errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
+    postObject.logOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameLog)
     postObject.accountOpen = openGoogleSheet(postObject.targetSheetID, postObject.targetSheetNameAccount)
     postObject.targetOpen = openGoogleSheet(postObject.targetSheetID, postObject.targetSheetNameTarget)
     // данные с листов
@@ -443,8 +456,6 @@ function addTarget(postObject) {
   }
 }
 
-/* eslint-disable no-undef */
-/* eslint-disable spaced-comment */
 function closedBudgetPeriod(postObject) {
   try {
     var postObjectBudget = copyObject(postObject)
@@ -471,8 +482,6 @@ function closedBudgetPeriod(postObject) {
   }
 }
 
-/* eslint-disable no-undef */
-/* eslint-disable spaced-comment */
 function closedFactPeriod(postObject) {
   try {
     var postObjectFact0 = copyObject(postObject)
@@ -498,8 +507,6 @@ function closedFactPeriod(postObject) {
   }
 }
 
-/* eslint-disable no-undef */
-/* eslint-disable spaced-comment */
 function createCardsForList(postObject) {
   try {
     var accountArray = getAccountingItem(postObject).array
@@ -597,20 +604,6 @@ function deleteRowByActionId(postObject) {
     //* получение данных учета после обновления
     postObject.dataAccount = getAllData(postObject, 'account')
     return sum
-  } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
-  }
-}
-
-function encodeData(data, symbol) {
-  try {
-    var encodeSymbol = encodeURIComponent(symbol)
-    var encodeData = encodeURIComponent(data)
-    if (isMatch(encodeData, encodeSymbol)) {
-      return data.replace(symbol, encodeURIComponent(symbol))
-    } else {
-      return data
-    }
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
