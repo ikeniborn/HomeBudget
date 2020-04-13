@@ -1,12 +1,8 @@
-/* eslint-disable no-caller */
-/* eslint-disable prefer-const */
-/* eslint-disable no-undef */
-/* eslint-disable space-before-function-paren */
 function addErrorItem(error) {
   try {
     let postObject = getGlobalVariable()
-    errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
-    errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, error])
+    let errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
+    errorOpen.appendRow([formatterDate().timestamp, '', '', error])
   } catch (e) {
     let error = arguments.callee.name + ': ' + e
     console.log(error)
@@ -71,9 +67,11 @@ function getGoogleSheetValues(openSheet) {
 
 function isValidDate(d) {
   try {
-    if (Object.prototype.toString.call(d) !== '[object Date]')
-      return false;
-    return !isNaN(d.getTime())
+    if (Object.prototype.toString.call(d) !== '[object Date]') {
+      return false
+    } else {
+      return !isNaN(d.getTime())
+    }
   } catch (e) {
     let error = arguments.callee.name + ': ' + e
     addErrorItem(error)
@@ -137,6 +135,21 @@ function copyObject(object) {
   }
 }
 
+function getPreviousDate(n) {
+  /*
+   * n - количество дней
+   */
+  try {
+    let endDate = new Date()
+    let startDate = new Date()
+    startDate.setDate(endDate.getDate() - n)
+    return startDate
+  } catch (e) {
+    let error = arguments.callee.name + ': ' + e
+    addErrorItem(error)
+  }
+}
+
 function deleteLog(postObject) {
   try {
     var globalVariable = getGlobalVariable()
@@ -152,10 +165,10 @@ function deleteLog(postObject) {
       return row
     }, [])
     if (deleteArrya.length > 0) {
-      let startDeleteIndex = deleteArrya.reduce(function (a, b) {
+      var startDeleteIndex = deleteArrya.reduce(function (a, b) {
         return a < b ? a : b
       })
-      let countDeleteRow = deleteArrya.reduce(function (a, b) {
+      var countDeleteRow = deleteArrya.reduce(function (a, b) {
         return a > b ? a : b
       })
       sourceOpen.deleteRows(startDeleteIndex, countDeleteRow)
@@ -170,10 +183,10 @@ function addErrorArray(postObject) {
     if (postObject.error.length > 0) {
       let globalVariable = getGlobalVariable()
       let errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
-      let errorText = ''
+      var errorText = ''
       let i = 0
       let errorArray = postObject.error
-      let errorArrayLenght = postObject.error.length
+      var errorArrayLenght = postObject.error.length
       errorArray.map(function (row) {
         i += 1
         errorText += row
@@ -187,20 +200,6 @@ function addErrorArray(postObject) {
   } catch (e) {
     let error = arguments.callee.name + ': ' + e
     addErrorItem(error)
-  }
-}
-
-function getPreviousDate(n) {
-  /*
-   * n - количество дней
-   */
-  try {
-    var endDate = new Date()
-    var startDate = new Date()
-    startDate.setDate(endDate.getDate() - n)
-    return startDate
-  } catch (e) {
-    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -396,21 +395,21 @@ function addFinancialCenter(postObject) {
    * @postObject - входные параметра запроса
    * */
   try {
-    var ss = postObject.financialCenterSheetOpen
-    var ssParametr = postObject.parametrSheetOpen
-    var array = getFinancialСenter(postObject).array
-    var arrayPаrametr = getParametr(postObject).array
-    var cfoArray = array.map(function (array) {
+    let ss = postObject.financialCenterSheetOpen
+    let ssParametr = postObject.parametrSheetOpen
+    let array = getFinancialСenter(postObject).array
+    let arrayPаrametr = getParametr(postObject).array
+    let cfoArray = array.map(function (array) {
       return array.id
     })
-    var parametrArray = arrayPаrametr.map(function (array) {
+    let parametrArray = arrayPаrametr.map(function (array) {
       return array.id
     })
     if (postObject.cfo == undefined) {
-      var newId = cfoArray.length + 1
+      let newId = cfoArray.length + 1
       ss.appendRow([newId, postObject.listName, formatterDate().timestamp])
       postObject.financialСenterArray = getGoogleSheetValues(postObject.financialCenterSheetOpen)
-      var newIdParametr = parametrArray.length + 1
+      let newIdParametr = parametrArray.length + 1
       ssParametr.appendRow([newIdParametr, 'Факт', postObject.listName, postObject.factPeriod, formatterDate().timestamp])
       ssParametr.appendRow([newIdParametr + 1, 'Бюджет', postObject.listName, postObject.budgetPeriod, formatterDate().timestamp])
     }
@@ -428,24 +427,24 @@ function addTarget(postObject) {
    * @postObject - входные параметра запроса
    * */
   try {
-    var ss = postObject.goalsSheetOpen
-    var array = getTarget(postObject).array
-    var goal = getTarget(postObject).item.goal
-    var cfo = getFinancialСenter(postObject).item.cfo
-    var objGoal = postObject.listName.toLowerCase().replace(cfo.toLowerCase(), '').trim()
-    var newGoal = objGoal[0].toUpperCase() + objGoal.slice(1)
-    var goalArray = array.map(function (array) {
+    let ss = postObject.goalsSheetOpen
+    let array = getTarget(postObject).array
+    let goal = getTarget(postObject).item.goal
+    let cfo = getFinancialСenter(postObject).item.cfo
+    let objGoal = postObject.listName.toLowerCase().replace(cfo.toLowerCase(), '').trim()
+    let newGoal = objGoal[0].toUpperCase() + objGoal.slice(1)
+    let goalArray = array.map(function (array) {
       return array.name
     })
     var ssMvz = postObject.costСenterSheetOpen
-    var postObjectCopy = copyObject(postObject)
+    let postObjectCopy = copyObject(postObject)
     postObjectCopy.comment = objGoal
     postObjectCopy.cfo = cfo
-    var arrayMvz = getCostСenter(postObjectCopy).array
-    var tagMvz = objGoal.toLowerCase().replace(/\s+/g, '').trim()
-    var newIdMvz = arrayMvz.length + 1
+    let arrayMvz = getCostСenter(postObjectCopy).array
+    let tagMvz = objGoal.toLowerCase().replace(/\s+/g, '').trim()
+    let newIdMvz = arrayMvz.length + 1
     if (goal == undefined) {
-      var newId = goalArray.length + 1
+      let newId = goalArray.length + 1
       ss.appendRow([newId, postObject.listName, newGoal, cfo, formatterDate().timestamp, postObject.listId, 'actual'])
       ssMvz.appendRow([newIdMvz, objGoal, tagMvz])
       postObject.goalsArray = getGoogleSheetValues(postObject.goalsSheetOpen)
@@ -514,7 +513,7 @@ function closedFactPeriod(postObject) {
 /* eslint-disable spaced-comment */
 function createCardsForList(postObject) {
   try {
-    var accountArray = getAccountingItem(postObject).array
+    let accountArray = getAccountingItem(postObject).array
     var accountItems
     if (postObject.isFact) {
       accountItems = accountArray.filter(function (row) {
@@ -530,7 +529,7 @@ function createCardsForList(postObject) {
       })
     }
     //* Информация по меткам
-    var labelList = getBoardLabel(postObject, postObject.boardId)
+    let labelList = getBoardLabel(postObject, postObject.boardId)
     //* создание карточек на листе факт
     accountItems.forEach(function (accounts) {
       var label = labelList.reduce(function (row, arrya) {
@@ -549,15 +548,15 @@ function createCardsForList(postObject) {
 
 function deleteEmptyRow(postObject) {
   try {
-    var ss = postObject.trelloOpen
-    var ts = postObject.accountOpen
-    var ssMaxRows = ss.getMaxRows()
-    var ssLastRow = ss.getLastRow()
+    let ss = postObject.trelloOpen
+    let ts = postObject.accountOpen
+    let ssMaxRows = ss.getMaxRows()
+    let ssLastRow = ss.getLastRow()
     if (ssMaxRows - ssLastRow !== 0) {
       ss.deleteRows(ssLastRow + 1, ssMaxRows - ssLastRow)
     }
-    var tsMaxRows = ts.getMaxRows()
-    var tsLastRow = ts.getLastRow()
+    let tsMaxRows = ts.getMaxRows()
+    let tsLastRow = ts.getLastRow()
     if (tsMaxRows - tsMaxRows !== 0) {
       ss.deleteRows(tsLastRow + 1, tsMaxRows - tsLastRow)
     }
@@ -616,8 +615,8 @@ function deleteRowByActionId(postObject) {
 
 function encodeData(data, symbol) {
   try {
-    var encodeSymbol = encodeURIComponent(symbol)
-    var encodeData = encodeURIComponent(data)
+    let encodeSymbol = encodeURIComponent(symbol)
+    let encodeData = encodeURIComponent(data)
     if (isMatch(encodeData, encodeSymbol)) {
       return data.replace(symbol, encodeURIComponent(symbol))
     } else {
