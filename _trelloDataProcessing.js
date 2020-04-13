@@ -600,7 +600,7 @@ function getAccountingItem(postObject) {
         row.color = array[8]
         account.array.push(row)
       }
-    }, {})
+    }, [])
     return account
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
@@ -671,7 +671,7 @@ function getAllTarget(postObject) {
         row.indexRow = index + 1
         obj.array.push(row)
       }
-    }, {})
+    }, [])
     return obj
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
@@ -741,7 +741,7 @@ function getCostСenter(postObject) {
           row.tag = array[2]
           mvz.array.push(row)
         }
-      }, {})
+      }, [])
     }
     if (mvz.item.mvz == undefined) {
       mvz.item.mvz = postObject.cfo
@@ -859,13 +859,12 @@ function getFinancialСenter(postObject) {
         row.cfo = array[1]
         cfo.array.push(row)
       }
-    }, {})
+    }, [])
     return cfo
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
 }
-
 
 function getParametr(postObject) {
   try {
@@ -892,11 +891,10 @@ function getParametr(postObject) {
         row.indexRow = index + 1
         parametr.array.push(row)
       }
-    }, {})
+    }, [])
     return parametr
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
-
   }
 }
 
@@ -1043,7 +1041,7 @@ function getTarget(postObject) {
           obj.array.push(row)
         }
       }
-    }, {})
+    }, [])
     return obj
   } catch (e) {
     postObject.error.push(arguments.callee.name + ': ' + e)
