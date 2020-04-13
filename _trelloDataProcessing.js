@@ -1,7 +1,7 @@
 function addErrorItem(error) {
   try {
     var globalVariable = getGlobalVariable()
-    var errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globallglobalVariableetiable.sourceSheetNameError)
+    var errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
     errorOpen.appendRow([formatterDate().timestamp, '', '', error])
   } catch (e) {
     console.error(arguments.callee.name + ': ' + e)
@@ -48,7 +48,6 @@ function openGoogleSheet(sheetID, sheetName) {
   try {
     return SpreadsheetApp.openById(sheetID).getSheetByName(sheetName)
   } catch (e) {
-    var error = arguments.callee.name + ': ' + e
     addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
@@ -107,7 +106,7 @@ function getYMD(date) {
     object.y = new Date(date).getFullYear()
     object.m = new Date(date).getMonth() + 1
     object.d = new Date(date).getDate()
-    object.ymd = y.toString() + m.toString() + d.toString()
+    object.ymd = object.y.toString() + object.m.toString() + object.d.toString()
     return object
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
@@ -232,8 +231,8 @@ function deleteError(postObject) {
 }
 
 function getPostObject(postData) {
-  var postObject = getGlobalVariable()
   try {
+    var postObject = getGlobalVariable()
     postObject.webHookDate = formatterDate().timestamp
     postObject.actionType = postData.action.type
     postObject.webHookActionId = postData.action.id
@@ -1570,11 +1569,6 @@ function doPost(e) {
     const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
     const botUser = ['5e2b5f3f409c544ebdb1b9d4']
     var postData = JSON.parse(e.postData.contents)
-    // if (['updateCard'].indexOf(postData.action.type) !== -1) {
-    //   var postObject = getPostObject(postData)
-    //   var errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
-    //   errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, '', '', '', JSON.parse(JSON.stringify(postObject))])
-    // }
     if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(postData)) {
       var postObject = getPostObject(postData)
       if (isMatch(postObject.actionType, 'commentCard')) {
