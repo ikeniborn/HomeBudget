@@ -1,3 +1,4 @@
+/* eslint-disable no-caller */
 /* eslint-disable prefer-const */
 /* eslint-disable no-undef */
 /* eslint-disable space-before-function-paren */
@@ -8,7 +9,7 @@ function objectToString(data) {
 function addErrorItem(error) {
   let postObject = getGlobalVariable()
   errorOpen = openGoogleSheet(postObject.sourceSheetID, postObject.sourceSheetNameError)
-  errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, '', '', '', error])
+  errorOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id, error])
 }
 
 function addLog(postData) {
@@ -35,16 +36,17 @@ function addLog(postData) {
     }
     return isNewAction
   } catch (e) {
-    addErrorItem(arguments.callee.name + ': ' + e)
+    let error = arguments.callee.name + ': ' + e
+    addErrorItem(error)
   }
 }
 
 function openGoogleSheet(sheetID, sheetName) {
   try {
-    // открытие листа
     return SpreadsheetApp.openById(sheetID).getSheetByName(sheetName)
   } catch (e) {
-    addErrorItem(arguments.callee.name + ': ' + e)
+    let error = arguments.callee.name + ': ' + e
+    addErrorItem(error)
   }
 }
 
@@ -52,7 +54,8 @@ function getGoogleSheetValues(openSheet) {
   try {
     return openSheet.getDataRange().getValues()
   } catch (e) {
-    addErrorItem(arguments.callee.name + ': ' + e)
+    let error = arguments.callee.name + ': ' + e
+    addErrorItem(error)
   }
 }
 
@@ -62,7 +65,8 @@ function isValidDate(d) {
       return false;
     return !isNaN(d.getTime())
   } catch (e) {
-    addErrorItem(arguments.callee.name + ': ' + e)
+    let error = arguments.callee.name + ': ' + e
+    addErrorItem(error)
   }
 }
 
@@ -74,7 +78,8 @@ function isValidString(d) {
       return false
     }
   } catch (e) {
-    addErrorItem(arguments.callee.name + ': ' + e)
+    let error = arguments.callee.name + ': ' + e
+    addErrorItem(error)
   }
 }
 
@@ -90,7 +95,8 @@ function isMatch(where, what) {
       return false
     }
   } catch (e) {
-    addErrorItem(arguments.callee.name + ': ' + e)
+    let error = arguments.callee.name + ': ' + e
+    addErrorItem(error)
   }
 }
 
@@ -103,7 +109,21 @@ function getYMD(date) {
     object.ymd = y.toString() + m.toString() + d.toString()
     return object
   } catch (e) {
-    addErrorItem(arguments.callee.name + ': ' + e)
+    let error = arguments.callee.name + ': ' + e
+    addErrorItem(error)
+  }
+}
+
+function copyObject(object) {
+  try {
+    if (Object.prototype.toString.call(object) == '[object Object]') {
+      return Object.assign({}, object)
+    } else {
+      return {}
+    }
+  } catch (e) {
+    let error = arguments.callee.name + ': ' + e
+    addErrorItem(error)
   }
 }
 
@@ -150,12 +170,13 @@ function addErrorArray(postObject) {
         errorArrayLenght == i ? errorText += '' : errorText += '\n'
         return row
       })
-      errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, postObject.actionId, postObject.boardId, postObject.listId, errorText])
+      errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, errorText])
       let subject = postObject.webHookDate + ' - ' + postObject.actionType
       MailApp.sendEmail('ikeniborn@gmail.com', subject, errorText)
     }
   } catch (e) {
-    addErrorItem(arguments.callee.name + ': ' + e)
+    let error = arguments.callee.name + ': ' + e
+    addErrorItem(error)
   }
 }
 
@@ -326,7 +347,7 @@ function getPostObject(postData) {
       }
     }
     if (['createList', 'updateList'].indexOf(postData.action.type) !== -1) {
-      var currDate = new Date
+      var currDate = new Date()
       postObject.period = new Date(currDate.getFullYear(), currDate.getMonth(), 1)
       postObject.ymd = getYMD(postObject.period)
       postObject.factPeriod2 = new Date(postObject.period.getFullYear(), postObject.period.getMonth() - 2, 1)
@@ -360,19 +381,6 @@ function getPostObject(postData) {
   }
 }
 
-function copyObject(object) {
-  try {
-    if (Object.prototype.toString.call(object) == '[object Object]') {
-      return Object.assign({}, object)
-    } else {
-      return {}
-    }
-  } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
-  }
-}
-
-// обновление параметра
 function addFinancialCenter(postObject) {
   /*
    * @postObject - входные параметра запроса
@@ -609,7 +617,6 @@ function encodeData(data, symbol) {
     postObject.error.push(arguments.callee.name + ': ' + e)
   }
 }
-
 
 function formatterDate(date) {
   //* форматирование даты
