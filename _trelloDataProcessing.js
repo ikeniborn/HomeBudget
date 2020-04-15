@@ -30,7 +30,7 @@ function addLog(postData) {
       return row
     }, [])
     var isNewAction = sourceArray.reduce(function (row, array) {
-      if (isMatch(array[2], postData.action.id)) {
+      if (isMatch(postData.action.id, array[2])) {
         row = false
       }
       return row
@@ -1542,7 +1542,7 @@ function doPost(e) {
     addErrorItem(botUser.indexOf(postData.action.memberCreator.id) === -1)
     addErrorItem(addLog(doPost))
     addErrorItem(getPostObject(postData))
-    if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(doPost)) {
+    if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(postData)) {
       var postObject = getPostObject(postData)
       if (isMatch(postObject.actionType, 'commentCard')) {
         //* добавление информации
