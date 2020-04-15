@@ -1537,7 +1537,7 @@ function getPreviousFact(postObject) {
 function isUser(postData) {
   try {
     let botUser = ['5e2b5f3f409c544ebdb1b9d4']
-    let isUser = botUser.reduce(function (row, array) {
+    var isUser = botUser.reduce(function (row, array) {
       if (isMatch(postData.action.memberCreator.id, array[0])) {
         row = false
       }
@@ -1552,7 +1552,7 @@ function isUser(postData) {
 function isValidateAction(postData) {
   try {
     let actionType = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
-    let isValidateAction = actionType.reduce(function (row, array) {
+    var isValidateAction = actionType.reduce(function (row, array) {
       if (isMatch(postData.action.type, array[0])) {
         row = true
       }
