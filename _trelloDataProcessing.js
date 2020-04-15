@@ -1541,7 +1541,7 @@ function doPost(e) {
     addErrorItem('1' + parseAction.indexOf(postData.action.type) !== -1)
     addErrorItem('2' + botUser.indexOf(postData.action.memberCreator.id) === -1)
     addErrorItem('3' + addLog(postData))
-    if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) == -1 && addLog(postData)) {
+    if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) !== -1 && addLog(postData)) {
       var postObject = getPostObject(postData)
       addErrorItem('4' + postObject)
       if (isMatch(postObject.actionType, 'commentCard')) {
