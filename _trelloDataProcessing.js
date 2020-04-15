@@ -1568,10 +1568,8 @@ function doPost(e) {
   try {
     var postData = JSON.parse(e.postData.contents)
     var isNewAction = addLog(postData)
-    addErrorItem('1 ' + isValidateAction(postData))
-    addErrorItem('2 ' + isUser(postData))
-    addErrorItem('3 ' + isNewAction)
-    if (isValidateAction(postData) && isUser(postData) && isNewAction) {
+    addErrorItem('1 ' + postData)
+    if (isValidateAction(postData) && !isUser(postData) && isNewAction) {
       var postObject = getPostObject(postData)
       addErrorItem('4 ' + postObject)
       if (isMatch(postObject.actionType, 'commentCard')) {
