@@ -1535,13 +1535,13 @@ function getPreviousFact(postObject) {
 
 function doPost(e) {
   try {
-    const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
-    const botUser = ['5e2b5f3f409c544ebdb1b9d4']
+    var parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
+    var botUser = ['5e2b5f3f409c544ebdb1b9d4']
     var postData = JSON.parse(e.postData.contents)
     addErrorItem('1' + parseAction.indexOf(postData.action.type) !== -1)
     addErrorItem('2' + botUser.indexOf(postData.action.memberCreator.id) === -1)
     addErrorItem('3' + addLog(postData))
-    if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(postData)) {
+    if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) == -1 && addLog(postData)) {
       var postObject = getPostObject(postData)
       addErrorItem('4' + postObject)
       if (isMatch(postObject.actionType, 'commentCard')) {
