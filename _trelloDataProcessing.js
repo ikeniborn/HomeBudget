@@ -1569,7 +1569,6 @@ function doPost(e) {
     var isNewAction = addLog(postData)
     if (isValidateAction(postData) && isUser(postData) && isNewAction) {
       var postObject = getPostObject(postData)
-      addErrorItem('1 ' + postObject)
       if (isMatch(postObject.actionType, 'commentCard')) {
         //* добавление информации
         updateTrelloData(postObject)
