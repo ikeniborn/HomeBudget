@@ -306,15 +306,15 @@ function getPostObject(postData) {
     }
     if (['commentCard', 'createList', 'updateList', 'updateCard'].indexOf(postData.action.type) !== -1) {
       object.list = {}
-      object.listId = object.action.data.list.id
-      object.listName = object.action.data.list.name
-      if (['updateList'].indexOf(object.action.type) !== -1) {
+      object.listId = postData.action.data.list.id
+      object.listName = postData.action.data.list.name
+      if (['updateList'].indexOf(postData.action.type) !== -1) {
         object.listClosed = object.action.data.list.closed
       }
-      if (['updateCard'].indexOf(object.action.type) !== -1) {
-        object.cardClosed = object.action.data.card.closed
+      if (['updateCard'].indexOf(postData.action.type) !== -1) {
+        object.cardClosed = postData.action.data.card.closed
       }
-    } else if (['updateComment', 'deleteComment'].indexOf(object.action.type) !== -1) {
+    } else if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
       object.list = getCardList(object)
       object.listId = object.list.id
       object.listName = object.list.name
@@ -329,14 +329,14 @@ function getPostObject(postData) {
     } else {
       object.privateBudget = false
     }
-    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(object.action.type) !== -1) {
+    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
       object.accountingItem = getAccountingItem(object)
       object.cashFlow = object.accountingItem.item.cashFlow
       object.bill = object.accountingItem.item.bill
       object.account = object.accountingItem.item.account
-      object.nomenclature = object.action.data.card.name
-      if (['updateComment', 'commentCard'].indexOf(object.action.type) !== -1) {
-        if (['updateComment'].indexOf(object.action.type) !== -1) {
+      object.nomenclature = postData.action.data.card.name
+      if (['updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
+        if (['updateComment'].indexOf(postData.action.type) !== -1) {
           object.text = postData.action.data.action.text
         } else {
           object.text = postData.action.data.text
