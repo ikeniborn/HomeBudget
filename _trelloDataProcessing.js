@@ -22,7 +22,7 @@ function addLog(postData) {
     var sourceOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameLog)
     var startDate = getPreviousDate(180)
     var sourceArray = getGoogleSheetValues(sourceOpen).reduce(function (row, array, index) {
-      if (index > 0) {
+      if (index != 0) {
         if (array[0] >= startDate) {
           row.push(array)
         }
@@ -1538,12 +1538,12 @@ function doPost(e) {
     const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
     const botUser = ['5e2b5f3f409c544ebdb1b9d4']
     var postData = JSON.parse(e.postData.contents)
-    addErrorItem(parseAction.indexOf(postData.action.type) !== -1)
-    addErrorItem(botUser.indexOf(postData.action.memberCreator.id) === -1)
-    addErrorItem(addLog(doPost))
-    addErrorItem(getPostObject(postData))
+    addErrorItem('1' + parseAction.indexOf(postData.action.type) !== -1)
+    addErrorItem('2' + botUser.indexOf(postData.action.memberCreator.id) === -1)
+    addErrorItem('3' + addLog(postData))
     if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(postData)) {
       var postObject = getPostObject(postData)
+      addErrorItem('4' + postObject)
       if (isMatch(postObject.actionType, 'commentCard')) {
         //* добавление информации
         updateTrelloData(postObject)
