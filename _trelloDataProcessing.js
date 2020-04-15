@@ -385,7 +385,6 @@ function getPostObject(postData) {
     } else {
       object.isOldData = false
     }
-    object.error = []
     return object
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
