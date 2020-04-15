@@ -1540,8 +1540,8 @@ function isUser(postData) {
     let validate = botUser.reduce(function (row, array) {
       if (isMatch(array[0], postData.action.memberCreator.id)) {
         row = false
-        return row
       }
+      return row
     }, true)
     return validate
   } catch (e) {
@@ -1555,8 +1555,8 @@ function isValidateAction(postData) {
     let validate = array.reduce(function (row, array) {
       if (isMatch(array[0], postData.action.type)) {
         row = true
-        return row
       }
+      return row
     }, false)
     return validate
   } catch (e) {
