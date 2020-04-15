@@ -232,10 +232,10 @@ function deleteError(postObject) {
 
 function getPostObject(postData) {
   try {
-    var object = Object.assign({}, postData)
+    var object = Object.assign({}, getGlobalVariable())
     object.webHookDate = formatterDate().timestamp
-    object.actionType = object.action.type
-    object.webHookActionId = object.action.id
+    object.actionType = postData.action.type
+    object.webHookActionId = postData.action.id
     // открытие листов
     object.financialCenterSheetOpen = openGoogleSheet(object.sourceSheetID, object.financialCenterSheetName)
     object.accountingItemSheetOpen = openGoogleSheet(object.sourceSheetID, object.accountingItemSheetName)
@@ -257,16 +257,16 @@ function getPostObject(postData) {
     object.errorArray = getGoogleSheetValues(object.errorOpen)
     object.accountArray = getGoogleSheetValues(object.accountOpen)
     object.targetArray = getGoogleSheetValues(object.targetOpen)
-    if (['updateComment', 'deleteComment'].indexOf(object.action.type) !== -1) {
-      object.actionId = object.action.data.action.id
+    if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
+      object.actionId = postData.action.data.action.id
     } else {
-      object.actionId = object.action.id
+      object.actionId = postData.action.id
     }
-    object.actionDate = new Date(object.action.date)
-    object.memberId = object.action.memberCreator.id
-    object.memberUsername = object.action.memberCreator.username
-    object.boardId = object.action.data.board.id
-    object.boardName = object.action.data.board.name
+    object.actionDate = new Date(postData.action.date)
+    object.memberId = postData.action.memberCreator.id
+    object.memberUsername = postData.action.memberCreator.username
+    object.boardId = postData.action.data.board.id
+    object.boardName = postData.action.data.board.name
     if ([object.boardIdFact, object.boardIdFact0].indexOf(object.boardId) !== -1) {
       object.isFact = true
       if ([object.boardIdFact].indexOf(object.boardId) !== -1) {
@@ -297,14 +297,14 @@ function getPostObject(postData) {
       object.isTarget = true
       object.type = 'Факт'
     }
-    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(object.action.type) !== -1) {
-      object.cardId = object.action.data.card.id
-      object.cardName = object.action.data.card.name
+    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
+      object.cardId = postData.action.data.card.id
+      object.cardName = postData.action.data.card.name
       object.cardDescription = ''
       object.cardComment = ''
       object.cardLabelColor = getCardLabel(object).item.color
     }
-    if (['commentCard', 'createList', 'updateList', 'updateCard'].indexOf(object.action.type) !== -1) {
+    if (['commentCard', 'createList', 'updateList', 'updateCard'].indexOf(postData.action.type) !== -1) {
       object.list = {}
       object.listId = object.action.data.list.id
       object.listName = object.action.data.list.name
@@ -337,15 +337,15 @@ function getPostObject(postData) {
       object.nomenclature = object.action.data.card.name
       if (['updateComment', 'commentCard'].indexOf(object.action.type) !== -1) {
         if (['updateComment'].indexOf(object.action.type) !== -1) {
-          object.text = object.action.data.action.text
+          object.text = postData.action.data.action.text
         } else {
-          object.text = object.action.data.text
+          object.text = postData.action.data.text
         }
         object.parseText = parseComment(object)
         object.sum = object.parseText.sum
-        if (['updateComment'].indexOf(object.action.type) !== -1) {
+        if (['updateComment'].indexOf(postData.action.type) !== -1) {
           var objectOld = copyObject(object)
-          objectOld.text = object.action.data.old.text
+          objectOld.text = postData.action.data.old.text
           object.oldSum = parseComment(objectOld).sum
         }
         object.comment = object.parseText.comment
@@ -356,7 +356,7 @@ function getPostObject(postData) {
         }
       }
     }
-    if (['createList', 'updateList'].indexOf(object.action.type) !== -1) {
+    if (['createList', 'updateList'].indexOf(postData.action.type) !== -1) {
       var currDate = new Date()
       object.period = new Date(currDate.getFullYear(), currDate.getMonth(), 1)
       object.ymd = getYMD(object.period)
@@ -377,10 +377,10 @@ function getPostObject(postData) {
       object.budgetPeriod2 = object.date.budgetPeriod2
       object.budgetPeriod3 = object.date.budgetPeriod3
     }
-    if (['deleteComment', 'updateComment', 'commentCard'].indexOf(object.action.type) !== -1) {
+    if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
       object.dataTrello = getAllData(object, 'trello')
     }
-    if (['deleteComment', 'updateComment'].indexOf(object.action.type) !== -1) {
+    if (['deleteComment', 'updateComment'].indexOf(postData.action.type) !== -1) {
       object.isOldData = isOldData(object)
     } else {
       object.isOldData = false
@@ -1537,10 +1537,8 @@ function doPost(e) {
   try {
     const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
     const botUser = ['5e2b5f3f409c544ebdb1b9d4']
-    var doPost = JSON.parse(e.postData.contents)
-    if (parseAction.indexOf(doPost.action.type) !== -1 && botUser.indexOf(doPost.action.memberCreator.id) === -1 && addLog(doPost)) {
-      var globalVariable = getGlobalVariable()
-      var postData = Object.assign(doPost, globalVariable)
+    var postData = JSON.parse(e.postData.contents)
+    if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(doPost)) {
       var postObject = getPostObject(postData)
       if (isMatch(postObject.actionType, 'commentCard')) {
         //* добавление информации
