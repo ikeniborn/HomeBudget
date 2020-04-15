@@ -497,7 +497,7 @@ function createCardsForList(postObject) {
     //* создание карточек на листе факт
     accountItems.forEach(function (accounts) {
       var label = labelList.reduce(function (row, arrya) {
-        if (isMatch(arrya.color, accounts.color)) {
+        if (isMatch(accounts.color, arrya.color)) {
           row = {}
           row.id = arrya.id
         }
@@ -558,7 +558,7 @@ function deleteRowByActionId(postObject) {
     ts = postObject.accountOpen
     targetData = postObject.accountArray
     targetData.reduce(function (row, array, index) {
-      if (isMatch(array[10], postObject.actionId)) {
+      if (isMatch(postObject.actionId, array[10])) {
         row = index + 1
         targetRowIndex.push(row)
       }
@@ -620,7 +620,7 @@ function getAccountingItem(postObject) {
       }
     }, [])
     object.item = object.array.reduce(function (row, array) {
-      if (isMatch(array[4], postObject.cardName) && isMatch(array[8], postObject.cardLabelColor)) {
+      if (isMatch(postObject.cardName, array[4]) && isMatch(postObject.cardLabelColor, array[8])) {
         row = array
       }
       return row
@@ -882,7 +882,7 @@ function getParametr(postObject) {
       }
     }, [])
     object.item = object.array.reduce(function (row, array) {
-      if (isMatch(row[2], postObject.cfo) && isMatch(row[1], postObject.type)) {
+      if (isMatch(postObject.cfo, row[2]) && isMatch(postObject.type, row[1])) {
         row = array
       }
       return row
@@ -1016,7 +1016,7 @@ function getTotalSum(postObject, array) {
     var total = {}
     //* сумма по операции
     total.cashFlowSum = array.reduce(function (sum, array) {
-      if (isMatch(postObject.cfo, array.cfo) && isMatch(postObject.cashFlow, array.cashFlow)) {
+      if (isMatch(array.cfo, postObject.cfo) && isMatch(array.cashFlow, postObject.cashFlow)) {
         sum += array.sum
       }
       return sum
