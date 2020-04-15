@@ -866,7 +866,7 @@ function getFinancialСenter(postObject) {
 
 function getParametr(postObject) {
   try {
-    var array = post.parametrArray
+    var array = postObject.parametrArray
     var object = {}
     object.item = {}
     object.array = []
