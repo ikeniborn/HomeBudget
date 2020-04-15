@@ -1568,7 +1568,7 @@ function doPost(e) {
   try {
     var postData = JSON.parse(e.postData.contents)
     var isNewAction = addLog(postData)
-    addErrorItem('1 ' + objectToString(datapostData))
+    addErrorItem('1 ' + objectToString(postData))
     if (isValidateAction(postData) && !isUser(postData) && isNewAction) {
       var postObject = getPostObject(postData)
       addErrorItem('4 ' + postObject)
