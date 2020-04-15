@@ -1538,6 +1538,10 @@ function doPost(e) {
     const parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
     const botUser = ['5e2b5f3f409c544ebdb1b9d4']
     var postData = JSON.parse(e.postData.contents)
+    addErrorItem(parseAction.indexOf(postData.action.type) !== -1)
+    addErrorItem(botUser.indexOf(postData.action.memberCreator.id) === -1)
+    addErrorItem(addLog(doPost))
+    addErrorItem(getPostObject(postData))
     if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) === -1 && addLog(doPost)) {
       var postObject = getPostObject(postData)
       if (isMatch(postObject.actionType, 'commentCard')) {
