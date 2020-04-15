@@ -1645,17 +1645,14 @@ function doPost(e) {
           }
         }
       }
+      //* удаление старых логов
+      deleteLog(postObject)
+      //* удаление старых ошибок
+      deleteError(postObject)
+      //* Удаление пустых строк
+      deleteEmptyRow(postObject)
     }
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
-  } finally {
-    //* запись ошибок
-    // addErrorArray(postObject)
-    //* удаление старых логов
-    deleteLog(postObject)
-    //* удаление старых ошибок
-    deleteError(postObject)
-    //* Удаление пустых строк
-    deleteEmptyRow(postObject)
   }
 }
