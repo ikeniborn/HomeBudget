@@ -385,9 +385,10 @@ function getPostObject(postData) {
     } else {
       object.isOldData = false
     }
+    object.error = []
     return object
   } catch (e) {
-    object.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -1537,10 +1538,10 @@ function isUser(postData) {
   try {
     let botUser = ['5e2b5f3f409c544ebdb1b9d4']
     let validate = botUser.reduce(function (row, array) {
-      if (isMatch(array[0], postData.action.type)) {
-        row = true
-      } else {
+      if (isMatch(array[0], postData.action.memberCreator.id)) {
         row = false
+      } else {
+        row = true
       }
       return row
     }, false)
