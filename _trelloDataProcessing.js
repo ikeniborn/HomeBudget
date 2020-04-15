@@ -1,3 +1,5 @@
+//? проверить описание карточки. Перестало считать остатки
+
 function addErrorItem(error) {
   try {
     var globalVariable = getGlobalVariable()
