@@ -1537,13 +1537,13 @@ function getPreviousFact(postObject) {
 function isUser(postData) {
   try {
     let botUser = ['5e2b5f3f409c544ebdb1b9d4']
-    let validate = botUser.reduce(function (row, array) {
-      if (isMatch(array[0], postData.action.memberCreator.id)) {
+    let isUser = botUser.reduce(function (row, array) {
+      if (isMatch(postData.action.memberCreator.id, array[0])) {
         row = false
       }
       return row
     }, true)
-    return validate
+    return isUser
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
@@ -1551,14 +1551,14 @@ function isUser(postData) {
 
 function isValidateAction(postData) {
   try {
-    var array = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
-    let validate = array.reduce(function (row, array) {
-      if (isMatch(array[0], postData.action.type)) {
+    let actionType = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
+    let isValidateAction = actionType.reduce(function (row, array) {
+      if (isMatch(postData.action.type, array[0])) {
         row = true
       }
       return row
     }, false)
-    return validate
+    return isValidateAction
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
