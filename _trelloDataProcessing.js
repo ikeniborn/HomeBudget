@@ -1533,17 +1533,50 @@ function getPreviousFact(postObject) {
   }
 }
 
+function isUser(postData) {
+  try {
+    let botUser = ['5e2b5f3f409c544ebdb1b9d4']
+    let validate = botUser.reduce(function (row, array) {
+      if (isMatch(array[0], postData.action.type)) {
+        row = true
+      } else {
+        row = false
+      }
+      return row
+    }, false)
+    return validate
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
+function isValidateAction(postData) {
+  try {
+    let parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
+    let validate = parseAction.reduce(function (row, array) {
+      if (isMatch(array[0], postData.action.type)) {
+        row = true
+      } else {
+        row = false
+      }
+      return row
+    }, false)
+    return validate
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
 function doPost(e) {
   try {
-    var parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
-    var botUser = ['5e2b5f3f409c544ebdb1b9d4']
     var postData = JSON.parse(e.postData.contents)
-    addErrorItem('1' + parseAction.indexOf(postData.action.type) !== -1)
-    addErrorItem('2' + botUser.indexOf(postData.action.memberCreator.id) === -1)
-    addErrorItem('3' + addLog(postData))
-    if (parseAction.indexOf(postData.action.type) !== -1 && botUser.indexOf(postData.action.memberCreator.id) !== -1 && addLog(postData)) {
+    var isNewAction = addLog(postData)
+    addErrorItem('1 ' + isValidateAction(postData))
+    addErrorItem('2 ' + isUser(postData))
+    addErrorItem('3 ' + isNewAction)
+    if (isValidateAction(postData) && isUser(postData) && isNewAction) {
       var postObject = getPostObject(postData)
-      addErrorItem('4' + postObject)
+      addErrorItem('4 ' + postObject)
       if (isMatch(postObject.actionType, 'commentCard')) {
         //* добавление информации
         updateTrelloData(postObject)
