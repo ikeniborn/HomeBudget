@@ -1540,11 +1540,9 @@ function isUser(postData) {
     let validate = botUser.reduce(function (row, array) {
       if (isMatch(array[0], postData.action.memberCreator.id)) {
         row = false
-      } else {
-        row = true
+        return row
       }
-      return row
-    }, false)
+    }, true)
     return validate
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
@@ -1553,14 +1551,12 @@ function isUser(postData) {
 
 function isValidateAction(postData) {
   try {
-    let parseAction = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
-    let validate = parseAction.reduce(function (row, array) {
+    var array = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
+    let validate = array.reduce(function (row, array) {
       if (isMatch(array[0], postData.action.type)) {
         row = true
-      } else {
-        row = false
+        return row
       }
-      return row
     }, false)
     return validate
   } catch (e) {
@@ -1668,4 +1664,3 @@ function doPost(e) {
     deleteEmptyRow(postObject)
   }
 }
-//
