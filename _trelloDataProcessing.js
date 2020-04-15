@@ -153,28 +153,28 @@ function encodeData(data, symbol) {
   }
 }
 
-function addErrorArray(postObject) {
-  try {
-    if (postObject.error.length > 0) {
-      var errorOpen = postObject.errorOpen
-      var errorText = ''
-      var i = 0
-      var errorArray = postObject.error
-      var errorArrayLenght = postObject.error.length
-      errorArray.map(function (row) {
-        i += 1
-        errorText += row
-        errorArrayLenght == i ? errorText += '' : errorText += '\n'
-        return row
-      })
-      errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, errorText])
-      var subject = postObject.webHookDate + ' - ' + postObject.actionType
-      MailApp.sendEmail('ikeniborn@gmail.com', subject, errorText)
-    }
-  } catch (e) {
-    addErrorItem(arguments.callee.name + ': ' + e)
-  }
-}
+// function addErrorArray(postObject) {
+//   try {
+//     if (postObject.error.length > 0) {
+//       var errorOpen = postObject.errorOpen
+//       var errorText = ''
+//       var i = 0
+//       var errorArray = postObject.error
+//       var errorArrayLenght = postObject.error.length
+//       errorArray.map(function (row) {
+//         i += 1
+//         errorText += row
+//         errorArrayLenght == i ? errorText += '' : errorText += '\n'
+//         return row
+//       })
+//       errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, errorText])
+//       var subject = postObject.webHookDate + ' - ' + postObject.actionType
+//       MailApp.sendEmail('ikeniborn@gmail.com', subject, errorText)
+//     }
+//   } catch (e) {
+//     addErrorItem(arguments.callee.name + ': ' + e)
+//   }
+// }
 
 function deleteLog(postObject) {
   try {
@@ -199,7 +199,7 @@ function deleteLog(postObject) {
       sourceOpen.deleteRows(startDeleteIndex, countDeleteRow)
     }
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -226,7 +226,7 @@ function deleteError(postObject) {
       errorOpen.deleteRows(startDeleteIndex, countDeleteRow)
     }
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -420,7 +420,7 @@ function addTarget(postObject) {
       postObject.goalsArray = getGoogleSheetValues(postObject.goalsSheetOpen)
     }
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -446,7 +446,7 @@ function closedBudgetPeriod(postObject) {
     createCardsForList(postObjectBudget3)
     updateList(postObjectBudget3)
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -471,7 +471,7 @@ function closedFactPeriod(postObject) {
     //* создание карточек на листе факт
     createCardsForList(postObject)
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -506,7 +506,7 @@ function createCardsForList(postObject) {
       addCard(postObject, accounts.nomenclature, postObject.listId, accounts.id, label.id)
     })
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -525,7 +525,7 @@ function deleteEmptyRow(postObject) {
       ss.deleteRows(tsLastRow + 1, tsMaxRows - tsLastRow)
     }
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -573,7 +573,7 @@ function deleteRowByActionId(postObject) {
     postObject.dataAccount = getAllData(postObject, 'account')
     return sum
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -627,7 +627,7 @@ function getAccountingItem(postObject) {
     })
     return object
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -676,7 +676,7 @@ function getAllTarget(postObject) {
     })
     return object
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -716,7 +716,7 @@ function getComment(postObject) {
     }
     return comment
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -747,7 +747,7 @@ function getCostСenter(postObject) {
     }
     return object
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -834,7 +834,7 @@ function getDescription(postObject) {
     }
     return description
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -860,7 +860,7 @@ function getFinancialСenter(postObject) {
     })
     return object
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -889,7 +889,7 @@ function getParametr(postObject) {
     })
     return object
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -932,7 +932,7 @@ function getPeriod(postObject) {
     date.ymd = getYMD(date.period).ymd
     return date
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -971,7 +971,7 @@ function getSum(postObject) {
     sum.totalSum = totalSum
     return sum
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -1004,7 +1004,7 @@ function getTarget(postObject) {
     })
     return object
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -1174,7 +1174,7 @@ function getTotalSum(postObject, array) {
     })
     return total
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -1190,7 +1190,7 @@ function isOldData(postObject) {
     }, false)
     return searchRow
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -1202,7 +1202,7 @@ function parseComment(postObject) {
     parseData.comment = text.split(parseData.sum).join('').replace(/^[.,\,, ,\-,\/,\\]/, ' ').trim()
     return parseData
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -1224,7 +1224,7 @@ function updateBalanceCard(postObject) {
       updateCardDesc(postObjectBalance)
     }
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -1251,7 +1251,7 @@ function updateDescForNewCards(postObject) {
       }
     })
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -1292,7 +1292,7 @@ function updateParametr(postObject) {
     postObject.budgetPeriod2 = postObject.date.budgetPeriod2
     postObject.budgetPeriod3 = postObject.date.budgetPeriod3
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -1344,7 +1344,7 @@ function updateRowByActionId(postObject) {
     //* получение текущих данных после обновления
     postObject.dataAccount = getAllData(postObject, 'account')
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -1361,7 +1361,7 @@ function updateTarget(postObject) {
     ss.getRange(indexRow, 5).setValue(formatterDate().timestamp)
     ss.getRange(indexRow, 7).setValue('closed')
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -1396,7 +1396,7 @@ function updateTrelloData(postObject) {
     //* получение данных учета после обновления
     postObject.dataAccount = getAllData(postObject, 'account')
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -1444,7 +1444,7 @@ function updateTargetList(postObject) {
     ssTargetOpen.getRange(targetItem.indexRow, targetColumn).setValue(+targetSumNew)
     postObject.targetArray = getGoogleSheetValues(postObject.targetOpen)
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -1512,7 +1512,7 @@ function getAllData(postObject, source) {
     })
     return object
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -1529,7 +1529,7 @@ function getPreviousFact(postObject) {
     sum.Prev2 = getSum(postObjectPrev2)
     return sum
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -1651,7 +1651,7 @@ function doPost(e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   } finally {
     //* запись ошибок
-    addErrorArray(postObject)
+    // addErrorArray(postObject)
     //* удаление старых логов
     deleteLog(postObject)
     //* удаление старых ошибок
