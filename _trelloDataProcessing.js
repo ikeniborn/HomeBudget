@@ -105,7 +105,7 @@ function isMatch(where, what) {
 
 function getYMD(date) {
   try {
-    const object = {}
+    let object = {}
     object.y = new Date(date).getFullYear()
     object.m = new Date(date).getMonth() + 1
     object.d = new Date(date).getDate()
@@ -607,45 +607,44 @@ function getAllTarget(postObject) {
   try {
     const array = postObject.targetArray
     const target = getTarget(postObject).item
-    const object = {}
-    object.item = {}
-    object.array = []
-    array.reduce(function (row, array, index) {
+    let object = {}
+    object.array = array.reduce(function (row, array, index) {
       if (index != 0) {
-        row = {}
-        row.timestamp = array[0]
-        row.goal = array[1]
-        row.cfo = array[2]
-        row.startDate = new Date(array[3])
-        row.duration = +array[4]
-        row.cost = +array[5]
-        row.inflation = +array[6]
-        row.isIis = +array[7]
-        row.restCost = +array[8]
-        row.endDate = new Date(array[9])
-        row.restDay = +array[10]
-        row.complete = array[11]
-        row.budget = +array[12]
-        row.newCost = +array[13]
-        row.monthDeductionSum = +array[14]
-        row.currentListedSum = +array[15]
-        row.targetSum = +array[17]
-        row.depositSum = +array[18]
-        row.exchangeSum = +array[19]
-        row.iisSum = +array[20]
-        row.disbursedFunds = +array[21]
-        row.inStock = +array[22]
-        row.completePersent = +array[23]
-        row.indexRow = index + 1
-        object.array.push(row)
+        let object = {}
+        object.timestamp = array[0]
+        object.goal = array[1]
+        object.cfo = array[2]
+        object.startDate = new Date(array[3])
+        object.duration = +array[4]
+        object.cost = +array[5]
+        object.inflation = +array[6]
+        object.isIis = +array[7]
+        object.restCost = +array[8]
+        object.endDate = new Date(array[9])
+        object.restDay = +array[10]
+        object.complete = array[11]
+        object.budget = +array[12]
+        object.newCost = +array[13]
+        object.monthDeductionSum = +array[14]
+        object.currentListedSum = +array[15]
+        object.targetSum = +array[17]
+        object.depositSum = +array[18]
+        object.exchangeSum = +array[19]
+        object.iisSum = +array[20]
+        object.disbursedFunds = +array[21]
+        object.inStock = +array[22]
+        object.completePersent = +array[23]
+        object.indexRow = index + 1
+        row.push(object)
       }
+      return row
     }, [])
     object.item = object.array.reduce(function (row, array) {
-      if (isMatch(target.goal, array[1]) && isMatch(target.cfo, array[2])) {
+      if (isMatch(target.goal, array.goal) && isMatch(target.cfo, array.cfo)) {
         row = array
       }
       return row
-    })
+    }, {})
     return object
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
@@ -655,7 +654,7 @@ function getAllTarget(postObject) {
 /* eslint-disable no-undef */
 function getComment(postObject) {
   try {
-    const comment = {}
+    let comment = {}
     const sum = getSum(postObject)
     if (isMatch(postObject.actionType, 'commentCard')) {
       comment.text = '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
@@ -695,25 +694,24 @@ function getComment(postObject) {
 function getCostСenter(postObject) {
   try {
     const array = postObject.costСenterArray
-    const object = {}
-    object.item = {}
-    object.array = []
-    array.reduce(function (row, array, index) {
+    let object = {}
+    object.array = array.reduce(function (row, array, index) {
       if (index != 0) {
-        row = {}
-        row.id = array[0]
-        row.mvz = array[1]
-        row.tag = array[2]
-        object.array.push(row)
+        let object = {}
+        object.id = array[0]
+        object.mvz = array[1]
+        object.tag = array[2]
+        row.push(object)
       }
+      return row
     }, [])
     if (isValidString(postObject.comment)) {
       object.item = object.array.reduce(function (row, array) {
-        if (isMatch(postObject.comment, array[2])) {
+        if (isMatch(postObject.comment, array.tag)) {
           row = array
         }
         return row
-      })
+      }, {})
     } else {
       object.item.mvz = postObject.cfo
     }
@@ -726,7 +724,7 @@ function getCostСenter(postObject) {
 function getDescription(postObject) {
   try {
     let description = {}
-    let sum = getSum(postObject)
+    const sum = getSum(postObject)
     description.text = '*Дата обновления*: ' + formatterDate(postObject.actionDate).time + postObject.lineBreak
     if (postObject.isFact || postObject.isBudget) {
       if (postObject.isFact) {
@@ -813,23 +811,21 @@ function getDescription(postObject) {
 function getFinancialСenter(postObject) {
   try {
     const array = postObject.financialСenterArray
-    const object = {}
-    object.item = {}
-    object.array = []
-    array.reduce(function (row, array, index) {
+    let object = {}
+    object.array = array.reduce(function (row, array, index) {
       if (index != 0) {
-        row = {}
-        row.id = array[0]
-        row.cfo = array[1]
-        object.array.push(row)
+        let object = {}
+        object.id = array[0]
+        object.cfo = array[1]
+        row.push(object)
       }
     }, [])
     object.item = object.array.reduce(function (row, array) {
-      if (isMatch(postObject.listName, array[1])) {
+      if (isMatch(postObject.listName, array.cfo)) {
         row = array
       }
       return row
-    })
+    }, {})
     return object
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
@@ -839,26 +835,24 @@ function getFinancialСenter(postObject) {
 function getParametr(postObject) {
   try {
     const array = postObject.parametrArray
-    const object = {}
-    object.item = {}
-    object.array = []
-    array.reduce(function (row, array, index) {
+    let object = {}
+    object.array = array.reduce(function (row, array, index) {
       if (index != 0) {
-        row = {}
-        row.id = array[0]
-        row.type = array[1]
-        row.cfo = array[2]
-        row.value = new Date(array[3])
-        row.indexRow = index + 1
-        object.array.push(row)
+        let object = {}
+        object.id = array[0]
+        object.type = array[1]
+        object.cfo = array[2]
+        object.value = new Date(array[3])
+        object.indexRow = index + 1
+        row.push(object)
       }
     }, [])
     object.item = object.array.reduce(function (row, array) {
-      if (isMatch(postObject.cfo, row[2]) && isMatch(postObject.type, row[1])) {
+      if (isMatch(postObject.cfo, row.cfo) && isMatch(postObject.type, row.type)) {
         row = array
       }
       return row
-    })
+    }, {})
     return object
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
@@ -950,28 +944,27 @@ function getSum(postObject) {
 function getTarget(postObject) {
   try {
     const array = postObject.goalsArray
-    const object = {}
-    object.item = {}
-    object.array = []
-    array.reduce(function (row, array, index) {
+    let object = {}
+    object.array = array.reduce(function (row, array, index) {
       if (index != 0) {
-        row = {}
-        row.id = array[0]
-        row.listName = array[1]
-        row.goal = array[2]
-        row.cfo = array[3]
-        row.listId = array[5]
-        row.status = array[6]
-        row.indexRow = index + 1
-        object.array.push(row)
+        let object = {}
+        object.id = array[0]
+        object.listName = array[1]
+        object.goal = array[2]
+        object.cfo = array[3]
+        object.listId = array[5]
+        object.status = array[6]
+        object.indexRow = index + 1
+        row.push(object)
       }
+      return row
     }, [])
     object.item = object.array.reduce(function (row, array) {
-      if (isMatch(postObject.listName, array[1])) {
+      if (isMatch(postObject.listName, array.listName)) {
         row = array
       }
       return row
-    })
+    }, {})
     return object
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
@@ -1121,7 +1114,7 @@ function isOldData(postObject) {
 
 function parseComment(postObject) {
   try {
-    const parseData = {}
+    let parseData = {}
     const text = postObject.text
     parseData.sum = +text.match(/^\d+/)
     parseData.comment = text.split(parseData.sum).join('').replace(/^[.,\,, ,\-,\/,\\]/, ' ').trim()
@@ -1138,13 +1131,13 @@ function updateBalanceCard(postObject) {
    */
   try {
     //* обновление карточки баланса
-    const postObjectBalance = copyObject(postObject)
+    let postObjectBalance = copyObject(postObject)
     postObjectBalance.nomenclature = 'Баланс'
-    const balanceCard = getCards(postObjectBalance, postObjectBalance.listId).item
+    let balanceCard = getCards(postObjectBalance, postObjectBalance.listId).item
     postObjectBalance.cardId = balanceCard.id
     addCardComment(postObjectBalance)
     if (postObjectBalance.isBudget || postObjectBalance.isTarget) {
-      const description = getDescription(postObjectBalance)
+      let description = getDescription(postObjectBalance)
       postObjectBalance.cardDescription = description.text
       updateCardDesc(postObjectBalance)
     }
@@ -1156,7 +1149,7 @@ function updateBalanceCard(postObject) {
 function updateDescForNewCards(postObject) {
   try {
     const cards = getCards(postObject).array
-    const postObjectCard = copyObject(postObject)
+    let postObjectCard = copyObject(postObject)
     postObjectCard.dataAccount = getAllData(postObjectCard, 'account')
     //* обновление описание карточки
     cards.forEach(function (card) {
@@ -1169,7 +1162,7 @@ function updateDescForNewCards(postObject) {
       postObjectCard.account = postObjectCard.accountingItem.item.account
       postObjectCard.nomenclature = card.name
       //? разобатся с получение описания и сумм
-      const description = getDescription(postObjectCard)
+      let description = getDescription(postObjectCard)
       if (description.haveBudget) {
         postObjectCard.cardDescription = description.text
         updateCardDesc(postObjectCard)
@@ -1191,7 +1184,7 @@ function updateParametr(postObject) {
     const ss = postObject.parametrSheetOpen
     let indexRow
     let value
-    const postObjectCopy = copyObject(postObject)
+    let postObjectCopy = copyObject(postObject)
     if (postObject.isCurrFact) {
       postObjectCopy.type = 'Факт'
       indexRow = getParametr(postObjectCopy).item.indexRow
@@ -1382,48 +1375,48 @@ function getAllData(postObject, source) {
       dataStructure = 2
       data = postObject.accountArray
     }
-    var object = {}
-    object.all = []
-    object.current = {}
-    data.reduce(function (row, array, index) {
+    let object = {}
+    object.all = data.reduce(function (row, array, index) {
       if (index != 0) {
-        row = {}
+        let object = {}
         if ([1].indexOf(dataStructure) !== -1) {
           //* данные из буфера трелло
-          row.actionDate = array[0]
-          row.period = array[1]
-          row.ymd = getYMD(array[1]).ymd
-          row.cfo = array[2]
-          row.mvz = array[3]
-          row.cashFlow = null
-          row.bill = null
-          row.account = null
-          row.nomenclature = array[4]
-          row.sum = array[5]
-          row.comment = array[6]
-          row.actionId = array[7]
-          row.type = array[8]
-          row.indexRow = index + 1
+          object.actionDate = array[0]
+          object.period = array[1]
+          object.ymd = getYMD(array[1]).ymd
+          object.cfo = array[2]
+          object.mvz = array[3]
+          object.cashFlow = null
+          object.bill = null
+          object.account = null
+          object.nomenclature = array[4]
+          object.sum = array[5]
+          object.comment = array[6]
+          object.actionId = array[7]
+          object.type = array[8]
+          object.indexRow = index + 1
         } else if ([2].indexOf(dataStructure) !== -1) {
           //* данные из учета
-          row.actionDate = array[0]
-          row.period = array[1]
-          row.ymd = getYMD(row.period).ymd
-          row.cfo = array[2]
-          row.mvz = array[3]
-          row.cashFlow = array[4]
-          row.bill = array[5]
-          row.account = array[6]
-          row.nomenclature = array[7]
-          row.sum = array[8]
-          row.comment = array[9]
-          row.actionId = array[10]
-          row.type = array[11]
-          row.indexRow = index + 1
+          object.actionDate = array[0]
+          object.period = array[1]
+          object.ymd = getYMD(row.period).ymd
+          object.cfo = array[2]
+          object.mvz = array[3]
+          object.cashFlow = array[4]
+          object.bill = array[5]
+          object.account = array[6]
+          object.nomenclature = array[7]
+          object.sum = array[8]
+          object.comment = array[9]
+          object.actionId = array[10]
+          object.type = array[11]
+          object.indexRow = index + 1
         }
-        object.all.push(row)
+        row.push(object)
       }
+      return row
     }, [])
+    object.current = {}
     object.current.fact = object.all.filter(function (row) {
       return row.ymd == getYMD(postObject.factPeriod).ymd && isMatch(row.type, 'Факт')
     })
