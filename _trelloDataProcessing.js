@@ -818,6 +818,7 @@ function getFinancialСenter(postObject) {
         object.cfo = array[1]
         row.push(object)
       }
+      return row
     }, [])
     object.item = object.array.reduce(function (row, array) {
       if (isMatch(postObject.listName, array.cfo)) {
@@ -845,6 +846,7 @@ function getParametr(postObject) {
         object.indexRow = index + 1
         row.push(object)
       }
+      return row
     }, [])
     object.item = object.array.reduce(function (row, array) {
       if (isMatch(postObject.cfo, row.cfo) && isMatch(postObject.type, row.type)) {
