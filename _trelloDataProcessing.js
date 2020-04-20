@@ -596,7 +596,6 @@ function getAccountingItem(postObject) {
       }
       return row
     }, {})
-    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     return object
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
