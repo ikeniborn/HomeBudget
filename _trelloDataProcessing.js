@@ -573,23 +573,23 @@ function getAccountingItem(postObject) {
       postObject.cardName = ''
       postObject.cardLabelColor = ''
     }
-    const object = {}
+    let object = {}
     object.item = {}
-    object.array = []
-    array.reduce(function (row, array, index) {
+    object.array = array.reduce(function (row, array, index) {
       if (index != 0) {
-        row = {}
-        row.id = array[0]
-        row.cashFlow = array[1]
-        row.bill = array[2]
-        row.account = array[3]
-        row.nomenclature = array[4]
-        row.budget = array[5]
-        row.fact = array[6]
-        row.target = array[7]
-        row.color = array[8]
-        object.array.push(row)
+        let data = {}
+        data.id = array[0]
+        data.cashFlow = array[1]
+        data.bill = array[2]
+        data.account = array[3]
+        data.nomenclature = array[4]
+        data.budget = array[5]
+        data.fact = array[6]
+        data.target = array[7]
+        data.color = array[8]
+        row.push(data)
       }
+      return row
     }, [])
     object.item = object.array.reduce(function (row, array) {
       if (isMatch(postObject.cardName, array[4]) && isMatch(postObject.cardLabelColor, array[8])) {
@@ -597,6 +597,7 @@ function getAccountingItem(postObject) {
       }
       return row
     })
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     return object
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
@@ -941,7 +942,6 @@ function getSum(postObject) {
     sum.budgetSum = budgetSum
     sum.factSum = factSum
     sum.totalSum = totalSum
-    addErrorItem(arguments.callee.name + ': ' + objectToString(sum))
     return sum
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
@@ -1099,7 +1099,6 @@ function getTotalSum(postObject, array) {
     total.nomenclatureRows = array.filter(function (array) {
       return isMatch(array.cfo, postObject.cfo) && isMatch(array.bill, postObject.bill) && isMatch(array.account, postObject.account) && isMatch(array.nomenclature, postObject.nomenclature) && isMatch(array.cashFlow, postObject.cashFlow)
     })
-    addErrorItem(arguments.callee.name + ': ' + objectToString(total))
     return total
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
