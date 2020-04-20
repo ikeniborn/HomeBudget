@@ -533,7 +533,6 @@ function deleteEmptyRow(postObject) {
 
 function deleteRowByActionId(postObject) {
   try {
-    let targetRowIndex = []
     let sum = 0
     //* удаление данных на листе источнике
     let ss = postObject.trelloOpen
@@ -554,10 +553,9 @@ function deleteRowByActionId(postObject) {
     //* удаление данных на листе учета
     let ts = postObject.accountOpen
     let targetData = postObject.accountArray
-    targetData.reduce(function (row, array, index) {
+    let targetRowIndex = targetData.reduce(function (row, array, index) {
       if (isMatch(postObject.actionId, array[10])) {
-        row = index + 1
-        targetRowIndex.push(row)
+        row.push(index + 1)
       }
       return row
     }, [])
@@ -1453,7 +1451,7 @@ function getAllData(postObject, source) {
       dataStructure = 2
       data = postObject.accountArray
     }
-    let object = {}
+    var object = {}
     object.all = []
     object.current = {}
     data.reduce(function (row, array, index) {
