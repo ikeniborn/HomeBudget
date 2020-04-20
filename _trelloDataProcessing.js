@@ -480,7 +480,7 @@ function closedFactPeriod(postObject) {
 function createCardsForList(postObject) {
   try {
     const accountArray = getAccountingItem(postObject).array
-    const accountItems
+    let accountItems
     if (postObject.isFact) {
       accountItems = accountArray.filter(function (row) {
         return row.fact == 1
@@ -533,17 +533,12 @@ function deleteEmptyRow(postObject) {
 
 function deleteRowByActionId(postObject) {
   try {
-    const ss
-    const sourceData
-    const sourceRows
-    const ts
-    const targetData
-    const targetRowIndex = []
-    const sum = 0
+    let targetRowIndex = []
+    let sum = 0
     //* удаление данных на листе источнике
-    ss = postObject.trelloOpen
-    sourceData = postObject.dataTrello.all
-    sourceRows = sourceData.reduce(function (row, array) {
+    let ss = postObject.trelloOpen
+    let sourceData = postObject.dataTrello.all
+    let sourceRows = sourceData.reduce(function (row, array) {
       if (isMatch(array.actionId, postObject.actionId)) {
         row.push(array)
       }
@@ -557,8 +552,8 @@ function deleteRowByActionId(postObject) {
       sum = row.sum
     })
     //* удаление данных на листе учета
-    ts = postObject.accountOpen
-    targetData = postObject.accountArray
+    let ts = postObject.accountOpen
+    let targetData = postObject.accountArray
     targetData.reduce(function (row, array, index) {
       if (isMatch(postObject.actionId, array[10])) {
         row = index + 1
@@ -810,11 +805,11 @@ function getDescription(postObject) {
       }
       //* данные по бюджетным заявкам
       if (sum.budgetSum.nomenclatureRows.length != 0 && !isMatch(postObject.nomenclature, 'Баланс')) {
-        const budgetRow = sum.budgetSum.nomenclatureRows
+        let budgetRow = sum.budgetSum.nomenclatureRows
         description.text += '**Бюджетные заявки**:' + postObject.lineBreak
         const i = 1
         budgetRow.forEach(function (row) {
-          const comma
+          let comma
           budgetRow.length > i ? comma = postObject.lineBreak : comma = ''
           description.text += formatterDate(row.actionDate).time + ': ' + row.sum + ' р. ' + row.comment + comma
           i += 1
@@ -897,8 +892,8 @@ function getParametr(postObject) {
 
 function getPeriod(postObject) {
   try {
-    const postObjectCopy
-    const date = {}
+    let postObjectCopy
+    let date = {}
     if (postObject.isFact || postObject.isTarget) {
       postObjectCopy = copyObject(postObject)
       postObjectCopy.type = 'Бюджет'
@@ -940,15 +935,15 @@ function getPeriod(postObject) {
 
 function getSum(postObject) {
   try {
-    const sum = {}
-    const totalSum = {}
-    const budgetSum = getTotalSum(postObject, postObject.dataAccount.current.budget)
-    const factSum = getTotalSum(postObject, postObject.dataAccount.current.fact)
+    let sum = {}
+    let totalSum = {}
+    let budgetSum = getTotalSum(postObject, postObject.dataAccount.current.budget)
+    let factSum = getTotalSum(postObject, postObject.dataAccount.current.fact)
     totalSum.totalRest = factSum.restSum + factSum.incomeSum - factSum.expenseSum
     totalSum.billBudgetRest = budgetSum.billSum - factSum.billSum
     totalSum.accountBudgetRest = budgetSum.accountSum - factSum.accountSum
     totalSum.nomenclatureBudgetRest = budgetSum.nomenclatureSum - factSum.nomenclatureSum
-    const transferCoef
+    let transferCoef
     if (isMatch(postObject.cfo, 'Илья')) {
       transferCoef = (70 / 100).toFixed(2)
     } else if (isMatch(postObject.cfo, 'Оксана')) {
@@ -1015,7 +1010,7 @@ function getTotalSum(postObject, array) {
    * @array - массив данных для расчета сумм
    */
   try {
-    const total = {}
+    let total = {}
     //* сумма по операции
     total.cashFlowSum = array.reduce(function (sum, array) {
       if (isMatch(array.cfo, postObject.cfo) && isMatch(array.cashFlow, postObject.cashFlow)) {
@@ -1164,7 +1159,7 @@ function getTotalSum(postObject, array) {
       return newArray
     }, {})
     total.groupBill = Object.keys(groupBill).map(function (k) {
-      const item = groupBill[k]
+      let item = groupBill[k]
       return {
         bill: item.bill,
         sum: item.sum
@@ -1184,13 +1179,12 @@ function isOldData(postObject) {
   try {
     //* добавление строк на страницу
     const targetArray = postObject.dataTrello.all
-    const searchRow = targetArray.reduce(function (row, array) {
+    return targetArray.reduce(function (row, array) {
       if (isMatch(array.actionId, postObject.actionId)) {
         row = true
       }
       return row
     }, false)
-    return searchRow
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
@@ -1266,8 +1260,8 @@ function updateParametr(postObject) {
    * */
   try {
     const ss = postObject.parametrSheetOpen
-    const indexRow
-    const value
+    let indexRow
+    let value
     const postObjectCopy = copyObject(postObject)
     if (postObject.isCurrFact) {
       postObjectCopy.type = 'Факт'
@@ -1303,16 +1297,11 @@ function updateRowByActionId(postObject) {
    * @postObject - данные реквеста
    * */
   try {
-    const ss
-    const sourceData
-    const sourceRows
-    const ts
-    const targetData
-    const targetRowIndex = []
+    let targetRowIndex = []
     //* обновление данных на листе источнике
-    ss = postObject.trelloOpen
-    sourceData = postObject.dataTrello.all
-    sourceRows = sourceData.filter(function (row) {
+    let ss = postObject.trelloOpen
+    let sourceData = postObject.dataTrello.all
+    let sourceRows = sourceData.filter(function (row) {
       return row.actionId == postObject.actionId
     })
     sourceRows.forEach(function (row) {
@@ -1321,8 +1310,8 @@ function updateRowByActionId(postObject) {
       ss.getRange(row.indexRow, 7).setValue(postObject.comment)
     })
     //* обновление данных на листе учета
-    ts = postObject.accountOpen
-    targetData = postObject.accountArray
+    let ts = postObject.accountOpen
+    let targetData = postObject.accountArray
     targetData.reduce(function (row, array, index) {
       if (isMatch(array[10], postObject.actionId)) {
         row = index + 1
@@ -1358,7 +1347,7 @@ function updateTarget(postObject) {
    * */
   try {
     const ss = postObject.goalsSheetOpen
-    const indexRow
+    let indexRow
     indexRow = getTarget(postObject).item.indexRow
     ss.getRange(indexRow, 5).setValue(formatterDate().timestamp)
     ss.getRange(indexRow, 7).setValue('closed')
@@ -1369,9 +1358,9 @@ function updateTarget(postObject) {
 
 function updateTrelloData(postObject) {
   try {
-    const pushBufferRow
-    const pushAccountRow
-    const insertdate
+    let pushBufferRow
+    let pushAccountRow
+    let insertdate
     //* вставка значений в буфер
     const ss = postObject.trelloOpen
     pushBufferRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
@@ -1406,10 +1395,10 @@ function updateTargetList(postObject) {
   try {
     const targetItem = getAllTarget(postObject).item
     const ssTargetOpen = postObject.targetOpen
-    const targetColumn
-    const targetSumOld
-    const targetSumNew
-    const actionSum
+    let targetColumn
+    let targetSumOld
+    let targetSumNew
+    let actionSum
     if (isMatch(postObject.bill, 'Накопления')) {
       if (isMatch(postObject.account, 'Цели')) {
         targetColumn = 18
@@ -1455,8 +1444,8 @@ function getAllData(postObject, source) {
    * @source - истоник: trello, account
    */
   try {
-    const dataStructure
-    const data
+    let dataStructure
+    let data
     if (isMatch(source, 'trello')) {
       dataStructure = 1
       data = postObject.trelloArray
@@ -1464,7 +1453,7 @@ function getAllData(postObject, source) {
       dataStructure = 2
       data = postObject.accountArray
     }
-    const object = {}
+    let object = {}
     object.all = []
     object.current = {}
     data.reduce(function (row, array, index) {
@@ -1520,7 +1509,7 @@ function getAllData(postObject, source) {
 
 function getPreviousFact(postObject) {
   try {
-    const sum = {}
+    let sum = {}
     const postObjectPrev1 = copyObject(postObject)
     postObjectPrev1.factPeriod = postObject.factPeriod1
     postObjectPrev1.dataAccount = getAllData(postObjectPrev1, 'account')
@@ -1538,13 +1527,12 @@ function getPreviousFact(postObject) {
 function isUser(postData) {
   try {
     const botUser = ['5e2b5f3f409c544ebdb1b9d4']
-    const isUser = botUser.reduce(function (row, array) {
+    return botUser.reduce(function (row, array) {
       if (isMatch(array, postData.action.memberCreator.id)) {
         row = false
       }
       return row
     }, true)
-    return isUser
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
@@ -1553,13 +1541,12 @@ function isUser(postData) {
 function isValidateAction(postData) {
   try {
     const actionType = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
-    const isValidateAction = actionType.reduce(function (row, array) {
+    return actionType.reduce(function (row, array) {
       if (isMatch(postData.action.type, array)) {
         row = true
       }
       return row
     }, false)
-    return isValidateAction
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
