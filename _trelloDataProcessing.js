@@ -574,8 +574,8 @@ function getAccountingItem(postObject) {
       postObject.cardLabelColor = ''
     }
     let object = {}
-    object.item = {}
     object.array = array.reduce(function (row, array, index) {
+      row = []
       if (index != 0) {
         let data = {}
         data.id = array[0]
@@ -596,7 +596,7 @@ function getAccountingItem(postObject) {
         row = array
       }
       return row
-    })
+    }, {})
     addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     return object
   } catch (e) {
