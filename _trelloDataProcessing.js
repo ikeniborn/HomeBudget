@@ -5,7 +5,7 @@ function addErrorItem(error) {
   try {
     const globalVariable = getGlobalVariable()
     const errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
-    errorOpen.appendRow([formatterDate().timestamp, '', '', error])
+    errorOpen.appendRow([formatterDate().timestamp, '', '', objectToString(error)])
   } catch (e) {
     console.error(arguments.callee.name + ': ' + e)
   }
@@ -15,7 +15,7 @@ function objectToString(data) {
   try {
     return JSON.stringify(data)
   } catch (e) {
-    addErrorItem(arguments.callee.name + ': ' + e)
+    console.error(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -941,6 +941,7 @@ function getSum(postObject) {
     sum.budgetSum = budgetSum
     sum.factSum = factSum
     sum.totalSum = totalSum
+    addErrorItem(arguments.callee.name + ': ' + sum)
     return sum
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
@@ -1144,6 +1145,7 @@ function getTotalSum(postObject, array) {
     total.nomenclatureRows = array.filter(function (array) {
       return isMatch(array.cfo, postObject.cfo) && isMatch(array.bill, postObject.bill) && isMatch(array.account, postObject.account) && isMatch(array.nomenclature, postObject.nomenclature) && isMatch(array.cashFlow, postObject.cashFlow)
     })
+    addErrorItem(arguments.callee.name + ': ' + total)
     return total
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
