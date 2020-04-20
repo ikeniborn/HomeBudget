@@ -211,7 +211,7 @@ function deleteError(postObject) {
 
 function getPostObject(postData) {
   try {
-    let object = Object.assign({}, getGlobalVariable())
+    var object = Object.assign({}, getGlobalVariable())
     object.webHookDate = formatterDate().timestamp
     object.actionType = postData.action.type
     object.webHookActionId = postData.action.id
