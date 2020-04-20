@@ -987,108 +987,64 @@ function getTotalSum(postObject, array) {
    */
   try {
     let total = {}
-    //* сумма по операции
-    total.cashFlowSum = array.reduce(function (sum, array) {
-      if (isMatch(array.cfo, postObject.cfo) && isMatch(array.cashFlow, postObject.cashFlow)) {
-        sum += array.sum
-      }
-      return sum
-    }, 0)
-    //* сумма по счету
-    total.billSum = array.reduce(function (sum, array) {
-      if (isMatch(array.cfo, postObject.cfo) && isMatch(array.bill, postObject.bill) && isMatch(array.cashFlow, postObject.cashFlow)) {
-        sum += array.sum
-      }
-      return sum
-    }, 0)
-    //* сумма по статье
-    total.accountSum = array.reduce(function (sum, array) {
-      if (isMatch(array.cfo, postObject.cfo) && isMatch(array.bill, postObject.bill) && isMatch(array.account, postObject.account) && isMatch(array.cashFlow, postObject.cashFlow)) {
-        sum += array.sum
-      }
-      return sum
-    }, 0)
-    //* сумма по номенклатуре
-    total.nomenclatureSum = array.reduce(function (sum, array) {
-      if (isMatch(array.cfo, postObject.cfo) && isMatch(array.bill, postObject.bill) && isMatch(array.account, postObject.account) && isMatch(array.nomenclature, postObject.nomenclature) && isMatch(array.cashFlow, postObject.cashFlow)) {
-        sum += array.sum
-      }
-      return sum
-    }, 0)
-    //* сумма по операции пополнение
-    total.incomeSum = array.reduce(function (sum, array) {
-      if (isMatch(array.cfo, postObject.cfo) && isMatch(array.cashFlow, 'Пополнение')) {
-        sum += array.sum
-      }
-      return sum
-    }, 0)
-    //* сумма по операции списание
-    total.expenseSum = array.reduce(function (sum, array) {
-      if (isMatch(array.cfo, postObject.cfo) && isMatch(array.cashFlow, 'Списание')) {
-        sum += array.sum
-      }
-      return sum
-    }, 0)
-    //* сумма по операции остатки
-    total.restSum = array.reduce(function (sum, array) {
-      if (isMatch(array.cfo, postObject.cfo) && isMatch(array.cashFlow, 'Остатки')) {
-        sum += array.sum
-      }
-      return sum
-    }, 0)
-    //* сумма по статье затраты
-    total.costSum = array.reduce(function (sum, array) {
-      if (isMatch(array.cfo, postObject.cfo) && isMatch(array.cashFlow, 'Списание') && isMatch(array.bill, 'Затраты')) {
-        sum += array.sum
-      }
-      return sum
-    }, 0)
-    //* сумма по статье накопления в расходах
-    total.accumulationBillExpenseSum = array.reduce(function (sum, array) {
-      if (isMatch(array.cfo, postObject.cfo) && isMatch(array.cashFlow, 'Списание') && isMatch(array.bill, 'Накопления')) {
-        sum += array.sum
-      }
-      return sum
-    }, 0)
-    //* сумма по статье переводы в расходах
-    total.transferBillExpenseSum = array.reduce(function (sum, array) {
-      if (isMatch(array.cfo, postObject.cfo) && isMatch(array.cashFlow, 'Списание') && isMatch(array.bill, 'Переводы')) {
-        sum += array.sum
-      }
-      return sum
-    }, 0)
-    //* сумма по статье накопления в приходах
-    total.accumulationBillIncomeSum = array.reduce(function (sum, array) {
-      if (isMatch(array.cfo, postObject.cfo) && isMatch(array.cashFlow, 'Пополнение') && isMatch(array.bill, 'Накопления')) {
-        sum += array.sum
-      }
-      return sum
-    }, 0)
-    //* сумма по номенклатуре накопления в приходах
-    total.accumulationNomenclatureIncomeSum = array.reduce(function (sum, array) {
-      if (isMatch(array.cfo, postObject.cfo) && isMatch(array.cashFlow, 'Пополнение') && isMatch(array.nomenclature, 'Накопления')) {
-        sum += array.sum
-      }
-      return sum
-    }, 0)
-    //* сумма по номенклатуре накопления в расходах
-    total.accumulationNomenclatureExpenseSum = array.reduce(function (sum, array) {
-      if (isMatch(array.cfo, postObject.cfo) && isMatch(array.cashFlow, 'Списание') && isMatch(array.nomenclature, 'Накопления')) {
-        sum += array.sum
-      }
-      return sum
-    }, 0)
-    //* сумма по переводу на счет семьи
-    total.transferToFamilyAccountSum = array.reduce(function (sum, array) {
-      if (isMatch(array.cfo, postObject.cfo) && isMatch(array.cashFlow, 'Списание') && isMatch(array.nomenclature, 'Перевод на счет Семья')) {
-        sum += array.sum
-      }
-      return sum
-    }, 0)
-    //* сумма по зарплате
-    total.salarySum = array.reduce(function (sum, array) {
-      if (isMatch(array.cfo, postObject.cfo) && isMatch(array.cashFlow, 'Пополнение') && isMatch(array.nomenclature, 'Зарплата')) {
-        sum += array.sum
+    total = array.reduce(function (sum, array) {
+      sum = {}
+      if (isMatch(array.cfo, postObject.cfo)) {
+        if (isMatch(array.cashFlow, postObject.cashFlow)) {
+          //* сумма по операции
+          sum.cashFlowSum += array.sum
+          if (isMatch(array.bill, postObject.bill)) {
+            //* сумма по счету
+            sum.billSum += array.sum
+            if (isMatch(array.account, postObject.account)) {
+              //* сумма по статье
+              total.accountSum += array.sum
+              if (isMatch(array.nomenclature, postObject.nomenclature)) {
+                //* сумма по номенклатуре
+                sum.nomenclatureSum += array.sum
+              }
+            }
+          }
+        }
+        if (isMatch(array.cashFlow, 'Пополнение')) {
+          //* сумма по операции пополнение
+          sum.incomeSum += array.sum
+          if (isMatch(array.bill, 'Накопления')) {
+            //* сумма по статье накопления в приходах
+            sum.accumulationBillIncomeSum += array.sum
+          }
+          if (isMatch(array.nomenclature, 'Накопления')) {
+            //* сумма по номенклатуре накопления в приходах
+            sum.accumulationNomenclatureIncomeSum += array.sum
+          }
+          if (isMatch(array.nomenclature, 'Зарплата')) {
+            //* сумма по зарплате
+            sum.salarySum += array.sum
+          }
+        } else if (isMatch(array.cashFlow, 'Списание')) {
+          //* сумма по операции списание
+          sum.expenseSum += array.sum
+          if (isMatch(array.bill, 'Затраты')) {
+            //* сумма по статье затраты
+            sum.costSum += array.sum
+          } else if (isMatch(array.bill, 'Накопления')) {
+            //* сумма по статье накопления в расходах
+            sum.accumulationBillExpenseSum += array.sum
+          } else if (isMatch(array.bill, 'Переводы')) {
+            //* сумма по статье переводы в расходах
+            sum.transferBillExpenseSum += array.sum
+          }
+          if (isMatch(array.nomenclature, 'Накопления')) {
+            //* сумма по номенклатуре накопления в расходах
+            sum.accumulationNomenclatureExpenseSum += array.sum
+          } else if (isMatch(array.nomenclature, 'Перевод на счет Семья')) {
+            //* сумма по переводу на счет семьи
+            sum.transferToFamilyAccountSum += array.sum
+          }
+        } else if (isMatch(array.cashFlow, 'Остатки')) {
+          //* сумма по операции остатки
+          sum.restSum += array.sum
+        }
       }
       return sum
     }, 0)
