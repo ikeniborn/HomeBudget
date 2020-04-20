@@ -575,7 +575,6 @@ function getAccountingItem(postObject) {
     }
     let object = {}
     object.array = array.reduce(function (row, array, index) {
-      row = []
       if (index != 0) {
         let data = {}
         data.id = array[0]
