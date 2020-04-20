@@ -3,8 +3,8 @@
 
 function addErrorItem(error) {
   try {
-    var globalVariable = getGlobalVariable()
-    var errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
+    let globalVariable = getGlobalVariable()
+    let errorOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameError)
     errorOpen.appendRow([formatterDate().timestamp, '', '', error])
   } catch (e) {
     console.error(arguments.callee.name + ': ' + e)
@@ -21,10 +21,10 @@ function objectToString(data) {
 
 function addLog(postData) {
   try {
-    var globalVariable = getGlobalVariable()
-    var sourceOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameLog)
-    var startDate = getPreviousDate(180)
-    var sourceArray = getGoogleSheetValues(sourceOpen).reduce(function (row, array, index) {
+    let globalVariable = getGlobalVariable()
+    let sourceOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameLog)
+    let startDate = getPreviousDate(180)
+    let sourceArray = getGoogleSheetValues(sourceOpen).reduce(function (row, array, index) {
       if (index != 0) {
         if (array[0] >= startDate) {
           row.push(array)
@@ -32,7 +32,7 @@ function addLog(postData) {
       }
       return row
     }, [])
-    var isNewAction = sourceArray.reduce(function (row, array) {
+    let isNewAction = sourceArray.reduce(function (row, array) {
       if (isMatch(postData.action.id, array[2])) {
         row = false
       }
@@ -105,7 +105,7 @@ function isMatch(where, what) {
 
 function getYMD(date) {
   try {
-    var object = {}
+    let object = {}
     object.y = new Date(date).getFullYear()
     object.m = new Date(date).getMonth() + 1
     object.d = new Date(date).getDate()
@@ -133,10 +133,9 @@ function getPreviousDate(n) {
    * n - количество дней
    */
   try {
-    var endDate = new Date()
-    var startDate = new Date()
-    startDate.setDate(endDate.getDate() - n)
-    return startDate
+    let endDate = new Date()
+    let startDate = new Date()
+    return startDate.setDate(endDate.getDate() - n)
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
@@ -144,8 +143,8 @@ function getPreviousDate(n) {
 
 function encodeData(data, symbol) {
   try {
-    var encodeSymbol = encodeURIComponent(symbol)
-    var encodeData = encodeURIComponent(data)
+    let encodeSymbol = encodeURIComponent(symbol)
+    let encodeData = encodeURIComponent(data)
     if (isMatch(encodeData, encodeSymbol)) {
       return data.replace(symbol, encodeURIComponent(symbol))
     } else {
@@ -181,8 +180,8 @@ function encodeData(data, symbol) {
 
 function deleteLog(postObject) {
   try {
-    var sourceOpen = postObject.logOpen
-    var startDate = getPreviousDate(90)
+    let sourceOpen = postObject.logOpen
+    let startDate = getPreviousDate(90)
     var deleteArrya = []
     getGoogleSheetValues(sourceOpen).reduce(function (row, array, index) {
       if (index > 0) {
@@ -208,8 +207,8 @@ function deleteLog(postObject) {
 
 function deleteError(postObject) {
   try {
-    var errorOpen = postObject.errorOpen
-    var startDate = getPreviousDate(1)
+    let errorOpen = postObject.errorOpen
+    let startDate = getPreviousDate(1)
     var deleteArrya = []
     postObject.errorArray.reduce(function (row, array, index) {
       if (index > 0) {
@@ -400,24 +399,24 @@ function addTarget(postObject) {
    * @postObject - входные параметра запроса
    * */
   try {
-    var ss = postObject.goalsSheetOpen
-    var array = getTarget(postObject).array
-    var goal = getTarget(postObject).item.goal
-    var cfo = getFinancialСenter(postObject).item.cfo
-    var objGoal = postObject.listName.toLowerCase().replace(cfo.toLowerCase(), '').trim()
-    var newGoal = objGoal[0].toUpperCase() + objGoal.slice(1)
-    var goalArray = array.map(function (array) {
+    let ss = postObject.goalsSheetOpen
+    let array = getTarget(postObject).array
+    let goal = getTarget(postObject).item.goal
+    let cfo = getFinancialСenter(postObject).item.cfo
+    let objGoal = postObject.listName.toLowerCase().replace(cfo.toLowerCase(), '').trim()
+    let newGoal = objGoal[0].toUpperCase() + objGoal.slice(1)
+    let goalArray = array.map(function (array) {
       return array.name
     })
-    var ssMvz = postObject.costСenterSheetOpen
-    var postObjectCopy = copyObject(postObject)
+    let ssMvz = postObject.costСenterSheetOpen
+    let postObjectCopy = copyObject(postObject)
     postObjectCopy.comment = objGoal
     postObjectCopy.cfo = cfo
-    var arrayMvz = getCostСenter(postObjectCopy).array
-    var tagMvz = objGoal.toLowerCase().replace(/\s+/g, '').trim()
-    var newIdMvz = arrayMvz.length + 1
+    let arrayMvz = getCostСenter(postObjectCopy).array
+    let tagMvz = objGoal.toLowerCase().replace(/\s+/g, '').trim()
+    let newIdMvz = arrayMvz.length + 1
     if (goal == undefined) {
-      var newId = goalArray.length + 1
+      let newId = goalArray.length + 1
       ss.appendRow([newId, postObject.listName, newGoal, cfo, formatterDate().timestamp, postObject.listId, 'actual'])
       ssMvz.appendRow([newIdMvz, objGoal, tagMvz])
       postObject.goalsArray = getGoogleSheetValues(postObject.goalsSheetOpen)
