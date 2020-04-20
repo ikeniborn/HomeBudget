@@ -948,8 +948,6 @@ function getSum(postObject) {
   }
 }
 
-
-
 function getTarget(postObject) {
   try {
     const array = postObject.goalsArray
