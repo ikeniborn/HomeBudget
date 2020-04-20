@@ -155,29 +155,6 @@ function encodeData(data, symbol) {
   }
 }
 
-// function addErrorArray(postObject) {
-//   try {
-//     if (postObject.error.length > 0) {
-//       const errorOpen = postObject.errorOpen
-//       const errorText = ''
-//       const i = 0
-//       const errorArray = postObject.error
-//       const errorArrayLenght = postObject.error.length
-//       errorArray.map(function (row) {
-//         i += 1
-//         errorText += row
-//         errorArrayLenght == i ? errorText += '' : errorText += '\n'
-//         return row
-//       })
-//       errorOpen.appendRow([postObject.webHookDate, postObject.actionType, postObject.webHookActionId, errorText])
-//       const subject = postObject.webHookDate + ' - ' + postObject.actionType
-//       MailApp.sendEmail('ikeniborn@gmail.com', subject, errorText)
-//     }
-//   } catch (e) {
-//     addErrorItem(arguments.callee.name + ': ' + e)
-//   }
-// }
-
 function deleteLog(postObject) {
   try {
     const sourceOpen = postObject.logOpen
@@ -748,8 +725,8 @@ function getCostСenter(postObject) {
 
 function getDescription(postObject) {
   try {
-    const description = {}
-    const sum = getSum(postObject)
+    let description = {}
+    let sum = getSum(postObject)
     description.text = '*Дата обновления*: ' + formatterDate(postObject.actionDate).time + postObject.lineBreak
     if (postObject.isFact || postObject.isBudget) {
       if (postObject.isFact) {
