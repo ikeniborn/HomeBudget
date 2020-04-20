@@ -576,22 +576,22 @@ function getAccountingItem(postObject) {
     let object = {}
     object.array = array.reduce(function (row, array, index) {
       if (index != 0) {
-        let data = {}
-        data.id = array[0]
-        data.cashFlow = array[1]
-        data.bill = array[2]
-        data.account = array[3]
-        data.nomenclature = array[4]
-        data.budget = array[5]
-        data.fact = array[6]
-        data.target = array[7]
-        data.color = array[8]
-        row.push(data)
+        let object = {}
+        object.id = array[0]
+        object.cashFlow = array[1]
+        object.bill = array[2]
+        object.account = array[3]
+        object.nomenclature = array[4]
+        object.budget = array[5]
+        object.fact = array[6]
+        object.target = array[7]
+        object.color = array[8]
+        row.push(object)
       }
       return row
     }, [])
     object.item = object.array.reduce(function (row, array) {
-      if (isMatch(postObject.cardName, array[4]) && isMatch(postObject.cardLabelColor, array[8])) {
+      if (isMatch(postObject.cardName, array.nomenclature) && isMatch(postObject.cardLabelColor, array.color)) {
         row = array
       }
       return row
