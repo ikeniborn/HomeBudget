@@ -710,12 +710,13 @@ function getCostСenter(postObject) {
     object.item = object.array.reduce(function (row, array) {
       if (isMatch(postObject.comment, array.tag)) {
         row = array
+      } else {
+        row.id = 0
+        row.mvz = postObject.cfo
+        row.tag = postObject.cfo
       }
       return row
     }, {})
-    if (object.item === {}) {
-      object.item.mvz = postObject.cfo
-    }
     return object
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
