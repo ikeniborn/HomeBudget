@@ -713,7 +713,7 @@ function getCostСenter(postObject) {
       }
       return row
     }, {})
-    if (object.item.mvz.length == 0) {
+    if (object.item === {}) {
       object.item.mvz = postObject.cfo
     }
     return object
