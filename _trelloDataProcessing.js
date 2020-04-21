@@ -862,7 +862,7 @@ function getParametr(postObject) {
 function getPeriod(postObject) {
   try {
     let postObjectCopy
-    const date = {}
+    let date
     if (postObject.isFact || postObject.isTarget) {
       postObjectCopy = copyObject(postObject)
       postObjectCopy.type = 'Бюджет'
@@ -976,9 +976,7 @@ function getTotalSum(postObject, array) {
    * @array - массив данных для расчета сумм
    */
   try {
-    let total = {}
-    total = array.reduce(function (sum, array) {
-      sum = {}
+    const total = array.reduce(function (sum, array) {
       if (isMatch(array.cfo, postObject.cfo)) {
         if (isMatch(array.cashFlow, postObject.cashFlow)) {
           //* сумма по операции
@@ -1037,7 +1035,7 @@ function getTotalSum(postObject, array) {
         }
       }
       return sum
-    }, 0)
+    }, {})
     //* данные по статьям с агрегацией
     const groupAccount = array.reduce(function (newArray, array) {
       if (isMatch(array.cfo, postObject.cfo)) {
@@ -1062,11 +1060,13 @@ function getTotalSum(postObject, array) {
     total.groupAccount.sort(function (a, b) {
       const nameA = a.bill.toLowerCase()
       const nameB = b.bill.toLowerCase()
-      if (nameA < nameB) // сортируем строки по возрастанию
+      if (nameA < nameB) { // сортируем строки по возрастанию
         return -1
-      if (nameA > nameB)
+      } else if (nameA > nameB) {
         return 1
-      return 0 // Никакой сортировки
+      } else {
+        return 0
+      } // Никакой сортировки
     })
     //* данные по счету с агрегацией
     const groupBill = array.reduce(function (newArray, array) {
