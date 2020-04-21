@@ -865,7 +865,7 @@ function getParametr(postObject) {
 
 function getPeriod(postObject) {
   try {
-    let date = {}
+    const date = {}
     if (postObject.isFact || postObject.isTarget) {
       const postObjectCopy = copyObject(postObject)
       postObjectCopy.type = 'Бюджет'
