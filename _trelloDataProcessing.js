@@ -579,17 +579,17 @@ function getAccountingItem(postObject) {
     const object = {}
     object.array = array.reduce(function (row, array, index) {
       if (index != 0) {
-        const subObject = {}
-        subObject.id = array[0]
-        subObject.cashFlow = array[1]
-        subObject.bill = array[2]
-        subObject.account = array[3]
-        subObject.nomenclature = array[4]
-        subObject.budget = array[5]
-        subObject.fact = array[6]
-        subObject.target = array[7]
-        subObject.color = array[8]
-        row.push(subObject)
+        const object = {}
+        object.id = array[0]
+        object.cashFlow = array[1]
+        object.bill = array[2]
+        object.account = array[3]
+        object.nomenclature = array[4]
+        object.budget = array[5]
+        object.fact = array[6]
+        object.target = array[7]
+        object.color = array[8]
+        row.push(object)
       }
       return row
     }, [])
@@ -612,32 +612,32 @@ function getAllTarget(postObject) {
     const object = {}
     object.array = array.reduce(function (row, array, index) {
       if (index != 0) {
-        const subObject = {}
-        subObject.timestamp = array[0]
-        subObject.goal = array[1]
-        subObject.cfo = array[2]
-        subObject.startDate = new Date(array[3])
-        subObject.duration = +array[4]
-        subObject.cost = +array[5]
-        subObject.inflation = +array[6]
-        subObject.isIis = +array[7]
-        subObject.restCost = +array[8]
-        subObject.endDate = new Date(array[9])
-        subObject.restDay = +array[10]
-        subObject.complete = array[11]
-        subObject.budget = +array[12]
-        subObject.newCost = +array[13]
-        subObject.monthDeductionSum = +array[14]
-        subObject.currentListedSum = +array[15]
-        subObject.targetSum = +array[17]
-        subObject.depositSum = +array[18]
-        subObject.exchangeSum = +array[19]
-        subObject.iisSum = +array[20]
-        subObject.disbursedFunds = +array[21]
-        subObject.inStock = +array[22]
-        subObject.completePersent = +array[23]
-        subObject.indexRow = index + 1
-        row.push(subObject)
+        const object = {}
+        object.timestamp = array[0]
+        object.goal = array[1]
+        object.cfo = array[2]
+        object.startDate = new Date(array[3])
+        object.duration = +array[4]
+        object.cost = +array[5]
+        object.inflation = +array[6]
+        object.isIis = +array[7]
+        object.restCost = +array[8]
+        object.endDate = new Date(array[9])
+        object.restDay = +array[10]
+        object.complete = array[11]
+        object.budget = +array[12]
+        object.newCost = +array[13]
+        object.monthDeductionSum = +array[14]
+        object.currentListedSum = +array[15]
+        object.targetSum = +array[17]
+        object.depositSum = +array[18]
+        object.exchangeSum = +array[19]
+        object.iisSum = +array[20]
+        object.disbursedFunds = +array[21]
+        object.inStock = +array[22]
+        object.completePersent = +array[23]
+        object.indexRow = index + 1
+        row.push(object)
       }
       return row
     }, [])
@@ -699,10 +699,10 @@ function getCostСenter(postObject) {
     const object = {}
     object.array = array.reduce(function (row, array, index) {
       if (index != 0) {
-        const subObject = {}
-        subObject.id = array[0]
-        subObject.mvz = array[1]
-        subObject.tag = array[2]
+        const object = {}
+        object.id = array[0]
+        object.mvz = array[1]
+        object.tag = array[2]
         row.push(object)
       }
       return row
@@ -816,9 +816,9 @@ function getFinancialСenter(postObject) {
     const object = {}
     object.array = array.reduce(function (row, array, index) {
       if (index != 0) {
-        const subObject = {}
-        subObject.id = array[0]
-        subObject.cfo = array[1]
+        const object = {}
+        object.id = array[0]
+        object.cfo = array[1]
         row.push(object)
       }
       return row
@@ -841,18 +841,18 @@ function getParametr(postObject) {
     const object = {}
     object.array = array.reduce(function (row, array, index) {
       if (index != 0) {
-        const subObject = {}
-        subObject.id = array[0]
-        subObject.type = array[1]
-        subObject.cfo = array[2]
-        subObject.value = new Date(array[3])
-        subObject.indexRow = index + 1
+        const object = {}
+        object.id = array[0]
+        object.type = array[1]
+        object.cfo = array[2]
+        object.value = new Date(array[3])
+        object.indexRow = index + 1
         row.push(object)
       }
       return row
     }, [])
     object.item = object.array.reduce(function (row, array) {
-      if (isMatch(postObject.cfo, row.cfo) && isMatch(postObject.type, row.type)) {
+      if (isMatch(postObject.cfo, array.cfo) && isMatch(postObject.type, array.type)) {
         row = array
       }
       return row
@@ -865,7 +865,7 @@ function getParametr(postObject) {
 
 function getPeriod(postObject) {
   try {
-    var date = {}
+    const date = {}
     if (postObject.isFact || postObject.isTarget) {
       const postObjectCopy = copyObject(postObject)
       postObjectCopy.type = 'Бюджет'
@@ -950,14 +950,14 @@ function getTarget(postObject) {
     const object = {}
     object.array = array.reduce(function (row, array, index) {
       if (index != 0) {
-        const subObject = {}
-        subObject.id = array[0]
-        subObject.listName = array[1]
-        subObject.goal = array[2]
-        subObject.cfo = array[3]
-        subObject.listId = array[5]
-        subObject.status = array[6]
-        subObject.indexRow = index + 1
+        const object = {}
+        object.id = array[0]
+        object.listName = array[1]
+        object.goal = array[2]
+        object.cfo = array[3]
+        object.listId = array[5]
+        object.status = array[6]
+        object.indexRow = index + 1
         row.push(object)
       }
       return row
@@ -1379,41 +1379,41 @@ function getAllData(postObject, source) {
     const object = {}
     object.all = data.reduce(function (row, array, index) {
       if (index != 0) {
-        const subObject = {}
+        const object = {}
         if ([1].indexOf(dataStructure) !== -1) {
           //* данные из буфера трелло
-          subObject.actionDate = array[0]
-          subObject.period = array[1]
-          subObject.ymd = getYMD(array[1]).ymd
-          subObject.cfo = array[2]
-          subObject.mvz = array[3]
-          subObject.cashFlow = null
-          subObject.bill = null
-          subObject.account = null
-          subObject.nomenclature = array[4]
-          subObject.sum = array[5]
-          subObject.comment = array[6]
-          subObject.actionId = array[7]
-          subObject.type = array[8]
-          subObject.indexRow = index + 1
+          object.actionDate = array[0]
+          object.period = array[1]
+          object.ymd = getYMD(array[1]).ymd
+          object.cfo = array[2]
+          object.mvz = array[3]
+          object.cashFlow = null
+          object.bill = null
+          object.account = null
+          object.nomenclature = array[4]
+          object.sum = array[5]
+          object.comment = array[6]
+          object.actionId = array[7]
+          object.type = array[8]
+          object.indexRow = index + 1
         } else if ([2].indexOf(dataStructure) !== -1) {
           //* данные из учета
-          subObject.actionDate = array[0]
-          subObject.period = array[1]
-          subObject.ymd = getYMD(row.period).ymd
-          subObject.cfo = array[2]
-          subObject.mvz = array[3]
-          subObject.cashFlow = array[4]
-          subObject.bill = array[5]
-          subObject.account = array[6]
-          subObject.nomenclature = array[7]
-          subObject.sum = array[8]
-          subObject.comment = array[9]
-          subObject.actionId = array[10]
-          subObject.type = array[11]
-          subObject.indexRow = index + 1
+          object.actionDate = array[0]
+          object.period = array[1]
+          object.ymd = getYMD(row.period).ymd
+          object.cfo = array[2]
+          object.mvz = array[3]
+          object.cashFlow = array[4]
+          object.bill = array[5]
+          object.account = array[6]
+          object.nomenclature = array[7]
+          object.sum = array[8]
+          object.comment = array[9]
+          object.actionId = array[10]
+          object.type = array[11]
+          object.indexRow = index + 1
         }
-        row.push(subObject)
+        row.push(object)
       }
       return row
     }, [])
