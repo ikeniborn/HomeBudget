@@ -707,14 +707,13 @@ function getCostСenter(postObject) {
       }
       return row
     }, [])
-    if (isValidString(postObject.comment)) {
-      object.item = object.array.reduce(function (row, array) {
-        if (isMatch(postObject.comment, array.tag)) {
-          row = array
-        }
-        return row
-      }, {})
-    } else {
+    object.item = object.array.reduce(function (row, array) {
+      if (isMatch(postObject.comment, array.tag)) {
+        row = array
+      }
+      return row
+    }, {})
+    if (object.item.mvz.length == 0) {
       object.item.mvz = postObject.cfo
     }
     return object
