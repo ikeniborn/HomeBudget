@@ -1480,6 +1480,9 @@ function doPost(e) {
   try {
     const postData = JSON.parse(e.postData.contents)
     const isNewAction = addLog(postData)
+    addErrorItem('1 : ' + isNewAction)
+    addErrorItem('1 : ' + isValidateAction(postData))
+    addErrorItem('1 : ' + isUser(postData))
     if (isValidateAction(postData) && isUser(postData) && isNewAction) {
       var postObject = getPostObject(postData)
       if (isMatch(postObject.actionType, 'commentCard')) {
