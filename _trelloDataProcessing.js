@@ -13,7 +13,8 @@ function addErrorItem(error) {
 
 function objectToString(data) {
   try {
-    return JSON.stringify(data)
+    const object = JSON.stringify(data)
+    return object
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
@@ -49,7 +50,8 @@ function addLog(postData) {
 
 function openGoogleSheet(sheetID, sheetName) {
   try {
-    return SpreadsheetApp.openById(sheetID).getSheetByName(sheetName)
+    const object = SpreadsheetApp.openById(sheetID).getSheetByName(sheetName)
+    return object
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
@@ -57,7 +59,8 @@ function openGoogleSheet(sheetID, sheetName) {
 
 function getGoogleSheetValues(openSheet) {
   try {
-    return openSheet.getDataRange().getValues()
+    const object = openSheet.getDataRange().getValues()
+    return object
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
@@ -212,7 +215,7 @@ function deleteError(postObject) {
 
 function getPostObject(postData) {
   try {
-    var object = Object.assign({}, getGlobalVariable())
+    const object = Object.assign({}, getGlobalVariable())
     object.webHookDate = formatterDate().timestamp
     object.actionType = postData.action.type
     object.webHookActionId = postData.action.id
