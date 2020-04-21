@@ -865,10 +865,9 @@ function getParametr(postObject) {
 
 function getPeriod(postObject) {
   try {
-    let postObjectCopy
-    const date = {}
+    let date = {}
     if (postObject.isFact || postObject.isTarget) {
-      postObjectCopy = copyObject(postObject)
+      const postObjectCopy = copyObject(postObject)
       postObjectCopy.type = 'Бюджет'
       date.factPeriod = getParametr(postObject).item.value
       date.budgetPeriod = getParametr(postObjectCopy).item.value
@@ -877,7 +876,7 @@ function getPeriod(postObject) {
       date.budgetPeriod2 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 1, 1)
       date.budgetPeriod3 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 2, 1)
     } else if (postObject.isBudget) {
-      postObjectCopy = copyObject(postObject)
+      const postObjectCopy = copyObject(postObject)
       postObjectCopy.type = 'Факт'
       date.factPeriod = getParametr(postObjectCopy).item.value
       date.budgetPeriod = getParametr(postObject).item.value
@@ -1480,9 +1479,6 @@ function doPost(e) {
   try {
     const postData = JSON.parse(e.postData.contents)
     const isNewAction = addLog(postData)
-    addErrorItem('1 : ' + isNewAction)
-    addErrorItem('1 : ' + isValidateAction(postData))
-    addErrorItem('1 : ' + isUser(postData))
     if (isValidateAction(postData) && isUser(postData) && isNewAction) {
       var postObject = getPostObject(postData)
       if (isMatch(postObject.actionType, 'commentCard')) {
