@@ -509,7 +509,7 @@ function deleteEmptyRow(postObject) {
 
 function deleteRowByActionId(postObject) {
   try {
-    let sum = 0
+    let sum
     //* удаление данных на листе источнике
     const ss = postObject.trelloOpen
     const sourceData = postObject.dataTrello.all
@@ -862,7 +862,7 @@ function getParametr(postObject) {
 function getPeriod(postObject) {
   try {
     let postObjectCopy
-    let date
+    const date = {}
     if (postObject.isFact || postObject.isTarget) {
       postObjectCopy = copyObject(postObject)
       postObjectCopy.type = 'Бюджет'
