@@ -1379,7 +1379,7 @@ function getAllDataAccount(postObject) {
         //* данные из учета
         object.actionDate = array[0]
         object.period = array[1]
-        object.ymd = getYMD(row.period).ymd
+        object.ymd = getYMD(array[1]).ymd
         object.cfo = array[2]
         object.mvz = array[3]
         object.cashFlow = array[4]
