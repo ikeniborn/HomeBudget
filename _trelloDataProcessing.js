@@ -1310,6 +1310,7 @@ function updateTrelloData(postObject) {
     }
     //* получение данных учета после обновления
     postObject.dataAccount = getAllDataAccount(postObject)
+    addErrorItem(arguments.callee.name + ': ' + objectToString(postObject.dataAccount))
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
