@@ -990,7 +990,8 @@ function getTotalSum(postObject, array) {
         if (isMatch(array.cashFlow, postObject.cashFlow)) {
           addErrorItem(arguments.callee.name + ':isMatch(array.cashFlow, postObject.cashFlow): ' + isMatch(array.cashFlow, postObject.cashFlow))
           //* сумма по операции
-          sum.cashFlowSum += array.sum
+          sum.cashFlowSum += +array.sum
+          addErrorItem(arguments.callee.name + ':sum.cashFlowSum: ' + array.sum)
           addErrorItem(arguments.callee.name + ':sum.cashFlowSum: ' + sum.cashFlowSum)
           if (isMatch(array.bill, postObject.bill)) {
             //* сумма по счету
@@ -1047,7 +1048,8 @@ function getTotalSum(postObject, array) {
       }
       return sum
     }, {})
-    const total = Object.assign({}, filterSum)
+    let total = {}
+    total = Object.assign({}, filterSum)
     //* данные по статьям с агрегацией
     const groupAccount = array.reduce(function (newArray, array) {
       if (isMatch(array.cfo, postObject.cfo)) {
