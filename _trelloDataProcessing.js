@@ -982,7 +982,7 @@ function getTotalSum(postObject, array) {
    * @array - массив данных для расчета сумм
    */
   try {
-    const total = array.reduce(function (sum, array) {
+    const total = Object.assign({}, array.reduce(function (sum, array) {
       sum = {}
       if (isMatch(array.cfo, postObject.cfo)) {
         if (isMatch(array.cashFlow, postObject.cashFlow)) {
@@ -1042,7 +1042,7 @@ function getTotalSum(postObject, array) {
         }
       }
       return sum
-    }, {})
+    }, {}))
     //* данные по статьям с агрегацией
     const groupAccount = array.reduce(function (newArray, array) {
       if (isMatch(array.cfo, postObject.cfo)) {
