@@ -727,6 +727,7 @@ function getDescription(postObject) {
   try {
     const description = {}
     const sum = getSum(postObject)
+    addErrorItem(arguments.callee.name + ': ' + objectToString(sum))
     description.text = '*Дата обновления*: ' + formatterDate(postObject.actionDate).time + postObject.lineBreak
     if (postObject.isFact || postObject.isBudget) {
       if (postObject.isFact) {
