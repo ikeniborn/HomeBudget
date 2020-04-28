@@ -1100,6 +1100,7 @@ function getTotalSum(postObject, array) {
     total.nomenclatureRows = array.filter(function (array) {
       return isMatch(array.cfo, postObject.cfo) && isMatch(array.bill, postObject.bill) && isMatch(array.account, postObject.account) && isMatch(array.nomenclature, postObject.nomenclature) && isMatch(array.cashFlow, postObject.cashFlow)
     })
+    addErrorItem(arguments.callee.name + ': ' + objectToString(total))
     return total
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
