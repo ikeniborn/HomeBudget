@@ -981,6 +981,7 @@ function getTotalSum(postObject, array) {
    */
   try {
     const total = array.reduce(function (sum, array) {
+      sum = {}
       if (isMatch(array.cfo, postObject.cfo)) {
         if (isMatch(array.cashFlow, postObject.cashFlow)) {
           //* сумма по операции
