@@ -361,7 +361,7 @@ function getPostObject(postData) {
       object.budgetPeriod3 = object.date.budgetPeriod3
     }
     if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
-      object.dataTrello = getAllData(object, 'trello')
+      object.dataTrello = getAllDataTrello(object)
     }
     if (['deleteComment', 'updateComment'].indexOf(postData.action.type) !== -1) {
       object.isOldData = isOldData(object)
@@ -545,7 +545,7 @@ function deleteRowByActionId(postObject) {
       targetData.splice(row - 1, 1)
     })
     //* получение данных учета после обновления
-    postObject.dataAccount = getAllData(postObject, 'account')
+    postObject.dataAccount = getAllDataAccount(postObject)
     return sum
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
@@ -1154,7 +1154,7 @@ function updateDescForNewCards(postObject) {
   try {
     const cards = getCards(postObject).array
     const postObjectCard = copyObject(postObject)
-    postObjectCard.dataAccount = getAllData(postObjectCard, 'account')
+    postObjectCard.dataAccount = getAllDataAccount(postObjectCard)
     //* обновление описание карточки
     cards.forEach(function (card) {
       postObjectCard.cardId = card.id
@@ -1259,7 +1259,7 @@ function updateRowByActionId(postObject) {
       }
     })
     //* получение текущих данных после обновления
-    postObject.dataAccount = getAllData(postObject, 'account')
+    postObject.dataAccount = getAllDataAccount(postObject)
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
@@ -1309,7 +1309,7 @@ function updateTrelloData(postObject) {
       }
     }
     //* получение данных учета после обновления
-    postObject.dataAccount = getAllData(postObject, 'account')
+    postObject.dataAccount = getAllDataAccount(postObject)
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
@@ -1363,57 +1363,31 @@ function updateTargetList(postObject) {
   }
 }
 
-function getAllData(postObject, source) {
+function getAllDataAccount(postObject) {
   /*
    * @source - истоник: trello, account
    */
   try {
-    var dataStructure
-    var data
-    if (isMatch(source, 'trello')) {
-      dataStructure = 1
-      data = postObject.trelloArray
-    } else if (isMatch(source, 'account')) {
-      dataStructure = 2
-      data = postObject.accountArray
-    }
+    const data = postObject.accountArray
     const object = {}
     object.all = data.reduce(function (row, array, index) {
       if (index != 0) {
         const object = {}
-        if ([1].indexOf(dataStructure) !== -1) {
-          //* данные из буфера трелло
-          object.actionDate = array[0]
-          object.period = array[1]
-          object.ymd = getYMD(array[1]).ymd
-          object.cfo = array[2]
-          object.mvz = array[3]
-          object.cashFlow = null
-          object.bill = null
-          object.account = null
-          object.nomenclature = array[4]
-          object.sum = array[5]
-          object.comment = array[6]
-          object.actionId = array[7]
-          object.type = array[8]
-          object.indexRow = index + 1
-        } else if ([2].indexOf(dataStructure) !== -1) {
-          //* данные из учета
-          object.actionDate = array[0]
-          object.period = array[1]
-          object.ymd = getYMD(row.period).ymd
-          object.cfo = array[2]
-          object.mvz = array[3]
-          object.cashFlow = array[4]
-          object.bill = array[5]
-          object.account = array[6]
-          object.nomenclature = array[7]
-          object.sum = array[8]
-          object.comment = array[9]
-          object.actionId = array[10]
-          object.type = array[11]
-          object.indexRow = index + 1
-        }
+        //* данные из учета
+        object.actionDate = array[0]
+        object.period = array[1]
+        object.ymd = getYMD(row.period).ymd
+        object.cfo = array[2]
+        object.mvz = array[3]
+        object.cashFlow = array[4]
+        object.bill = array[5]
+        object.account = array[6]
+        object.nomenclature = array[7]
+        object.sum = array[8]
+        object.comment = array[9]
+        object.actionId = array[10]
+        object.type = array[11]
+        object.indexRow = index + 1
         row.push(object)
       }
       return row
@@ -1425,7 +1399,48 @@ function getAllData(postObject, source) {
     object.current.budget = object.all.filter(function (row) {
       return row.ymd == getYMD(postObject.budgetPeriod).ymd && isMatch(row.type, 'Бюджет')
     })
-    addErrorItem(arguments.callee.name + ': ' + objectToString(object.current.fact))
+    return object
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
+
+function getAllDataTrello(postObject) {
+  /*
+   * @source - истоник: trello, account
+   */
+  try {
+    const data = postObject.trelloArray
+    const object = {}
+    object.all = data.reduce(function (row, array, index) {
+      if (index != 0) {
+        const object = {}
+        //* данные из буфера трелло
+        object.actionDate = array[0]
+        object.period = array[1]
+        object.ymd = getYMD(array[1]).ymd
+        object.cfo = array[2]
+        object.mvz = array[3]
+        object.cashFlow = null
+        object.bill = null
+        object.account = null
+        object.nomenclature = array[4]
+        object.sum = array[5]
+        object.comment = array[6]
+        object.actionId = array[7]
+        object.type = array[8]
+        object.indexRow = index + 1
+        row.push(object)
+      }
+      return row
+    }, [])
+    object.current = {}
+    object.current.fact = object.all.filter(function (row) {
+      return row.ymd == getYMD(postObject.factPeriod).ymd && isMatch(row.type, 'Факт')
+    })
+    object.current.budget = object.all.filter(function (row) {
+      return row.ymd == getYMD(postObject.budgetPeriod).ymd && isMatch(row.type, 'Бюджет')
+    })
     return object
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
@@ -1437,11 +1452,11 @@ function getPreviousFact(postObject) {
     const sum = {}
     const postObjectPrev1 = copyObject(postObject)
     postObjectPrev1.factPeriod = postObject.factPeriod1
-    postObjectPrev1.dataAccount = getAllData(postObjectPrev1, 'account')
+    postObjectPrev1.dataAccount = getAllDataAccount(postObjectPrev1)
     sum.Prev1 = getSum(postObjectPrev1)
     const postObjectPrev2 = copyObject(postObject)
     postObjectPrev2.factPeriod = postObject.factPeriod2
-    postObjectPrev2.dataAccount = getAllData(postObjectPrev2, 'account')
+    postObjectPrev2.dataAccount = getAllDataAccount(postObjectPrev2)
     sum.Prev2 = getSum(postObjectPrev2)
     return sum
   } catch (e) {
