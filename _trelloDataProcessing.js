@@ -986,9 +986,12 @@ function getTotalSum(postObject, array) {
     const filterSum = array.reduce(function (sum, array) {
       sum = {}
       if (isMatch(array.cfo, postObject.cfo)) {
+        addErrorItem(arguments.callee.name + ':isMatch(array.cfo, postObject.cfo): ' + isMatch(array.cfo, postObject.cfo))
         if (isMatch(array.cashFlow, postObject.cashFlow)) {
+          addErrorItem(arguments.callee.name + ':isMatch(array.cashFlow, postObject.cashFlow): ' + isMatch(array.cashFlow, postObject.cashFlow))
           //* сумма по операции
           sum.cashFlowSum += array.sum
+          addErrorItem(arguments.callee.name + ':sum.cashFlowSum: ' + sum.cashFlowSum)
           if (isMatch(array.bill, postObject.bill)) {
             //* сумма по счету
             sum.billSum += array.sum
@@ -1044,7 +1047,6 @@ function getTotalSum(postObject, array) {
       }
       return sum
     }, {})
-    addErrorItem(arguments.callee.name + ':filterSum: ' + objectToString(filterSum))
     const total = Object.assign({}, filterSum)
     //* данные по статьям с агрегацией
     const groupAccount = array.reduce(function (newArray, array) {
@@ -1101,7 +1103,6 @@ function getTotalSum(postObject, array) {
     total.nomenclatureRows = array.filter(function (array) {
       return isMatch(array.cfo, postObject.cfo) && isMatch(array.bill, postObject.bill) && isMatch(array.account, postObject.account) && isMatch(array.nomenclature, postObject.nomenclature) && isMatch(array.cashFlow, postObject.cashFlow)
     })
-    addErrorItem(arguments.callee.name + ':total: ' + objectToString(total))
     return total
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
