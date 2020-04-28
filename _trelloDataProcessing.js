@@ -756,18 +756,16 @@ function getDescription(postObject) {
           if (postObject.isCurrBudget) {
             //* информация в рестроспективе за последние два месяца
             description.text += '**Факт прошлых периодов:**' + postObject.lineBreak
-            description.text += formatterDate(postObject.factPeriod).date + ' - ' + getPreviousFact(postObject).Prev1.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
-            description.text += formatterDate(postObject.factPeriod1).date + ' - ' + getPreviousFact(postObject).Prev2.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
+            description.text += formatterDate(postObject.factPeriod).date + ': ' + getPreviousFact(postObject).Prev1.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
+            description.text += formatterDate(postObject.factPeriod1).date + ': ' + getPreviousFact(postObject).Prev2.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
           }
         } else if (isMatch(postObject.nomenclature, 'Баланс')) {
           //* описание карточки баланса
           description.text += '**Итоговый бюджет** *' + formatterDate(postObject.period).date + '* **по статьям**' + ':' + postObject.lineBreak
           if (sum.budgetSum.groupAccount.length !== 0) {
             const groupBudgetRows = sum.budgetSum.groupAccount
-            const i = 1
             groupBudgetRows.forEach(function (row) {
               description.text += row.bill + ' - ' + row.account + ': ' + row.sum + ' р. ' + postObject.lineBreak
-              i += 1
             })
           }
           description.text += '**Остатки**: ' + sum.factSum.restSum + ' р.' + postObject.lineBreak
