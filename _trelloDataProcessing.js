@@ -980,6 +980,7 @@ function getTotalSum(postObject, array) {
    * @array - массив данных для расчета сумм
    */
   try {
+    addErrorItem(arguments.callee.name + ': ' + objectToString(array))
     const total = array.reduce(function (sum, array) {
       sum = {}
       if (isMatch(array.cfo, postObject.cfo)) {
