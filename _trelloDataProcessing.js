@@ -108,6 +108,9 @@ function isMatch(where, what) {
 
 function getYMD(date) {
   try {
+    if (!isValidDate(date)) {
+      var date = new Date(date)
+    }
     const object = {}
     object.y = new Date(date).getFullYear()
     object.m = new Date(date).getMonth() + 1
