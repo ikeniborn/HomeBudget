@@ -983,22 +983,37 @@ function getTotalSum(postObject, array) {
    * @array - массив данных для расчета сумм
    */
   try {
-    const filterSum = array.reduce(function (sum, array) {
-      sum = {}
+    const filterSum = array.reduce(function (sum, array, index) {
+      if (index === 0) {
+        sum = {}
+        sum.cashFlowSum = 0
+        sum.billSum = 0
+        sum.accountSum = 0
+        sum.nomenclatureSum = 0
+        sum.incomeSum = 0
+        sum.accumulationBillIncomeSum = 0
+        sum.accumulationNomenclatureIncomeSum = 0
+        sum.salarySum = 0
+        sum.expenseSum = 0
+        sum.costSum = 0
+        sum.accumulationBillExpenseSum = 0
+        sum.transferBillExpenseSum = 0
+        sum.accumulationNomenclatureExpenseSum = 0
+        sum.transferToFamilyAccountSum
+        sum.restSum = 0
+      }
       if (isMatch(array.cfo, postObject.cfo)) {
-        addErrorItem(arguments.callee.name + ':isMatch(array.cfo, postObject.cfo): ' + isMatch(array.cfo, postObject.cfo))
         if (isMatch(array.cashFlow, postObject.cashFlow)) {
-          addErrorItem(arguments.callee.name + ':isMatch(array.cashFlow, postObject.cashFlow): ' + isMatch(array.cashFlow, postObject.cashFlow))
           //* сумма по операции
-          sum.cashFlowSum += +array.sum
-          addErrorItem(arguments.callee.name + ':sum.cashFlowSum: ' + array.sum)
+          sum.cashFlowSum += array.sum
+          addErrorItem(arguments.callee.name + ':array.sum: ' + array.sum)
           addErrorItem(arguments.callee.name + ':sum.cashFlowSum: ' + sum.cashFlowSum)
           if (isMatch(array.bill, postObject.bill)) {
             //* сумма по счету
             sum.billSum += array.sum
             if (isMatch(array.account, postObject.account)) {
               //* сумма по статье
-              total.accountSum += array.sum
+              sum.accountSum += array.sum
               if (isMatch(array.nomenclature, postObject.nomenclature)) {
                 //* сумма по номенклатуре
                 sum.nomenclatureSum += array.sum
