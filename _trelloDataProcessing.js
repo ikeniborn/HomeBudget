@@ -761,7 +761,7 @@ function getDescription(postObject) {
           }
         } else if (isMatch(postObject.nomenclature, 'Баланс')) {
           //* описание карточки баланса
-          description.text = '**Итоговый бюджет** *' + formatterDate(postObject.period).date + '* **по статьям**' + ':' + postObject.lineBreak
+          description.text += '**Итоговый бюджет** *' + formatterDate(postObject.period).date + '* **по статьям**' + ':' + postObject.lineBreak
           if (sum.budgetSum.groupAccount.length !== 0) {
             const groupBudgetRows = sum.budgetSum.groupAccount
             const i = 1
