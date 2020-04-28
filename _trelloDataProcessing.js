@@ -1,5 +1,6 @@
 //! проверить описание карточки. Перестало считать остатки
 //? добавить старое значение по накоплениям при добавлении в комментарий 
+//? добавить функцию сверки даты
 
 function addErrorItem(error) {
   try {
@@ -982,8 +983,7 @@ function getTotalSum(postObject, array) {
    * @array - массив данных для расчета сумм
    */
   try {
-    let total = {}
-    const sum = array.reduce(function (sum, array) {
+    const filterSum = array.reduce(function (sum, array) {
       sum = {}
       if (isMatch(array.cfo, postObject.cfo)) {
         if (isMatch(array.cashFlow, postObject.cashFlow)) {
@@ -1044,7 +1044,8 @@ function getTotalSum(postObject, array) {
       }
       return sum
     }, {})
-    total = Object.assign({}, sum)
+    addErrorItem(arguments.callee.name + ':filterSum: ' + objectToString(filterSum))
+    const total = Object.assign({}, filterSum)
     //* данные по статьям с агрегацией
     const groupAccount = array.reduce(function (newArray, array) {
       if (isMatch(array.cfo, postObject.cfo)) {
@@ -1100,7 +1101,7 @@ function getTotalSum(postObject, array) {
     total.nomenclatureRows = array.filter(function (array) {
       return isMatch(array.cfo, postObject.cfo) && isMatch(array.bill, postObject.bill) && isMatch(array.account, postObject.account) && isMatch(array.nomenclature, postObject.nomenclature) && isMatch(array.cashFlow, postObject.cashFlow)
     })
-    addErrorItem(arguments.callee.name + ': ' + objectToString(total))
+    addErrorItem(arguments.callee.name + ':total: ' + objectToString(total))
     return total
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
