@@ -999,15 +999,13 @@ function getTotalSum(postObject, array) {
         sum.accumulationBillExpenseSum = 0
         sum.transferBillExpenseSum = 0
         sum.accumulationNomenclatureExpenseSum = 0
-        sum.transferToFamilyAccountSum
+        sum.transferToFamilyAccountSum = 0
         sum.restSum = 0
       }
       if (isMatch(array.cfo, postObject.cfo)) {
         if (isMatch(array.cashFlow, postObject.cashFlow)) {
           //* сумма по операции
           sum.cashFlowSum += array.sum
-          addErrorItem(arguments.callee.name + ':array.sum: ' + array.sum)
-          addErrorItem(arguments.callee.name + ':sum.cashFlowSum: ' + sum.cashFlowSum)
           if (isMatch(array.bill, postObject.bill)) {
             //* сумма по счету
             sum.billSum += array.sum
