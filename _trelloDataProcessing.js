@@ -727,7 +727,6 @@ function getDescription(postObject) {
   try {
     const description = {}
     const sum = getSum(postObject)
-    addErrorItem(arguments.callee.name + ': ' + objectToString(sum))
     description.text = '*Дата обновления*: ' + formatterDate(postObject.actionDate).time + postObject.lineBreak
     if (postObject.isFact || postObject.isBudget) {
       if (postObject.isFact) {
@@ -980,7 +979,6 @@ function getTotalSum(postObject, array) {
    * @array - массив данных для расчета сумм
    */
   try {
-    addErrorItem(arguments.callee.name + ': ' + objectToString(array))
     const total = array.reduce(function (sum, array) {
       sum = {}
       if (isMatch(array.cfo, postObject.cfo)) {
@@ -1370,8 +1368,8 @@ function getAllData(postObject, source) {
    * @source - истоник: trello, account
    */
   try {
-    let dataStructure
-    let data
+    var dataStructure
+    var data
     if (isMatch(source, 'trello')) {
       dataStructure = 1
       data = postObject.trelloArray
@@ -1427,6 +1425,7 @@ function getAllData(postObject, source) {
     object.current.budget = object.all.filter(function (row) {
       return row.ymd == getYMD(postObject.budgetPeriod).ymd && isMatch(row.type, 'Бюджет')
     })
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object.current.fact))
     return object
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
