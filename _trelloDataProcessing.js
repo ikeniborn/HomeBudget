@@ -376,6 +376,7 @@ function getPostObject(postData) {
     } else {
       object.isOldData = false
     }
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     return object
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
@@ -1556,7 +1557,6 @@ function isValidateAction(postData) {
 function doPost(e) {
   try {
     const postData = JSON.parse(e.postData.contents)
-    addErrorItem(arguments.callee.name + ': ' + objectToString(postData))
     if (addLog(postData)) {
       var postObject = getPostObject(postData)
       if (isMatch(postObject.actionType, 'commentCard')) {
