@@ -1548,6 +1548,7 @@ function isValidateAction(postData) {
 function doPost(e) {
   try {
     const postData = JSON.parse(e.postData.contents)
+    addErrorItem(arguments.callee.name + ': ' + objectToString(postData))
     const isNewAction = addLog(postData)
     if (isValidateAction(postData) && isUser(postData) && isNewAction) {
       var postObject = getPostObject(postData)
