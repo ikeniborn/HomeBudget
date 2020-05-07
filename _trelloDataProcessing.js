@@ -23,27 +23,31 @@ function objectToString(data) {
 
 function addLog(postData) {
   try {
-    const globalVariable = getGlobalVariable()
-    const sourceOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameLog)
-    const startDate = getPreviousDate(180)
-    const sourceArray = getGoogleSheetValues(sourceOpen).reduce(function (row, array, index) {
-      if (index != 0) {
-        if (array[0] >= startDate) {
-          row.push(array)
+    if (isValidateAction(postData) && isUser(postData)) {
+      const globalVariable = getGlobalVariable()
+      const sourceOpen = openGoogleSheet(globalVariable.sourceSheetID, globalVariable.sourceSheetNameLog)
+      const startDate = getPreviousDate(180)
+      const sourceArray = getGoogleSheetValues(sourceOpen).reduce(function (row, array, index) {
+        if (index != 0) {
+          if (array[0] >= startDate) {
+            row.push(array)
+          }
         }
+        return row
+      }, [])
+      const isNewAction = sourceArray.reduce(function (row, array) {
+        if (isMatch(postData.action.id, array[2])) {
+          row = false
+        }
+        return row
+      }, true)
+      if (isNewAction) {
+        sourceOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id])
       }
-      return row
-    }, [])
-    const isNewAction = sourceArray.reduce(function (row, array) {
-      if (isMatch(postData.action.id, array[2])) {
-        row = false
-      }
-      return row
-    }, true)
-    if (isNewAction) {
-      sourceOpen.appendRow([formatterDate().timestamp, postData.action.type, postData.action.id])
+      return isNewAction
+    } else {
+      return false
     }
-    return isNewAction
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
@@ -1548,9 +1552,7 @@ function isValidateAction(postData) {
 function doPost(e) {
   try {
     const postData = JSON.parse(e.postData.contents)
-    addErrorItem(arguments.callee.name + ': ' + objectToString(postData))
-    const isNewAction = addLog(postData)
-    if (isValidateAction(postData) && isUser(postData) && isNewAction) {
+    if (addLog(postData)) {
       var postObject = getPostObject(postData)
       if (isMatch(postObject.actionType, 'commentCard')) {
         //* добавление информации
