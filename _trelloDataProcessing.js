@@ -406,7 +406,7 @@ function addFinancialCenter(postObject) {
     postObject.listName = postObject.listName + ' ' + formatterDate(postObject.period).date
     updateList(postObject)
   } catch (e) {
-    postObject.error.push(arguments.callee.name + ': ' + e)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
