@@ -1223,12 +1223,11 @@ function updateDescForNewCards(postObject) {
       postObjectCard.bill = postObjectCard.accountingItem.item.bill
       postObjectCard.account = postObjectCard.accountingItem.item.account
       postObjectCard.nomenclature = card.name
-      //? разобатся с получение описания и сумм
-      // const description = getDescription(postObjectCard)
-      // if (description.haveBudget) {
-      //   postObjectCard.cardDescription = description.text
-      //   updateCardDesc(postObjectCard)
-      // }
+      const description = getDescription(postObjectCard)
+      if (description.haveBudget) {
+        postObjectCard.cardDescription = description.text
+        updateCardDesc(postObjectCard)
+      }
     })
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
@@ -1540,7 +1539,13 @@ function isValidateAction(postData) {
     const actionType = ['commentCard', 'updateComment', 'deleteComment', 'createList', 'updateList', 'updateCard']
     return actionType.reduce(function (row, array) {
       if (isMatch(postData.action.type, array)) {
-        row = true
+        if (isMatch(postData.action.type, 'updateCard')) {
+          if (isMatch(postData.action.data.card.name, 'Баланс')) {
+            row = true
+          }
+        } else {
+          row = true
+        }
       }
       return row
     }, false)
