@@ -1223,11 +1223,11 @@ function updateDescForNewCards(postObject) {
       postObjectCard.account = postObjectCard.accountingItem.item.account
       postObjectCard.nomenclature = card.name
       //? разобатся с получение описания и сумм
-      const description = getDescription(postObjectCard)
-      if (description.haveBudget) {
-        postObjectCard.cardDescription = description.text
-        updateCardDesc(postObjectCard)
-      }
+      // const description = getDescription(postObjectCard)
+      // if (description.haveBudget) {
+      //   postObjectCard.cardDescription = description.text
+      //   updateCardDesc(postObjectCard)
+      // }
     })
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
