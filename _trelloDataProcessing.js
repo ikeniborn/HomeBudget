@@ -376,7 +376,7 @@ function getPostObject(postData) {
     } else {
       object.isOldData = false
     }
-    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
+    // addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     return object
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
