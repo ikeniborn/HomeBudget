@@ -223,7 +223,7 @@ function deleteError(postObject) {
 
 function getPostObject(postData) {
   try {
-    var object = Object.assign({}, getGlobalVariable())
+    const object = Object.assign({}, getGlobalVariable())
     object.webHookDate = formatterDate().timestamp
     addErrorItem(arguments.callee.name + 'webHookDate: ' + new Date(object.webHookDate))
     object.actionType = postData.action.type
@@ -297,13 +297,6 @@ function getPostObject(postData) {
       object.isTarget = true
       object.type = 'Факт'
     }
-    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
-      object.cardId = postData.action.data.card.id
-      object.cardName = postData.action.data.card.name
-      object.cardDescription = ''
-      object.cardComment = ''
-      object.cardLabelColor = getCardLabel(object).item.color
-    }
     if (['commentCard', 'createList', 'updateList', 'updateCard'].indexOf(postData.action.type) !== -1) {
       object.list = {}
       object.listId = postData.action.data.list.id
@@ -322,6 +315,13 @@ function getPostObject(postData) {
     addErrorItem(arguments.callee.name + 'listId: ' + object.listId)
     addErrorItem(arguments.callee.name + 'listName: ' + object.listName)
     addErrorItem(arguments.callee.name + 'listClosed: ' + object.listClosed)
+    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
+      object.cardId = postData.action.data.card.id
+      object.cardName = postData.action.data.card.name
+      object.cardDescription = ''
+      object.cardComment = ''
+      object.cardLabelColor = getCardLabel(object).item.color
+    }
     if (object.isTarget) {
       object.cfo = getTarget(object).item.cfo
     } else {
