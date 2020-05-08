@@ -225,7 +225,7 @@ function getPostObject(postData) {
   try {
     const object = Object.assign({}, getGlobalVariable())
     object.webHookDate = formatterDate().timestamp
-    addErrorItem(arguments.callee.name + 'webHookDate: ' + object.webHookDate)
+    addErrorItem(arguments.callee.name + 'webHookDate: ' + new Date(object.webHookDate))
     object.actionType = postData.action.type
     addErrorItem(arguments.callee.name + 'actionType: ' + object.actionType)
     object.webHookActionId = postData.action.id
@@ -258,7 +258,7 @@ function getPostObject(postData) {
     }
     addErrorItem(arguments.callee.name + 'actionId: ' + object.actionId)
     object.actionDate = new Date(postData.action.date)
-    addErrorItem(arguments.callee.name + 'actionDate: ' + object.actionDate)
+    addErrorItem(arguments.callee.name + 'actionDate: ' + new Date(object.actionDate))
     object.memberId = postData.action.memberCreator.id
     addErrorItem(arguments.callee.name + 'memberId: ' + object.memberId)
     object.memberUsername = postData.action.memberCreator.username
@@ -380,14 +380,14 @@ function getPostObject(postData) {
       object.budgetPeriod2 = object.date.budgetPeriod2
       object.budgetPeriod3 = object.date.budgetPeriod3
     }
-    addErrorItem(arguments.callee.name + 'period: ' + object.period)
+    addErrorItem(arguments.callee.name + 'period: ' + new Date(object.period))
     addErrorItem(arguments.callee.name + 'ymd: ' + object.ymd)
-    addErrorItem(arguments.callee.name + 'factPeriod2: ' + object.factPeriod2)
-    addErrorItem(arguments.callee.name + 'factPeriod1: ' + object.factPeriod1)
-    addErrorItem(arguments.callee.name + 'factPeriod: ' + object.factPeriod)
-    addErrorItem(arguments.callee.name + 'budgetPeriod: ' + object.budgetPeriod)
-    addErrorItem(arguments.callee.name + 'budgetPeriod2: ' + object.budgetPeriod2)
-    addErrorItem(arguments.callee.name + 'budgetPeriod3: ' + object.budgetPeriod3)
+    addErrorItem(arguments.callee.name + 'factPeriod2: ' + new Date(object.factPeriod2))
+    addErrorItem(arguments.callee.name + 'factPeriod1: ' + new Date(object.factPeriod1))
+    addErrorItem(arguments.callee.name + 'factPeriod: ' + new Date(object.factPeriod))
+    addErrorItem(arguments.callee.name + 'budgetPeriod: ' + new Date(object.budgetPeriod))
+    addErrorItem(arguments.callee.name + 'budgetPeriod2: ' + new Date(object.budgetPeriod2))
+    addErrorItem(arguments.callee.name + 'budgetPeriod3: ' + new Date(object.budgetPeriod3))
     if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
       object.dataTrello = getAllDataTrello(object)
     }
