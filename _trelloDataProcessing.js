@@ -288,6 +288,13 @@ function getPostObject(postData) {
       object.isTarget = true
       object.type = 'Факт'
     }
+    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
+      object.cardId = postData.action.data.card.id
+      object.cardName = postData.action.data.card.name
+      object.cardDescription = ''
+      object.cardComment = ''
+      object.cardLabelColor = getCardLabel(object).item.color
+    }
     if (['commentCard', 'createList', 'updateCard', 'updateList'].indexOf(postData.action.type) !== -1) {
       object.listId = postData.action.data.list.id
       object.listName = postData.action.data.list.name
@@ -301,13 +308,6 @@ function getPostObject(postData) {
       object.list = getCardList(object)
       object.listId = object.list.id
       object.listName = object.list.name
-    }
-    if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
-      object.cardId = postData.action.data.card.id
-      object.cardName = postData.action.data.card.name
-      object.cardDescription = ''
-      object.cardComment = ''
-      object.cardLabelColor = getCardLabel(object).item.color
     }
     if (object.isTarget) {
       object.cfo = getTarget(object).item.cfo

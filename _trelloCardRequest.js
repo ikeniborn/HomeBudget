@@ -24,7 +24,7 @@ function addCard(postObject, cardName, listId, pos, labelId) {
     variable.name = JSON.parse(resp).name
     return variable
   } catch (e) {
-    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
+
     addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
@@ -41,7 +41,7 @@ function addCardComment(postObject) {
     }
     UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '/actions/comments?text=' + postObject.cardComment + '&' + postObject.keyAndToken, data)
   } catch (e) {
-    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
+
     addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
@@ -73,7 +73,7 @@ function addCardReaction(postObject) {
       UrlFetchApp.fetch(postObject.apiRoot + 'actions/' + postObject.actionId + '/reactions?' + postObject.keyAndToken, data)
     })
   } catch (e) {
-    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
+
     addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
@@ -90,7 +90,6 @@ function archiveAllCards(postObject) {
     }
     UrlFetchApp.fetch(postObject.apiRoot + 'lists/' + postObject.listId + '/archiveAllCards?' + postObject.keyAndToken, data)
   } catch (e) {
-    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
     addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
@@ -107,7 +106,6 @@ function closeCard(postObject, cardId) {
     }
     UrlFetchApp.fetch(postObject.apiRoot + '/cards/' + cardId + '?closed=true&' + postObject.keyAndToken, data)
   } catch (e) {
-    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
     addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
@@ -129,7 +127,6 @@ function copyCard(postObject, listId, idCardSource) {
     variable.name = JSON.parse(resp).name
     return variable
   } catch (e) {
-    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
     addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
@@ -166,7 +163,6 @@ function getCardLabel(postObject) {
     }, {})
     return variable
   } catch (e) {
-    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
     addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
@@ -187,7 +183,6 @@ function getCardList(postObject) {
     variable.name = respData.name
     return variable
   } catch (e) {
-    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
     addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
@@ -223,7 +218,7 @@ function getCards(postObject) {
     }, [])
     return cards
   } catch (e) {
-    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
+
     addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
@@ -256,7 +251,7 @@ function moveCard(postObject) {
     }
     UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '/idBoard?value=' + postObject.boardId + '&idList=' + postObject.listId + '&' + postObject.keyAndToken, data)
   } catch (e) {
-    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
+
     addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
@@ -272,7 +267,7 @@ function updateCardDesc(postObject) {
     }
     UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '?desc=' + postObject.cardDescription + '&' + postObject.keyAndToken, data)
   } catch (e) {
-    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
+
     addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
