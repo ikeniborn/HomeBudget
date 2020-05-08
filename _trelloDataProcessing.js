@@ -297,9 +297,12 @@ function getPostObject(postData) {
       object.isTarget = true
       object.type = 'Факт'
     }
-    if (['commentCard', 'createList', 'updateCard'].indexOf(postData.action.type) !== -1) {
+    if (['commentCard', 'createList', 'updateCard', 'updateList'].indexOf(postData.action.type) !== -1) {
       object.listId = postData.action.data.list.id
       object.listName = postData.action.data.list.name
+      if (['updateList'].indexOf(postData.action.type) !== -1) {
+        object.listClosed = postData.action.data.list.closed
+      }
       if (['updateCard'].indexOf(postData.action.type) !== -1) {
         object.cardClosed = postData.action.data.card.closed
       }
@@ -307,12 +310,6 @@ function getPostObject(postData) {
       object.list = getCardList(object)
       object.listId = object.list.id
       object.listName = object.list.name
-    } else if (['updateList'].indexOf(postData.action.type) !== -1) {
-      object.listId = postData.action.data.list.id
-      object.listName = postData.action.data.list.name
-      if (['updateList'].indexOf(postData.action.type) !== -1) {
-        object.listClosed = postData.action.data.list.closed
-      }
     }
     addErrorItem(arguments.callee.name + 'listId: ' + object.listId)
     addErrorItem(arguments.callee.name + 'listName: ' + object.listName)
