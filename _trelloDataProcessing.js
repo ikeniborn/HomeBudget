@@ -225,8 +225,11 @@ function getPostObject(postData) {
   try {
     const object = Object.assign({}, getGlobalVariable())
     object.webHookDate = formatterDate().timestamp
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     object.actionType = postData.action.type
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     object.webHookActionId = postData.action.id
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     // открытие листов
     object.financialCenterSheetOpen = openGoogleSheet(object.sourceSheetID, object.financialCenterSheetName)
     object.accountingItemSheetOpen = openGoogleSheet(object.sourceSheetID, object.accountingItemSheetName)
@@ -248,16 +251,23 @@ function getPostObject(postData) {
     object.errorArray = getGoogleSheetValues(object.errorOpen)
     object.accountArray = getGoogleSheetValues(object.accountOpen)
     object.targetArray = getGoogleSheetValues(object.targetOpen)
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
       object.actionId = postData.action.data.action.id
     } else {
       object.actionId = postData.action.id
     }
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     object.actionDate = new Date(postData.action.date)
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     object.memberId = postData.action.memberCreator.id
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     object.memberUsername = postData.action.memberCreator.username
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     object.boardId = postData.action.data.board.id
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     object.boardName = postData.action.data.board.name
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     if ([object.boardIdFact, object.boardIdFact0].indexOf(object.boardId) !== -1) {
       object.isFact = true
       if ([object.boardIdFact].indexOf(object.boardId) !== -1) {
@@ -288,6 +298,7 @@ function getPostObject(postData) {
       object.isTarget = true
       object.type = 'Факт'
     }
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
       object.cardId = postData.action.data.card.id
       object.cardName = postData.action.data.card.name
@@ -295,6 +306,7 @@ function getPostObject(postData) {
       object.cardComment = ''
       object.cardLabelColor = getCardLabel(object).item.color
     }
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     if (['commentCard', 'createList', 'updateList', 'updateCard'].indexOf(postData.action.type) !== -1) {
       object.list = {}
       object.listId = postData.action.data.list.id
@@ -310,16 +322,19 @@ function getPostObject(postData) {
       object.listId = object.list.id
       object.listName = object.list.name
     }
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     if (object.isTarget) {
       object.cfo = getTarget(object).item.cfo
     } else {
       object.cfo = getFinancialСenter(object).item.cfo
     }
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     if (['Илья', 'Оксана'].indexOf(object.cfo) !== -1) {
       object.privateBudget = true
     } else {
       object.privateBudget = false
     }
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
       object.accountingItem = getAccountingItem(object)
       object.cashFlow = object.accountingItem.item.cashFlow
@@ -368,6 +383,7 @@ function getPostObject(postData) {
       object.budgetPeriod2 = object.date.budgetPeriod2
       object.budgetPeriod3 = object.date.budgetPeriod3
     }
+    addErrorItem(arguments.callee.name + ': ' + objectToString(object))
     if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
       object.dataTrello = getAllDataTrello(object)
     }
