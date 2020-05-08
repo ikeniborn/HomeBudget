@@ -225,11 +225,8 @@ function getPostObject(postData) {
   try {
     const object = Object.assign({}, getGlobalVariable())
     object.webHookDate = formatterDate().timestamp
-    addErrorItem(arguments.callee.name + 'webHookDate: ' + new Date(object.webHookDate))
     object.actionType = postData.action.type
-    addErrorItem(arguments.callee.name + 'actionType: ' + object.actionType)
     object.webHookActionId = postData.action.id
-    addErrorItem(arguments.callee.name + 'webHookActionId: ' + object.webHookActionId)
     // открытие листов
     object.financialCenterSheetOpen = openGoogleSheet(object.sourceSheetID, object.financialCenterSheetName)
     object.accountingItemSheetOpen = openGoogleSheet(object.sourceSheetID, object.accountingItemSheetName)
