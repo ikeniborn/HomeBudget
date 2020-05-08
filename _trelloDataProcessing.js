@@ -256,17 +256,11 @@ function getPostObject(postData) {
     } else {
       object.actionId = postData.action.id
     }
-    addErrorItem(arguments.callee.name + 'actionId: ' + object.actionId)
     object.actionDate = new Date(postData.action.date)
-    addErrorItem(arguments.callee.name + 'actionDate: ' + new Date(object.actionDate))
     object.memberId = postData.action.memberCreator.id
-    addErrorItem(arguments.callee.name + 'memberId: ' + object.memberId)
     object.memberUsername = postData.action.memberCreator.username
-    addErrorItem(arguments.callee.name + 'memberUsername: ' + object.memberUsername)
     object.boardId = postData.action.data.board.id
-    addErrorItem(arguments.callee.name + 'boardId: ' + object.boardId)
     object.boardName = postData.action.data.board.name
-    addErrorItem(arguments.callee.name + 'boardName: ' + object.boardName)
     if ([object.boardIdFact, object.boardIdFact0].indexOf(object.boardId) !== -1) {
       object.isFact = true
       if ([object.boardIdFact].indexOf(object.boardId) !== -1) {
@@ -311,9 +305,6 @@ function getPostObject(postData) {
       object.listId = object.list.id
       object.listName = object.list.name
     }
-    addErrorItem(arguments.callee.name + 'listId: ' + object.listId)
-    addErrorItem(arguments.callee.name + 'listName: ' + object.listName)
-    addErrorItem(arguments.callee.name + 'listClosed: ' + object.listClosed)
     if (['deleteComment', 'updateComment', 'commentCard', 'updateCard'].indexOf(postData.action.type) !== -1) {
       object.cardId = postData.action.data.card.id
       object.cardName = postData.action.data.card.name
@@ -379,14 +370,6 @@ function getPostObject(postData) {
       object.budgetPeriod2 = object.date.budgetPeriod2
       object.budgetPeriod3 = object.date.budgetPeriod3
     }
-    addErrorItem(arguments.callee.name + 'period: ' + new Date(object.period))
-    addErrorItem(arguments.callee.name + 'ymd: ' + object.ymd)
-    addErrorItem(arguments.callee.name + 'factPeriod2: ' + new Date(object.factPeriod2))
-    addErrorItem(arguments.callee.name + 'factPeriod1: ' + new Date(object.factPeriod1))
-    addErrorItem(arguments.callee.name + 'factPeriod: ' + new Date(object.factPeriod))
-    addErrorItem(arguments.callee.name + 'budgetPeriod: ' + new Date(object.budgetPeriod))
-    addErrorItem(arguments.callee.name + 'budgetPeriod2: ' + new Date(object.budgetPeriod2))
-    addErrorItem(arguments.callee.name + 'budgetPeriod3: ' + new Date(object.budgetPeriod3))
     if (['deleteComment', 'updateComment', 'commentCard'].indexOf(postData.action.type) !== -1) {
       object.dataTrello = getAllDataTrello(object)
     }
@@ -395,7 +378,6 @@ function getPostObject(postData) {
     } else {
       object.isOldData = false
     }
-    addErrorItem(arguments.callee.name + 'isOldData: ' + objectToString(object.isOldData))
     return object
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
