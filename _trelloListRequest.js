@@ -16,7 +16,7 @@ function addList(postObject) {
     return variable
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
-    addError(postObject)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -33,7 +33,7 @@ function closedList(postObject) {
     UrlFetchApp.fetch(postObject.apiRoot + 'lists/' + postObject.listId + '/closed?value=true&' + postObject.keyAndToken, data)
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
-    addError(postObject)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -54,7 +54,7 @@ function copyList(postObject, postObjectNew) {
     return variable
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
-    addError(postObject)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -84,7 +84,7 @@ function getList(postObject) {
     return listArray
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
-    addError(postObject)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -101,7 +101,7 @@ function moveList(postObject, postObjectNew) {
     UrlFetchApp.fetch(postObject.apiRoot + 'lists/' + postObject.listId + '/idBoard?value=' + postObjectNew.boardId + '&' + postObject.keyAndToken, data)
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
-    addError(postObject)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -119,6 +119,6 @@ function updateList(postObject) {
     UrlFetchApp.fetch(postObject.apiRoot + 'lists/' + postObject.listId + '?name=' + postObject.listName + '&' + postObject.keyAndToken, data)
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
-    addError(postObject)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }

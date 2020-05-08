@@ -16,7 +16,7 @@ function addCheckList(postObject, cardId, checkListName) {
     return variable
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
-    addError(postObject)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -38,7 +38,7 @@ function addCheckListItem(postObject, checkListId, nameItem) {
     return variable
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
-    addError(postObject)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -66,6 +66,6 @@ function getCheckList(postObject, cardId) {
     return variable
   } catch (e) {
     postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
-    addError(postObject)
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
