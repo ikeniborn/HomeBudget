@@ -724,7 +724,7 @@ function getComment(postObject) {
       comment.text += '*Счет* - ' + postObject.nomenclature + postObject.lineBreak
       comment.text += '*Старая сумма*: ' + postObject.targetSumOld + ' р.' + postObject.lineBreak
       comment.text += '*Новая сумма*: ' + postObject.targetSumNew + ' р.' + postObject.lineBreak
-      comment.text += '*Изменения*: ' + postObject.targetSumOld - postObject.targetSumNew + ' р.'
+      comment.text += '*Изменения*: ' + postObject.actionSum + ' р.'
     }
     return comment
   } catch (e) {
@@ -1414,6 +1414,7 @@ function updateTargetList(postObject) {
     postObject.targetArray = getGoogleSheetValues(postObject.targetOpen)
     postObject.targetSumOld = targetSumOld
     postObject.targetSumNew = targetSumNew
+    postObject.actionSum = actionSum
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
