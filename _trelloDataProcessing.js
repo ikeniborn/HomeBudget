@@ -721,10 +721,10 @@ function getComment(postObject) {
       }
     } else if (postObject.isTarget) {
       //* комментарий по цели
-      comment.text += '*Счет* - ' + postObject.nomenclature
-      comment.text += '*Старая сумма*: ' + postObject.targetSumOld
-      comment.text += '*Новая сумма*: ' + postObject.targetSumNew
-      comment.text += '*Изменения*: ' + postObject.targetSumOld - postObject.targetSumNew
+      comment.text += '*Счет* - ' + postObject.nomenclature + postObject.lineBreak
+      comment.text += '*Старая сумма*: ' + postObject.targetSumOld + ' р.' + postObject.lineBreak
+      comment.text += '*Новая сумма*: ' + postObject.targetSumNew + ' р.' + postObject.lineBreak
+      comment.text += '*Изменения*: ' + postObject.targetSumOld - postObject.targetSumNew + ' р.'
     }
     return comment
   } catch (e) {
@@ -1379,22 +1379,22 @@ function updateTargetList(postObject) {
     let actionSum
     if (isMatch(postObject.bill, 'Накопления')) {
       if (isMatch(postObject.account, 'Цели')) {
-        targetColumn = 14
+        targetColumn = 15
         targetSumOld = targetItem.targetSum
       } else if (isMatch(postObject.account, 'Депозит')) {
-        targetColumn = 15
+        targetColumn = 16
         targetSumOld = targetItem.depositSum
       } else if (isMatch(postObject.account, 'Биржа')) {
-        targetColumn = 16
+        targetColumn = 17
         targetSumOld = targetItem.exchangeSum
       } else if (isMatch(postObject.account, 'ИИС')) {
-        targetColumn = 17
+        targetColumn = 18
         targetSumOld = targetItem.iisSum
       }
       //? продумать как определять цель при списании в затраты
     } else if (isMatch(postObject.bill, 'Затраты')) {
       if (isMatch(targetItem.goal, postObject.mvz)) {
-        targetColumn = 18
+        targetColumn = 19
         targetSumOld = targetItem.disbursedFunds
       }
     }
