@@ -659,22 +659,19 @@ function getAllTarget(postObject) {
         object.duration = +array[4]
         object.cost = +array[5]
         object.inflation = +array[6]
-        object.isIis = +array[7]
-        object.restCost = +array[8]
-        object.endDate = new Date(array[9])
-        object.restDay = +array[10]
-        object.complete = array[11]
-        object.budget = +array[12]
-        object.newCost = +array[13]
-        object.monthDeductionSum = +array[14]
-        object.currentListedSum = +array[15]
-        object.targetSum = +array[17]
-        object.depositSum = +array[18]
-        object.exchangeSum = +array[19]
-        object.iisSum = +array[20]
-        object.disbursedFunds = +array[21]
-        object.inStock = +array[22]
-        object.completePersent = +array[23]
+        object.endDate = new Date(array[7])
+        object.complete = array[8]
+        object.budget = +array[9]
+        object.newCost = +array[10]
+        object.monthDeductionSum = +array[11]
+        object.currentListedSum = +array[12]
+        object.targetSum = +array[13]
+        object.depositSum = +array[14]
+        object.exchangeSum = +array[15]
+        object.iisSum = +array[16]
+        object.disbursedFunds = +array[17]
+        object.inStock = +array[18]
+        object.completePersent = +array[19]
         object.indexRow = index + 1
         row.push(object)
       }
@@ -725,6 +722,9 @@ function getComment(postObject) {
     } else if (postObject.isTarget) {
       //* комментарий по цели
       comment.text += '*Счет* - ' + postObject.nomenclature
+      comment.text += '*Старая сумма*: ' + postObject.targetSumOld
+      comment.text += '*Новая сумма*: ' + postObject.targetSumNew
+      comment.text += '*Изменения*: ' + postObject.targetSumOld - postObject.targetSumNew
     }
     return comment
   } catch (e) {
@@ -1379,22 +1379,22 @@ function updateTargetList(postObject) {
     let actionSum
     if (isMatch(postObject.bill, 'Накопления')) {
       if (isMatch(postObject.account, 'Цели')) {
-        targetColumn = 18
+        targetColumn = 14
         targetSumOld = targetItem.targetSum
       } else if (isMatch(postObject.account, 'Депозит')) {
-        targetColumn = 19
+        targetColumn = 15
         targetSumOld = targetItem.depositSum
       } else if (isMatch(postObject.account, 'Биржа')) {
-        targetColumn = 20
+        targetColumn = 16
         targetSumOld = targetItem.exchangeSum
       } else if (isMatch(postObject.account, 'ИИС')) {
-        targetColumn = 21
+        targetColumn = 17
         targetSumOld = targetItem.iisSum
       }
       //? продумать как определять цель при списании в затраты
     } else if (isMatch(postObject.bill, 'Затраты')) {
       if (isMatch(targetItem.goal, postObject.mvz)) {
-        targetColumn = 22
+        targetColumn = 18
         targetSumOld = targetItem.disbursedFunds
       }
     }
@@ -1412,6 +1412,8 @@ function updateTargetList(postObject) {
     }
     ssTargetOpen.getRange(targetItem.indexRow, targetColumn).setValue(+targetSumNew)
     postObject.targetArray = getGoogleSheetValues(postObject.targetOpen)
+    postobject.targetSumOld = targetSumOld
+    postobject.targetSumNew = targetSumNew
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
