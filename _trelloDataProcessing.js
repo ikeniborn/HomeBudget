@@ -200,7 +200,7 @@ function deleteError(postObject) {
     const startDate = getPreviousDate(1)
     const deleteArrya = []
     postObject.errorArray.reduce(function (row, array, index) {
-      if (index > 0) {
+      if (index != 0) {
         if (array[0] <= startDate) {
           deleteArrya.push(index + 1)
         }
@@ -665,13 +665,13 @@ function getAllTarget(postObject) {
         object.newCost = +array[10]
         object.monthDeductionSum = +array[11]
         object.currentListedSum = +array[12]
-        object.targetSum = +array[13]
-        object.depositSum = +array[14]
-        object.exchangeSum = +array[15]
-        object.iisSum = +array[16]
-        object.disbursedFunds = +array[17]
-        object.inStock = +array[18]
-        object.completePersent = +array[19]
+        object.targetSum = +array[14]
+        object.depositSum = +array[15]
+        object.exchangeSum = +array[16]
+        object.iisSum = +array[17]
+        object.disbursedFunds = +array[18]
+        object.inStock = +array[19]
+        object.completePersent = +array[20]
         object.indexRow = index + 1
         row.push(object)
       }
@@ -1412,8 +1412,8 @@ function updateTargetList(postObject) {
     }
     ssTargetOpen.getRange(targetItem.indexRow, targetColumn).setValue(+targetSumNew)
     postObject.targetArray = getGoogleSheetValues(postObject.targetOpen)
-    postobject.targetSumOld = targetSumOld
-    postobject.targetSumNew = targetSumNew
+    postObject.targetSumOld = targetSumOld
+    postObject.targetSumNew = targetSumNew
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
