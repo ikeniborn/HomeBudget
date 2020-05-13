@@ -749,14 +749,13 @@ function getCostСenter(postObject) {
     object.item = object.array.reduce(function (row, array) {
       if (isMatch(postObject.comment, array.tag)) {
         row = array
-        return row
-      } else {
-        row.id = 0
-        row.mvz = postObject.cfo
-        row.tag = postObject.cfo
-        return row
       }
-    }, {})
+      return row
+    }, {
+      id: 0,
+      mvz: postObject.cfo,
+      tag: postObject.cfo
+    })
     return object
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
