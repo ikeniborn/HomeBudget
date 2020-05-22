@@ -924,10 +924,10 @@ function getPeriod(postObject) {
       date.budgetPeriod2 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 1, 1)
       date.budgetPeriod3 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 2, 1)
     }
-    if (getYMD(date.factPeriod).ymd == getYMD(date.budgetPeriod).ymd) {
-      date.budgetPeriodCurrent = date.factPeriod
-    } else {
+    if (getYMD(date.factPeriod).ymd === getYMD(date.budgetPeriod).ymd) {
       date.budgetPeriodCurrent = date.budgetPeriod
+    } else {
+      date.budgetPeriodCurrent = date.factPeriod
     }
     if (isMatch(postObject.boardId, postObject.boardIdFact)) {
       date.period = date.factPeriod
