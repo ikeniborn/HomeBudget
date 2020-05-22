@@ -912,7 +912,6 @@ function getPeriod(postObject) {
       date.budgetPeriod = getParametr(postObjectCopy).item.value
       date.factPeriod1 = new Date(date.factPeriod.getFullYear(), date.factPeriod.getMonth() - 1, 1)
       date.factPeriod2 = new Date(date.factPeriod.getFullYear(), date.factPeriod.getMonth() - 2, 1)
-      date.budgetPeriod0 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() - 1, 1)
       date.budgetPeriod2 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 1, 1)
       date.budgetPeriod3 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 2, 1)
     } else if (postObject.isBudget) {
@@ -924,11 +923,11 @@ function getPeriod(postObject) {
       date.factPeriod2 = new Date(date.factPeriod.getFullYear(), date.factPeriod.getMonth() - 2, 1)
       date.budgetPeriod2 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 1, 1)
       date.budgetPeriod3 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 2, 1)
-      if (getYMD(date.factPeriod).ymd === getYMD(date.budgetPeriod).ymd) {
-        date.budgetPeriodCurrent = date.factPeriod
-      } else {
-        date.budgetPeriodCurrent = date.budgetPeriod
-      }
+    }
+    if (getYMD(date.factPeriod).ymd == getYMD(date.budgetPeriod).ymd) {
+      date.budgetPeriodCurrent = date.factPeriod
+    } else {
+      date.budgetPeriodCurrent = date.budgetPeriod
     }
     if (isMatch(postObject.boardId, postObject.boardIdFact)) {
       date.period = date.factPeriod
