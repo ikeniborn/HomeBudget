@@ -353,7 +353,7 @@ function getPostObject(postData) {
       object.factPeriod2 = new Date(object.period.getFullYear(), object.period.getMonth() - 2, 1)
       object.factPeriod1 = new Date(object.period.getFullYear(), object.period.getMonth() - 1, 1)
       object.factPeriod = object.period
-      object.budgetPeriod0 = new Date(object.period.getFullYear(), object.period.getMonth(), 1)
+      object.budgetPeriodCurrent = object.period
       object.budgetPeriod = new Date(object.period.getFullYear(), object.period.getMonth() + 1, 1)
       object.budgetPeriod2 = new Date(object.period.getFullYear(), object.period.getMonth() + 2, 1)
       object.budgetPeriod3 = new Date(object.period.getFullYear(), object.period.getMonth() + 3, 1)
@@ -364,7 +364,7 @@ function getPostObject(postData) {
       object.factPeriod2 = object.date.factPeriod2
       object.factPeriod1 = object.date.factPeriod1
       object.factPeriod = object.date.factPeriod
-      object.budgetPeriod0 = object.date.budgetPeriod0
+      object.budgetPeriodCurrent = object.date.budgetPeriodCurrent
       object.budgetPeriod = object.date.budgetPeriod
       object.budgetPeriod2 = object.date.budgetPeriod2
       object.budgetPeriod3 = object.date.budgetPeriod3
