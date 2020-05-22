@@ -353,6 +353,7 @@ function getPostObject(postData) {
       object.factPeriod2 = new Date(object.period.getFullYear(), object.period.getMonth() - 2, 1)
       object.factPeriod1 = new Date(object.period.getFullYear(), object.period.getMonth() - 1, 1)
       object.factPeriod = object.period
+      object.budgetPeriod0 = new Date(object.period.getFullYear(), object.period.getMonth(), 1)
       object.budgetPeriod = new Date(object.period.getFullYear(), object.period.getMonth() + 1, 1)
       object.budgetPeriod2 = new Date(object.period.getFullYear(), object.period.getMonth() + 2, 1)
       object.budgetPeriod3 = new Date(object.period.getFullYear(), object.period.getMonth() + 3, 1)
@@ -363,6 +364,7 @@ function getPostObject(postData) {
       object.factPeriod2 = object.date.factPeriod2
       object.factPeriod1 = object.date.factPeriod1
       object.factPeriod = object.date.factPeriod
+      object.budgetPeriod0 = object.date.budgetPeriod0
       object.budgetPeriod = object.date.budgetPeriod
       object.budgetPeriod2 = object.date.budgetPeriod2
       object.budgetPeriod3 = object.date.budgetPeriod3
@@ -910,6 +912,7 @@ function getPeriod(postObject) {
       date.budgetPeriod = getParametr(postObjectCopy).item.value
       date.factPeriod1 = new Date(date.factPeriod.getFullYear(), date.factPeriod.getMonth() - 1, 1)
       date.factPeriod2 = new Date(date.factPeriod.getFullYear(), date.factPeriod.getMonth() - 2, 1)
+      date.budgetPeriod0 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() - 1, 1)
       date.budgetPeriod2 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 1, 1)
       date.budgetPeriod3 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 2, 1)
     } else if (postObject.isBudget) {
@@ -921,6 +924,11 @@ function getPeriod(postObject) {
       date.factPeriod2 = new Date(date.factPeriod.getFullYear(), date.factPeriod.getMonth() - 2, 1)
       date.budgetPeriod2 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 1, 1)
       date.budgetPeriod3 = new Date(date.budgetPeriod.getFullYear(), date.budgetPeriod.getMonth() + 2, 1)
+      if (getYMD(date.factPeriod).ymd === getYMD(date.budgetPeriod).ymd) {
+        date.budgetPeriodCurrent = date.factPeriod
+      } else {
+        date.budgetPeriodCurrent = date.budgetPeriod
+      }
     }
     if (isMatch(postObject.boardId, postObject.boardIdFact)) {
       date.period = date.factPeriod
@@ -1170,6 +1178,7 @@ function isOldData(postObject) {
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
+  пуе
 }
 
 function parseComment(postObject) {
@@ -1454,7 +1463,7 @@ function getAllDataAccount(postObject) {
       return row.ymd == getYMD(postObject.factPeriod).ymd && isMatch(row.type, 'Факт')
     })
     object.current.budget = object.all.filter(function (row) {
-      return row.ymd == getYMD(postObject.budgetPeriod).ymd && isMatch(row.type, 'Бюджет')
+      return row.ymd == getYMD(postObject.budgetPeriodCurrent).ymd && isMatch(row.type, 'Бюджет')
     })
     return object
   } catch (e) {
@@ -1496,7 +1505,7 @@ function getAllDataTrello(postObject) {
       return row.ymd == getYMD(postObject.factPeriod).ymd && isMatch(row.type, 'Факт')
     })
     object.current.budget = object.all.filter(function (row) {
-      return row.ymd == getYMD(postObject.budgetPeriod).ymd && isMatch(row.type, 'Бюджет')
+      return row.ymd == getYMD(postObject.budgetPeriodCurrent).ymd && isMatch(row.type, 'Бюджет')
     })
     return object
   } catch (e) {
