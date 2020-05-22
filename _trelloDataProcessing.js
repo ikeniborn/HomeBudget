@@ -1178,7 +1178,6 @@ function isOldData(postObject) {
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
-  пуе
 }
 
 function parseComment(postObject) {
