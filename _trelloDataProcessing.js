@@ -795,7 +795,7 @@ function getDescription(postObject) {
             description.text += '**Факт прошлых периодов:**' + postObject.lineBreak
             const previousFact = getPreviousFact(postObject)
             description.text += formatterDate(postObject.factPeriod).date + ': ' + previousFact.Prev0.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
-            description.text += formatterDate(postObject.factPeriod1).date + ': ' + previousFact.Prev2.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
+            description.text += formatterDate(postObject.factPeriod1).date + ': ' + previousFact.Prev1.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
             description.text += formatterDate(postObject.factPeriod2).date + ': ' + previousFact.Prev2.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
           }
         } else if (isMatch(postObject.nomenclature, 'Баланс')) {
