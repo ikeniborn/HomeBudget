@@ -1067,7 +1067,7 @@ function getTotalSum(postObject, array) {
             //* сумма по статье накопления в приходах
             sum.accumulationBillIncomeSum += array.sum
           }
-          if (isMatch(array.nomenclature, 'Накопления')) {
+          if (isMatch(array.nomenclature, 'Уменьшение накоплений')) {
             //* сумма по номенклатуре накопления в приходах
             sum.accumulationNomenclatureIncomeSum += array.sum
           }
@@ -1088,7 +1088,7 @@ function getTotalSum(postObject, array) {
             //* сумма по статье переводы в расходах
             sum.transferBillExpenseSum += array.sum
           }
-          if (isMatch(array.nomenclature, 'Накопления')) {
+          if (isMatch(array.nomenclature, 'Увеличение накоплений')) {
             //* сумма по номенклатуре накопления в расходах
             sum.accumulationNomenclatureExpenseSum += array.sum
           } else if (isMatch(array.nomenclature, 'Перевод на счет Семья')) {
