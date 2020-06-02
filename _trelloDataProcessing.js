@@ -793,8 +793,10 @@ function getDescription(postObject) {
           if (postObject.isCurrBudget) {
             //* информация в рестроспективе за последние два месяца
             description.text += '**Факт прошлых периодов:**' + postObject.lineBreak
-            description.text += formatterDate(postObject.factPeriod).date + ': ' + getPreviousFact(postObject).Prev1.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
-            description.text += formatterDate(postObject.factPeriod1).date + ': ' + getPreviousFact(postObject).Prev2.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
+            const previousFact = getPreviousFact(postObject)
+            description.text += formatterDate(postObject.factPeriod).date + ': ' + previousFact.Prev0.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
+            description.text += formatterDate(postObject.factPeriod1).date + ': ' + previousFact.Prev2.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
+            description.text += formatterDate(postObject.factPeriod2).date + ': ' + previousFact.Prev2.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
           }
         } else if (isMatch(postObject.nomenclature, 'Баланс')) {
           //* описание карточки баланса
@@ -1515,6 +1517,10 @@ function getAllDataTrello(postObject) {
 function getPreviousFact(postObject) {
   try {
     const sum = {}
+    const postObjectPrevCurrent = copyObject(postObject)
+    postObjectPrevCurrent.factPeriod = postObject.factPeriod
+    postObjectPrevCurrent.dataAccount = getAllDataAccount(postObjectPrevCurrent)
+    sum.Prev0 = getSum(postObjectPrevCurrent)
     const postObjectPrev1 = copyObject(postObject)
     postObjectPrev1.factPeriod = postObject.factPeriod1
     postObjectPrev1.dataAccount = getAllDataAccount(postObjectPrev1)
