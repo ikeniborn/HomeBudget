@@ -796,7 +796,6 @@ function getDescription(postObject) {
             const previousFact = getPreviousFact(postObject)
             description.text += formatterDate(postObject.factPeriod).date + ': ' + previousFact.Prev0.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
             description.text += formatterDate(postObject.factPeriod1).date + ': ' + previousFact.Prev1.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
-            description.text += formatterDate(postObject.factPeriod2).date + ': ' + previousFact.Prev2.factSum.nomenclatureSum + ' р.' + postObject.lineBreak
           }
         } else if (isMatch(postObject.nomenclature, 'Баланс')) {
           //* описание карточки баланса
@@ -1525,10 +1524,6 @@ function getPreviousFact(postObject) {
     postObjectPrev1.factPeriod = postObject.factPeriod1
     postObjectPrev1.dataAccount = getAllDataAccount(postObjectPrev1)
     sum.Prev1 = getSum(postObjectPrev1)
-    const postObjectPrev2 = copyObject(postObject)
-    postObjectPrev2.factPeriod = postObject.factPeriod2
-    postObjectPrev2.dataAccount = getAllDataAccount(postObjectPrev2)
-    sum.Prev2 = getSum(postObjectPrev2)
     return sum
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
