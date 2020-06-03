@@ -52,8 +52,8 @@ function addCardReaction(postObject) {
    * @postObject - входные параметра запроса
    */
   try {
-    var reactions = []
-    if (postObject.memberId == '55cb5c5729ae976dfd2b901e') {
+    const reactions = []
+    if (isMatch(postObject.memberId, '55cb5c5729ae976dfd2b901e')) {
       if (postObject.sum > 500) {
         reactions.push(postObject.scream)
       } else {
@@ -73,7 +73,6 @@ function addCardReaction(postObject) {
       UrlFetchApp.fetch(postObject.apiRoot + 'actions/' + postObject.actionId + '/reactions?' + postObject.keyAndToken, data)
     })
   } catch (e) {
-
     addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
