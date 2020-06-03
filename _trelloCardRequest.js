@@ -72,6 +72,7 @@ function addCardReaction(postObject) {
       }
       UrlFetchApp.fetch(postObject.apiRoot + 'actions/' + postObject.actionId + '/reactions?' + postObject.keyAndToken, data)
     })
+    addErrorItem(arguments.callee.name + ': ' + reactions)
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
