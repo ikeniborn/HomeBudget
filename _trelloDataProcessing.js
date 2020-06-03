@@ -1589,8 +1589,7 @@ function doPost(e) {
         updateCardDesc(postObject)
         //* обновление карточки баланса
         updateBalanceCard(postObject)
-        //* добавление реакции на комментарий
-        addCardReaction(postObject)
+
       } else if (isMatch(postObject.actionType, 'updateComment') && postObject.isOldData) {
         //* обновление данных при изменении комментария
         updateRowByActionId(postObject)
@@ -1604,7 +1603,6 @@ function doPost(e) {
         updateCardDesc(postObject)
         //* обновление карточки баланса
         updateBalanceCard(postObject)
-        addCardReaction(postObject)
       } else if (isMatch(postObject.actionType, 'deleteComment') && postObject.isOldData) {
         //* удаление строки при удалении комментария
         postObject.sum = deleteRowByActionId(postObject)
@@ -1660,5 +1658,8 @@ function doPost(e) {
     }
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
+  } finally {
+    //* добавление реакции на комментарий
+    addCardReaction(postObject)
   }
 }
