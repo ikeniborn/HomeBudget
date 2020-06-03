@@ -1659,7 +1659,9 @@ function doPost(e) {
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   } finally {
-    //* добавление реакции на комментарий
-    addCardReaction(postObject)
+    if (isMatch(postObject.actionType, 'commentCard')) {
+      //* добавление реакции на комментарий
+      addCardReaction(postObject)
+    }
   }
 }
