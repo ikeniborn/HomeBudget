@@ -1202,7 +1202,6 @@ function parseComment(postObject) {
 function updateBalanceCard(postObject) {
   /*
    * @postObject - данные реквеста
-   * @sumData - данные по суммам из учета
    */
   try {
     //* обновление карточки баланса
@@ -1216,6 +1215,8 @@ function updateBalanceCard(postObject) {
       postObjectBalance.cardDescription = description.text
       updateCardDesc(postObjectBalance)
     }
+    //* подписка на карточку 
+    updateCardSubcribed(postObject)
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }

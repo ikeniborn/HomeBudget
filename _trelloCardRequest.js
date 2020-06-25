@@ -217,7 +217,6 @@ function getCards(postObject) {
     }, [])
     return cards
   } catch (e) {
-
     addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
@@ -234,7 +233,6 @@ function moveAllCards(postObjectOld, postObjectNew) {
     }
     UrlFetchApp.fetch(postObjectOld.apiRoot + 'lists/' + postObjectOld.listId + '/moveAllCards?idBoard=' + postObjectNew.boardId + '&idList=' + postObjectNew.listId + '&' + postObjectOld.keyAndToken, data)
   } catch (e) {
-    postObjectOld.error += arguments.callee.name + ': ' + e + postObjectOld.lineBreakCell
     addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
@@ -250,7 +248,6 @@ function moveCard(postObject) {
     }
     UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '/idBoard?value=' + postObject.boardId + '&idList=' + postObject.listId + '&' + postObject.keyAndToken, data)
   } catch (e) {
-
     addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
@@ -266,7 +263,21 @@ function updateCardDesc(postObject) {
     }
     UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '?desc=' + postObject.cardDescription + '&' + postObject.keyAndToken, data)
   } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
+}
 
+function updateCardSubcribed(postObject) {
+  /*
+   * @postObject - входные параметра запроса
+   */
+  try {
+    var data = {
+      method: 'put',
+      contentType: 'application/json'
+    }
+    UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '?subscribed=true&' + postObject.keyAndToken, data)
+  } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
