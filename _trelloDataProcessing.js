@@ -1236,9 +1236,6 @@ function updateDescForNewCards(postObject) {
         postObjectCard.cardDescription = description.text
         updateCardDesc(postObjectCard)
       }
-      if (isMatch(postObjectCard.nomenclature, 'Баланс')) {
-        //* подписка на карточку баланса
-      }
     })
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
