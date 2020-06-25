@@ -1,6 +1,5 @@
 //? добавить функцию сверки даты
-//? перенести реакцию в блоки finally для проверки добавление записи в учет
-//? добавить в данные информациию по операции для использования в отчетности
+//? добавить уведомление о баланче через бота телеграмм
 
 function addErrorItem(error) {
   try {
@@ -1575,7 +1574,6 @@ function isValidateAction(postData) {
 function doPost(e) {
   try {
     const postData = JSON.parse(e.postData.contents)
-    addErrorItem(arguments.callee.name + ': ' + JSON.parse(e.postData))
     if (addLog(postData)) {
       var postObject = getPostObject(postData)
       if (isMatch(postObject.actionType, 'commentCard')) {
@@ -1592,7 +1590,6 @@ function doPost(e) {
         updateCardDesc(postObject)
         //* обновление карточки баланса
         updateBalanceCard(postObject)
-
       } else if (isMatch(postObject.actionType, 'updateComment') && postObject.isOldData) {
         //* обновление данных при изменении комментария
         updateRowByActionId(postObject)
