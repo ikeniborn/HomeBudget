@@ -274,7 +274,10 @@ function updateCardSubcribed(postObject) {
   try {
     var data = {
       method: 'put',
-      contentType: 'application/json'
+      contentType: 'application/json',
+      header: {
+        Accept: 'application/json'
+      }
     }
     UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '?subscribed=' + true + '&' + postObject.keyAndToken, data)
   } catch (e) {
