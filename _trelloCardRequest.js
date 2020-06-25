@@ -279,7 +279,7 @@ function updateCardSubcribed(postObject) {
         Accept: 'application/json'
       }
     }
-    UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '?subscribed=' + true + '&' + postObject.keyAndToken, data)
+    UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '?idMembers' + postObject.memberId + '&subscribed=' + true + '&' + postObject.keyAndToken, data)
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
