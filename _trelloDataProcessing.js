@@ -527,6 +527,10 @@ function createCardsForList(postObject) {
         return row
       }, {})
       addCard(postObject, accounts.nomenclature, postObject.listId, accounts.id, label.id)
+      if (isMatch(accounts.nomenclature, 'Баланс')) {
+        //* подписка на карточку баланса
+        updateCardSubcribed(postObject)
+      }
     })
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
@@ -1215,8 +1219,6 @@ function updateBalanceCard(postObject) {
       postObjectBalance.cardDescription = description.text
       updateCardDesc(postObjectBalance)
     }
-    //* подписка на карточку 
-    updateCardSubcribed(postObject)
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
