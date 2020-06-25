@@ -526,7 +526,7 @@ function createCardsForList(postObject) {
         }
         return row
       }, {})
-      addCard(postObject, accounts.nomenclature, postObject.listId, accounts.id, label.id)
+      postObject.cardId = addCard(postObject, accounts.nomenclature, postObject.listId, accounts.id, label.id).id
       if (isMatch(accounts.nomenclature, 'Баланс')) {
         //* подписка на карточку баланса
         updateCardSubcribed(postObject)
