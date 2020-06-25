@@ -1242,7 +1242,6 @@ function updateDescForNewCards(postObject) {
       }
       if (isMatch(postObjectCard.nomenclature, 'Баланс')) {
         //* подписка на карточку баланса
-        updateCardSubcribed(postObjectCard)
       }
     })
   } catch (e) {

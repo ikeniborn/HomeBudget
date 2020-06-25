@@ -266,19 +266,3 @@ function updateCardDesc(postObject) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
-
-function updateCardSubcribed(postObject) {
-  /*
-   * @postObject - входные параметра запроса
-   */
-  try {
-    var data = {
-      method: 'put',
-      contentType: 'application/json'
-    }
-    const isSubscribed = true
-    UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '?&subscribed=' + isSubscribed + '&' + postObject.keyAndToken, data)
-  } catch (e) {
-    addErrorItem(arguments.callee.name + ': ' + e)
-  }
-}
