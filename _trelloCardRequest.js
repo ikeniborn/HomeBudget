@@ -274,12 +274,10 @@ function updateCardSubcribed(postObject) {
   try {
     var data = {
       method: 'put',
-      contentType: 'application/json',
-      headers: {
-        Accept: 'application/json'
-      }
+      contentType: 'application/json'
     }
-    UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '?idMembers' + postObject.memberId + '&subscribed=' + true + '&' + postObject.keyAndToken, data)
+    const isSubscribed = true
+    UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '?idMembers' + postObject.memberId + '&subscribed=' + isSubscribed + '&' + postObject.keyAndToken, data)
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
