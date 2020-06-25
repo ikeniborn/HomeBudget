@@ -1,6 +1,3 @@
-//? добавить функцию сверки даты
-//? добавить уведомление о баланче через бота телеграмм
-
 function addErrorItem(error) {
   try {
     const globalVariable = getGlobalVariable()
