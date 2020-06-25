@@ -275,7 +275,7 @@ function updateCardSubcribed(postObject) {
     var data = {
       method: 'put',
       contentType: 'application/json',
-      header: {
+      headers: {
         Accept: 'application/json'
       }
     }
