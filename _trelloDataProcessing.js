@@ -1576,6 +1576,7 @@ function isValidateAction(postData) {
 function doPost(e) {
   try {
     const postData = JSON.parse(e.postData.contents)
+    addErrorItem(arguments.callee.name + ': ' + postData)
     if (addLog(postData)) {
       var postObject = getPostObject(postData)
       if (isMatch(postObject.actionType, 'commentCard')) {
