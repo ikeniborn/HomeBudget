@@ -526,11 +526,7 @@ function createCardsForList(postObject) {
         }
         return row
       }, {})
-      postObject.cardId = addCard(postObject, accounts.nomenclature, postObject.listId, accounts.id, label.id).id
-      if (isMatch(accounts.nomenclature, 'Баланс')) {
-        //* подписка на карточку баланса
-        updateCardSubcribed(postObject)
-      }
+      addCard(postObject, accounts.nomenclature, postObject.listId, accounts.id, label.id).id
     })
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
@@ -1243,6 +1239,10 @@ function updateDescForNewCards(postObject) {
       if (description.haveBudget) {
         postObjectCard.cardDescription = description.text
         updateCardDesc(postObjectCard)
+      }
+      if (isMatch(postObjectCard.nomenclature, 'Баланс')) {
+        //* подписка на карточку баланса
+        updateCardSubcribed(postObjectCard)
       }
     })
   } catch (e) {
