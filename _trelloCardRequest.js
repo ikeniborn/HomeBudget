@@ -276,7 +276,7 @@ function updateCardSubcribed(postObject) {
       method: 'put',
       contentType: 'application/json'
     }
-    UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '?subscribed=true&' + postObject.keyAndToken, data)
+    UrlFetchApp.fetch(postObject.apiRoot + 'cards/' + postObject.cardId + '?subscribed=' + true + '&' + postObject.keyAndToken, data)
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
