@@ -1,15 +1,13 @@
 function sendMessageTelegram(postObject) {
   try {
-    var payload = {
-      method: 'sendMessage',
-      chat_id: postObject.telegramChatId,
-      text: postObject.cardDescription,
-      parse_mode: 'HTML'
-    }
-
-    var data = {
+    const data = {
       method: 'post',
-      payload: payload
+      payload: {
+        method: 'sendMessage',
+        chat_id: postObject.telegramChatId,
+        text: postObject.cardComment,
+        parse_mode: 'HTML'
+      }
     }
     UrlFetchApp.fetch(postObject.telegramUrl, data);
   } catch (e) {

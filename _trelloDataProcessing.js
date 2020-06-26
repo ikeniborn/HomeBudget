@@ -1210,8 +1210,8 @@ function updateBalanceCard(postObject) {
       const description = getDescription(postObjectBalance)
       postObjectBalance.cardDescription = description.text
       updateCardDesc(postObjectBalance)
-      sendMessageTelegram(postObjectBalance)
     }
+    sendMessageTelegram(postObjectBalance)
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
