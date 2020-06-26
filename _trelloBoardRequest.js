@@ -16,8 +16,8 @@ function addBoardLabel(postObject, labelName, labelColor, boardId) {
     variable.name = JSON.parse(resp).name
     return variable
   } catch (e) {
-    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
-    addError(postObject)
+
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -43,8 +43,8 @@ function getBoardLabel(postObject, boardId) {
     }, {})
     return respArray
   } catch (e) {
-    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
-    addError(postObject)
+
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -61,7 +61,7 @@ function updateBoard(postObject, boardId, boardName) {
     }
     UrlFetchApp.fetch(postObject.apiRoot + 'boards/' + boardId + '?name=' + boardName + '&' + postObject.keyAndToken, data)
   } catch (e) {
-    postObject.error += arguments.callee.name + ': ' + e + postObject.lineBreakCell
-    addError(postObject)
+
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
