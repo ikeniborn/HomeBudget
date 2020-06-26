@@ -5,7 +5,7 @@ function sendMessageTelegram(postObject) {
       payload: {
         method: 'sendMessage',
         chat_id: postObject.telegramChatId,
-        text: postObject.cardComment,
+        text: postObject.telegramMessage,
         parse_mode: 'HTML'
       }
     }
