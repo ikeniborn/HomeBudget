@@ -1228,10 +1228,10 @@ function updateBalanceCard(postObject) {
       postObjectBalance.cardDescription = description.text
       updateCardDesc(postObjectBalance)
     }
-    postObjectBalance.telegramChatId.forEach(id) {
+    postObjectBalance.telegramChatId.forEach(function (id) {
       postObjectBalance.telegramChatId = id
       sendMessageTelegram(postObjectBalance)
-    }
+    })
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
