@@ -694,13 +694,13 @@ function getComment(postObject) {
     const sum = getSum(postObject)
     if (isMatch(postObject.actionType, 'commentCard')) {
       comment.text = '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
-      comment.message = 'Внесенная сумма: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
+      comment.message = '<b>Внесенная сумма<b>: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
     } else if (isMatch(postObject.actionType, 'updateComment')) {
       comment.text = '**Новая сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
-      comment.message = 'Новая сумма: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
+      comment.message = '<b>Новая сумма<b>: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
     } else if (isMatch(postObject.actionType, 'deleteComment')) {
       comment.text = '**Удаленная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
-      comment.message = 'Удаленная сумма: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
+      comment.message = '<b>Удаленная сумма<b>: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
     }
     if (postObject.isFact) {
       //* комментарий по факту
@@ -708,13 +708,13 @@ function getComment(postObject) {
       comment.text += '**Остаток бюджета**:' + postObject.lineBreak
       comment.text += '*Статья* - ' + postObject.nomenclature + ': ' + sum.totalSum.nomenclatureBudgetRest + ' р.' + postObject.lineBreak
       comment.text += '*Номенклатура* - ' + postObject.account + ': ' + sum.totalSum.accountBudgetRest + ' р.' + postObject.lineBreak
-      comment.message += 'Остаток средств ' + '' + postObject.cfo + ': ' + sum.totalSum.totalRest + ' р.' + postObject.telegramLineBreak
-      comment.message += 'Остаток бюджета:' + postObject.telegramLineBreak
-      comment.message += 'Статья - ' + postObject.nomenclature + ': ' + sum.totalSum.nomenclatureBudgetRest + ' р.' + postObject.telegramLineBreak
-      comment.message += 'Номенклатура - ' + postObject.account + ': ' + sum.totalSum.accountBudgetRest + ' р.' + postObject.telegramLineBreak
+      comment.message += '<b>Остаток средств<b> ' + '<i>' + postObject.cfo + '<i>: ' + sum.totalSum.totalRest + ' р.' + postObject.telegramLineBreak
+      comment.message += '<b>Остаток бюджета<b>:' + postObject.telegramLineBreak
+      comment.message += '<i>Статья<i> - ' + postObject.nomenclature + ': ' + sum.totalSum.nomenclatureBudgetRest + ' р.' + postObject.telegramLineBreak
+      comment.message += '<i>Номенклатура <i>- ' + postObject.account + ': ' + sum.totalSum.accountBudgetRest + ' р.' + postObject.telegramLineBreak
       if (isValidString(postObject.comment)) {
         comment.text += '**Комментарий**: ' + postObject.comment
-        comment.message += 'Комментарий: ' + postObject.comment
+        comment.message += '<b>Комментарий<b>: ' + postObject.comment
       }
     } else if (postObject.isBudget) {
       //* комментарий по бюджету
@@ -722,13 +722,13 @@ function getComment(postObject) {
       comment.text += '*Номенклатура* - ' + postObject.nomenclature + ': ' + sum.budgetSum.nomenclatureSum + ' р.' + postObject.lineBreak
       comment.text += '*Статья* - ' + postObject.account + ': ' + sum.budgetSum.accountSum + ' р.' + postObject.lineBreak
       comment.text += '*Счет* - ' + postObject.bill + ': ' + sum.budgetSum.billSum + ' р.' + postObject.lineBreak
-      comment.message += 'Бюджет:' + postObject.telegramLineBreak
-      comment.message += 'Номенклатура - ' + postObject.nomenclature + ': ' + sum.budgetSum.nomenclatureSum + ' р.' + postObject.telegramLineBreak
-      comment.message += 'Статья - ' + postObject.account + ': ' + sum.budgetSum.accountSum + ' р.' + postObject.telegramLineBreak
-      comment.message += 'Счет - ' + postObject.bill + ': ' + sum.budgetSum.billSum + ' р.' + postObject.telegramLineBreak
+      comment.message += '<b>Бюджет<b>:' + postObject.telegramLineBreak
+      comment.message += '<i>Номенклатура<i> - ' + postObject.nomenclature + ': ' + sum.budgetSum.nomenclatureSum + ' р.' + postObject.telegramLineBreak
+      comment.message += '<i>Статья<i> - ' + postObject.account + ': ' + sum.budgetSum.accountSum + ' р.' + postObject.telegramLineBreak
+      comment.message += '<i>Счет<i> - ' + postObject.bill + ': ' + sum.budgetSum.billSum + ' р.' + postObject.telegramLineBreak
       if (isValidString(postObject.comment)) {
         comment.text += '**Комментарий**: ' + postObject.comment
-        comment.message += 'Комментарий: ' + postObject.comment
+        comment.message += '<b>Комментарий<b>: ' + postObject.comment
       }
     } else if (postObject.isTarget) {
       //* комментарий по цели
@@ -736,10 +736,10 @@ function getComment(postObject) {
       comment.text += '*Старая сумма*: ' + postObject.targetSumOld + ' р.' + postObject.lineBreak
       comment.text += '*Новая сумма*: ' + postObject.targetSumNew + ' р.' + postObject.lineBreak
       comment.text += '*Изменения*: ' + postObject.actionSum + ' р.'
-      comment.message += 'Счет - ' + postObject.nomenclature + postObject.telegramLineBreak
-      comment.message += 'Старая сумма: ' + postObject.targetSumOld + ' р.' + postObject.telegramLineBreak
-      comment.message += 'Новая сумма: ' + postObject.targetSumNew + ' р.' + postObject.telegramLineBreak
-      comment.message += 'Изменения: ' + postObject.actionSum + ' р.'
+      comment.message += '<i>Счет<i> - ' + postObject.nomenclature + postObject.telegramLineBreak
+      comment.message += '<i>Старая сумма<i>: ' + postObject.targetSumOld + ' р.' + postObject.telegramLineBreak
+      comment.message += '<i>Новая сумма<i>: ' + postObject.targetSumNew + ' р.' + postObject.telegramLineBreak
+      comment.message += '<i>Изменения<i>: ' + postObject.actionSum + ' р.'
     }
     return comment
   } catch (e) {
