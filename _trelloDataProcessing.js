@@ -695,7 +695,6 @@ function getComment(postObject) {
     if (isMatch(postObject.actionType, 'commentCard')) {
       comment.text = '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
       comment.message = '<b><u>' + postObject.cfo + '</u> внесено</b>: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
-      comment.message += postObject.sum + ' р.' + postObject.telegramLineBreak
     } else if (isMatch(postObject.actionType, 'updateComment')) {
       comment.text = '**Новая сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
       comment.message = '<b><u>' + postObject.cfo + '</u> изменено</b>: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
@@ -704,7 +703,6 @@ function getComment(postObject) {
     } else if (isMatch(postObject.actionType, 'deleteComment')) {
       comment.text = '**Удаленная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
       comment.message = '<b><u>' + postObject.cfo + '</u> удалено</b>: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
-      comment.message += postObject.sum + ' р.' + postObject.telegramLineBreak
     }
     if (postObject.isFact) {
       //* комментарий по факту
