@@ -694,13 +694,16 @@ function getComment(postObject) {
     const sum = getSum(postObject)
     if (isMatch(postObject.actionType, 'commentCard')) {
       comment.text = '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
-      comment.message = '<b>Внесенно</b>: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
+      comment.message = '<b>' + postObject.cfo + '</b> '
+      comment.message += '<b>Внесенно</b>: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
     } else if (isMatch(postObject.actionType, 'updateComment')) {
       comment.text = '**Новая сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
-      comment.message = '<b>Изменено</b>: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
+      comment.message = '<b>' + postObject.cfo + '</b> '
+      comment.message += '<b>Изменено</b>: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
     } else if (isMatch(postObject.actionType, 'deleteComment')) {
       comment.text = '**Удаленная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
-      comment.message = '<b>Удаленно</b>: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
+      comment.message = '<b>' + postObject.cfo + '</b> '
+      comment.message += '<b>Удаленно</b>: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
     }
     if (postObject.isFact) {
       //* комментарий по факту
@@ -708,7 +711,7 @@ function getComment(postObject) {
       comment.text += '**Остаток бюджета**:' + postObject.lineBreak
       comment.text += '*Статья* - ' + postObject.account + ': ' + sum.totalSum.accountBudgetRest + ' р.' + postObject.lineBreak
       comment.text += '*Номенклатура* - ' + postObject.nomenclature + ': ' + sum.totalSum.nomenclatureBudgetRest + ' р.' + postObject.lineBreak
-      comment.message += '<b>Остаток</b> ' + '<i>' + postObject.cfo + '</i>: ' + postObject.telegramLineBreak
+      comment.message += '<b>Остаток</b> ' + postObject.telegramLineBreak
       comment.message += '<b>Факт</b>: ' + sum.totalSum.totalRest + ' р.' + postObject.telegramLineBreak
       comment.message += '<b>Бюджет</b>:' + postObject.telegramLineBreak
       comment.message += '<i>' + postObject.account + '</i>: ' + sum.totalSum.nomenclatureBudgetRest + ' р.' + postObject.telegramLineBreak
