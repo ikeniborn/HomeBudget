@@ -711,9 +711,8 @@ function getComment(postObject) {
       comment.text += '**Остаток бюджета**:' + postObject.lineBreak
       comment.text += '*Статья* - ' + postObject.account + ': ' + sum.totalSum.accountBudgetRest + ' р.' + postObject.lineBreak
       comment.text += '*Номенклатура* - ' + postObject.nomenclature + ': ' + sum.totalSum.nomenclatureBudgetRest + ' р.' + postObject.lineBreak
-      comment.message += '<b>Остаток</b> ' + postObject.telegramLineBreak
-      comment.message += '<b>Факт</b>: ' + sum.totalSum.totalRest + ' р.' + postObject.telegramLineBreak
-      comment.message += '<b>Бюджет</b>:' + postObject.telegramLineBreak
+      comment.message += '<b>Остаток ДС</b>: ' + sum.totalSum.totalRest + ' р.' + postObject.telegramLineBreak
+      comment.message += '<b>Остаток бюджета</b>:' + postObject.telegramLineBreak
       comment.message += '<i>' + postObject.account + '</i>: ' + sum.totalSum.nomenclatureBudgetRest + ' р.' + postObject.telegramLineBreak
       comment.message += '<i>' + postObject.nomenclature + '</i>: ' + sum.totalSum.accountBudgetRest + ' р.' + postObject.telegramLineBreak
       if (isValidString(postObject.comment)) {
