@@ -694,17 +694,17 @@ function getComment(postObject) {
     const sum = getSum(postObject)
     if (isMatch(postObject.actionType, 'commentCard')) {
       comment.text = '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
-      comment.message = '<b>' + postObject.cfo + '</b> ' + postObject.telegramLineBreak
+      comment.message = '<b><u>' + postObject.cfo + '</u></b> ' + postObject.telegramLineBreak
       comment.message += '<b>Внесено</b>: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
     } else if (isMatch(postObject.actionType, 'updateComment')) {
       comment.text = '**Новая сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
-      comment.message = '<b>' + postObject.cfo + '</b> ' + postObject.telegramLineBreak
+      comment.message = '<b><u>' + postObject.cfo + '</u></b> ' + postObject.telegramLineBreak
       comment.message += '<b>Изменено</b>: ' + postObject.telegramLineBreak
       comment.message += '<i>Новое</i> - ' + postObject.sum + ' р.' + postObject.telegramLineBreak
       comment.message += '<i>Старое</i> - ' + postObject.oldSum + ' р.' + postObject.telegramLineBreak
     } else if (isMatch(postObject.actionType, 'deleteComment')) {
       comment.text = '**Удаленная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
-      comment.message = '<b>' + postObject.cfo + '</b> ' + postObject.telegramLineBreak
+      comment.message = '<b><u>' + postObject.cfo + '</u></b> ' + postObject.telegramLineBreak
       comment.message += '<b>Удалено</b>: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
     }
     if (postObject.isFact) {
