@@ -737,6 +737,7 @@ function getComment(postObject) {
       comment.text += '*Старая сумма*: ' + postObject.targetSumOld + ' р.' + postObject.lineBreak
       comment.text += '*Новая сумма*: ' + postObject.targetSumNew + ' р.' + postObject.lineBreak
       comment.text += '*Изменения*: ' + postObject.actionSum + ' р.'
+      comment.message += '<i>МВЗ</i> - ' + postObject.mvz + postObject.telegramLineBreak
       comment.message += '<i>Счет</i> - ' + postObject.nomenclature + postObject.telegramLineBreak
       comment.message += '<i>Старая сумма</i>: ' + postObject.targetSumOld + ' р.' + postObject.telegramLineBreak
       comment.message += '<i>Новая сумма</i>: ' + postObject.targetSumNew + ' р.' + postObject.telegramLineBreak
