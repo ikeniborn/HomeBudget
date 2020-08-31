@@ -1374,8 +1374,25 @@ function updateTrelloData(postObject) {
     let insertdate
     //* вставка значений в буфер
     const ss = postObject.trelloOpen
-    const pushBufferRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
+    const trelloArray = postObject.trelloArray
+    const pushBufferRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.cashFlow, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
     ss.appendRow(pushBufferRow)
+    trelloArray.push(pushBufferRow)
+    //* Проверка перевода на счет семьи
+    if (isMatch(postObject.account, 'Перевод на счет Семья')) {
+      insertdate = new Date(postObject.actionDate.getTime() + 1000);
+      if (isMatch(postObject.cfo, 'Илья')) {
+        pushBufferRow = [insertdate, postObject.period, 'Семья', 'Семья', 'Пополнение', 'Переводы', 'Приход со счета Илья', 'Приход со счета Илья', postObject.sum, postObject.comment, postObject.actionId, postObject.type]
+        ss.appendRow(pushBufferRow)
+        trelloArray.push(pushBufferRow)
+      } else if (isMatch(postObject.cfo, 'Оксана')) {
+        pushBufferRow = [insertdate, postObject.period, 'Семья', 'Семья', 'Пополнение', 'Переводы', 'Приход со счета Оксана', 'Приход со счета Оксана', postObject.sum, postObject.comment, postObject.actionId, postObject.type]
+        ss.appendRow(pushBufferRow)
+        trelloArray.push(pushBufferRow)
+      }
+    }
+    //* получение данных учета после обновления
+    postObject.dataTrello = getAllDataTrello(postObject)
     //* вставка значений в учет
     const ts = postObject.accountOpen
     const targetArray = postObject.accountArray
@@ -1511,14 +1528,14 @@ function getAllDataTrello(postObject) {
         object.ymd = getYMD(array[1]).ymd
         object.cfo = array[2]
         object.mvz = array[3]
-        object.cashFlow = null
-        object.bill = null
-        object.account = null
-        object.nomenclature = array[4]
-        object.sum = array[5]
-        object.comment = array[6]
-        object.actionId = array[7]
-        object.type = array[8]
+        object.cashFlow = array[4]
+        object.bill = array[5]
+        object.account = array[6]
+        object.nomenclature = array[7]
+        object.sum = array[8]
+        object.comment = array[9]
+        object.actionId = array[10]
+        object.type = array[11]
         object.indexRow = index + 1
         row.push(object)
       }
