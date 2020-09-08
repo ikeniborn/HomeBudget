@@ -1374,8 +1374,8 @@ function updateTrelloData(postObject) {
     let pushAccountRow
     let insertdate
     //* вставка значений в буфер
-    let ss = postObject.trelloOpen
-    let trelloArray = postObject.trelloArray
+    const ss = postObject.trelloOpen
+    const trelloArray = postObject.trelloArray
     let pushBufferRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.cashFlow, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
     ss.appendRow(pushBufferRow)
     trelloArray.push(pushBufferRow)
