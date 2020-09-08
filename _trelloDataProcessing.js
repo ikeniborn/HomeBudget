@@ -583,6 +583,7 @@ function deleteRowByActionId(postObject) {
     })
     //* получение данных учета после обновления
     postObject.dataAccount = getAllDataAccount(postObject)
+    postObject.dataTrello = getAllDataTrello(postObject)
     return sum
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
@@ -1373,9 +1374,9 @@ function updateTrelloData(postObject) {
     let pushAccountRow
     let insertdate
     //* вставка значений в буфер
-    const ss = postObject.trelloOpen
-    const trelloArray = postObject.trelloArray
-    const pushBufferRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.cashFlow, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
+    let ss = postObject.trelloOpen
+    let trelloArray = postObject.trelloArray
+    let pushBufferRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.cashFlow, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
     ss.appendRow(pushBufferRow)
     trelloArray.push(pushBufferRow)
     //* Проверка перевода на счет семьи
@@ -1394,8 +1395,8 @@ function updateTrelloData(postObject) {
     //* получение данных учета после обновления
     postObject.dataTrello = getAllDataTrello(postObject)
     //* вставка значений в учет
-    const ts = postObject.accountOpen
-    const targetArray = postObject.accountArray
+    let ts = postObject.accountOpen
+    let targetArray = postObject.accountArray
     pushAccountRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.cashFlow, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
     ts.appendRow(pushAccountRow)
     targetArray.push(pushAccountRow)
