@@ -583,6 +583,7 @@ function deleteRowByActionId(postObject) {
     })
     //* получение данных учета после обновления
     postObject.dataAccount = getAllDataAccount(postObject)
+    postObject.dataTrello = getAllDataTrello(postObject)
     return sum
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
@@ -694,28 +695,42 @@ function getComment(postObject) {
     const sum = getSum(postObject)
     if (isMatch(postObject.actionType, 'commentCard')) {
       comment.text = '**Внесенная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
+      comment.message = '<b><u>' + postObject.cfo + '</u> внесено</b>: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
     } else if (isMatch(postObject.actionType, 'updateComment')) {
       comment.text = '**Новая сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
+      comment.message = '<b><u>' + postObject.cfo + '</u> изменено</b>: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
+      comment.message += '<i>Новое</i> - ' + postObject.sum + ' р.' + postObject.telegramLineBreak
+      comment.message += '<i>Старое</i> - ' + postObject.oldSum + ' р.' + postObject.telegramLineBreak
     } else if (isMatch(postObject.actionType, 'deleteComment')) {
       comment.text = '**Удаленная сумма**: ' + postObject.sum + ' р.' + postObject.lineBreak
+      comment.message = '<b><u>' + postObject.cfo + '</u> удалено</b>: ' + postObject.sum + ' р.' + postObject.telegramLineBreak
     }
     if (postObject.isFact) {
       //* комментарий по факту
       comment.text += '**Остаток средств** ' + '*' + postObject.cfo + '*: ' + sum.totalSum.totalRest + ' р.' + postObject.lineBreak
       comment.text += '**Остаток бюджета**:' + postObject.lineBreak
-      comment.text += '*Статья* - ' + postObject.nomenclature + ': ' + sum.totalSum.nomenclatureBudgetRest + ' р.' + postObject.lineBreak
-      comment.text += '*Номенклатура* - ' + postObject.account + ': ' + sum.totalSum.accountBudgetRest + ' р.' + postObject.lineBreak
+      comment.text += '*Статья* - ' + postObject.account + ': ' + sum.totalSum.accountBudgetRest + ' р.' + postObject.lineBreak
+      comment.text += '*Номенклатура* - ' + postObject.nomenclature + ': ' + sum.totalSum.nomenclatureBudgetRest + ' р.' + postObject.lineBreak
+      comment.message += '<b>Ост. ДС</b>: ' + sum.totalSum.totalRest + ' р.' + postObject.telegramLineBreak
+      comment.message += '<b>Ост. бюджета</b>:' + postObject.telegramLineBreak
+      comment.message += '<i>' + postObject.account + '</i>: ' + sum.totalSum.nomenclatureBudgetRest + ' р.' + postObject.telegramLineBreak
+      comment.message += '<i>' + postObject.nomenclature + '</i>: ' + sum.totalSum.accountBudgetRest + ' р.' + postObject.telegramLineBreak
       if (isValidString(postObject.comment)) {
         comment.text += '**Комментарий**: ' + postObject.comment
+        comment.message += '<b>Комментарий</b>: ' + postObject.comment
       }
     } else if (postObject.isBudget) {
-      //* комментарий по бюджетуы
+      //* комментарий по бюджету
       comment.text += '**Бюджет**:' + postObject.lineBreak
       comment.text += '*Номенклатура* - ' + postObject.nomenclature + ': ' + sum.budgetSum.nomenclatureSum + ' р.' + postObject.lineBreak
       comment.text += '*Статья* - ' + postObject.account + ': ' + sum.budgetSum.accountSum + ' р.' + postObject.lineBreak
       comment.text += '*Счет* - ' + postObject.bill + ': ' + sum.budgetSum.billSum + ' р.' + postObject.lineBreak
+      comment.message += '<b>Бюджет</b>:' + postObject.telegramLineBreak
+      comment.message += '<i>Номенклатура</i> - ' + postObject.nomenclature + ': ' + sum.budgetSum.nomenclatureSum + ' р.' + postObject.telegramLineBreak
+      comment.message += '<i>Статья</i> - ' + postObject.account + ': ' + sum.budgetSum.accountSum + ' р.' + postObject.telegramLineBreak
       if (isValidString(postObject.comment)) {
         comment.text += '**Комментарий**: ' + postObject.comment
+        comment.message += '<b>Комментарий</b>: ' + postObject.comment
       }
     } else if (postObject.isTarget) {
       //* комментарий по цели
@@ -723,6 +738,11 @@ function getComment(postObject) {
       comment.text += '*Старая сумма*: ' + postObject.targetSumOld + ' р.' + postObject.lineBreak
       comment.text += '*Новая сумма*: ' + postObject.targetSumNew + ' р.' + postObject.lineBreak
       comment.text += '*Изменения*: ' + postObject.actionSum + ' р.'
+      comment.message += '<i>МВЗ</i> - ' + postObject.mvz + postObject.telegramLineBreak
+      comment.message += '<i>Счет</i> - ' + postObject.nomenclature + postObject.telegramLineBreak
+      comment.message += '<i>Старая сумма</i>: ' + postObject.targetSumOld + ' р.' + postObject.telegramLineBreak
+      comment.message += '<i>Новая сумма</i>: ' + postObject.targetSumNew + ' р.' + postObject.telegramLineBreak
+      comment.message += '<i>Изменения</i>: ' + postObject.actionSum + ' р.'
     }
     return comment
   } catch (e) {
@@ -1211,6 +1231,10 @@ function updateBalanceCard(postObject) {
       postObjectBalance.cardDescription = description.text
       updateCardDesc(postObjectBalance)
     }
+    postObjectBalance.telegramChatId.forEach(function (id) {
+      postObjectBalance.telegramChatId = id
+      sendMessageTelegram(postObjectBalance)
+    })
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
@@ -1296,8 +1320,8 @@ function updateRowByActionId(postObject) {
     })
     sourceRows.forEach(function (row) {
       ss.getRange(row.indexRow, 1).setValue(postObject.actionDate)
-      ss.getRange(row.indexRow, 6).setValue(postObject.sum)
-      ss.getRange(row.indexRow, 7).setValue(postObject.comment)
+      ss.getRange(row.indexRow, 9).setValue(postObject.sum)
+      ss.getRange(row.indexRow, 10).setValue(postObject.comment)
     })
     //* обновление данных на листе учета
     const ts = postObject.accountOpen
@@ -1351,11 +1375,28 @@ function updateTrelloData(postObject) {
     let insertdate
     //* вставка значений в буфер
     const ss = postObject.trelloOpen
-    const pushBufferRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
+    const trelloArray = postObject.trelloArray
+    let pushBufferRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.cashFlow, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
     ss.appendRow(pushBufferRow)
+    trelloArray.push(pushBufferRow)
+    //* Проверка перевода на счет семьи
+    if (isMatch(postObject.account, 'Перевод на счет Семья')) {
+      insertdate = new Date(postObject.actionDate.getTime() + 1000);
+      if (isMatch(postObject.cfo, 'Илья')) {
+        pushBufferRow = [insertdate, postObject.period, 'Семья', 'Семья', 'Пополнение', 'Переводы', 'Приход со счета Илья', 'Приход со счета Илья', postObject.sum, postObject.comment, postObject.actionId, postObject.type]
+        ss.appendRow(pushBufferRow)
+        trelloArray.push(pushBufferRow)
+      } else if (isMatch(postObject.cfo, 'Оксана')) {
+        pushBufferRow = [insertdate, postObject.period, 'Семья', 'Семья', 'Пополнение', 'Переводы', 'Приход со счета Оксана', 'Приход со счета Оксана', postObject.sum, postObject.comment, postObject.actionId, postObject.type]
+        ss.appendRow(pushBufferRow)
+        trelloArray.push(pushBufferRow)
+      }
+    }
+    //* получение данных учета после обновления
+    postObject.dataTrello = getAllDataTrello(postObject)
     //* вставка значений в учет
-    const ts = postObject.accountOpen
-    const targetArray = postObject.accountArray
+    let ts = postObject.accountOpen
+    let targetArray = postObject.accountArray
     pushAccountRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.cashFlow, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
     ts.appendRow(pushAccountRow)
     targetArray.push(pushAccountRow)
@@ -1488,14 +1529,14 @@ function getAllDataTrello(postObject) {
         object.ymd = getYMD(array[1]).ymd
         object.cfo = array[2]
         object.mvz = array[3]
-        object.cashFlow = null
-        object.bill = null
-        object.account = null
-        object.nomenclature = array[4]
-        object.sum = array[5]
-        object.comment = array[6]
-        object.actionId = array[7]
-        object.type = array[8]
+        object.cashFlow = array[4]
+        object.bill = array[5]
+        object.account = array[6]
+        object.nomenclature = array[7]
+        object.sum = array[8]
+        object.comment = array[9]
+        object.actionId = array[10]
+        object.type = array[11]
         object.indexRow = index + 1
         row.push(object)
       }
@@ -1579,7 +1620,9 @@ function doPost(e) {
         }
         //* получение описание карточки и комментария
         postObject.cardDescription = getDescription(postObject).text
-        postObject.cardComment = getComment(postObject).text
+        const comment = getComment(postObject)
+        postObject.cardComment = comment.text
+        postObject.telegramMessage = comment.message
         //* обновление описание карточки
         updateCardDesc(postObject)
         //* обновление карточки баланса
@@ -1592,7 +1635,9 @@ function doPost(e) {
           updateTargetList(postObject)
         }
         postObject.cardDescription = getDescription(postObject).text
-        postObject.cardComment = getComment(postObject).text
+        const comment = getComment(postObject)
+        postObject.cardComment = comment.text
+        postObject.telegramMessage = comment.message
         //* обновление описание карточки
         updateCardDesc(postObject)
         //* обновление карточки баланса
@@ -1605,7 +1650,9 @@ function doPost(e) {
           updateTargetList(postObject)
         }
         postObject.cardDescription = getDescription(postObject).text
-        postObject.cardComment = getComment(postObject).text
+        const comment = getComment(postObject)
+        postObject.cardComment = comment.text
+        postObject.telegramMessage = comment.message
         //* обновление описание карточки
         updateCardDesc(postObject)
         //* обновление карточки баланса
