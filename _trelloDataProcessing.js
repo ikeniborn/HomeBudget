@@ -232,7 +232,7 @@ function getPostObject(postData) {
     object.trelloOpen = openGoogleSheet(object.sourceSheetID, object.sourceSheetNameTrello)
     object.errorOpen = openGoogleSheet(object.sourceSheetID, object.sourceSheetNameError)
     object.logOpen = openGoogleSheet(object.sourceSheetID, object.sourceSheetNameLog)
-    //! object.accountOpen = openGoogleSheet(object.targetSheetID, object.targetSheetNameAccount) //!
+    // object.accountOpen = openGoogleSheet(object.targetSheetID, object.targetSheetNameAccount) //!
     object.targetOpen = openGoogleSheet(object.targetSheetID, object.targetSheetNameTarget)
     //* данные с листов
     object.financialСenterArray = getGoogleSheetValues(object.financialCenterSheetOpen)
@@ -242,7 +242,7 @@ function getPostObject(postData) {
     object.goalsArray = getGoogleSheetValues(object.goalsSheetOpen)
     object.trelloArray = getGoogleSheetValues(object.trelloOpen)
     object.errorArray = getGoogleSheetValues(object.errorOpen)
-    //! object.accountArray = getGoogleSheetValues(object.accountOpen)
+    // object.accountArray = getGoogleSheetValues(object.accountOpen)
     object.targetArray = getGoogleSheetValues(object.targetOpen)
     if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
       object.actionId = postData.action.data.action.id
