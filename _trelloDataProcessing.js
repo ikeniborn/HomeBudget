@@ -1331,7 +1331,7 @@ function updateRowByActionId(postObject) {
     // const targetRowIndex = []
     const sourceRowIndex = []
     //* обновление данных на листе источнике
-    // const ss = postObject.trelloOpen
+    const ss = postObject.trelloOpen
     // const sourceData = postObject.dataTrello.all
     // const sourceRows = sourceData.filter(function (row) {
     //   return row.actionId == postObject.actionId
@@ -1351,10 +1351,10 @@ function updateRowByActionId(postObject) {
       return row
     }, [])
     sourceRowIndex.forEach(function (row) {
-      ts.getRange(row, 1).setValue(postObject.actionDate)
-      ts.getRange(row, 3).setValue(postObject.mvz)
-      ts.getRange(row, 9).setValue(postObject.sum)
-      ts.getRange(row, 10).setValue(postObject.comment)
+      ss.getRange(row, 1).setValue(postObject.actionDate)
+      ss.getRange(row, 3).setValue(postObject.mvz)
+      ss.getRange(row, 9).setValue(postObject.sum)
+      ss.getRange(row, 10).setValue(postObject.comment)
     })
     //* обновление данных в массиве источника
     sourceData.map(function (array) {
