@@ -223,7 +223,7 @@ function getPostObject(postData) {
     object.webHookDate = formatterDate().timestamp
     object.actionType = postData.action.type
     object.webHookActionId = postData.action.id
-    // открытие листов
+    //* открытие листов
     object.financialCenterSheetOpen = openGoogleSheet(object.sourceSheetID, object.financialCenterSheetName)
     object.accountingItemSheetOpen = openGoogleSheet(object.sourceSheetID, object.accountingItemSheetName)
     object.costСenterSheetOpen = openGoogleSheet(object.sourceSheetID, object.costСenterSheetName)
@@ -232,9 +232,9 @@ function getPostObject(postData) {
     object.trelloOpen = openGoogleSheet(object.sourceSheetID, object.sourceSheetNameTrello)
     object.errorOpen = openGoogleSheet(object.sourceSheetID, object.sourceSheetNameError)
     object.logOpen = openGoogleSheet(object.sourceSheetID, object.sourceSheetNameLog)
-    object.accountOpen = openGoogleSheet(object.targetSheetID, object.targetSheetNameAccount)
+    //! object.accountOpen = openGoogleSheet(object.targetSheetID, object.targetSheetNameAccount) //!
     object.targetOpen = openGoogleSheet(object.targetSheetID, object.targetSheetNameTarget)
-    // данные с листов
+    //* данные с листов
     object.financialСenterArray = getGoogleSheetValues(object.financialCenterSheetOpen)
     object.accountingItemArray = getGoogleSheetValues(object.accountingItemSheetOpen)
     object.costСenterArray = getGoogleSheetValues(object.costСenterSheetOpen)
@@ -242,7 +242,7 @@ function getPostObject(postData) {
     object.goalsArray = getGoogleSheetValues(object.goalsSheetOpen)
     object.trelloArray = getGoogleSheetValues(object.trelloOpen)
     object.errorArray = getGoogleSheetValues(object.errorOpen)
-    object.accountArray = getGoogleSheetValues(object.accountOpen)
+    //! object.accountArray = getGoogleSheetValues(object.accountOpen)
     object.targetArray = getGoogleSheetValues(object.targetOpen)
     if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
       object.actionId = postData.action.data.action.id
@@ -532,17 +532,17 @@ function createCardsForList(postObject) {
 function deleteEmptyRow(postObject) {
   try {
     const ss = postObject.trelloOpen
-    const ts = postObject.accountOpen
+    // const ts = postObject.accountOpen
     const ssMaxRows = ss.getMaxRows()
     const ssLastRow = ss.getLastRow()
     if (ssMaxRows - ssLastRow !== 0) {
       ss.deleteRows(ssLastRow + 1, ssMaxRows - ssLastRow)
     }
-    const tsMaxRows = ts.getMaxRows()
-    const tsLastRow = ts.getLastRow()
-    if (tsMaxRows - tsMaxRows !== 0) {
-      ss.deleteRows(tsLastRow + 1, tsMaxRows - tsLastRow)
-    }
+    // const tsMaxRows = ts.getMaxRows()
+    // const tsLastRow = ts.getLastRow()
+    // if (tsMaxRows - tsMaxRows !== 0) {
+    //   ss.deleteRows(tsLastRow + 1, tsMaxRows - tsLastRow)
+    // }
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
@@ -553,36 +553,50 @@ function deleteRowByActionId(postObject) {
     let sum
     //* удаление данных на листе источнике
     const ss = postObject.trelloOpen
-    const sourceData = postObject.dataTrello.all
-    const sourceRows = sourceData.reduce(function (row, array) {
-      if (isMatch(array.actionId, postObject.actionId)) {
-        row.push(array)
-      }
-      row.sort(function (a, b) {
-        return b.indexRow - a.indexRow
-      })
-      return row
-    }, [])
-    sourceRows.forEach(function (row) {
-      ss.deleteRow(row.indexRow)
-      sum = row.sum
-    })
-    //* удаление данных на листе учета
-    const ts = postObject.accountOpen
-    const targetData = postObject.accountArray
-    const targetRowIndex = targetData.reduce(function (row, array, index) {
+    // const sourceData = postObject.dataTrello.all
+    // const sourceRows = sourceData.reduce(function (row, array) {
+    //   if (isMatch(array.actionId, postObject.actionId)) {
+    //     row.push(array)
+    //   }
+    //   row.sort(function (a, b) {
+    //     return b.indexRow - a.indexRow
+    //   })
+    //   return row
+    // }, [])
+    // sourceRows.forEach(function (row) {
+    //   ss.deleteRow(row.indexRow)
+    //   sum = row.sum
+    //   //* удаление данных в массиве учета
+    //   sourceData.splice(row - 1, 1)
+    // })
+    const sourceData = postObject.trelloArray
+    const sourceRows = sourceData.reduce(function (row, array, index) {
       if (isMatch(postObject.actionId, array[10])) {
         row.push(index + 1)
       }
       return row
     }, [])
-    targetRowIndex.forEach(function (row) {
-      ts.deleteRow(row)
+    sourceRows.forEach(function (row) {
+      ss.deleteRow(row)
       //* удаление данных в массиве учета
-      targetData.splice(row - 1, 1)
+      sourceData.splice(row - 1, 1)
     })
+    //* удаление данных на листе учета
+    // const ts = postObject.accountOpen
+    // const targetData = postObject.accountArray
+    // const targetRowIndex = targetData.reduce(function (row, array, index) {
+    //   if (isMatch(postObject.actionId, array[10])) {
+    //     row.push(index + 1)
+    //   }
+    //   return row
+    // }, [])
+    // targetRowIndex.forEach(function (row) {
+    //   ts.deleteRow(row)
+    //   //* удаление данных в массиве учета
+    //   targetData.splice(row - 1, 1)
+    // })
     //* получение данных учета после обновления
-    postObject.dataAccount = getAllDataAccount(postObject)
+    // postObject.dataAccount = getAllDataAccount(postObject)
     postObject.dataTrello = getAllDataTrello(postObject)
     return sum
   } catch (e) {
@@ -1244,7 +1258,8 @@ function updateDescForNewCards(postObject) {
   try {
     const cards = getCards(postObject).array
     const postObjectCard = copyObject(postObject)
-    postObjectCard.dataAccount = getAllDataAccount(postObjectCard)
+    // postObjectCard.dataAccount = getAllDataAccount(postObjectCard)
+    postObjectCard.dataAccount = getAllDataTrello(postObjectCard)
     //* обновление описание карточки
     cards.forEach(function (card) {
       postObjectCard.cardId = card.id
@@ -1311,43 +1326,69 @@ function updateRowByActionId(postObject) {
    * @postObject - данные реквеста
    * */
   try {
-    const targetRowIndex = []
+    // const targetRowIndex = []
+    const sourceRowIndex = []
     //* обновление данных на листе источнике
-    const ss = postObject.trelloOpen
-    const sourceData = postObject.dataTrello.all
-    const sourceRows = sourceData.filter(function (row) {
-      return row.actionId == postObject.actionId
-    })
-    sourceRows.forEach(function (row) {
-      ss.getRange(row.indexRow, 1).setValue(postObject.actionDate)
-      ss.getRange(row.indexRow, 9).setValue(postObject.sum)
-      ss.getRange(row.indexRow, 10).setValue(postObject.comment)
-    })
-    //* обновление данных на листе учета
-    const ts = postObject.accountOpen
-    const targetData = postObject.accountArray
-    targetData.reduce(function (row, array, index) {
+    // const ss = postObject.trelloOpen
+    // const sourceData = postObject.dataTrello.all
+    // const sourceRows = sourceData.filter(function (row) {
+    //   return row.actionId == postObject.actionId
+    // })
+    // sourceRows.forEach(function (row) {
+    //   ss.getRange(row.indexRow, 1).setValue(postObject.actionDate)
+    //   ss.getRange(row.indexRow, 3).setValue(postObject.mvz)
+    //   ss.getRange(row.indexRow, 9).setValue(postObject.sum)
+    //   ss.getRange(row.indexRow, 10).setValue(postObject.comment)
+    // })
+    const sourceData = postObject.trelloArray
+    sourceData.reduce(function (row, array, index) {
       if (isMatch(array[10], postObject.actionId)) {
         row = index + 1
-        targetRowIndex.push(row)
+        sourceRowIndex.push(row)
       }
       return row
     }, [])
-    targetRowIndex.forEach(function (row) {
+    sourceRowIndex.forEach(function (row) {
       ts.getRange(row, 1).setValue(postObject.actionDate)
+      ts.getRange(row, 3).setValue(postObject.mvz)
       ts.getRange(row, 9).setValue(postObject.sum)
       ts.getRange(row, 10).setValue(postObject.comment)
     })
-    //* обновление данных в массиве учета
-    targetData.map(function (array) {
+    //* обновление данных в массиве источника
+    sourceData.map(function (array) {
       if (isMatch(array[10], postObject.actionId)) {
         array[0] = postObject.actionDate
+        array[1] = postObject.mvz
         array[8] = postObject.sum
         array[9] = postObject.comment
       }
     })
+    // //* обновление данных на листе учета
+    // const ts = postObject.accountOpen
+    // const targetData = postObject.accountArray
+    // targetData.reduce(function (row, array, index) {
+    //   if (isMatch(array[10], postObject.actionId)) {
+    //     row = index + 1
+    //     targetRowIndex.push(row)
+    //   }
+    //   return row
+    // }, [])
+    // targetRowIndex.forEach(function (row) {
+    //   ts.getRange(row, 1).setValue(postObject.actionDate)
+    //   ts.getRange(row, 9).setValue(postObject.sum)
+    //   ts.getRange(row, 10).setValue(postObject.comment)
+    // })
+    // //* обновление данных в массиве учета
+    // targetData.map(function (array) {
+    //   if (isMatch(array[10], postObject.actionId)) {
+    //     array[0] = postObject.actionDate
+    //     array[8] = postObject.sum
+    //     array[9] = postObject.comment
+    //   }
+    // })
     //* получение текущих данных после обновления
-    postObject.dataAccount = getAllDataAccount(postObject)
+    // postObject.dataAccount = getAllDataAccount(postObject)
+    postObject.dataTrello = getAllDataTrello(postObject)
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
@@ -1371,7 +1412,7 @@ function updateTarget(postObject) {
 
 function updateTrelloData(postObject) {
   try {
-    let pushAccountRow
+    // let pushAccountRow
     let insertdate
     //* вставка значений в буфер
     const ss = postObject.trelloOpen
@@ -1381,7 +1422,7 @@ function updateTrelloData(postObject) {
     trelloArray.push(pushBufferRow)
     //* Проверка перевода на счет семьи
     if (isMatch(postObject.account, 'Перевод на счет Семья')) {
-      insertdate = new Date(postObject.actionDate.getTime() + 1000);
+      insertdate = new Date(postObject.actionDate.getTime() + 1000)
       if (isMatch(postObject.cfo, 'Илья')) {
         pushBufferRow = [insertdate, postObject.period, 'Семья', 'Семья', 'Пополнение', 'Переводы', 'Приход со счета Илья', 'Приход со счета Илья', postObject.sum, postObject.comment, postObject.actionId, postObject.type]
         ss.appendRow(pushBufferRow)
@@ -1392,29 +1433,29 @@ function updateTrelloData(postObject) {
         trelloArray.push(pushBufferRow)
       }
     }
-    //* получение данных учета после обновления
-    postObject.dataTrello = getAllDataTrello(postObject)
-    //* вставка значений в учет
-    let ts = postObject.accountOpen
-    let targetArray = postObject.accountArray
-    pushAccountRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.cashFlow, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
-    ts.appendRow(pushAccountRow)
-    targetArray.push(pushAccountRow)
-    //* Проверка перевода на счет семьи
-    if (isMatch(postObject.account, 'Перевод на счет Семья')) {
-      insertdate = new Date(postObject.actionDate.getTime() + 1000);
-      if (isMatch(postObject.cfo, 'Илья')) {
-        pushAccountRow = [insertdate, postObject.period, 'Семья', 'Семья', 'Пополнение', 'Переводы', 'Приход со счета Илья', 'Приход со счета Илья', postObject.sum, postObject.comment, postObject.actionId, postObject.type]
-        ts.appendRow(pushAccountRow)
-        targetArray.push(pushAccountRow)
-      } else if (isMatch(postObject.cfo, 'Оксана')) {
-        pushAccountRow = [insertdate, postObject.period, 'Семья', 'Семья', 'Пополнение', 'Переводы', 'Приход со счета Оксана', 'Приход со счета Оксана', postObject.sum, postObject.comment, postObject.actionId, postObject.type]
-        ts.appendRow(pushAccountRow)
-        targetArray.push(pushAccountRow)
-      }
-    }
-    //* получение данных учета после обновления
-    postObject.dataAccount = getAllDataAccount(postObject)
+    // //* получение данных учета после обновления
+    // postObject.dataTrello = getAllDataTrello(postObject)
+    // //* вставка значений в учет
+    // const ts = postObject.accountOpen
+    // const targetArray = postObject.accountArray
+    // pushAccountRow = [postObject.actionDate, postObject.period, postObject.cfo, postObject.mvz, postObject.cashFlow, postObject.bill, postObject.account, postObject.nomenclature, postObject.sum, postObject.comment, postObject.actionId, postObject.type]
+    // ts.appendRow(pushAccountRow)
+    // targetArray.push(pushAccountRow)
+    // //* Проверка перевода на счет семьи
+    // if (isMatch(postObject.account, 'Перевод на счет Семья')) {
+    //   insertdate = new Date(postObject.actionDate.getTime() + 1000)
+    //   if (isMatch(postObject.cfo, 'Илья')) {
+    //     pushAccountRow = [insertdate, postObject.period, 'Семья', 'Семья', 'Пополнение', 'Переводы', 'Приход со счета Илья', 'Приход со счета Илья', postObject.sum, postObject.comment, postObject.actionId, postObject.type]
+    //     ts.appendRow(pushAccountRow)
+    //     targetArray.push(pushAccountRow)
+    //   } else if (isMatch(postObject.cfo, 'Оксана')) {
+    //     pushAccountRow = [insertdate, postObject.period, 'Семья', 'Семья', 'Пополнение', 'Переводы', 'Приход со счета Оксана', 'Приход со счета Оксана', postObject.sum, postObject.comment, postObject.actionId, postObject.type]
+    //     ts.appendRow(pushAccountRow)
+    //     targetArray.push(pushAccountRow)
+    //   }
+    // }
+    // //* получение данных учета после обновления
+    // // postObject.dataAccount = getAllDataAccount(postObject)
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
@@ -1471,47 +1512,47 @@ function updateTargetList(postObject) {
   }
 }
 
-function getAllDataAccount(postObject) {
-  /*
-   * @source - истоник: trello, account
-   */
-  try {
-    const data = postObject.accountArray
-    const object = {}
-    object.all = data.reduce(function (row, array, index) {
-      if (index != 0) {
-        const object = {}
-        //* данные из учета
-        object.actionDate = array[0]
-        object.period = array[1]
-        object.ymd = getYMD(array[1]).ymd
-        object.cfo = array[2]
-        object.mvz = array[3]
-        object.cashFlow = array[4]
-        object.bill = array[5]
-        object.account = array[6]
-        object.nomenclature = array[7]
-        object.sum = array[8]
-        object.comment = array[9]
-        object.actionId = array[10]
-        object.type = array[11]
-        object.indexRow = index + 1
-        row.push(object)
-      }
-      return row
-    }, [])
-    object.current = {}
-    object.current.fact = object.all.filter(function (row) {
-      return row.ymd == getYMD(postObject.factPeriod).ymd && isMatch(row.type, 'Факт')
-    })
-    object.current.budget = object.all.filter(function (row) {
-      return row.ymd == getYMD(postObject.budgetPeriodCurrent).ymd && isMatch(row.type, 'Бюджет')
-    })
-    return object
-  } catch (e) {
-    addErrorItem(arguments.callee.name + ': ' + e)
-  }
-}
+// function getAllDataAccount(postObject) {
+//   /*
+//    * @source - истоник: trello, account
+//    */
+//   try {
+//     const data = postObject.accountArray
+//     const object = {}
+//     object.all = data.reduce(function (row, array, index) {
+//       if (index != 0) {
+//         const object = {}
+//         //* данные из учета
+//         object.actionDate = array[0]
+//         object.period = array[1]
+//         object.ymd = getYMD(array[1]).ymd
+//         object.cfo = array[2]
+//         object.mvz = array[3]
+//         object.cashFlow = array[4]
+//         object.bill = array[5]
+//         object.account = array[6]
+//         object.nomenclature = array[7]
+//         object.sum = array[8]
+//         object.comment = array[9]
+//         object.actionId = array[10]
+//         object.type = array[11]
+//         object.indexRow = index + 1
+//         row.push(object)
+//       }
+//       return row
+//     }, [])
+//     object.current = {}
+//     object.current.fact = object.all.filter(function (row) {
+//       return row.ymd == getYMD(postObject.factPeriod).ymd && isMatch(row.type, 'Факт')
+//     })
+//     object.current.budget = object.all.filter(function (row) {
+//       return row.ymd == getYMD(postObject.budgetPeriodCurrent).ymd && isMatch(row.type, 'Бюджет')
+//     })
+//     return object
+//   } catch (e) {
+//     addErrorItem(arguments.callee.name + ': ' + e)
+//   }
+// }
 
 function getAllDataTrello(postObject) {
   /*
@@ -1560,11 +1601,13 @@ function getPreviousFact(postObject) {
     const sum = {}
     const postObjectPrevCurrent = copyObject(postObject)
     postObjectPrevCurrent.factPeriod = postObject.factPeriod
-    postObjectPrevCurrent.dataAccount = getAllDataAccount(postObjectPrevCurrent)
+    // postObjectPrevCurrent.dataAccount = getAllDataAccount(postObjectPrevCurrent)
+    postObjectPrevCurrent.dataAccount = getAllDataTrello(postObjectPrevCurrent)
     sum.Prev0 = getSum(postObjectPrevCurrent)
     const postObjectPrev1 = copyObject(postObject)
     postObjectPrev1.factPeriod = postObject.factPeriod1
-    postObjectPrev1.dataAccount = getAllDataAccount(postObjectPrev1)
+    // postObjectPrev1.dataAccount = getAllDataAccount(postObjectPrev1)
+    postObjectPrev1.dataAccount = getAllDataTrello(postObjectPrev1)
     sum.Prev1 = getSum(postObjectPrev1)
     return sum
   } catch (e) {
