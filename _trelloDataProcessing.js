@@ -727,6 +727,7 @@ function getComment(postObject) {
       comment.text += '*Номенклатура* - ' + postObject.nomenclature + ': ' + sum.totalSum.nomenclatureBudgetRest + ' р.' + postObject.lineBreak
       comment.message += '<b>Ост. ДС</b>: ' + sum.totalSum.totalRest + ' р.' + postObject.telegramLineBreak
       comment.message += '<b>Ост. бюджета</b>:' + postObject.telegramLineBreak
+      comment.message += '<i>МВЗ</i> - ' + postObject.mvz + postObject.telegramLineBreak
       comment.message += '<i>' + postObject.account + '</i>: ' + sum.totalSum.nomenclatureBudgetRest + ' р.' + postObject.telegramLineBreak
       comment.message += '<i>' + postObject.nomenclature + '</i>: ' + sum.totalSum.accountBudgetRest + ' р.' + postObject.telegramLineBreak
       if (isValidString(postObject.comment)) {
@@ -740,6 +741,7 @@ function getComment(postObject) {
       comment.text += '*Статья* - ' + postObject.account + ': ' + sum.budgetSum.accountSum + ' р.' + postObject.lineBreak
       comment.text += '*Счет* - ' + postObject.bill + ': ' + sum.budgetSum.billSum + ' р.' + postObject.lineBreak
       comment.message += '<b>Бюджет</b>:' + postObject.telegramLineBreak
+      comment.message += '<i>МВЗ</i> - ' + postObject.mvz + postObject.telegramLineBreak
       comment.message += '<i>Номенклатура</i> - ' + postObject.nomenclature + ': ' + sum.budgetSum.nomenclatureSum + ' р.' + postObject.telegramLineBreak
       comment.message += '<i>Статья</i> - ' + postObject.account + ': ' + sum.budgetSum.accountSum + ' р.' + postObject.telegramLineBreak
       if (isValidString(postObject.comment)) {
@@ -991,8 +993,8 @@ function getSum(postObject) {
   try {
     const sum = {}
     const totalSum = {}
-    const budgetSum = getTotalSum(postObject, postObject.dataAccount.current.budget)
-    const factSum = getTotalSum(postObject, postObject.dataAccount.current.fact)
+    const budgetSum = getTotalSum(postObject, postObject.dataTrello.current.budget)
+    const factSum = getTotalSum(postObject, postObject.dataTrello.current.fact)
     totalSum.totalRest = factSum.restSum + factSum.incomeSum - factSum.expenseSum
     totalSum.billBudgetRest = budgetSum.billSum - factSum.billSum
     totalSum.accountBudgetRest = budgetSum.accountSum - factSum.accountSum
@@ -1259,7 +1261,7 @@ function updateDescForNewCards(postObject) {
     const cards = getCards(postObject).array
     const postObjectCard = copyObject(postObject)
     // postObjectCard.dataAccount = getAllDataAccount(postObjectCard)
-    postObjectCard.dataAccount = getAllDataTrello(postObjectCard)
+    postObjectCard.dataTrello = getAllDataTrello(postObjectCard)
     //* обновление описание карточки
     cards.forEach(function (card) {
       postObjectCard.cardId = card.id
@@ -1434,7 +1436,7 @@ function updateTrelloData(postObject) {
       }
     }
     // //* получение данных учета после обновления
-    // postObject.dataTrello = getAllDataTrello(postObject)
+    postObject.dataTrello = getAllDataTrello(postObject)
     // //* вставка значений в учет
     // const ts = postObject.accountOpen
     // const targetArray = postObject.accountArray
@@ -1602,12 +1604,12 @@ function getPreviousFact(postObject) {
     const postObjectPrevCurrent = copyObject(postObject)
     postObjectPrevCurrent.factPeriod = postObject.factPeriod
     // postObjectPrevCurrent.dataAccount = getAllDataAccount(postObjectPrevCurrent)
-    postObjectPrevCurrent.dataAccount = getAllDataTrello(postObjectPrevCurrent)
+    postObjectPrevCurrent.dataTrello = getAllDataTrello(postObjectPrevCurrent)
     sum.Prev0 = getSum(postObjectPrevCurrent)
     const postObjectPrev1 = copyObject(postObject)
     postObjectPrev1.factPeriod = postObject.factPeriod1
     // postObjectPrev1.dataAccount = getAllDataAccount(postObjectPrev1)
-    postObjectPrev1.dataAccount = getAllDataTrello(postObjectPrev1)
+    postObjectPrev1.dataTrello = getAllDataTrello(postObjectPrev1)
     sum.Prev1 = getSum(postObjectPrev1)
     return sum
   } catch (e) {
