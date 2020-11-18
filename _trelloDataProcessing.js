@@ -553,6 +553,18 @@ function deleteRowByActionId(postObject) {
     let sum
     //* удаление данных на листе источнике
     const ss = postObject.trelloOpen
+    const sourceData = postObject.trelloArray
+    const sourceRows = sourceData.reduce(function (row, array, index) {
+      if (isMatch(postObject.actionId, array[10])) {
+        row.push(index + 1)
+      }
+      return row
+    }, [])
+    sourceRows.forEach(function (row) {
+      ss.deleteRow(row)
+      //* удаление данных в массиве учета
+      sourceData.splice(row - 1, 1)
+    })
     // const sourceData = postObject.dataTrello.all
     // const sourceRows = sourceData.reduce(function (row, array) {
     //   if (isMatch(array.actionId, postObject.actionId)) {
@@ -569,18 +581,6 @@ function deleteRowByActionId(postObject) {
     //   //* удаление данных в массиве учета
     //   sourceData.splice(row - 1, 1)
     // })
-    const sourceData = postObject.trelloArray
-    const sourceRows = sourceData.reduce(function (row, array, index) {
-      if (isMatch(postObject.actionId, array[10])) {
-        row.push(index + 1)
-      }
-      return row
-    }, [])
-    sourceRows.forEach(function (row) {
-      ss.deleteRow(row)
-      //* удаление данных в массиве учета
-      sourceData.splice(row - 1, 1)
-    })
     //* удаление данных на листе учета
     // const ts = postObject.accountOpen
     // const targetData = postObject.accountArray
