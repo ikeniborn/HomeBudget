@@ -557,8 +557,6 @@ function deleteRowByActionId(postObject) {
     const sourceRows = sourceData.reduce(function (row, array, index) {
       if (isMatch(postObject.actionId, array[10])) {
         row.push(index + 1)
-        //? Добавить данные по удаляемой сумме
-
       }
       row.sort(function (a, b) {
         return b - a
