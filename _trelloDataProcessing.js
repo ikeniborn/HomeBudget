@@ -568,6 +568,8 @@ function deleteRowByActionId(postObject) {
     return sum
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
+  } finally {
+    addErrorItem(arguments.callee.name + ': ' + sourceRows)
   }
 }
 
