@@ -550,7 +550,7 @@ function deleteRowByActionId(postObject) {
     const sourceData = postObject.trelloArray
     const sum = sourceData.reduce(function (row, array) {
       if (isMatch(postObject.actionId, array[10])) {
-        row.push(array[8])
+        row = array[8]
       }
       return row
     }, {})
