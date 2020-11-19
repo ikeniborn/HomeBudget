@@ -559,10 +559,14 @@ function deleteRowByActionId(postObject) {
       if (isMatch(postObject.actionId, array[10])) {
         row.push(index + 1)
       }
+      row.sort(function (a, b) {
+        return b.index - a.index
+      })
       return row
     }, [])
     sourceRows.forEach(function (row) {
       ss.deleteRow(row)
+      sum = row.sum
       //* удаление данных в массиве учета
       sourceData.splice(row - 1, 1)
     })
