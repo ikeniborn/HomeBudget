@@ -561,6 +561,7 @@ function deleteRowByActionId(postObject) {
     sourceRows.forEach(function (row) {
       ss.deleteRow(row)
       sum = row[8]
+      addErrorItem(arguments.callee.name + ': ' + sourceRows)
       //* удаление данных в массиве учета
       sourceData.splice(row - 1, 1)
     })
@@ -568,8 +569,6 @@ function deleteRowByActionId(postObject) {
     return sum
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
-  } finally {
-    addErrorItem(arguments.callee.name + ': ' + sourceRows)
   }
 }
 
