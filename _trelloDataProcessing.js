@@ -552,7 +552,7 @@ function deleteRowByActionId(postObject) {
     const sourceRows = sourceData.reduce(function (row, array, index) {
       if (isMatch(postObject.actionId, array[10])) {
         row.push(index + 1)
-        sum = row[8]
+        sum = array[8]
         addErrorItem(arguments.callee.name + ': ' + sum)
       }
       row.sort(function (a, b) {
