@@ -560,7 +560,7 @@ function deleteRowByActionId(postObject) {
         row.push(index + 1)
       }
       row.sort(function (a, b) {
-        return b.index - a.index
+        return b - a
       })
       return row
     }, [])
