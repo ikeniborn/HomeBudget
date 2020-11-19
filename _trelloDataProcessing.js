@@ -1,3 +1,4 @@
+//? добавить валидацию пустых ячеек
 function addErrorItem(error) {
   try {
     const globalVariable = getGlobalVariable()
@@ -1352,7 +1353,7 @@ function updateRowByActionId(postObject) {
     }, [])
     sourceRowIndex.forEach(function (row) {
       ss.getRange(row, 1).setValue(postObject.actionDate)
-      ss.getRange(row, 3).setValue(postObject.mvz)
+      ss.getRange(row, 4).setValue(postObject.mvz)
       ss.getRange(row, 9).setValue(postObject.sum)
       ss.getRange(row, 10).setValue(postObject.comment)
     })
