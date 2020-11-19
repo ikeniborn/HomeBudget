@@ -545,8 +545,8 @@ function deleteEmptyRow(postObject) {
 
 function deleteRowByActionId(postObject) {
   try {
-    const sum
     //* удаление данных на листе источнике
+    const sum
     const ss = postObject.trelloOpen
     const sourceData = postObject.trelloArray
     const sourceRows = sourceData.reduce(function (row, array, index) {
