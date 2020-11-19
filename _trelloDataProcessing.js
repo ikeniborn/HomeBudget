@@ -548,11 +548,17 @@ function deleteRowByActionId(postObject) {
     //* удаление данных на листе источнике
     const ss = postObject.trelloOpen
     const sourceData = postObject.trelloArray
+    const sum = sourceData.reduce(function (row, array) {
+      if (isMatch(postObject.actionId, array[10])) {
+        row.push(array[8])
+      }
+      return row
+    }, {})
     const sourceRows = sourceData.reduce(function (row, array, index) {
       if (isMatch(postObject.actionId, array[10])) {
         row.push(index + 1)
         //? Добавить данные по удаляемой сумме
-        // const sum = array[8]
+
       }
       row.sort(function (a, b) {
         return b - a
