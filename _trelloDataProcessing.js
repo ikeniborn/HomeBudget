@@ -552,6 +552,8 @@ function deleteRowByActionId(postObject) {
     const sourceRows = sourceData.reduce(function (row, array, index) {
       if (isMatch(postObject.actionId, array[10])) {
         row.push(index + 1)
+        sum = row[8]
+        addErrorItem(arguments.callee.name + ': ' + sum)
       }
       row.sort(function (a, b) {
         return b - a
@@ -560,8 +562,6 @@ function deleteRowByActionId(postObject) {
     }, [])
     sourceRows.forEach(function (row) {
       ss.deleteRow(row)
-      sum = row[8]
-      addErrorItem(arguments.callee.name + ': ' + sourceRows)
       //* удаление данных в массиве учета
       sourceData.splice(row - 1, 1)
     })
