@@ -550,6 +550,7 @@ function deleteRowByActionId(postObject) {
     const sourceData = postObject.trelloArray
     const sum = sourceData.reduce(function (row, array) {
       if (isMatch(postObject.actionId, array[10])) {
+        //? добавить массив: сумма, мвз
         row = array[8]
       }
       return row
@@ -696,9 +697,9 @@ function getComment(postObject) {
       comment.text += '**Остаток бюджета**:' + postObject.lineBreak
       comment.text += '*Статья* - ' + postObject.account + ': ' + sum.totalSum.accountBudgetRest + ' р.' + postObject.lineBreak
       comment.text += '*Номенклатура* - ' + postObject.nomenclature + ': ' + sum.totalSum.nomenclatureBudgetRest + ' р.' + postObject.lineBreak
+      comment.message += '<i>МВЗ</i> - ' + postObject.mvz + postObject.telegramLineBreak
       comment.message += '<b>Ост. ДС</b>: ' + sum.totalSum.totalRest + ' р.' + postObject.telegramLineBreak
       comment.message += '<b>Ост. бюджета</b>:' + postObject.telegramLineBreak
-      comment.message += '<i>МВЗ</i> - ' + postObject.mvz + postObject.telegramLineBreak
       comment.message += '<i>' + postObject.account + '</i>: ' + sum.totalSum.nomenclatureBudgetRest + ' р.' + postObject.telegramLineBreak
       comment.message += '<i>' + postObject.nomenclature + '</i>: ' + sum.totalSum.accountBudgetRest + ' р.' + postObject.telegramLineBreak
       if (isValidString(postObject.comment)) {
@@ -711,8 +712,8 @@ function getComment(postObject) {
       comment.text += '*Номенклатура* - ' + postObject.nomenclature + ': ' + sum.budgetSum.nomenclatureSum + ' р.' + postObject.lineBreak
       comment.text += '*Статья* - ' + postObject.account + ': ' + sum.budgetSum.accountSum + ' р.' + postObject.lineBreak
       comment.text += '*Счет* - ' + postObject.bill + ': ' + sum.budgetSum.billSum + ' р.' + postObject.lineBreak
-      comment.message += '<b>Бюджет</b>:' + postObject.telegramLineBreak
       comment.message += '<i>МВЗ</i> - ' + postObject.mvz + postObject.telegramLineBreak
+      comment.message += '<b>Бюджет</b>:' + postObject.telegramLineBreak
       comment.message += '<i>Номенклатура</i> - ' + postObject.nomenclature + ': ' + sum.budgetSum.nomenclatureSum + ' р.' + postObject.telegramLineBreak
       comment.message += '<i>Статья</i> - ' + postObject.account + ': ' + sum.budgetSum.accountSum + ' р.' + postObject.telegramLineBreak
       if (isValidString(postObject.comment)) {
