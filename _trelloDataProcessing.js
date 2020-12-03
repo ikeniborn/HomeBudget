@@ -1,4 +1,32 @@
 //? добавить валидацию пустых ячеек
+//? в описание карточки добавлять возможный списко тэгов для МВз
+//? добавить секундомер для оенки произодительности
+function timeToStr(t) {
+  var ms = t % 1000;
+  t -= ms;
+  ms = Math.floor(ms / 10);
+  t = Math.floor(t / 1000);
+  var s = t % 60;
+  t -= s;
+  t = Math.floor(t / 60);
+  var m = t % 60;
+  t -= m;
+  t = Math.floor(t / 60);
+  var h = t % 60;
+  if (h < 10) h = '0' + h;
+  if (m < 10) m = '0' + m;
+  if (s < 10) s = '0' + s;
+  if (ms < 10) ms = '0' + ms;
+  return h + ':' + m + ':' + s + '.' + ms;
+}
+
+function findTime(start) {
+  const thisDate = new Date()
+  const tdiff = start.getTime() - thisDate.getTime()
+  const str = timeToStr(tdiff)
+  return str
+}
+
 function addErrorItem(error) {
   try {
     const globalVariable = getGlobalVariable()
@@ -6,6 +34,22 @@ function addErrorItem(error) {
     errorOpen.appendRow([formatterDate().timestamp, '', '', error])
   } catch (e) {
     console.error(arguments.callee.name + ': ' + e)
+  }
+}
+
+function formatterDate(date) {
+  //* форматирование даты
+  try {
+    if (date == undefined) {
+      date = new Date()
+    }
+    const formatter = {}
+    formatter.date = Utilities.formatDate(new Date(date), 'GMT+3', 'dd.MM.yyyy')
+    formatter.time = Utilities.formatDate(new Date(date), 'GMT+3', 'dd.MM.yyyy HH:mm')
+    formatter.timestamp = Utilities.formatDate(new Date(date), 'GMT+3', 'dd.MM.yyyy HH:mm:ss')
+    return formatter
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
   }
 }
 
@@ -233,7 +277,6 @@ function getPostObject(postData) {
     object.trelloOpen = openGoogleSheet(object.sourceSheetID, object.sourceSheetNameTrello)
     object.errorOpen = openGoogleSheet(object.sourceSheetID, object.sourceSheetNameError)
     object.logOpen = openGoogleSheet(object.sourceSheetID, object.sourceSheetNameLog)
-    // object.accountOpen = openGoogleSheet(object.targetSheetID, object.targetSheetNameAccount) //!
     object.targetOpen = openGoogleSheet(object.targetSheetID, object.targetSheetNameTarget)
     //* данные с листов
     object.financialСenterArray = getGoogleSheetValues(object.financialCenterSheetOpen)
@@ -243,7 +286,6 @@ function getPostObject(postData) {
     object.goalsArray = getGoogleSheetValues(object.goalsSheetOpen)
     object.trelloArray = getGoogleSheetValues(object.trelloOpen)
     object.errorArray = getGoogleSheetValues(object.errorOpen)
-    // object.accountArray = getGoogleSheetValues(object.accountOpen)
     object.targetArray = getGoogleSheetValues(object.targetOpen)
     if (['updateComment', 'deleteComment'].indexOf(postData.action.type) !== -1) {
       object.actionId = postData.action.data.action.id
@@ -571,22 +613,6 @@ function deleteRowByActionId(postObject) {
     })
     postObject.dataTrello = getAllDataTrello(postObject)
     return sum
-  } catch (e) {
-    addErrorItem(arguments.callee.name + ': ' + e)
-  }
-}
-
-function formatterDate(date) {
-  //* форматирование даты
-  try {
-    if (date == undefined) {
-      date = new Date()
-    }
-    const formatter = {}
-    formatter.date = Utilities.formatDate(new Date(date), 'GMT+3', 'dd.MM.yyyy')
-    formatter.time = Utilities.formatDate(new Date(date), 'GMT+3', 'dd.MM.yyyy HH:mm')
-    formatter.timestamp = Utilities.formatDate(new Date(date), 'GMT+3', 'dd.MM.yyyy HH:mm:ss')
-    return formatter
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
