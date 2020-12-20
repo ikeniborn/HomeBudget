@@ -1,13 +1,13 @@
-function getParametr() {
+function updateAccountData() {
   try {
     const object = getGlobalVariable()
     const trelloOpen = openGoogleSheet(object.sourceSheetID, object.sourceSheetNameTrello)
     const accountOpen = openGoogleSheet(object.targetSheetID, object.targetSheetNameAccount)
     const currentDate = new Date()
-    const currentPeriod = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
-    const previousPeriod = new Date(currentDate.getFullYear(), currentDate.getMonth() - 2, 1)
-    const data = getGoogleSheetValues(trelloOpen)
-    const filterdata = data.reduce(function (row, array, index) {
+    const startPeriod = new Date(currentDate.getFullYear(), currentDate.getMonth() - 2, 1)
+    const endPeriod = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
+    const trelloArray = getGoogleSheetValues(trelloOpen)
+    const filterArray = trelloArray.reduce(function (row, array, index) {
       if (index != 0) {
         const object = {}
         //* данные из буфера трелло
@@ -24,16 +24,52 @@ function getParametr() {
         object.actionId = array[10]
         object.type = array[11]
         object.indexRow = index + 1
-        if ((isMatch(object.type, 'Факт') && object.period >= previousPeriod && object.period <= currentPeriod) || (isMatch(object.type, 'Бюджет') && object.period == currentPeriod)) {
-          row.push(object)
+        if (isMatch(object.type, 'факт') && new Date(object.period) >= startPeriod && new Date(object.period) <= endPeriod || isMatch(object.type, 'бюджет') && new Date(object.period) >= endPeriod && new Date(object.period) <= endPeriod) {
+          //* Преобразование объектов в массив
+          const sheetRow = [object.actionDate, object.period, object.cfo, object.mvz, object.cashFlow, object.bill, object.account, object.nomenclature, object.sum, object.comment, object.actionId, object.type]
+          row.push(sheetRow)
         }
       }
       return row
     }, [])
-    const ssMaxRows = accountOpen.getMaxRows()
-    accountOpen.deleteRows(2, ssMaxRows - 2)
-    accountOpen.setValues(filterdata)
+    if (accountOpen.getMaxRows() !== 1) {
+      accountOpen.deleteRows(2, accountOpen.getMaxRows() - 1)
+    }
+    //* Опредление диапазона и вставка данных
+    accountOpen.getRange(accountOpen.getLastRow() + 1, 1, filterArray.length, filterArray[0].length).setValues(filterArray)
   } catch (e) {
     addErrorItem(arguments.callee.name + ': ' + e)
   }
+}
+
+function onOpen() {
+  var ui = SpreadsheetApp.getUi();
+  // Or DocumentApp or FormApp.
+  ui.createMenu('Обновление данных')
+    .addItem('Обновить учет', updateAccountData())
+    //      .addSeparator()
+    //      .addSubMenu(ui.createMenu('Sub-menu')
+    //          .addItem('Second item', 'menuItem2'))
+    .addToUi();
+}
+
+function MD5(input) {
+  var txtHash = ''
+  var rawHash = Utilities.computeDigest(
+    Utilities.DigestAlgorithm.MD5,
+    input)
+  for (i = 0; i < rawHash.length; i++) {
+
+    var hashVal = rawHash[i]
+
+    if (hashVal < 0) {
+      hashVal += 256
+    };
+    if (hashVal.toString(16).length == 1) {
+      txtHash += '0'
+    };
+    txtHash += hashVal.toString(16)
+  };
+  // change below to "txtHash.toUpperCase()" if needed
+  return txtHash
 }
