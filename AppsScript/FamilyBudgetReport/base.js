@@ -1,5 +1,5 @@
 function updateAccountData() {
-  dataBuffer.updateAccountData()
+  FamilyBudgetData.updateAccountData()
 }
 
 function onOpen() {
