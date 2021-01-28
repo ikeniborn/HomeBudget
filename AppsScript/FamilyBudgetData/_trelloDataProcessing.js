@@ -1,30 +1,45 @@
-//? добавить валидацию пустых ячеек
-//? в описание карточки добавлять возможный списко тэгов для МВз
-//? добавить секундомер для оенки произодительности
+//TODO добавить валидацию пустых ячеек
+//TODO в описание карточки добавлять возможный списко тэгов для МВз
+//TODO добавить секундомер для оенки произодительности
+/**
+ * Преобразование времени из чиста в стороку
+ * @param {number} t - число
+ */
 function timeToStr(t) {
-  var ms = t % 1000;
-  t -= ms;
-  ms = Math.floor(ms / 10);
-  t = Math.floor(t / 1000);
-  var s = t % 60;
-  t -= s;
-  t = Math.floor(t / 60);
-  var m = t % 60;
-  t -= m;
-  t = Math.floor(t / 60);
-  var h = t % 60;
-  if (h < 10) h = '0' + h;
-  if (m < 10) m = '0' + m;
-  if (s < 10) s = '0' + s;
-  if (ms < 10) ms = '0' + ms;
-  return h + ':' + m + ':' + s + '.' + ms;
+  try {
+    var ms = t % 1000
+    t -= ms
+    ms = Math.floor(ms / 10)
+    t = Math.floor(t / 1000)
+    var s = t % 60
+    t -= s
+    t = Math.floor(t / 60)
+    var m = t % 60
+    t -= m
+    t = Math.floor(t / 60)
+    var h = t % 60
+    if (h < 10) h = '0' + h
+    if (m < 10) m = '0' + m
+    if (s < 10) s = '0' + s
+    if (ms < 10) ms = '0' + ms
+    return h + ':' + m + ':' + s + '.' + ms
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
 }
 
+/**
+ * Преобразование времени из чиста в стороку
+ * @param {date} start - дата начала
+ */
 function findTime(start) {
-  const thisDate = new Date()
-  const tdiff = start.getTime() - thisDate.getTime()
-  const str = timeToStr(tdiff)
-  return str
+  try {
+    const thisDate = new Date()
+    const tdiff = thisDate.valueOf() - start.valueOf()
+    return timeToStr(tdiff)
+  } catch (e) {
+    addErrorItem(arguments.callee.name + ': ' + e)
+  }
 }
 
 function addErrorItem(error) {
